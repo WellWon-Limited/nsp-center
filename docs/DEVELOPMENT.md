@@ -50,7 +50,7 @@ npm run check
 
 Последовательно: offline extraction/import, browser summary, TypeScript,
 production build, 238 SSR documents, content + rendered HTML tests, content
-retention audit. Ожидание — exit 0. Без NSP_TEST_URL два HTTP-теста явно SKIP;
+retention audit. Ожидание — exit 0. Без NSP_TEST_URL три HTTP-теста явно SKIP;
 это не свидетельство проверки работающего сервера.
 
 Для полного gate, включая все 227 HTTP-адресов, при запущенном изолированном
@@ -60,7 +60,7 @@ preview:
 NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
-Ожидание — 22 tests passed, 0 failed, 0 skipped.
+Ожидание — 25 tests passed, 0 failed, 0 skipped.
 
 ## Источники и импорт
 

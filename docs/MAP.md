@@ -51,6 +51,8 @@ Factory узнаёт сайт как прототип проекта по фай
 | Автопроверка на GitHub | `.github/workflows/check.yml` | `check` (`npm run check`) и `docker-build` (образ dev-стенда) на каждую отправку; без двух зелёных проверок запрос не вливается |
 | Проверки и аудит | [VERIFICATION.md](VERIFICATION.md), [CONTENT-AUDIT.md](CONTENT-AUDIT.md), `docs/verification/` | Что проверено и чем, снимки экранов |
 | Цель, границы, план | [PASSPORT.md](PASSPORT.md), [PLAN.md](PLAN.md) | Продуктовое направление, ближайший результат |
+| SEO под Яндекс | [SEO.md](SEO.md) | Принципы, шаблон статьи блога, задачи на Метрику, Вебмастер и тексты |
+| Указатель документов | [docs/README.md](README.md) | Все документы одним списком |
 
 ## Вне репозитория
 

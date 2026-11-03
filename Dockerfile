@@ -12,7 +12,7 @@ WORKDIR /app
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=4173
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/src/generated/content.json ./src/generated/content.json
-COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs ./scripts/
+COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs ./scripts/
 COPY --from=build ["/app/assets/NSP App Prototype.html", "./assets/"]
 USER node
 EXPOSE 4173
