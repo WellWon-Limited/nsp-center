@@ -4,7 +4,7 @@ import {promisify} from 'node:util';
 import {readFile,writeFile} from 'node:fs/promises';
 const exec=promisify(execFile);
 if(process.env.WW_TEST!=='1'||!process.env.WW_TEST_ID)throw new Error('Use WW_TEST=1 WW_TEST_ID=<id> against the isolated preview.');
-const origin=process.env.NSP_TEST_URL||'http://127.0.0.1:4173';
+const origin=process.env.NSP_TEST_URL||'http://127.0.0.1:5217';
 if(!/^http:\/\/(?:127\.0\.0\.1|localhost):\d+$/.test(origin))throw new Error('Only the local isolated preview is accepted.');
 const {routes}=JSON.parse(await readFile('src/generated/content.json','utf8'));
 async function cv(args){const {stdout}=await exec('sh',['.wellwon/canvas/cv',...args],{maxBuffer:2**20,timeout:25000});return JSON.parse(stdout.trim());}

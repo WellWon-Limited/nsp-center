@@ -15,8 +15,9 @@ npm run build
 npm run preview
 ```
 
-Сайт: http://127.0.0.1:4173/ · [Дизайн-система](http://127.0.0.1:4173/design-system/).
-Для разработки после `npm run content`: `npm run dev` (порт 5173).
+Сайт: http://127.0.0.1:5217/ · [Дизайн-система](http://127.0.0.1:5217/design-system/) ·
+[Прототип приложения](http://127.0.0.1:5217/app-prototype/) (только локально).
+Для разработки после `npm run content`: `npm run dev` (тот же порт 5217; одновременно с preview не запускается).
 
 ## Что работает
 
@@ -43,10 +44,11 @@ npm run preview
 npm run check
 WW_TEST=1 WW_TEST_ID=nsp-acceptance npm run preview
 # В другом терминале:
-NSP_TEST_URL=http://127.0.0.1:4173 npm test
+NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
 [Разработка](docs/DEVELOPMENT.md) · [Дизайн-система](docs/DESIGN-SYSTEM.md) ·
+[Прототип приложения](docs/PROTOTYPE.md) ·
 [Аудит](docs/CONTENT-AUDIT.md) · [Приёмка через холст](docs/VERIFICATION.md).
 
 Снимок является источником сборки: `raw/`, `data/` и `assets/` сохранены без

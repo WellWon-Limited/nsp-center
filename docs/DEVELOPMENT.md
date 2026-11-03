@@ -12,20 +12,26 @@ npm run content
 npm run dev
 ```
 
-Dev: http://127.0.0.1:5173/. Для полной проверки direct URLs используйте
+Порт проекта — 5217, закреплён в реестре Factory (`cv servers ports mine`);
+dev и preview используют его оба, поэтому одновременно не запускаются.
+
+Dev: http://127.0.0.1:5217/. Для полной проверки direct URLs используйте
 сборку и сервер с manifest-aware query routing:
 
 ```sh
 npm run build
-WW_TEST=1 WW_TEST_ID=nsp-acceptance PORT=4173 npm run preview
+WW_TEST=1 WW_TEST_ID=nsp-acceptance npm run preview
 ```
 
-Preview: http://127.0.0.1:4173/. `scripts/serve.mjs` связывает исходные
+Preview: http://127.0.0.1:5217/. `scripts/serve.mjs` связывает исходные
 `?PAGEN_1=N` с отдельными HTML-документами. Обычный static host должен повторить
 эти rewrite rules; файлы находятся в `catalog/<slug>/page/N/index.html`,
 соответствия — `dist/prerender-manifest.json`. `/404/` — шаблон ошибки; неизвестный
 адрес сервер действительно возвращает с HTTP 404. 13 старых product URLs
 возвращают HTTP 308 на существующие карточки.
+`/app-prototype/` отдаёт исходный `assets/NSP App Prototype.html` без изменений;
+в `dist/` он не копируется и на static host не публикуется
+([описание прототипа](PROTOTYPE.md)).
 
 ## Быстрые проверки
 
@@ -43,17 +49,17 @@ npm run check
 
 Последовательно: offline extraction/import, browser summary, TypeScript,
 production build, 238 SSR documents, content + rendered HTML tests, content
-retention audit. Ожидание — exit 0. Без NSP_TEST_URL один HTTP-тест явно SKIP;
+retention audit. Ожидание — exit 0. Без NSP_TEST_URL два HTTP-теста явно SKIP;
 это не свидетельство проверки работающего сервера.
 
 Для полного gate, включая все 227 HTTP-адресов, при запущенном изолированном
 preview:
 
 ```sh
-NSP_TEST_URL=http://127.0.0.1:4173 npm test
+NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
-Ожидание — 18 tests passed, 0 failed, 0 skipped.
+Ожидание — 19 tests passed, 0 failed, 0 skipped.
 
 ## Источники и импорт
 
@@ -79,7 +85,7 @@ NSP_TEST_URL=http://127.0.0.1:4173 npm test
 Проверяйте safe insets и телефон/большой экран. Все source страницы в renderer можно проверить повторяемо:
 
 ```sh
-WW_TEST=1 WW_TEST_ID=nsp-acceptance NSP_TEST_URL=http://127.0.0.1:4173 npm run check:canvas
+WW_TEST=1 WW_TEST_ID=nsp-acceptance NSP_TEST_URL=http://127.0.0.1:5217 npm run check:canvas
 ```
 
 Фактические наблюдения записаны
