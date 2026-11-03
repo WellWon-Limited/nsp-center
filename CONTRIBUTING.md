@@ -45,7 +45,9 @@ gh pr create --fill
 - `main` is protected: no direct pushes from collaborators, no force-push, no
   deletion, no rewriting shared history.
 - Merge needs no approval: the author merges the PR after the required checks
-  pass. Required checks (`.github/workflows/check.yml`): `check`
+  pass. An agent merges only after an explicit "yes" from its human for
+  that merge (`AGENTS.md`, "Irreversible actions need the human's yes").
+  Required checks (`.github/workflows/check.yml`): `check`
   (`npm run check`) and `docker-build` (dev stand image build + smoke test).
   The branch must be up to date with `main` before merging; all review
   conversations must be resolved. GitHub refuses to merge a red PR.
