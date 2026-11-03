@@ -3,6 +3,10 @@
 .agent/
 node_modules/
 .DS_Store
+CLAUDE.local.md
+AGENTS.override.md
+.claude/settings.local.json
+/out/
 .env
 .env.*
 !.env.example
