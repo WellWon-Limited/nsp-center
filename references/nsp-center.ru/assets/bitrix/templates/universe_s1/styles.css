@@ -1,0 +1,76 @@
+.first-col .phone {
+    padding-bottom: 10px;
+}
+
+@media (max-width: 767px) {
+    .menu-mobcontacts {
+        padding-top: 30px;
+        background-color: #f1f1f1;
+        /*height: 100% !important;*/
+    }
+    .menuphone {
+        width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 20px;
+        margin-top: 0px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .menuphone a {
+        color: black;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        vertical-align: middle;
+    }
+    .menuemail {
+        text-align: center !important;
+        width: 100% !important;
+        margin-top: 30px;
+        padding-bottom: 80px;
+    }
+    .menuemail a {
+        color: black;
+        text-decoration: none;
+        vertical-align: middle;
+    }
+}
+
+
+
+#tmg_pk_form_container .paykeeper-text{
+    font-size: 16px;
+    font-weight: 400;
+	line-height: 23px;
+}
+
+#tmg_pk_form_container h3{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#tmg_pk_form_container .paykeeper-btn,
+#tmg_pk_form_container .paykeeper-btn:active,
+#tmg_pk_form_container .paykeeper-btn:focus {
+    outline: none;
+}
+
+#tmg_pk_form_container .paykeeper-btn{
+    background-color: #61ac27;
+    background-image: none;
+    border-color: #61ac27;
+    border-radius: 25px;
+    color: white;
+    font-weight: 400;
+    padding: 10px 30px;
+}
+
+#tmg_pk_form_container .paykeeper-btn:hover{
+    background-color: #79d135;
+    border-color: #79d135;
+    transition: 0.3s all;
+}
+
+body div.payment-options-methods-row:last-child:after {
+	content: none;
+}

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="195564ee-7b4a-43ba-8886-91c8174ed8bb"></script>
+
+</head>
+<body>
+
+<x-dc>
+<helmet data-dc-atomics=""><link rel="preconnect" href="https://fonts.googleapis.com"><style>/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("0cd538aa-3242-4a10-b9dc-ac4c1117cc7e") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("5b2cbabd-33c1-4ca8-9d3a-87400dde7988") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("9ff19298-208f-4202-98fc-c7f92400e403") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("a0919308-4665-41c8-9511-557860e176a3") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("66ad2c05-f0ff-4d7e-a9f1-122f7ffefca5") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("876b09be-0fd5-4f62-92c7-579d269d9015") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("b846b61b-18f5-4737-a442-d1d507b1c4d7") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("6f43e666-d5b1-4012-b771-285d641eb95b") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("76f294b1-36ea-4bda-9471-1ba2402ce173") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("65592156-a2f6-422d-8b8a-302e7c4128e6") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("70fd9617-1e6b-467d-acf7-1cd27053ac35") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("9c8ab78c-9a5f-461f-b09c-06ea98ebf46d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("c584e62b-06c5-4371-bb43-ec8caedceefc") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("358fbdcc-99f9-4577-87e6-f994e5f319eb") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("97861922-9994-4f53-8f88-eb2329525299") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("f8a941c8-9793-4151-9199-e74426e30825") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("70fd9617-1e6b-467d-acf7-1cd27053ac35") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("9c8ab78c-9a5f-461f-b09c-06ea98ebf46d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("c584e62b-06c5-4371-bb43-ec8caedceefc") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("358fbdcc-99f9-4577-87e6-f994e5f319eb") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("97861922-9994-4f53-8f88-eb2329525299") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("f8a941c8-9793-4151-9199-e74426e30825") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("70fd9617-1e6b-467d-acf7-1cd27053ac35") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("9c8ab78c-9a5f-461f-b09c-06ea98ebf46d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("c584e62b-06c5-4371-bb43-ec8caedceefc") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("358fbdcc-99f9-4577-87e6-f994e5f319eb") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("97861922-9994-4f53-8f88-eb2329525299") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("f8a941c8-9793-4151-9199-e74426e30825") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("70fd9617-1e6b-467d-acf7-1cd27053ac35") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("9c8ab78c-9a5f-461f-b09c-06ea98ebf46d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("c584e62b-06c5-4371-bb43-ec8caedceefc") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("358fbdcc-99f9-4577-87e6-f994e5f319eb") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("97861922-9994-4f53-8f88-eb2329525299") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("f8a941c8-9793-4151-9199-e74426e30825") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("70fd9617-1e6b-467d-acf7-1cd27053ac35") format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("9c8ab78c-9a5f-461f-b09c-06ea98ebf46d") format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("c584e62b-06c5-4371-bb43-ec8caedceefc") format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("358fbdcc-99f9-4577-87e6-f994e5f319eb") format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("97861922-9994-4f53-8f88-eb2329525299") format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("f8a941c8-9793-4151-9199-e74426e30825") format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+</style><style>body{margin:0;background:#d7e2df;font-family:Manrope,sans-serif}a{color:#23806a;text-decoration:none}a:hover{color:#1d3a36}.scr{scrollbar-width:none}.scr::-webkit-scrollbar{display:none}.scr>*{flex-shrink:0}input{font-family:inherit;outline:none}@keyframes sheetIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}</style></helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px 16px;box-sizing:border-box">
+<div style="font:600 12px Manrope,sans-serif;color:#4f6d68;letter-spacing:.04em">NSP-Center · интерактивный прототип · стиль 1c</div>
+<div style="width:390px;height:844px;border-radius:54px;background:#15171a;padding:10px;box-sizing:border-box;box-shadow:0 30px 70px rgba(20,50,45,.28);flex:none">
+<div style="position:relative;width:100%;height:100%;border-radius:44px;overflow:hidden;background:#eaf3f1;color:#1d3a36;font-family:Manrope,sans-serif">
+<div style="position:absolute;width:320px;height:320px;border-radius:50%;background:#9fdcc6;filter:blur(60px);top:-80px;left:-90px;opacity:.9"></div>
+<div style="position:absolute;width:280px;height:280px;border-radius:50%;background:#b9d4f5;filter:blur(60px);top:280px;right:-120px;opacity:.9"></div>
+<div style="position:absolute;width:260px;height:260px;border-radius:50%;background:#f3dcb8;filter:blur(70px);bottom:40px;left:-80px;opacity:.8"></div>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div class="scr" style="position:absolute;inset:0;overflow-y:auto;padding:58px 18px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:12px"><div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#4f6d68">Суббота, 26 сентября</span><span style="font-size:22px;font-weight:800;letter-spacing:-.02em">Доброе утро, {{ userName }}</span></div>
+<span sc-camel-on-click="{{ openCart }}" style="position:relative;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none"><span style="width:16px;height:13px;border:2px solid #1d3a36;border-top:none;border-radius:0 0 5px 5px"></span><sc-if value="{{ hasCart }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:-3px;right:-3px;min-width:19px;height:19px;padding:0 4px;box-sizing:border-box;border-radius:10px;background:#2f9c80;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span></sc-if></span></div>
+
+<div style="border-radius:26px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:18px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:16px;font-weight:800">Приём на сегодня</span><span sc-camel-on-click="{{ goHealthIntake }}" style="font-size:13px;font-weight:700;color:#23806a;cursor:pointer">{{ intakeDone }} из {{ intakeTotal }}</span></div>
+<sc-for list="{{ intake }}" as="it" hint-placeholder-count="3">
+<div sc-camel-on-click="{{ it.onToggle }}" style="display:flex;align-items:center;gap:12px;cursor:pointer">
+<span style="width:26px;height:26px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;box-sizing:border-box;background:{{ it.boxBg }};border:{{ it.boxBorder }}">{{ it.mark }}</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:1px;min-width:0"><span style="font-size:14px;font-weight:700;color:{{ it.nameColor }};text-decoration:{{ it.deco }}">{{ it.name }}</span><span style="font-size:12px;color:#5f7a75">{{ it.dose }}</span></span>
+<span style="font-size:12px;font-weight:700;color:#5f7a75">{{ it.time }}</span></div>
+</sc-for>
+<sc-if value="{{ refillShow }}" hint-placeholder-val="{{ true }}"><div sc-camel-on-click="{{ refill }}" style="padding:11px 13px;border-radius:14px;background:rgba(243,220,184,.55);font-size:12px;color:#6e5424;cursor:pointer">Комплекс с валерианой закончится через 5 дней · <b>заказать повторно</b></div></sc-if></div>
+
+<div sc-camel-on-click="{{ goHealthMarathon }}" style="border-radius:26px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:18px;display:flex;flex-direction:column;gap:12px;cursor:pointer">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="padding:6px 11px;border-radius:14px;background:rgba(47,156,128,.14);color:#23806a;font-size:11px;font-weight:700">Марафон здоровья</span><span style="font-size:12px;color:#5f7a75">день {{ mDay }} из 21</span></div>
+<span style="font-size:19px;font-weight:800">Очистка организма</span>
+<div style="height:8px;border-radius:4px;background:rgba(29,58,54,.1)"><div style="height:100%;border-radius:4px;background:#2f9c80;width:{{ mProgress }}"></div></div>
+<span style="font-size:13px;color:#4f6d68">Задания на сегодня: {{ mTasksDone }} из 4</span></div>
+
+<div sc-camel-on-click="{{ openTest }}" style="border-radius:26px;background:#1d3a36;color:#fff;padding:20px;display:flex;align-items:center;gap:14px;cursor:pointer">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px"><span style="font-size:16px;font-weight:800">Диагностический тест</span><span style="font-size:12px;line-height:1.45;color:#b8d2cc">{{ testCardSub }}</span></div>
+<span style="width:46px;height:46px;border-radius:50%;background:#fff;color:#1d3a36;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex:none">→</span></div>
+
+<div sc-camel-on-click="{{ goSets }}" style="position:relative;height:190px;border-radius:26px;overflow:hidden;background:{{ setsBg }};cursor:pointer;border:1px solid rgba(255,255,255,.8)">
+<div style="position:absolute;left:12px;bottom:12px;padding:12px 16px;border-radius:18px;background:rgba(255,255,255,.55);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.8);display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:800">Наборы продуктов</span><span style="font-size:12px;color:#4f6d68">Готовые курсы на месяц</span></div></div>
+
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:4px 4px 0"><span style="font-size:18px;font-weight:800">Хиты</span><span sc-camel-on-click="{{ goCatalog }}" style="font-size:13px;color:#23806a;font-weight:700;cursor:pointer">Весь каталог</span></div>
+<sc-for list="{{ hits }}" as="p" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:14px;padding:10px;border-radius:22px;background:rgba(255,255,255,.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8)">
+<div sc-camel-on-click="{{ p.onOpen }}" style="width:62px;height:62px;border-radius:16px;flex:none;cursor:pointer;background:{{ p.imgBg }}"></div>
+<div sc-camel-on-click="{{ p.onOpen }}" style="flex:1;display:flex;flex-direction:column;gap:3px;cursor:pointer;min-width:0"><span style="font-size:14px;font-weight:700">{{ p.name }}</span><span style="font-size:12px;color:#5f7a75">{{ p.cat }} · {{ p.pv }} PV</span><span style="font-size:14px;font-weight:800">{{ p.priceF }}</span></div>
+<span sc-camel-on-click="{{ p.onAdd }}" style="min-width:40px;height:40px;padding:0 8px;box-sizing:border-box;border-radius:14px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer;background:{{ p.addBg }}">{{ p.addLabel }}</span></div>
+</sc-for>
+</div></sc-if>
+
+<sc-if value="{{ isCatalog }}" hint-placeholder-val="{{ false }}">
+<div class="scr" style="position:absolute;inset:0;overflow-y:auto;padding:58px 18px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:26px;font-weight:800;letter-spacing:-.02em">Каталог</span><span sc-camel-on-click="{{ openCart }}" style="height:40px;padding:0 14px;border-radius:20px;background:rgba(255,255,255,.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer">Корзина<span style="min-width:20px;height:20px;border-radius:10px;background:#2f9c80;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span></span></div>
+<div style="height:50px;border-radius:25px;background:rgba(255,255,255,.5);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);display:flex;align-items:center;gap:10px;padding:0 18px"><span style="width:13px;height:13px;border:2px solid #5f7a75;border-radius:50%;flex:none"></span><input value="{{ q }}" sc-camel-on-change="{{ onSearch }}" placeholder="Симптом, продукт или цель" style="flex:1;min-width:0;border:none;background:transparent;font-size:14px;color:#1d3a36"><sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ false }}"><span sc-camel-on-click="{{ clearSearch }}" style="font-size:18px;color:#5f7a75;cursor:pointer">×</span></sc-if></div>
+<div class="scr" style="display:flex;gap:8px;overflow-x:auto;margin:0 -18px;padding:0 18px">
+<sc-for list="{{ cats }}" as="c" hint-placeholder-count="5"><span sc-camel-on-click="{{ c.onPick }}" style="padding:9px 14px;border-radius:18px;font-size:13px;font-weight:700;white-space:nowrap;cursor:pointer;border:1px solid rgba(255,255,255,.85);background:{{ c.bg }};color:{{ c.color }}">{{ c.name }}</span></sc-for></div>
+<span style="font-size:12px;color:#5f7a75;padding:0 4px">Найдено: {{ foundCount }}</span>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}"><div style="border-radius:24px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);padding:24px;display:flex;flex-direction:column;gap:10px;align-items:flex-start"><span style="font-size:16px;font-weight:800">Ничего не нашлось</span><span style="font-size:13px;color:#4f6d68;line-height:1.45">Опишите задачу консультанту — он подберёт продукты.</span><span sc-camel-on-click="{{ goChat }}" style="padding:11px 16px;border-radius:14px;background:#1d3a36;color:#fff;font-size:13px;font-weight:700;cursor:pointer">Спросить консультанта</span></div></sc-if>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<sc-for list="{{ products }}" as="p" hint-placeholder-count="4">
+<div style="border-radius:22px;background:rgba(255,255,255,.45);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.8);padding:10px;display:flex;flex-direction:column;gap:8px">
+<div sc-camel-on-click="{{ p.onOpen }}" style="height:118px;border-radius:16px;display:flex;align-items:flex-end;padding:8px;box-sizing:border-box;cursor:pointer;background:{{ p.imgBg }}"><span style="font:600 9px 'IBM Plex Mono',monospace;color:#4f6d68">{{ p.lat }}</span></div>
+<span sc-camel-on-click="{{ p.onOpen }}" style="font-size:13px;font-weight:700;line-height:1.25;min-height:32px;cursor:pointer">{{ p.name }}</span>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:6px"><span style="font-size:14px;font-weight:800">{{ p.priceF }}</span><span sc-camel-on-click="{{ p.onAdd }}" style="min-width:34px;height:34px;padding:0 8px;box-sizing:border-box;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;background:{{ p.addBg }}">{{ p.addLabel }}</span></div></div>
+</sc-for></div>
+</div></sc-if>
+
+<sc-if value="{{ isChat }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;padding:52px 0 100px;box-sizing:border-box;display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:12px;padding:6px 18px 12px"><span style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#9fdcc6,#b9d4f5);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex:none">М</span><div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:17px;font-weight:800">Марина, консультант</span><span style="font-size:12px;color:#23806a;font-weight:600">● онлайн · отвечает за 2 минуты</span></div></div>
+<div class="scr" ref="{{ chatRef }}" style="flex:1;min-height:0;overflow-y:auto;padding:4px 18px 12px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
+<div style="max-width:84%;display:flex;flex-direction:column;gap:8px;align-self:{{ m.align }}">
+<div style="padding:12px 14px;font-size:14px;line-height:1.45;white-space:pre-line;border:1px solid rgba(255,255,255,.8);background:{{ m.bg }};color:{{ m.color }};border-radius:{{ m.radius }}">{{ m.text }}</div>
+<sc-for list="{{ m.products }}" as="p" hint-placeholder-count="0">
+<div style="display:flex;align-items:center;gap:10px;padding:8px;border-radius:18px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85)"><div sc-camel-on-click="{{ p.onOpen }}" style="width:44px;height:44px;border-radius:12px;flex:none;cursor:pointer;background:{{ p.imgBg }}"></div><div sc-camel-on-click="{{ p.onOpen }}" style="flex:1;display:flex;flex-direction:column;gap:2px;cursor:pointer;min-width:0"><span style="font-size:13px;font-weight:700">{{ p.name }}</span><span style="font-size:12px;font-weight:800">{{ p.priceF }}</span></div><span sc-camel-on-click="{{ p.onAdd }}" style="min-width:34px;height:34px;padding:0 8px;box-sizing:border-box;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;background:{{ p.addBg }}">{{ p.addLabel }}</span></div>
+</sc-for>
+<sc-if value="{{ m.hasAction }}" hint-placeholder-val="{{ false }}"><span sc-camel-on-click="{{ m.onAction }}" style="align-self:flex-start;padding:10px 14px;border-radius:14px;background:#1d3a36;color:#fff;font-size:13px;font-weight:700;cursor:pointer">{{ m.actionLabel }}</span></sc-if>
+</div></sc-for>
+<sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}"><div style="align-self:flex-start;padding:12px 16px;border-radius:18px 18px 18px 6px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.8);font-size:13px;color:#5f7a75">{{ typingDots }}</div></sc-if>
+</div>
+<div class="scr" style="display:flex;gap:8px;overflow-x:auto;padding:4px 18px 10px">
+<sc-for list="{{ quick }}" as="qr" hint-placeholder-count="3"><span sc-camel-on-click="{{ qr.onPick }}" style="padding:9px 13px;border-radius:16px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);font-size:12px;font-weight:700;white-space:nowrap;color:#23806a;cursor:pointer">{{ qr.text }}</span></sc-for></div>
+<div style="display:flex;gap:8px;padding:0 18px"><input value="{{ chatInput }}" sc-camel-on-change="{{ onChatInput }}" sc-camel-on-key-down="{{ onChatKey }}" placeholder="Напишите вопрос…" style="flex:1;min-width:0;height:48px;border-radius:24px;border:1px solid rgba(255,255,255,.85);background:rgba(255,255,255,.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:0 18px;font-size:14px;color:#1d3a36;box-sizing:border-box"><span sc-camel-on-click="{{ sendChat }}" style="width:48px;height:48px;border-radius:50%;background:#2f9c80;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;cursor:pointer;flex:none">↑</span></div>
+</div></sc-if>
+
+<sc-if value="{{ isHealth }}" hint-placeholder-val="{{ false }}">
+<div class="scr" style="position:absolute;inset:0;overflow-y:auto;padding:58px 18px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<span style="font-size:26px;font-weight:800;letter-spacing:-.02em">Здоровье</span>
+<div style="height:48px;border-radius:24px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.8);display:grid;grid-template-columns:1fr 1fr;padding:4px;gap:4px;box-sizing:border-box;font-size:14px;font-weight:700">
+<span sc-camel-on-click="{{ segIntake }}" style="border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ seg.intakeBg }};color:{{ seg.intakeColor }}">Приём</span>
+<span sc-camel-on-click="{{ segMarathon }}" style="border-radius:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:{{ seg.marBg }};color:{{ seg.marColor }}">Марафон</span></div>
+
+<sc-if value="{{ isSegIntake }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="border-radius:24px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:14px;font-weight:800">Эта неделя</span><span style="font-size:12px;color:#5f7a75">соблюдение графика</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center">
+<sc-for list="{{ week }}" as="d" hint-placeholder-count="7"><div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="font-size:11px;font-weight:700;color:{{ d.labelColor }}">{{ d.label }}</span><span style="width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;box-sizing:border-box;background:{{ d.bg }};color:{{ d.color }};border:{{ d.border }}">{{ d.num }}</span></div></sc-for></div></div>
+<div style="border-radius:24px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:18px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:16px;font-weight:800">Сегодня</span><span style="font-size:13px;font-weight:700;color:#23806a">{{ intakeDone }} из {{ intakeTotal }}</span></div>
+<sc-for list="{{ intake }}" as="it" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px">
+<span sc-camel-on-click="{{ it.onToggle }}" style="width:30px;height:30px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;box-sizing:border-box;cursor:pointer;background:{{ it.boxBg }};border:{{ it.boxBorder }}">{{ it.mark }}</span>
+<span sc-camel-on-click="{{ it.onOpen }}" style="flex:1;display:flex;flex-direction:column;gap:2px;cursor:pointer;min-width:0"><span style="font-size:14px;font-weight:700;color:{{ it.nameColor }};text-decoration:{{ it.deco }}">{{ it.name }}</span><span style="font-size:12px;color:#5f7a75">{{ it.dose }} · осталось на {{ it.left }} дн.</span></span>
+<span style="padding:6px 9px;border-radius:10px;background:rgba(255,255,255,.6);font-size:12px;font-weight:800">{{ it.time }}</span></div>
+</sc-for></div>
+<div style="display:flex;gap:10px">
+<span sc-camel-on-click="{{ goCatalog }}" style="flex:1;height:50px;border-radius:18px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer">+ Добавить продукт</span>
+<span sc-camel-on-click="{{ refill }}" style="flex:1;height:50px;border-radius:18px;background:#1d3a36;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer">Повторить курс</span></div>
+<div sc-camel-on-click="{{ toggleNotif }}" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.8);cursor:pointer"><span style="flex:1;font-size:14px;font-weight:700">Напоминания о приёме</span><span style="width:46px;height:28px;border-radius:14px;padding:3px;box-sizing:border-box;display:flex;justify-content:{{ notifJustify }};background:{{ notifBg }}"><span style="width:22px;height:22px;border-radius:50%;background:#fff"></span></span></div>
+</div></sc-if>
+
+<sc-if value="{{ isSegMarathon }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="border-radius:26px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:18px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="padding:6px 11px;border-radius:14px;background:rgba(47,156,128,.14);color:#23806a;font-size:11px;font-weight:700">21 день</span><span style="font-size:12px;color:#5f7a75;white-space:nowrap">пройдено {{ mDoneCount }} из 21</span></div>
+<span style="font-size:22px;font-weight:800;line-height:1.15">Очистка организма</span>
+<span style="font-size:13px;color:#4f6d68;line-height:1.45">Курс из Хлорофилла и Лимфатик Дренаж, питьевой режим и ежедневная активность.</span>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:7px">
+<sc-for list="{{ mDays }}" as="d" hint-placeholder-count="21"><span style="aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;box-sizing:border-box;background:{{ d.bg }};color:{{ d.color }};border:{{ d.border }}">{{ d.n }}</span></sc-for></div></div>
+<div style="border-radius:26px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:18px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:16px;font-weight:800">День {{ mDay }} · задания</span><span style="font-size:13px;font-weight:700;color:#23806a">{{ mTasksDone }} из 4</span></div>
+<sc-for list="{{ mTasks }}" as="t" hint-placeholder-count="4">
+<div sc-camel-on-click="{{ t.onToggle }}" style="display:flex;align-items:center;gap:12px;cursor:pointer"><span style="width:26px;height:26px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;box-sizing:border-box;background:{{ t.boxBg }};border:{{ t.boxBorder }}">{{ t.mark }}</span><span style="flex:1;font-size:14px;font-weight:600;line-height:1.35;color:{{ t.color }};text-decoration:{{ t.deco }}">{{ t.text }}</span></div>
+</sc-for>
+<sc-if value="{{ mDayComplete }}" hint-placeholder-val="{{ false }}"><div style="padding:12px 14px;border-radius:14px;background:rgba(47,156,128,.14);color:#1f6f5c;font-size:13px;font-weight:700">День {{ mDay }} пройден. Завтра — день {{ mNextDay }}.</div></sc-if></div>
+<span sc-camel-on-click="{{ askMarathon }}" style="height:50px;border-radius:18px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer">Вопрос по марафону консультанту</span>
+</div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+<div class="scr" style="position:absolute;inset:0;overflow-y:auto;padding:58px 18px 120px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:14px"><span style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#f3dcb8,#9fdcc6);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;flex:none">{{ userInitial }}</span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:20px;font-weight:800">{{ userName }} Соколова</span><span style="font-size:13px;color:#5f7a75">+7 921 ••• 42 18</span></div></div>
+<div style="position:relative;overflow:hidden;border-radius:28px;background:linear-gradient(135deg,rgba(29,58,54,.94),rgba(35,110,92,.9));color:#fff;padding:20px;display:flex;flex-direction:column;gap:16px">
+<span style="position:absolute;right:-50px;top:-50px;width:170px;height:170px;border-radius:50%;border:1px solid rgba(255,255,255,.2)"></span>
+<div style="display:flex;justify-content:space-between;font-size:12px;opacity:.8"><span>Дисконтная карта</span><span>{{ lvlName }}</span></div>
+<div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:40px;font-weight:800;letter-spacing:-.03em">{{ pvF }}</span><span style="font-size:14px;font-weight:700;color:#aef0d6">PV</span><span style="flex:1"></span><span style="font-size:22px;font-weight:800">−{{ lvlPct }}%</span></div>
+<div style="height:54px;border-radius:12px;background:#fff;padding:8px 12px;box-sizing:border-box;display:flex;flex-direction:column;gap:3px"><div style="flex:1;background:repeating-linear-gradient(90deg,#1d3a36 0 2px,transparent 2px 4px,#1d3a36 4px 7px,transparent 7px 9px,#1d3a36 9px 10px,transparent 10px 13px)"></div><span style="font:500 9px 'IBM Plex Mono',monospace;color:#1d3a36;text-align:center;letter-spacing:.2em">7 204 118</span></div>
+<span style="font-size:12px;opacity:.85">{{ lvlNextText }}</span></div>
+<div style="border-radius:24px;background:rgba(255,255,255,.45);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.8);padding:8px 16px;display:flex;flex-direction:column">
+<sc-for list="{{ levels }}" as="l" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:{{ l.border }}"><span style="width:10px;height:10px;border-radius:50%;flex:none;background:{{ l.dot }}"></span><span style="flex:1;min-width:0;font-size:14px;font-weight:{{ l.weight }}">{{ l.name }}</span><span style="font-size:12px;color:#5f7a75;white-space:nowrap">от {{ l.fromF }} PV</span><span style="width:44px;text-align:right;font-size:14px;font-weight:800">{{ l.pct }}%</span></div></sc-for></div>
+<sc-if value="{{ hasTestResult }}" hint-placeholder-val="{{ false }}"><div sc-camel-on-click="{{ openTest }}" style="display:flex;align-items:center;gap:12px;padding:16px;border-radius:22px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);cursor:pointer"><div style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:12px;color:#5f7a75">Результат теста</span><span style="font-size:15px;font-weight:800">{{ testTopName }}</span></div><span style="font-size:18px;color:#23806a">›</span></div></sc-if>
+<span style="font-size:18px;font-weight:800;padding:4px 4px 0">Заказы</span>
+<sc-for list="{{ orders }}" as="o" hint-placeholder-count="2"><div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:20px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8)"><div style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-size:14px;font-weight:800">Заказ {{ o.id }}</span><span style="font-size:12px;color:#5f7a75">{{ o.date }} · {{ o.items }} товара · +{{ o.pv }} PV</span></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span style="font-size:14px;font-weight:800">{{ o.totalF }}</span><span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:8px;background:{{ o.stBg }};color:{{ o.stColor }}">{{ o.status }}</span></div></div></sc-for>
+<div style="border-radius:22px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.8);display:flex;flex-direction:column;padding:4px 16px;font-size:14px;font-weight:600">
+<span style="padding:13px 0;border-bottom:1px solid rgba(29,58,54,.08)">Адрес доставки · Санкт-Петербург</span>
+<div sc-camel-on-click="{{ toggleNotif }}" style="display:flex;align-items:center;padding:10px 0;border-bottom:1px solid rgba(29,58,54,.08);cursor:pointer"><span style="flex:1">Напоминания о приёме</span><span style="width:46px;height:28px;border-radius:14px;padding:3px;box-sizing:border-box;display:flex;justify-content:{{ notifJustify }};background:{{ notifBg }}"><span style="width:22px;height:22px;border-radius:50%;background:#fff"></span></span></div>
+<span sc-camel-on-click="{{ goChat }}" style="padding:13px 0;cursor:pointer">Связаться с консультантом</span></div>
+</div></sc-if>
+
+<div style="position:absolute;top:0;left:0;right:0;height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;font-size:15px;font-weight:700;z-index:40;pointer-events:none"><span>9:41</span><span style="width:26px;height:12px;border-radius:4px;border:1.5px solid #1d3a36;box-sizing:border-box"></span></div>
+
+<div style="position:absolute;left:14px;right:14px;bottom:20px;height:66px;border-radius:33px;background:rgba(255,255,255,.55);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.9);box-shadow:0 12px 30px -12px rgba(30,80,70,.35);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;padding:0 4px;gap:0;font-size:10px;text-align:center;z-index:10">
+<div sc-camel-on-click="{{ goHome }}" style="position:relative;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;white-space:nowrap;letter-spacing:-.01em;color:{{ tb.home.color }};font-weight:{{ tb.home.weight }}"><span style="width:46px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{ tb.home.bg }};color:{{ tb.home.icon }}"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V20h5v-6h4v6h5V9.5"></path></svg></span>Главная</div>
+<div sc-camel-on-click="{{ goCatalog }}" style="position:relative;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;white-space:nowrap;letter-spacing:-.01em;color:{{ tb.catalog.color }};font-weight:{{ tb.catalog.weight }}"><span style="width:46px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{ tb.catalog.bg }};color:{{ tb.catalog.icon }}"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="2"></rect><rect x="13.5" y="3.5" width="7" height="7" rx="2"></rect><rect x="3.5" y="13.5" width="7" height="7" rx="2"></rect><rect x="13.5" y="13.5" width="7" height="7" rx="2"></rect></svg></span>Каталог</div>
+<div sc-camel-on-click="{{ goChat }}" style="position:relative;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;white-space:nowrap;letter-spacing:-.01em;color:{{ tb.chat.color }};font-weight:{{ tb.chat.weight }}"><span style="width:46px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{ tb.chat.bg }};color:{{ tb.chat.icon }}"><span style="width:17px;height:14px;border-radius:6px 6px 6px 2px;border:2px solid currentColor;box-sizing:border-box"></span></span>Консультант<sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:3px;right:6px;width:16px;height:16px;border-radius:50%;background:#e2664f;color:#fff;font-size:9px;display:flex;align-items:center;justify-content:center">{{ unread }}</span></sc-if></div>
+<div sc-camel-on-click="{{ goHealth }}" style="position:relative;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;white-space:nowrap;letter-spacing:-.01em;color:{{ tb.health.color }};font-weight:{{ tb.health.weight }}"><span style="width:46px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{ tb.health.bg }};color:{{ tb.health.icon }}"><svg width="22" height="22" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4.5l2.5-6 4 13 3-9 1.5 2H22"></path></svg></span>Здоровье</div>
+<div sc-camel-on-click="{{ goProfile }}" style="position:relative;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;white-space:nowrap;letter-spacing:-.01em;color:{{ tb.profile.color }};font-weight:{{ tb.profile.weight }}"><span style="width:46px;height:28px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:{{ tb.profile.bg }};color:{{ tb.profile.icon }}"><svg width="18" height="18" sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"></path></svg></span>Профиль</div>
+</div>
+
+<sc-if value="{{ showProduct }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:rgba(234,243,241,.78);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:sheetIn .25s ease-out;display:flex;flex-direction:column">
+<div class="scr" style="flex:1;overflow-y:auto;padding:54px 18px 20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between"><span sc-camel-on-click="{{ closeOverlay }}" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">‹</span><span sc-camel-on-click="{{ openCart }}" style="height:44px;padding:0 16px;border-radius:22px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;font-size:13px;font-weight:700;cursor:pointer">Корзина · {{ cartCount }}</span></div>
+<div style="height:250px;border-radius:28px;border:1px solid rgba(255,255,255,.85);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;background:{{ prod.imgBg }}"><span style="font:600 11px 'IBM Plex Mono',monospace;color:#4f6d68">{{ prod.lat }}</span></div>
+<div style="display:flex;gap:6px"><span style="padding:6px 11px;border-radius:12px;background:rgba(47,156,128,.14);color:#23806a;font-size:12px;font-weight:700">{{ prod.cat }}</span><span style="padding:6px 11px;border-radius:12px;background:rgba(255,255,255,.6);font-size:12px;font-weight:700">{{ prod.pv }} PV</span></div>
+<span style="font-size:26px;font-weight:800;line-height:1.1;letter-spacing:-.02em">{{ prod.name }}</span>
+<div style="display:flex;align-items:baseline;gap:10px"><span style="font-size:24px;font-weight:800">{{ prod.priceF }}</span><span style="font-size:13px;color:#23806a;font-weight:700">{{ prod.cardPriceF }} по вашей карте</span></div>
+<span style="font-size:14px;line-height:1.55;color:#34524d">{{ prod.desc }}</span>
+<div style="border-radius:20px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85);padding:14px 16px;display:flex;flex-direction:column;gap:5px"><span style="font-size:12px;color:#5f7a75;font-weight:700">Способ применения</span><span style="font-size:14px;line-height:1.45">{{ prod.dose }}</span></div>
+</div>
+<div style="display:flex;gap:10px;padding:12px 18px 30px"><span sc-camel-on-click="{{ prod.onIntake }}" style="flex:1;height:54px;border-radius:20px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;text-align:center">{{ prod.intakeLabel }}</span><span sc-camel-on-click="{{ prod.onAdd }}" style="flex:1.3;height:54px;border-radius:20px;background:#1d3a36;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer">{{ prod.cartLabel }}</span></div>
+</div></sc-if>
+
+<sc-if value="{{ showCart }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:rgba(234,243,241,.8);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:sheetIn .25s ease-out;display:flex;flex-direction:column">
+<div class="scr" style="flex:1;overflow-y:auto;padding:54px 18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><span sc-camel-on-click="{{ closeOverlay }}" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">‹</span><span style="font-size:24px;font-weight:800">Корзина</span></div>
+<sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}"><div style="border-radius:24px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);padding:28px 22px;display:flex;flex-direction:column;gap:12px;align-items:flex-start"><span style="font-size:18px;font-weight:800">Корзина пуста</span><span style="font-size:13px;color:#4f6d68">Добавьте продукты из каталога или пройдите тест для подбора.</span><span sc-camel-on-click="{{ goCatalog }}" style="padding:12px 18px;border-radius:14px;background:#1d3a36;color:#fff;font-size:13px;font-weight:700;cursor:pointer">В каталог</span></div></sc-if>
+<sc-for list="{{ cartItems }}" as="c" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:22px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.85)"><div style="width:58px;height:58px;border-radius:14px;flex:none;background:{{ c.imgBg }}"></div><div style="flex:1;display:flex;flex-direction:column;gap:3px;min-width:0"><span style="font-size:14px;font-weight:700">{{ c.name }}</span><span style="font-size:13px;font-weight:800">{{ c.sumF }}</span></div>
+<div style="display:flex;align-items:center;gap:4px;padding:3px;border-radius:14px;background:rgba(255,255,255,.7)"><span sc-camel-on-click="{{ c.onDec }}" style="width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;cursor:pointer">−</span><span style="width:18px;text-align:center;font-size:14px;font-weight:800">{{ c.qty }}</span><span sc-camel-on-click="{{ c.onInc }}" style="width:30px;height:30px;border-radius:10px;background:#2f9c80;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;cursor:pointer">+</span></div></div>
+</sc-for>
+<sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}"><div style="border-radius:24px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);padding:16px 18px;display:flex;flex-direction:column;gap:10px;font-size:14px">
+<div style="display:flex;justify-content:space-between"><span style="color:#4f6d68">Товары</span><span style="font-weight:700">{{ subF }}</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#4f6d68">Скидка по карте −{{ lvlPct }}%</span><span style="font-weight:700;color:#23806a">−{{ discF }}</span></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#4f6d68">Начислится</span><span style="font-weight:700">+{{ cartPv }} PV</span></div>
+<div style="height:1px;background:rgba(29,58,54,.1)"></div>
+<div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800"><span>Итого</span><span>{{ totalF }}</span></div></div></sc-if>
+</div>
+<sc-if value="{{ hasCart }}" hint-placeholder-val="{{ false }}"><div style="padding:12px 18px 30px"><span sc-camel-on-click="{{ checkout }}" style="height:56px;border-radius:20px;background:#1d3a36;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;cursor:pointer">Оформить заказ · {{ totalF }}</span></div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{ showSuccess }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:rgba(234,243,241,.82);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:sheetIn .25s ease-out;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:0 32px;text-align:center">
+<span style="width:88px;height:88px;border-radius:50%;background:#2f9c80;color:#fff;display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;box-shadow:0 20px 40px -16px rgba(47,156,128,.7)">✓</span>
+<span style="font-size:24px;font-weight:800">Заказ {{ lastOrder.id }} оформлен</span>
+<span style="font-size:14px;line-height:1.5;color:#4f6d68">Сумма {{ lastOrder.totalF }}. Доставим 28–30 сентября, консультант позвонит для подтверждения.</span>
+<span style="padding:10px 16px;border-radius:16px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);font-size:14px;font-weight:800;color:#23806a">+{{ lastOrder.pv }} PV на карту</span>
+<span sc-camel-on-click="{{ goHome }}" style="margin-top:12px;align-self:stretch;height:54px;border-radius:20px;background:#1d3a36;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;cursor:pointer">На главную</span>
+<span sc-camel-on-click="{{ goProfile }}" style="font-size:13px;font-weight:700;color:#23806a;cursor:pointer">Мои заказы</span></div></sc-if>
+
+<sc-if value="{{ showTest }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;z-index:20;background:rgba(234,243,241,.8);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);animation:sheetIn .25s ease-out;display:flex;flex-direction:column">
+<div class="scr" style="flex:1;overflow-y:auto;padding:54px 18px 30px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:12px"><span sc-camel-on-click="{{ testBack }}" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer">‹</span><span style="flex:1;font-size:16px;font-weight:800">Диагностический тест</span><span sc-camel-on-click="{{ closeOverlay }}" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer">×</span></div>
+<sc-if value="{{ testRunning }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="height:6px;border-radius:3px;background:rgba(29,58,54,.1)"><div style="height:100%;border-radius:3px;background:#2f9c80;width:{{ testProgress }}"></div></div>
+<span style="font-size:13px;font-weight:700;color:#23806a">Вопрос {{ testNum }} из {{ testTotal }}</span>
+<span style="font-size:26px;font-weight:800;line-height:1.15;letter-spacing:-.02em">{{ testQ }}</span>
+<sc-for list="{{ testOpts }}" as="o" hint-placeholder-count="4"><div sc-camel-on-click="{{ o.onPick }}" style="padding:18px;border-radius:20px;background:rgba(255,255,255,.55);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.9);font-size:15px;font-weight:700;cursor:pointer" style-hover="background:rgba(255,255,255,.85)">{{ o.text }}</div></sc-for>
+</div></sc-if>
+<sc-if value="{{ testFinished }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:14px">
+<span style="font-size:13px;font-weight:700;color:#23806a">Ваш результат</span>
+<span style="font-size:28px;font-weight:800;line-height:1.1;letter-spacing:-.02em">Поддержка нужна: {{ testTopName }}</span>
+<span style="font-size:14px;line-height:1.5;color:#34524d">{{ testTopDesc }}</span>
+<div style="border-radius:22px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.85);padding:16px;display:flex;flex-direction:column;gap:11px">
+<sc-for list="{{ testBars }}" as="b" hint-placeholder-count="5"><div style="display:flex;flex-direction:column;gap:5px"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700"><span>{{ b.name }}</span><span>{{ b.pctLabel }}</span></div><div style="height:6px;border-radius:3px;background:rgba(29,58,54,.08)"><div style="height:100%;border-radius:3px;width:{{ b.pctLabel }};background:{{ b.color }}"></div></div></div></sc-for></div>
+<span style="font-size:16px;font-weight:800;padding-top:4px">Рекомендуемый курс</span>
+<sc-for list="{{ testRecs }}" as="p" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85)"><div sc-camel-on-click="{{ p.onOpen }}" style="width:52px;height:52px;border-radius:14px;flex:none;cursor:pointer;background:{{ p.imgBg }}"></div><div sc-camel-on-click="{{ p.onOpen }}" style="flex:1;display:flex;flex-direction:column;gap:2px;cursor:pointer"><span style="font-size:14px;font-weight:700">{{ p.name }}</span><span style="font-size:13px;font-weight:800">{{ p.priceF }}</span></div><span sc-camel-on-click="{{ p.onAdd }}" style="min-width:36px;height:36px;padding:0 8px;box-sizing:border-box;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;cursor:pointer;background:{{ p.addBg }}">{{ p.addLabel }}</span></div>
+</sc-for>
+<span sc-camel-on-click="{{ addCourse }}" style="height:54px;border-radius:20px;background:#1d3a36;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;cursor:pointer">Добавить курс в корзину</span>
+<span sc-camel-on-click="{{ discussTest }}" style="height:50px;border-radius:18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer">Обсудить с консультантом</span>
+<span sc-camel-on-click="{{ restartTest }}" style="align-self:center;font-size:13px;font-weight:700;color:#23806a;cursor:pointer;padding:6px">Пройти заново</span>
+</div></sc-if>
+</div></div></sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:54px;left:50%;transform:translateX(-50%);z-index:50;max-width:320px;padding:12px 18px;border-radius:18px;background:rgba(29,58,54,.92);color:#fff;font-size:13px;font-weight:700;text-align:center;box-shadow:0 12px 30px -10px rgba(0,0,0,.35);animation:sheetIn .2s ease-out">{{ toast }}</div></sc-if>
+</div></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;userName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Анна&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;startTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;catalog&quot;,&quot;chat&quot;,&quot;health&quot;,&quot;profile&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const PRODUCTS = [
+  {id:'set1',name:'Набор «Сильный иммунитет»',lat:'',price:8490,pv:40,cat:'Наборы',set:true,dose:'Курс на 30 дней по схеме в буклете набора.',desc:'Коллоидное серебро, По Д\'Арко и Колострум — готовый курс для укрепления и поддержания иммунитета.'},
+  {id:'set2',name:'Набор «Очистка организма»',lat:'',price:8990,pv:42,cat:'Наборы',set:true,dose:'Курс на 21 день, подходит для марафона здоровья.',desc:'Хлорофилл жидкий, Лимфатик Дренаж и Бифидофилус Флора Форс для мягкого очищения.'},
+  {id:'col',name:'Коллоидное серебро',lat:'COLLOIDAL SILVER',price:4083,pv:19,cat:'Иммунитет',dose:'По 1 ч. л. 2 раза в день.',desc:'Природный антисептик для поддержки защитных сил организма в сезон простуд.'},
+  {id:'chl',name:'Хлорофилл жидкий',lat:'CHLOROPHYLL LIQUID',price:2952,pv:14,cat:'Очищение',dose:'1 ч. л. на стакан воды, 2 раза в день во время еды.',desc:'Концентрат хлорофилла из люцерны с мятой. Поддерживает очищение организма и уровень энергии.'},
+  {id:'omega',name:'Омега 3 ПНЖК',lat:'OMEGA-3 EPA',price:3411,pv:16,cat:'Сердце',dose:'1 капсула 2 раза в день во время еды.',desc:'Полиненасыщенные жирные кислоты для здоровья сердца, сосудов и мозга.'},
+  {id:'lym',name:'Лимфатик Дренаж',lat:'LYMPHATIC DRAINAGE',price:3050,pv:14,cat:'Очищение',dose:'2 капсулы до завтрака.',desc:'Растительный комплекс для поддержки лимфатической системы и выведения токсинов.'},
+  {id:'val',name:'Комплекс с валерианой',lat:'VALERIAN ROOT',price:1906,pv:9,cat:'Нервная система',dose:'2 капсулы за час до сна.',desc:'Мягкое успокаивающее действие, помогает быстрее засыпать.'},
+  {id:'htp',name:'5-HTP Пауер',lat:'5-HTP POWER',price:3758,pv:17,cat:'Нервная система',dose:'1 капсула в день.',desc:'Поддерживает выработку серотонина, настроение и качество сна.'},
+  {id:'mind',name:'Майнд-Макс',lat:'MIND-MAX',price:4833,pv:22,cat:'Нервная система',dose:'2 капсулы утром.',desc:'Комплекс для памяти, концентрации и умственной работоспособности.'},
+  {id:'lec',name:'Лецитин',lat:'LECITHIN',price:3318,pv:15,cat:'Сердце',dose:'1 капсула 2 раза в день.',desc:'Фосфолипиды для нервной системы, печени и сосудов.'},
+  {id:'bif',name:'Бифидофилус Флора Форс',lat:'BIFIDOPHILUS',price:3479,pv:16,cat:'Пищеварение',dose:'1 капсула 2 раза в день.',desc:'Пробиотик для баланса микрофлоры кишечника.'},
+  {id:'pau',name:"По Д'Арко",lat:"PAU D'ARCO",price:1906,pv:9,cat:'Иммунитет',dose:'1 капсула 3 раза в день.',desc:'Кора муравьиного дерева для поддержки иммунитета.'},
+  {id:'cls',name:'Колострум',lat:'COLOSTRUM',price:1997,pv:9,cat:'Иммунитет',dose:'2 капсулы натощак.',desc:'Молозиво — источник иммуноглобулинов и факторов роста.'},
+  {id:'chr',name:'Хром Хелат',lat:'CHROMIUM CHELATE',price:1603,pv:7,cat:'Похудение',dose:'1 таблетка в день во время еды.',desc:'Снижает тягу к сладкому, помогает контролировать аппетит.'},
+];
+const BY = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+const TINT = {'Иммунитет':'rgba(47,156,128,.18)','Очищение':'rgba(140,190,90,.2)','Нервная система':'rgba(130,110,200,.18)','Сердце':'rgba(220,110,110,.18)','Пищеварение':'rgba(230,170,80,.2)','Похудение':'rgba(90,140,220,.18)'};
+const CATS = ['Все','Наборы','Иммунитет','Очищение','Нервная система','Сердце','Пищеварение','Похудение'];
+const LEVELS = [{name:'Стартовая',pct:10,from:0},{name:'Серебряная',pct:15,from:500},{name:'Золотая',pct:18,from:2000},{name:'Платиновая',pct:25,from:5000}];
+const SYS = {
+  imm:{name:'Иммунная система',color:'#2f9c80',desc:'Частые простуды и сезонная усталость говорят о том, что защитным силам нужна поддержка.',recs:['col','pau','cls']},
+  clean:{name:'Очищение и энергия',color:'#8cbe5a',desc:'Упадок сил и тяжесть часто связаны с нагрузкой на органы выведения.',recs:['chl','lym','bif']},
+  nerv:{name:'Нервная система',color:'#826ec8',desc:'Стресс и недосып отражаются на настроении и восстановлении.',recs:['val','htp','mind']},
+  dig:{name:'Пищеварительная система',color:'#e6aa50',desc:'Питание и дискомфорт после еды указывают на нагрузку на ЖКТ.',recs:['bif','chl']},
+  heart:{name:'Сердце и сосуды',color:'#dc6e6e',desc:'Сосудам и сердцу полезна поддержка омега-кислотами и фосфолипидами.',recs:['omega','lec']},
+};
+const TEST = [
+  {q:'Что беспокоит чаще всего?',o:[['Часто простужаюсь',{imm:3}],['Быстро устаю',{clean:3}],['Тревожность, плохой сон',{nerv:3}],['Тяжесть после еды',{dig:3}]]},
+  {q:'Сколько часов вы спите?',o:[['Меньше 6',{nerv:2,heart:1}],['6–7',{clean:1,nerv:1}],['7–8',{}],['Больше 8, но не высыпаюсь',{clean:2}]]},
+  {q:'Как часто болеете ОРВИ?',o:[['4 раза в год и чаще',{imm:3}],['2–3 раза',{imm:2}],['Редко',{}]]},
+  {q:'Как вы питаетесь?',o:[['Много сладкого и мучного',{dig:2,clean:1}],['Нерегулярно, перекусы',{dig:2}],['Много жирного и мяса',{heart:2,dig:1}],['Сбалансированно',{}]]},
+  {q:'Какая цель для вас главная?',o:[['Реже болеть',{imm:2}],['Больше энергии',{clean:2}],['Спокойствие и сон',{nerv:2}],['Здоровое сердце',{heart:3}]]},
+];
+const QUICK = ['Подобрать для иммунитета','Как принимать Хлорофилл?','Где мой заказ?','Моя скидка','Плохо сплю'];
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+const GLASS_W = 'rgba(255,255,255,.55)';
+
+class Component extends DCLogic {
+  state = {
+    tab: this.props.startTab || 'home', overlay: null, pid: null,
+    cart: {chl:1, omega:1}, q: '', cat: 'Все',
+    intake: [{pid:'omega',time:'08:00',dose:'1 капсула во время еды',done:true,left:24},{pid:'chl',time:'13:00',dose:'1 ч. л. на стакан воды',done:true,left:18},{pid:'val',time:'21:00',dose:'2 капсулы перед сном',done:false,left:5}],
+    seg: 'intake', mDone: [1,2,3], mDay: 4, mTasks: [false,false,true,false],
+    pv: 1240,
+    orders: [{id:'№ 48213',date:'12 сентября',items:3,total:9824,pv:46,status:'В пути'},{id:'№ 47790',date:'18 августа',items:2,total:5530,pv:25,status:'Доставлен'}],
+    msgs: [{from:'bot',text:'Здравствуйте! Я Марина, консультант NSP-Center. Помогу подобрать продукты, подскажу схему приёма и отвечу по заказу.'}],
+    chatInput: '', typing: false, dots: 1, unread: 1,
+    tStep: 0, tAns: [], tDone: false,
+    notif: true, toast: null, lastOrder: null,
+  };
+  chatRef = React.createRef();
+  componentDidUpdate() { const el = this.chatRef.current; if (el) el.scrollTop = el.scrollHeight; }
+  componentWillUnmount() { clearTimeout(this.tt); clearInterval(this.di); }
+  showToast(t) { clearTimeout(this.tt); this.setState({toast:t}); this.tt = setTimeout(() => this.setState({toast:null}), 2200); }
+  go(tab, extra) { this.setState({tab, overlay:null, ...(tab==='chat'?{unread:0}:{}), ...(extra||{})}); }
+  add(id, n = 1) { this.setState(s => ({cart:{...s.cart,[id]:(s.cart[id]||0)+n}})); this.showToast(`${BY[id].name} — в корзине`); }
+  setQty(id, d) { this.setState(s => { const c = {...s.cart}; c[id] = (c[id]||0)+d; if (c[id] <= 0) delete c[id]; return {cart:c}; }); }
+  level(pv) { let i = 0; LEVELS.forEach((l, k) => { if (pv >= l.from) i = k; }); return i; }
+  totals() {
+    const s = this.state, lvl = LEVELS[this.level(s.pv)];
+    let sub = 0, pv = 0, count = 0;
+    Object.entries(s.cart).forEach(([id,q]) => { sub += BY[id].price*q; pv += BY[id].pv*q; count += q; });
+    const disc = Math.round(sub*lvl.pct/100);
+    return {sub, disc, total: sub-disc, pv, count};
+  }
+  checkout() {
+    const t = this.totals();
+    const o = {id:'№ ' + (48214 + this.state.orders.length), date:'26 сентября', items:t.count, total:t.total, pv:t.pv, status:'Оформлен'};
+    const before = this.level(this.state.pv);
+    this.setState(s => ({orders:[o,...s.orders], cart:{}, pv:s.pv+t.pv, overlay:'success', lastOrder:o}));
+    if (this.level(this.state.pv + t.pv) > before) setTimeout(() => this.showToast(`Новый уровень карты: ${LEVELS[this.level(this.state.pv)].name}`), 600);
+  }
+  toggleIntake(i) {
+    this.setState(s => ({intake:s.intake.map((x,k) => k===i ? {...x,done:!x.done} : x)}));
+    const x = this.state.intake[i];
+    if (!x.done) this.showToast(`Принято: ${BY[x.pid].name}`);
+  }
+  toggleTask(i) {
+    const tasks = this.state.mTasks.map((v,k) => k===i ? !v : v);
+    const all = tasks.every(Boolean), d = this.state.mDay;
+    let mDone = this.state.mDone.filter(x => x !== d);
+    if (all) { mDone = [...mDone, d]; this.showToast(`День ${d} марафона пройден`); }
+    this.setState({mTasks:tasks, mDone});
+  }
+  reply(raw) {
+    const t = raw.toLowerCase(), s = this.state, li = this.level(s.pv), nx = LEVELS[li+1];
+    if (/иммун|простуд|болею|орви/.test(t)) return {text:'Для иммунитета рекомендую курс из трёх продуктов на 30 дней, затем перерыв 2 недели. Можно взять их набором — так выгоднее.',products:['col','pau','cls','set1']};
+    if (/хлорофил/.test(t)) return {text:'Хлорофилл жидкий: 1 чайная ложка на стакан воды, 2 раза в день во время еды. Курс — месяц. Он уже есть в вашем графике приёма на 13:00.'};
+    if (/сон|сплю|стресс|тревож|нерв/.test(t)) return {text:'При проблемах со сном подойдёт Комплекс с валерианой за час до сна. Если есть тревожность днём — добавьте 5-HTP Пауер.',products:['val','htp']};
+    if (/заказ|достав/.test(t)) { const o = s.orders[0]; return {text:`Заказ ${o.id} от ${o.date} — статус «${o.status}». Ожидаемая доставка 28–30 сентября.`,action:['Мои заказы','profile']}; }
+    if (/скидк|карт|pv|балл/.test(t)) return {text:`На вашей карте ${s.pv.toLocaleString('ru-RU')} PV, уровень «${LEVELS[li].name}», скидка ${LEVELS[li].pct}%.` + (nx ? ` До уровня «${nx.name}» (${nx.pct}%) осталось ${(nx.from-s.pv).toLocaleString('ru-RU')} PV.` : ''),action:['Открыть карту','profile']};
+    if (/очищ|детокс|марафон/.test(t)) return {text:'Для марафона «Очистка организма» основа — Хлорофилл и Лимфатик Дренаж, плюс пробиотик для кишечника. Пейте не меньше 2 литров воды в день.',products:['chl','lym','bif']};
+    if (/пищевар|кишеч|желуд/.test(t)) return {text:'Для пищеварения начните с пробиотика Бифидофилус Флора Форс и Хлорофилла. Ешьте регулярно, 4–5 раз в день небольшими порциями.',products:['bif','chl']};
+    if (/сердц|сосуд|давлен/.test(t)) return {text:'Для сердца и сосудов базовая пара — Омега 3 ПНЖК и Лецитин, курс 2 месяца.',products:['omega','lec']};
+    if (/тест|подобр|результат/.test(t)) return {text:'Предлагаю пройти диагностический тест — 5 вопросов. По результату подберу курс.',action:['Пройти тест','test']};
+    return {text:'Спасибо за вопрос! Уточните, пожалуйста, что беспокоит: иммунитет, сон, пищеварение или энергия? Или пройдите диагностический тест.',action:['Пройти тест','test']};
+  }
+  send(text) {
+    text = (text||'').trim(); if (!text || this.state.typing) return;
+    this.setState(s => ({msgs:[...s.msgs,{from:'me',text}], chatInput:'', typing:true, dots:1}));
+    clearInterval(this.di); this.di = setInterval(() => this.setState(s => ({dots:s.dots%3+1})), 350);
+    setTimeout(() => { clearInterval(this.di); this.setState(s => ({typing:false, msgs:[...s.msgs,{from:'bot',...this.reply(text)}]})); }, 1100);
+  }
+  scores() {
+    const sc = {imm:0,clean:0,nerv:0,dig:0,heart:0};
+    this.state.tAns.forEach((a,i) => { const w = TEST[i].o[a][1]; Object.keys(w).forEach(k => sc[k] += w[k]); });
+    return sc;
+  }
+  topSys() { const sc = this.scores(); return Object.keys(sc).sort((a,b) => sc[b]-sc[a])[0]; }
+  pick(i) {
+    const tAns = [...this.state.tAns.slice(0,this.state.tStep), i];
+    if (this.state.tStep + 1 >= TEST.length) this.setState({tAns, tDone:true});
+    else this.setState({tAns, tStep:this.state.tStep+1});
+  }
+  vm(p) {
+    const q = this.state.cart[p.id] || 0;
+    return {...p, priceF:fmt(p.price), imgBg: p.set ? 'url(uploads/pasted-1790409141694-0.png) 72% 45%/auto 135% #dfeee0' : `repeating-linear-gradient(135deg,rgba(29,58,54,.05) 0 6px,transparent 6px 12px),${TINT[p.cat]||'rgba(255,255,255,.5)'}`,
+      addLabel: q ? `${q} шт` : '+', addBg: q ? '#1d3a36' : '#2f9c80',
+      onOpen: () => this.setState({overlay:'product', pid:p.id}), onAdd: () => this.add(p.id)};
+  }
+  renderVals() {
+    const s = this.state, name = this.props.userName || 'Анна';
+    const li = this.level(s.pv), lvl = LEVELS[li], nx = LEVELS[li+1];
+    const t = this.totals();
+    const tabStyle = k => s.tab===k ? {bg:'#1d3a36',icon:'#fff',color:'#1d3a36',weight:'800'} : {bg:'transparent',icon:'#4f6d68',color:'#4f6d68',weight:'600'};
+    const q = s.q.trim().toLowerCase();
+    const list = PRODUCTS.filter(p => (s.cat==='Все' || p.cat===s.cat) && (!q || (p.name+' '+p.lat+' '+p.cat+' '+p.desc).toLowerCase().includes(q)));
+    const intakeIds = s.intake.map(x => x.pid);
+    const intake = s.intake.map((x,i) => ({name:BY[x.pid].name, time:x.time, dose:x.dose, left:x.left, mark:x.done?'✓':'',
+      boxBg:x.done?'#2f9c80':'rgba(255,255,255,.6)', boxBorder:x.done?'none':'2px solid #b9cfca', nameColor:x.done?'#7f9893':'#1d3a36', deco:x.done?'line-through':'none',
+      onToggle:() => this.toggleIntake(i), onOpen:() => this.setState({overlay:'product',pid:x.pid})}));
+    const intakeDone = s.intake.filter(x => x.done).length;
+    const todayR = intakeDone / s.intake.length;
+    const week = [['Пн',21,1],['Вт',22,1],['Ср',23,.6],['Чт',24,1],['Пт',25,1],['Сб',26,todayR],['Вс',27,-1]].map(([l,n,r],i) => {
+      const today = i===5;
+      return {label:l,num:n,labelColor:today?'#23806a':'#5f7a75',
+        bg: r<0 ? 'rgba(255,255,255,.35)' : r>=1 ? '#2f9c80' : r>0 ? 'rgba(47,156,128,.35)' : 'rgba(255,255,255,.6)',
+        color: r>=1 ? '#fff' : '#1d3a36', border: today ? '2px solid #1d3a36' : '1px solid rgba(255,255,255,.8)'};
+    });
+    const mDays = Array.from({length:21},(_,i) => { const n=i+1, done=s.mDone.includes(n), cur=n===s.mDay;
+      return {n, bg:done?'#2f9c80':cur?'rgba(255,255,255,.8)':'rgba(255,255,255,.35)', color:done?'#fff':cur?'#1d3a36':'#8aa39e', border:cur?'2px solid #1d3a36':'1px solid rgba(255,255,255,.7)'}; });
+    const TASKS = ['Лимфатик Дренаж — 2 капсулы до завтрака','Хлорофилл — 1 ч. л. на стакан воды','Выпить 2 литра воды','Прогулка 30 минут'];
+    const mTasks = TASKS.map((text,i) => { const d = s.mTasks[i]; return {text, mark:d?'✓':'', boxBg:d?'#2f9c80':'rgba(255,255,255,.6)', boxBorder:d?'none':'2px solid #b9cfca', color:d?'#7f9893':'#1d3a36', deco:d?'line-through':'none', onToggle:() => this.toggleTask(i)}; });
+    const mTasksDone = s.mTasks.filter(Boolean).length;
+    const P = s.pid ? BY[s.pid] : null, pq = P ? (s.cart[P.id]||0) : 0;
+    const prod = P ? {...this.vm(P), cardPriceF:fmt(P.price*(1-lvl.pct/100)),
+      cartLabel: pq ? `Ещё одну · в корзине ${pq}` : `В корзину · ${fmt(P.price)}`,
+      intakeLabel: P.set ? 'Курс на месяц' : intakeIds.includes(P.id) ? 'Уже в графике' : 'Добавить в приём',
+      onIntake: () => { if (P.set || intakeIds.includes(P.id)) return; this.setState(st => ({intake:[...st.intake,{pid:P.id,time:'19:00',dose:P.dose.split('.')[0],done:false,left:30}]})); this.showToast('Добавлено в график приёма на 19:00'); }} : {};
+    const cartItems = Object.entries(s.cart).map(([id,qn]) => { const p = this.vm(BY[id]); return {name:p.name, imgBg:p.imgBg, qty:qn, sumF:fmt(p.price*qn), onInc:() => this.setQty(id,1), onDec:() => this.setQty(id,-1)}; });
+    const msgs = s.msgs.map(m => ({text:m.text, align:m.from==='me'?'flex-end':'flex-start', bg:m.from==='me'?'#1d3a36':'rgba(255,255,255,.6)', color:m.from==='me'?'#fff':'#1d3a36', radius:m.from==='me'?'18px 18px 6px 18px':'18px 18px 18px 6px',
+      products:(m.products||[]).map(id => this.vm(BY[id])), hasAction:!!m.action, actionLabel:m.action?m.action[0]:'',
+      onAction:() => { const a = m.action[1]; if (a==='test') this.setState({overlay:'test',tStep:0,tAns:[],tDone:false}); else this.go(a); }}));
+    const sc = this.scores(), maxSc = Math.max(1, ...Object.values(sc)), top = s.tDone ? this.topSys() : null;
+    const cur = TEST[s.tStep];
+    const hasRes = s.tDone && s.overlay !== 'test' || (s.tDone);
+    return {
+      userName:name, userInitial:name[0], setsBg:`url(${(window.__resources&&window.__resources.setsImg)||'uploads/pasted-1790409141694-0.png'}) center/cover #dfeee0`,
+      isHome:s.tab==='home', isCatalog:s.tab==='catalog', isChat:s.tab==='chat', isHealth:s.tab==='health', isProfile:s.tab==='profile',
+      tb:{home:tabStyle('home'),catalog:tabStyle('catalog'),chat:tabStyle('chat'),health:tabStyle('health'),profile:tabStyle('profile')},
+      goHome:() => this.go('home'), goCatalog:() => this.go('catalog'), goChat:() => this.go('chat'), goHealth:() => this.go('health'), goProfile:() => this.go('profile'),
+      goHealthIntake:() => this.go('health',{seg:'intake'}), goHealthMarathon:() => this.go('health',{seg:'marathon'}), goSets:() => this.go('catalog',{cat:'Наборы',q:''}),
+      cartCount:t.count, hasCart:t.count>0, cartEmpty:t.count===0, openCart:() => this.setState({overlay:'cart'}), closeOverlay:() => this.setState({overlay:null}),
+      pvF:s.pv.toLocaleString('ru-RU'), lvlName:lvl.name, lvlPct:lvl.pct,
+      lvlProgress: nx ? Math.round((s.pv-lvl.from)/(nx.from-lvl.from)*100)+'%' : '100%',
+      lvlNextText: nx ? `До уровня «${nx.name}» (−${nx.pct}%) — ещё ${(nx.from-s.pv).toLocaleString('ru-RU')} PV` : 'Максимальный уровень карты',
+      levels: LEVELS.map((l,i) => ({name:l.name, pct:l.pct, fromF:l.from.toLocaleString('ru-RU'), dot:i===li?'#2f9c80':i<li?'#9fcbbf':'rgba(29,58,54,.15)', weight:i===li?'800':'600', border:i<LEVELS.length-1?'1px solid rgba(29,58,54,.08)':'none'})),
+      intake, intakeDone, intakeTotal:s.intake.length, week,
+      refillShow: !s.cart.val, refill:() => this.add('val'),
+      mDay:s.mDay, mNextDay:s.mDay+1, mDays, mTasks, mTasksDone, mDoneCount:s.mDone.length, mProgress:Math.round(s.mDone.length/21*100)+'%', mDayComplete:s.mDone.includes(s.mDay),
+      askMarathon:() => { this.go('chat'); setTimeout(() => this.send('Вопрос по марафону очищения'), 50); },
+      seg:{intakeBg:s.seg==='intake'?'#1d3a36':'transparent',intakeColor:s.seg==='intake'?'#fff':'#4f6d68',marBg:s.seg==='marathon'?'#1d3a36':'transparent',marColor:s.seg==='marathon'?'#fff':'#4f6d68'},
+      isSegIntake:s.seg==='intake', isSegMarathon:s.seg==='marathon', segIntake:() => this.setState({seg:'intake'}), segMarathon:() => this.setState({seg:'marathon'}),
+      notifBg:s.notif?'#2f9c80':'rgba(29,58,54,.2)', notifJustify:s.notif?'flex-end':'flex-start',
+      toggleNotif:() => { this.setState({notif:!s.notif}); this.showToast(s.notif?'Напоминания выключены':'Напоминания включены'); },
+      hits:['set1','col','chl','omega'].map(id => this.vm(BY[id])),
+      q:s.q, hasQuery:!!s.q, onSearch:e => this.setState({q:e.target.value}), clearSearch:() => this.setState({q:''}),
+      cats: CATS.map(c => ({name:c, bg:s.cat===c?'#1d3a36':'rgba(255,255,255,.45)', color:s.cat===c?'#fff':'#1d3a36', onPick:() => this.setState({cat:c})})),
+      products:list.map(p => this.vm(p)), foundCount:list.length, noResults:list.length===0,
+      msgs, typing:s.typing, typingDots:'Марина печатает' + '.'.repeat(s.dots), chatRef:this.chatRef,
+      quick: QUICK.map(text => ({text, onPick:() => this.send(text)})),
+      chatInput:s.chatInput, onChatInput:e => this.setState({chatInput:e.target.value}), onChatKey:e => { if (e.key==='Enter') this.send(s.chatInput); }, sendChat:() => this.send(s.chatInput),
+      unread:s.unread, hasUnread:s.unread>0 && s.tab!=='chat',
+      showProduct:s.overlay==='product' && !!P, prod,
+      showCart:s.overlay==='cart', cartItems, subF:fmt(t.sub), discF:fmt(t.disc), totalF:fmt(t.total), cartPv:t.pv, checkout:() => this.checkout(),
+      showSuccess:s.overlay==='success' && !!s.lastOrder, lastOrder: s.lastOrder ? {...s.lastOrder, totalF:fmt(s.lastOrder.total)} : {},
+      orders: s.orders.map(o => ({...o, totalF:fmt(o.total), stBg:o.status==='Доставлен'?'rgba(29,58,54,.08)':'rgba(47,156,128,.16)', stColor:o.status==='Доставлен'?'#4f6d68':'#1f6f5c'})),
+      showTest:s.overlay==='test', testRunning:!s.tDone, testFinished:s.tDone,
+      openTest:() => this.setState({overlay:'test'}),
+      testBack:() => { if (s.tDone) this.setState({tDone:false, tStep:TEST.length-1}); else if (s.tStep>0) this.setState({tStep:s.tStep-1}); else this.setState({overlay:null}); },
+      testNum:s.tStep+1, testTotal:TEST.length, testProgress:Math.round((s.tStep+(s.tDone?1:0))/TEST.length*100)+'%', testQ:cur.q,
+      testOpts:cur.o.map((o,i) => ({text:o[0], onPick:() => this.pick(i)})),
+      hasTestResult:s.tDone, testTopName: top ? SYS[top].name : '', testTopDesc: top ? SYS[top].desc : '',
+      testCardSub: top ? `Ваш результат: ${SYS[top].name}. Открыть рекомендации` : '5 вопросов — подберём продукты под системы организма',
+      testBars: Object.keys(SYS).map(k => ({name:SYS[k].name, color:SYS[k].color, pctLabel:Math.round(sc[k]/maxSc*100)+'%'})).sort((a,b) => parseInt(b.pctLabel)-parseInt(a.pctLabel)),
+      testRecs: top ? SYS[top].recs.map(id => this.vm(BY[id])) : [],
+      addCourse:() => { SYS[top].recs.forEach(id => this.setState(st => ({cart:{...st.cart,[id]:(st.cart[id]||0)+1}}))); this.showToast('Курс добавлен в корзину'); },
+      discussTest:() => { this.go('chat'); setTimeout(() => this.send(`Мой результат теста: ${SYS[top].name}. Что подобрать?`), 50); },
+      restartTest:() => this.setState({tStep:0,tAns:[],tDone:false}),
+      hasToast:!!s.toast, toast:s.toast,
+    };
+  }
+}
+</script>
+
+
+</body></html>

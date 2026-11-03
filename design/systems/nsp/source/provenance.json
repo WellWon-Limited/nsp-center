@@ -1,0 +1,324 @@
+{
+  "input": "assets/NSP App Prototype.html",
+  "sha256": "ee22021e1996d17cf75b0dd4a9cbc6ce161aa83cb399711ff3d062dfda73e950",
+  "templateSha256": "b8f82ff4ada982ff5208aeee3d14015587119d8b492d90ad3f073a7b3ff1c2c1",
+  "extraction": "JSON.parse of data islands, strict Base64 decode, bounded gzip inflate; no artifact code execution.",
+  "resources": [
+    {
+      "id": "d5e66bd8-9b18-40bf-87c1-06cae78135ac",
+      "mime": "image/png",
+      "compressed": false,
+      "bytes": 586399,
+      "sha256": "8fc98bdae6834f9e3b67a388c17254878e728c9b99fd09cd2aefa32ed32fc6ea",
+      "exported": true
+    },
+    {
+      "id": "195564ee-7b4a-43ba-8886-91c8174ed8bb",
+      "mime": "text/javascript",
+      "compressed": true,
+      "bytes": 69150,
+      "sha256": "8fe7df74405f3c55f49b7249c74ea1397e65d07dea2b1bd3b4a489bec2e28cbe",
+      "exported": false
+    },
+    {
+      "id": "f676503b-7747-4f71-a7ba-b63676db26b7",
+      "mime": "text/javascript",
+      "compressed": true,
+      "bytes": 10751,
+      "sha256": "d949f1c3687aedadcedac85261865f29b17cd273997e7f6b2bfc53b2f9d4c4dd",
+      "exported": false
+    },
+    {
+      "id": "02d6f14a-a8d7-4cb5-bbad-4bc67d6d5328",
+      "mime": "text/javascript",
+      "compressed": true,
+      "bytes": 131835,
+      "sha256": "35f4f974f4b2bcd44da73963347f8952e341f83909e4498227d4e26b98f66f0d",
+      "exported": false
+    },
+    {
+      "id": "0cd538aa-3242-4a10-b9dc-ac4c1117cc7e",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 4336,
+      "sha256": "311098be73eac339128f0b5a6e33d72645b6f87488541fdf467c402152d297fd",
+      "exported": true
+    },
+    {
+      "id": "5b2cbabd-33c1-4ca8-9d3a-87400dde7988",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 5500,
+      "sha256": "d524dc8ff6dbf7ed69772f3b2ff4affaf5a89b5762b270e36c3f21da0d4e39f5",
+      "exported": true
+    },
+    {
+      "id": "9ff19298-208f-4202-98fc-c7f92400e403",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 4036,
+      "sha256": "b2529fba93fd07a50ffb8fc3d103eb04b0c298d4f6564d2833c44fde286de7e4",
+      "exported": true
+    },
+    {
+      "id": "a0919308-4665-41c8-9511-557860e176a3",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 8848,
+      "sha256": "77f03e26f981c582bdba3a7abed4baa2d3149211c01366bb3ab3ba7622ec4ae5",
+      "exported": true
+    },
+    {
+      "id": "66ad2c05-f0ff-4d7e-a9f1-122f7ffefca5",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 10060,
+      "sha256": "a76f53ca6612e7b3828eec2311098675b7f9849ae4169a8bcef6302aec02a6c0",
+      "exported": true
+    },
+    {
+      "id": "876b09be-0fd5-4f62-92c7-579d269d9015",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 4320,
+      "sha256": "f746246b6b0b641f99d9e26e0bf4e42197bde692126857857f0195a94362d52a",
+      "exported": true
+    },
+    {
+      "id": "b846b61b-18f5-4737-a442-d1d507b1c4d7",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 5548,
+      "sha256": "b814a03d7e57b0626a906f76911b9361d173a1aabc5544c40f72d6a35a1e4940",
+      "exported": true
+    },
+    {
+      "id": "6f43e666-d5b1-4012-b771-285d641eb95b",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 4116,
+      "sha256": "69744cabbccc9faf77516ce9b744361e1e6be7f8081400006035a153797d2965",
+      "exported": true
+    },
+    {
+      "id": "76f294b1-36ea-4bda-9471-1ba2402ce173",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 8960,
+      "sha256": "1b6b18fd0fd240bc6d5850f4df621484722d4b5d3650ebdd1e3a8bbd81c75854",
+      "exported": true
+    },
+    {
+      "id": "65592156-a2f6-422d-8b8a-302e7c4128e6",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 10120,
+      "sha256": "ad4580d8cb4b5f627c2d18457656732f7f7b070f7837fbc380e08054157e6f6c",
+      "exported": true
+    },
+    {
+      "id": "70fd9617-1e6b-467d-acf7-1cd27053ac35",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 2592,
+      "sha256": "e8c0b39992f06b3dc9a9834494088014859f363bf6ca8792b6bb07e17c7965f3",
+      "exported": true
+    },
+    {
+      "id": "9c8ab78c-9a5f-461f-b09c-06ea98ebf46d",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 14544,
+      "sha256": "95a493061fe0a8d0d027c2892747134ba747141112d3be4d5022e70ab7d3a1a6",
+      "exported": true
+    },
+    {
+      "id": "c584e62b-06c5-4371-bb43-ec8caedceefc",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 9360,
+      "sha256": "40af11327fe5308166c6cb5787808b042db6da889abf602f0a4876c49675d87e",
+      "exported": true
+    },
+    {
+      "id": "358fbdcc-99f9-4577-87e6-f994e5f319eb",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 8492,
+      "sha256": "bab757f8a0a1bc04055ee98cb5777f3254aab11f6d222366e1f40a36f390506a",
+      "exported": true
+    },
+    {
+      "id": "97861922-9994-4f53-8f88-eb2329525299",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 15240,
+      "sha256": "ce093b341d9c10658ee1eaa85c5f8042ff3307bc6ccfc5f405616eb437f0009e",
+      "exported": true
+    },
+    {
+      "id": "f8a941c8-9793-4151-9199-e74426e30825",
+      "mime": "font/woff2",
+      "compressed": false,
+      "bytes": 24576,
+      "sha256": "e310b55a7fd9677f5e3555e6c6c4d064fa1f1d24393f0ddbe217cea12a8c432f",
+      "exported": true
+    }
+  ],
+  "fonts": [
+    {
+      "family": "IBM Plex Mono",
+      "weight": "500",
+      "subset": "cyrillic-ext",
+      "resourceId": "0cd538aa-3242-4a10-b9dc-ac4c1117cc7e",
+      "path": "public/prototype/fonts/ibm-plex-mono-500-cyrillic-ext.woff2",
+      "bytes": 4336,
+      "sha256": "311098be73eac339128f0b5a6e33d72645b6f87488541fdf467c402152d297fd"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "500",
+      "subset": "cyrillic",
+      "resourceId": "5b2cbabd-33c1-4ca8-9d3a-87400dde7988",
+      "path": "public/prototype/fonts/ibm-plex-mono-500-cyrillic.woff2",
+      "bytes": 5500,
+      "sha256": "d524dc8ff6dbf7ed69772f3b2ff4affaf5a89b5762b270e36c3f21da0d4e39f5"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "500",
+      "subset": "vietnamese",
+      "resourceId": "9ff19298-208f-4202-98fc-c7f92400e403",
+      "path": "public/prototype/fonts/ibm-plex-mono-500-vietnamese.woff2",
+      "bytes": 4036,
+      "sha256": "b2529fba93fd07a50ffb8fc3d103eb04b0c298d4f6564d2833c44fde286de7e4"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "500",
+      "subset": "latin-ext",
+      "resourceId": "a0919308-4665-41c8-9511-557860e176a3",
+      "path": "public/prototype/fonts/ibm-plex-mono-500-latin-ext.woff2",
+      "bytes": 8848,
+      "sha256": "77f03e26f981c582bdba3a7abed4baa2d3149211c01366bb3ab3ba7622ec4ae5"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "500",
+      "subset": "latin",
+      "resourceId": "66ad2c05-f0ff-4d7e-a9f1-122f7ffefca5",
+      "path": "public/prototype/fonts/ibm-plex-mono-500-latin.woff2",
+      "bytes": 10060,
+      "sha256": "a76f53ca6612e7b3828eec2311098675b7f9849ae4169a8bcef6302aec02a6c0"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "600",
+      "subset": "cyrillic-ext",
+      "resourceId": "876b09be-0fd5-4f62-92c7-579d269d9015",
+      "path": "public/prototype/fonts/ibm-plex-mono-600-cyrillic-ext.woff2",
+      "bytes": 4320,
+      "sha256": "f746246b6b0b641f99d9e26e0bf4e42197bde692126857857f0195a94362d52a"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "600",
+      "subset": "cyrillic",
+      "resourceId": "b846b61b-18f5-4737-a442-d1d507b1c4d7",
+      "path": "public/prototype/fonts/ibm-plex-mono-600-cyrillic.woff2",
+      "bytes": 5548,
+      "sha256": "b814a03d7e57b0626a906f76911b9361d173a1aabc5544c40f72d6a35a1e4940"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "600",
+      "subset": "vietnamese",
+      "resourceId": "6f43e666-d5b1-4012-b771-285d641eb95b",
+      "path": "public/prototype/fonts/ibm-plex-mono-600-vietnamese.woff2",
+      "bytes": 4116,
+      "sha256": "69744cabbccc9faf77516ce9b744361e1e6be7f8081400006035a153797d2965"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "600",
+      "subset": "latin-ext",
+      "resourceId": "76f294b1-36ea-4bda-9471-1ba2402ce173",
+      "path": "public/prototype/fonts/ibm-plex-mono-600-latin-ext.woff2",
+      "bytes": 8960,
+      "sha256": "1b6b18fd0fd240bc6d5850f4df621484722d4b5d3650ebdd1e3a8bbd81c75854"
+    },
+    {
+      "family": "IBM Plex Mono",
+      "weight": "600",
+      "subset": "latin",
+      "resourceId": "65592156-a2f6-422d-8b8a-302e7c4128e6",
+      "path": "public/prototype/fonts/ibm-plex-mono-600-latin.woff2",
+      "bytes": 10120,
+      "sha256": "ad4580d8cb4b5f627c2d18457656732f7f7b070f7837fbc380e08054157e6f6c"
+    },
+    {
+      "family": "Manrope",
+      "weight": "400 800",
+      "subset": "cyrillic-ext",
+      "resourceId": "70fd9617-1e6b-467d-acf7-1cd27053ac35",
+      "path": "public/prototype/fonts/manrope-cyrillic-ext.woff2",
+      "bytes": 2592,
+      "sha256": "e8c0b39992f06b3dc9a9834494088014859f363bf6ca8792b6bb07e17c7965f3"
+    },
+    {
+      "family": "Manrope",
+      "weight": "400 800",
+      "subset": "cyrillic",
+      "resourceId": "9c8ab78c-9a5f-461f-b09c-06ea98ebf46d",
+      "path": "public/prototype/fonts/manrope-cyrillic.woff2",
+      "bytes": 14544,
+      "sha256": "95a493061fe0a8d0d027c2892747134ba747141112d3be4d5022e70ab7d3a1a6"
+    },
+    {
+      "family": "Manrope",
+      "weight": "400 800",
+      "subset": "greek",
+      "resourceId": "c584e62b-06c5-4371-bb43-ec8caedceefc",
+      "path": "public/prototype/fonts/manrope-greek.woff2",
+      "bytes": 9360,
+      "sha256": "40af11327fe5308166c6cb5787808b042db6da889abf602f0a4876c49675d87e"
+    },
+    {
+      "family": "Manrope",
+      "weight": "400 800",
+      "subset": "vietnamese",
+      "resourceId": "358fbdcc-99f9-4577-87e6-f994e5f319eb",
+      "path": "public/prototype/fonts/manrope-vietnamese.woff2",
+      "bytes": 8492,
+      "sha256": "bab757f8a0a1bc04055ee98cb5777f3254aab11f6d222366e1f40a36f390506a"
+    },
+    {
+      "family": "Manrope",
+      "weight": "400 800",
+      "subset": "latin-ext",
+      "resourceId": "97861922-9994-4f53-8f88-eb2329525299",
+      "path": "public/prototype/fonts/manrope-latin-ext.woff2",
+      "bytes": 15240,
+      "sha256": "ce093b341d9c10658ee1eaa85c5f8042ff3307bc6ccfc5f405616eb437f0009e"
+    },
+    {
+      "family": "Manrope",
+      "weight": "400 800",
+      "subset": "latin",
+      "resourceId": "f8a941c8-9793-4151-9199-e74426e30825",
+      "path": "public/prototype/fonts/manrope-latin.woff2",
+      "bytes": 24576,
+      "sha256": "e310b55a7fd9677f5e3555e6c6c4d064fa1f1d24393f0ddbe217cea12a8c432f"
+    }
+  ],
+  "image": {
+    "resourceId": "d5e66bd8-9b18-40bf-87c1-06cae78135ac",
+    "path": "public/prototype/sets.png",
+    "width": 756,
+    "height": 548
+  },
+  "externalFontLicenseSources": {
+    "Manrope": "https://raw.githubusercontent.com/google/fonts/main/ofl/manrope/OFL.txt",
+    "IBM Plex Mono": "https://raw.githubusercontent.com/google/fonts/main/ofl/ibmplexmono/OFL.txt"
+  }
+}

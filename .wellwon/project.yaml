@@ -1,0 +1,7 @@
+schema: 1
+name: "NSP Center"
+guidance:
+  profile: core
+  harnesses: [claude, codex]
+  decisions: {}
+project_uid: 3b60588d-af4d-4e1d-81ac-5f6d7d9f12b6

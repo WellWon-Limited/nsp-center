@@ -1,0 +1,30 @@
+{
+  "name": "nsp-center",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "content": "node scripts/extract-prototype.mjs && node scripts/import-content.mjs && node scripts/split-content.mjs",
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/*.test.mjs",
+    "build": "npm run content && npm run typecheck && vite build && node scripts/prerender.mjs",
+    "preview": "node scripts/serve.mjs",
+    "check": "npm run build && npm test && node scripts/check-content.mjs",
+    "check:canvas": "node scripts/check-canvas.mjs"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "cheerio": "^1.2.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.1"
+  }
+}

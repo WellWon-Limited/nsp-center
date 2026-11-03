@@ -1,0 +1,152 @@
+.c-categories.c-categories-template-6 .grid-small {
+    width: 40%;
+}
+.c-categories.c-categories-template-6 .grid-big {
+    width: 60%;
+}
+.c-categories.c-categories-template-6 .grid-standard {
+    width: 33.333333%;
+}
+.c-categories.c-categories-template-6 .widget-header + .widget-content {
+    margin-top: 25px;
+}
+.c-categories.c-categories-template-6 .widget-content {
+    font-size: 0;
+    text-align: left;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+.c-categories.c-categories-template-6 .widget-element-wrap {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.c-categories.c-categories-template-6 .grid-small .widget-element,
+.c-categories.c-categories-template-6 .grid-big .widget-element,
+.c-categories.c-categories-template-6 .grid-standard .widget-element {
+    height: 300px;
+}
+.c-categories.c-categories-template-6 .widget-element {
+    display: block;
+    margin: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #000;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+.c-categories.c-categories-template-6 .widget-element-sticker-wrap {
+     position: absolute;
+     top: 0;
+     bottom: 0;
+     left: 0;
+     right: 0;
+}
+.c-categories.c-categories-template-6 .widget-element-sticker {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    color: #FFF;
+    padding: 10px 25px;
+    border-radius: 5px;
+    background-color: rgba(0,0,0,0.5);
+    margin: 10px;
+}
+.c-categories.c-categories-template-6 .widget-element:hover {
+    -webkit-box-shadow: 2px 6px 20px 4px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 2px 6px 20px 4px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 6px 20px 4px rgba(0, 0, 0, 0.3);
+}
+.c-categories.c-categories-template-6 .widget-element-picture {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #000;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: block;
+}
+.c-categories.c-categories-template-6 .widget-element:hover .widget-element-picture.zoom {
+    transform: scale(1.1);
+}
+.c-categories.c-categories-template-6 .widget-element-name-wrap {
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.c-categories.c-categories-template-6 .widget-element-name {
+    display: inline-block;
+    font-size: 22px;
+    line-height: 1.2;
+    font-weight: bold;
+    color: #FFF;
+    background: #000;
+    padding: 5px 8px;
+    margin: 25px;
+    pointer-events: none;
+    -webkit-transition: 0.4s;
+    -moz-transition: 0.4s;
+    -ms-transition: 0.4s;
+    -o-transition: 0.4s;
+    transition: 0.4s;
+}
+
+.c-categories.c-categories-template-6 .widget-footer {
+    margin-top: 25px;
+}
+.c-categories.c-categories-template-6 .widget-footer-all {
+    display: inline-block;
+    font-size: 14px;
+    line-height: 1;
+    text-decoration: none;
+    padding: 15px;
+    border: 2px solid;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    transition: all 0.4s;
+}
+.c-categories.c-categories-template-6 .widget-footer-all:hover {
+    color: #FFF;
+}
+
+@media all and (max-width: 1000px) {
+    .c-categories.c-categories-template-6 .grid-big,
+    .c-categories.c-categories-template-6 .grid-small,
+    .c-categories.c-categories-template-6 .grid-standard {
+        width: 50%;
+    }
+}
+@media all and (max-width: 720px) {
+    .c-categories.c-categories-template-6 .grid-big,
+    .c-categories.c-categories-template-6 .grid-small,
+    .c-categories.c-categories-template-6 .grid-standard {
+        width: 100%;
+    }
+    .c-categories.c-categories-template-6 .widget-element-name {
+        font-size: 18px;
+    }
+}

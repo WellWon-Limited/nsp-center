@@ -1,0 +1,205 @@
+
+const PRODUCTS = [
+  {id:'set1',name:'Набор «Сильный иммунитет»',lat:'',price:8490,pv:40,cat:'Наборы',set:true,dose:'Курс на 30 дней по схеме в буклете набора.',desc:'Коллоидное серебро, По Д\'Арко и Колострум — готовый курс для укрепления и поддержания иммунитета.'},
+  {id:'set2',name:'Набор «Очистка организма»',lat:'',price:8990,pv:42,cat:'Наборы',set:true,dose:'Курс на 21 день, подходит для марафона здоровья.',desc:'Хлорофилл жидкий, Лимфатик Дренаж и Бифидофилус Флора Форс для мягкого очищения.'},
+  {id:'col',name:'Коллоидное серебро',lat:'COLLOIDAL SILVER',price:4083,pv:19,cat:'Иммунитет',dose:'По 1 ч. л. 2 раза в день.',desc:'Природный антисептик для поддержки защитных сил организма в сезон простуд.'},
+  {id:'chl',name:'Хлорофилл жидкий',lat:'CHLOROPHYLL LIQUID',price:2952,pv:14,cat:'Очищение',dose:'1 ч. л. на стакан воды, 2 раза в день во время еды.',desc:'Концентрат хлорофилла из люцерны с мятой. Поддерживает очищение организма и уровень энергии.'},
+  {id:'omega',name:'Омега 3 ПНЖК',lat:'OMEGA-3 EPA',price:3411,pv:16,cat:'Сердце',dose:'1 капсула 2 раза в день во время еды.',desc:'Полиненасыщенные жирные кислоты для здоровья сердца, сосудов и мозга.'},
+  {id:'lym',name:'Лимфатик Дренаж',lat:'LYMPHATIC DRAINAGE',price:3050,pv:14,cat:'Очищение',dose:'2 капсулы до завтрака.',desc:'Растительный комплекс для поддержки лимфатической системы и выведения токсинов.'},
+  {id:'val',name:'Комплекс с валерианой',lat:'VALERIAN ROOT',price:1906,pv:9,cat:'Нервная система',dose:'2 капсулы за час до сна.',desc:'Мягкое успокаивающее действие, помогает быстрее засыпать.'},
+  {id:'htp',name:'5-HTP Пауер',lat:'5-HTP POWER',price:3758,pv:17,cat:'Нервная система',dose:'1 капсула в день.',desc:'Поддерживает выработку серотонина, настроение и качество сна.'},
+  {id:'mind',name:'Майнд-Макс',lat:'MIND-MAX',price:4833,pv:22,cat:'Нервная система',dose:'2 капсулы утром.',desc:'Комплекс для памяти, концентрации и умственной работоспособности.'},
+  {id:'lec',name:'Лецитин',lat:'LECITHIN',price:3318,pv:15,cat:'Сердце',dose:'1 капсула 2 раза в день.',desc:'Фосфолипиды для нервной системы, печени и сосудов.'},
+  {id:'bif',name:'Бифидофилус Флора Форс',lat:'BIFIDOPHILUS',price:3479,pv:16,cat:'Пищеварение',dose:'1 капсула 2 раза в день.',desc:'Пробиотик для баланса микрофлоры кишечника.'},
+  {id:'pau',name:"По Д'Арко",lat:"PAU D'ARCO",price:1906,pv:9,cat:'Иммунитет',dose:'1 капсула 3 раза в день.',desc:'Кора муравьиного дерева для поддержки иммунитета.'},
+  {id:'cls',name:'Колострум',lat:'COLOSTRUM',price:1997,pv:9,cat:'Иммунитет',dose:'2 капсулы натощак.',desc:'Молозиво — источник иммуноглобулинов и факторов роста.'},
+  {id:'chr',name:'Хром Хелат',lat:'CHROMIUM CHELATE',price:1603,pv:7,cat:'Похудение',dose:'1 таблетка в день во время еды.',desc:'Снижает тягу к сладкому, помогает контролировать аппетит.'},
+];
+const BY = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+const TINT = {'Иммунитет':'rgba(47,156,128,.18)','Очищение':'rgba(140,190,90,.2)','Нервная система':'rgba(130,110,200,.18)','Сердце':'rgba(220,110,110,.18)','Пищеварение':'rgba(230,170,80,.2)','Похудение':'rgba(90,140,220,.18)'};
+const CATS = ['Все','Наборы','Иммунитет','Очищение','Нервная система','Сердце','Пищеварение','Похудение'];
+const LEVELS = [{name:'Стартовая',pct:10,from:0},{name:'Серебряная',pct:15,from:500},{name:'Золотая',pct:18,from:2000},{name:'Платиновая',pct:25,from:5000}];
+const SYS = {
+  imm:{name:'Иммунная система',color:'#2f9c80',desc:'Частые простуды и сезонная усталость говорят о том, что защитным силам нужна поддержка.',recs:['col','pau','cls']},
+  clean:{name:'Очищение и энергия',color:'#8cbe5a',desc:'Упадок сил и тяжесть часто связаны с нагрузкой на органы выведения.',recs:['chl','lym','bif']},
+  nerv:{name:'Нервная система',color:'#826ec8',desc:'Стресс и недосып отражаются на настроении и восстановлении.',recs:['val','htp','mind']},
+  dig:{name:'Пищеварительная система',color:'#e6aa50',desc:'Питание и дискомфорт после еды указывают на нагрузку на ЖКТ.',recs:['bif','chl']},
+  heart:{name:'Сердце и сосуды',color:'#dc6e6e',desc:'Сосудам и сердцу полезна поддержка омега-кислотами и фосфолипидами.',recs:['omega','lec']},
+};
+const TEST = [
+  {q:'Что беспокоит чаще всего?',o:[['Часто простужаюсь',{imm:3}],['Быстро устаю',{clean:3}],['Тревожность, плохой сон',{nerv:3}],['Тяжесть после еды',{dig:3}]]},
+  {q:'Сколько часов вы спите?',o:[['Меньше 6',{nerv:2,heart:1}],['6–7',{clean:1,nerv:1}],['7–8',{}],['Больше 8, но не высыпаюсь',{clean:2}]]},
+  {q:'Как часто болеете ОРВИ?',o:[['4 раза в год и чаще',{imm:3}],['2–3 раза',{imm:2}],['Редко',{}]]},
+  {q:'Как вы питаетесь?',o:[['Много сладкого и мучного',{dig:2,clean:1}],['Нерегулярно, перекусы',{dig:2}],['Много жирного и мяса',{heart:2,dig:1}],['Сбалансированно',{}]]},
+  {q:'Какая цель для вас главная?',o:[['Реже болеть',{imm:2}],['Больше энергии',{clean:2}],['Спокойствие и сон',{nerv:2}],['Здоровое сердце',{heart:3}]]},
+];
+const QUICK = ['Подобрать для иммунитета','Как принимать Хлорофилл?','Где мой заказ?','Моя скидка','Плохо сплю'];
+const fmt = n => Math.round(n).toLocaleString('ru-RU') + ' ₽';
+const GLASS_W = 'rgba(255,255,255,.55)';
+
+class Component extends DCLogic {
+  state = {
+    tab: this.props.startTab || 'home', overlay: null, pid: null,
+    cart: {chl:1, omega:1}, q: '', cat: 'Все',
+    intake: [{pid:'omega',time:'08:00',dose:'1 капсула во время еды',done:true,left:24},{pid:'chl',time:'13:00',dose:'1 ч. л. на стакан воды',done:true,left:18},{pid:'val',time:'21:00',dose:'2 капсулы перед сном',done:false,left:5}],
+    seg: 'intake', mDone: [1,2,3], mDay: 4, mTasks: [false,false,true,false],
+    pv: 1240,
+    orders: [{id:'№ 48213',date:'12 сентября',items:3,total:9824,pv:46,status:'В пути'},{id:'№ 47790',date:'18 августа',items:2,total:5530,pv:25,status:'Доставлен'}],
+    msgs: [{from:'bot',text:'Здравствуйте! Я Марина, консультант NSP-Center. Помогу подобрать продукты, подскажу схему приёма и отвечу по заказу.'}],
+    chatInput: '', typing: false, dots: 1, unread: 1,
+    tStep: 0, tAns: [], tDone: false,
+    notif: true, toast: null, lastOrder: null,
+  };
+  chatRef = React.createRef();
+  componentDidUpdate() { const el = this.chatRef.current; if (el) el.scrollTop = el.scrollHeight; }
+  componentWillUnmount() { clearTimeout(this.tt); clearInterval(this.di); }
+  showToast(t) { clearTimeout(this.tt); this.setState({toast:t}); this.tt = setTimeout(() => this.setState({toast:null}), 2200); }
+  go(tab, extra) { this.setState({tab, overlay:null, ...(tab==='chat'?{unread:0}:{}), ...(extra||{})}); }
+  add(id, n = 1) { this.setState(s => ({cart:{...s.cart,[id]:(s.cart[id]||0)+n}})); this.showToast(`${BY[id].name} — в корзине`); }
+  setQty(id, d) { this.setState(s => { const c = {...s.cart}; c[id] = (c[id]||0)+d; if (c[id] <= 0) delete c[id]; return {cart:c}; }); }
+  level(pv) { let i = 0; LEVELS.forEach((l, k) => { if (pv >= l.from) i = k; }); return i; }
+  totals() {
+    const s = this.state, lvl = LEVELS[this.level(s.pv)];
+    let sub = 0, pv = 0, count = 0;
+    Object.entries(s.cart).forEach(([id,q]) => { sub += BY[id].price*q; pv += BY[id].pv*q; count += q; });
+    const disc = Math.round(sub*lvl.pct/100);
+    return {sub, disc, total: sub-disc, pv, count};
+  }
+  checkout() {
+    const t = this.totals();
+    const o = {id:'№ ' + (48214 + this.state.orders.length), date:'26 сентября', items:t.count, total:t.total, pv:t.pv, status:'Оформлен'};
+    const before = this.level(this.state.pv);
+    this.setState(s => ({orders:[o,...s.orders], cart:{}, pv:s.pv+t.pv, overlay:'success', lastOrder:o}));
+    if (this.level(this.state.pv + t.pv) > before) setTimeout(() => this.showToast(`Новый уровень карты: ${LEVELS[this.level(this.state.pv)].name}`), 600);
+  }
+  toggleIntake(i) {
+    this.setState(s => ({intake:s.intake.map((x,k) => k===i ? {...x,done:!x.done} : x)}));
+    const x = this.state.intake[i];
+    if (!x.done) this.showToast(`Принято: ${BY[x.pid].name}`);
+  }
+  toggleTask(i) {
+    const tasks = this.state.mTasks.map((v,k) => k===i ? !v : v);
+    const all = tasks.every(Boolean), d = this.state.mDay;
+    let mDone = this.state.mDone.filter(x => x !== d);
+    if (all) { mDone = [...mDone, d]; this.showToast(`День ${d} марафона пройден`); }
+    this.setState({mTasks:tasks, mDone});
+  }
+  reply(raw) {
+    const t = raw.toLowerCase(), s = this.state, li = this.level(s.pv), nx = LEVELS[li+1];
+    if (/иммун|простуд|болею|орви/.test(t)) return {text:'Для иммунитета рекомендую курс из трёх продуктов на 30 дней, затем перерыв 2 недели. Можно взять их набором — так выгоднее.',products:['col','pau','cls','set1']};
+    if (/хлорофил/.test(t)) return {text:'Хлорофилл жидкий: 1 чайная ложка на стакан воды, 2 раза в день во время еды. Курс — месяц. Он уже есть в вашем графике приёма на 13:00.'};
+    if (/сон|сплю|стресс|тревож|нерв/.test(t)) return {text:'При проблемах со сном подойдёт Комплекс с валерианой за час до сна. Если есть тревожность днём — добавьте 5-HTP Пауер.',products:['val','htp']};
+    if (/заказ|достав/.test(t)) { const o = s.orders[0]; return {text:`Заказ ${o.id} от ${o.date} — статус «${o.status}». Ожидаемая доставка 28–30 сентября.`,action:['Мои заказы','profile']}; }
+    if (/скидк|карт|pv|балл/.test(t)) return {text:`На вашей карте ${s.pv.toLocaleString('ru-RU')} PV, уровень «${LEVELS[li].name}», скидка ${LEVELS[li].pct}%.` + (nx ? ` До уровня «${nx.name}» (${nx.pct}%) осталось ${(nx.from-s.pv).toLocaleString('ru-RU')} PV.` : ''),action:['Открыть карту','profile']};
+    if (/очищ|детокс|марафон/.test(t)) return {text:'Для марафона «Очистка организма» основа — Хлорофилл и Лимфатик Дренаж, плюс пробиотик для кишечника. Пейте не меньше 2 литров воды в день.',products:['chl','lym','bif']};
+    if (/пищевар|кишеч|желуд/.test(t)) return {text:'Для пищеварения начните с пробиотика Бифидофилус Флора Форс и Хлорофилла. Ешьте регулярно, 4–5 раз в день небольшими порциями.',products:['bif','chl']};
+    if (/сердц|сосуд|давлен/.test(t)) return {text:'Для сердца и сосудов базовая пара — Омега 3 ПНЖК и Лецитин, курс 2 месяца.',products:['omega','lec']};
+    if (/тест|подобр|результат/.test(t)) return {text:'Предлагаю пройти диагностический тест — 5 вопросов. По результату подберу курс.',action:['Пройти тест','test']};
+    return {text:'Спасибо за вопрос! Уточните, пожалуйста, что беспокоит: иммунитет, сон, пищеварение или энергия? Или пройдите диагностический тест.',action:['Пройти тест','test']};
+  }
+  send(text) {
+    text = (text||'').trim(); if (!text || this.state.typing) return;
+    this.setState(s => ({msgs:[...s.msgs,{from:'me',text}], chatInput:'', typing:true, dots:1}));
+    clearInterval(this.di); this.di = setInterval(() => this.setState(s => ({dots:s.dots%3+1})), 350);
+    setTimeout(() => { clearInterval(this.di); this.setState(s => ({typing:false, msgs:[...s.msgs,{from:'bot',...this.reply(text)}]})); }, 1100);
+  }
+  scores() {
+    const sc = {imm:0,clean:0,nerv:0,dig:0,heart:0};
+    this.state.tAns.forEach((a,i) => { const w = TEST[i].o[a][1]; Object.keys(w).forEach(k => sc[k] += w[k]); });
+    return sc;
+  }
+  topSys() { const sc = this.scores(); return Object.keys(sc).sort((a,b) => sc[b]-sc[a])[0]; }
+  pick(i) {
+    const tAns = [...this.state.tAns.slice(0,this.state.tStep), i];
+    if (this.state.tStep + 1 >= TEST.length) this.setState({tAns, tDone:true});
+    else this.setState({tAns, tStep:this.state.tStep+1});
+  }
+  vm(p) {
+    const q = this.state.cart[p.id] || 0;
+    return {...p, priceF:fmt(p.price), imgBg: p.set ? 'url(uploads/pasted-1790409141694-0.png) 72% 45%/auto 135% #dfeee0' : `repeating-linear-gradient(135deg,rgba(29,58,54,.05) 0 6px,transparent 6px 12px),${TINT[p.cat]||'rgba(255,255,255,.5)'}`,
+      addLabel: q ? `${q} шт` : '+', addBg: q ? '#1d3a36' : '#2f9c80',
+      onOpen: () => this.setState({overlay:'product', pid:p.id}), onAdd: () => this.add(p.id)};
+  }
+  renderVals() {
+    const s = this.state, name = this.props.userName || 'Анна';
+    const li = this.level(s.pv), lvl = LEVELS[li], nx = LEVELS[li+1];
+    const t = this.totals();
+    const tabStyle = k => s.tab===k ? {bg:'#1d3a36',icon:'#fff',color:'#1d3a36',weight:'800'} : {bg:'transparent',icon:'#4f6d68',color:'#4f6d68',weight:'600'};
+    const q = s.q.trim().toLowerCase();
+    const list = PRODUCTS.filter(p => (s.cat==='Все' || p.cat===s.cat) && (!q || (p.name+' '+p.lat+' '+p.cat+' '+p.desc).toLowerCase().includes(q)));
+    const intakeIds = s.intake.map(x => x.pid);
+    const intake = s.intake.map((x,i) => ({name:BY[x.pid].name, time:x.time, dose:x.dose, left:x.left, mark:x.done?'✓':'',
+      boxBg:x.done?'#2f9c80':'rgba(255,255,255,.6)', boxBorder:x.done?'none':'2px solid #b9cfca', nameColor:x.done?'#7f9893':'#1d3a36', deco:x.done?'line-through':'none',
+      onToggle:() => this.toggleIntake(i), onOpen:() => this.setState({overlay:'product',pid:x.pid})}));
+    const intakeDone = s.intake.filter(x => x.done).length;
+    const todayR = intakeDone / s.intake.length;
+    const week = [['Пн',21,1],['Вт',22,1],['Ср',23,.6],['Чт',24,1],['Пт',25,1],['Сб',26,todayR],['Вс',27,-1]].map(([l,n,r],i) => {
+      const today = i===5;
+      return {label:l,num:n,labelColor:today?'#23806a':'#5f7a75',
+        bg: r<0 ? 'rgba(255,255,255,.35)' : r>=1 ? '#2f9c80' : r>0 ? 'rgba(47,156,128,.35)' : 'rgba(255,255,255,.6)',
+        color: r>=1 ? '#fff' : '#1d3a36', border: today ? '2px solid #1d3a36' : '1px solid rgba(255,255,255,.8)'};
+    });
+    const mDays = Array.from({length:21},(_,i) => { const n=i+1, done=s.mDone.includes(n), cur=n===s.mDay;
+      return {n, bg:done?'#2f9c80':cur?'rgba(255,255,255,.8)':'rgba(255,255,255,.35)', color:done?'#fff':cur?'#1d3a36':'#8aa39e', border:cur?'2px solid #1d3a36':'1px solid rgba(255,255,255,.7)'}; });
+    const TASKS = ['Лимфатик Дренаж — 2 капсулы до завтрака','Хлорофилл — 1 ч. л. на стакан воды','Выпить 2 литра воды','Прогулка 30 минут'];
+    const mTasks = TASKS.map((text,i) => { const d = s.mTasks[i]; return {text, mark:d?'✓':'', boxBg:d?'#2f9c80':'rgba(255,255,255,.6)', boxBorder:d?'none':'2px solid #b9cfca', color:d?'#7f9893':'#1d3a36', deco:d?'line-through':'none', onToggle:() => this.toggleTask(i)}; });
+    const mTasksDone = s.mTasks.filter(Boolean).length;
+    const P = s.pid ? BY[s.pid] : null, pq = P ? (s.cart[P.id]||0) : 0;
+    const prod = P ? {...this.vm(P), cardPriceF:fmt(P.price*(1-lvl.pct/100)),
+      cartLabel: pq ? `Ещё одну · в корзине ${pq}` : `В корзину · ${fmt(P.price)}`,
+      intakeLabel: P.set ? 'Курс на месяц' : intakeIds.includes(P.id) ? 'Уже в графике' : 'Добавить в приём',
+      onIntake: () => { if (P.set || intakeIds.includes(P.id)) return; this.setState(st => ({intake:[...st.intake,{pid:P.id,time:'19:00',dose:P.dose.split('.')[0],done:false,left:30}]})); this.showToast('Добавлено в график приёма на 19:00'); }} : {};
+    const cartItems = Object.entries(s.cart).map(([id,qn]) => { const p = this.vm(BY[id]); return {name:p.name, imgBg:p.imgBg, qty:qn, sumF:fmt(p.price*qn), onInc:() => this.setQty(id,1), onDec:() => this.setQty(id,-1)}; });
+    const msgs = s.msgs.map(m => ({text:m.text, align:m.from==='me'?'flex-end':'flex-start', bg:m.from==='me'?'#1d3a36':'rgba(255,255,255,.6)', color:m.from==='me'?'#fff':'#1d3a36', radius:m.from==='me'?'18px 18px 6px 18px':'18px 18px 18px 6px',
+      products:(m.products||[]).map(id => this.vm(BY[id])), hasAction:!!m.action, actionLabel:m.action?m.action[0]:'',
+      onAction:() => { const a = m.action[1]; if (a==='test') this.setState({overlay:'test',tStep:0,tAns:[],tDone:false}); else this.go(a); }}));
+    const sc = this.scores(), maxSc = Math.max(1, ...Object.values(sc)), top = s.tDone ? this.topSys() : null;
+    const cur = TEST[s.tStep];
+    const hasRes = s.tDone && s.overlay !== 'test' || (s.tDone);
+    return {
+      userName:name, userInitial:name[0], setsBg:`url(${(window.__resources&&window.__resources.setsImg)||'uploads/pasted-1790409141694-0.png'}) center/cover #dfeee0`,
+      isHome:s.tab==='home', isCatalog:s.tab==='catalog', isChat:s.tab==='chat', isHealth:s.tab==='health', isProfile:s.tab==='profile',
+      tb:{home:tabStyle('home'),catalog:tabStyle('catalog'),chat:tabStyle('chat'),health:tabStyle('health'),profile:tabStyle('profile')},
+      goHome:() => this.go('home'), goCatalog:() => this.go('catalog'), goChat:() => this.go('chat'), goHealth:() => this.go('health'), goProfile:() => this.go('profile'),
+      goHealthIntake:() => this.go('health',{seg:'intake'}), goHealthMarathon:() => this.go('health',{seg:'marathon'}), goSets:() => this.go('catalog',{cat:'Наборы',q:''}),
+      cartCount:t.count, hasCart:t.count>0, cartEmpty:t.count===0, openCart:() => this.setState({overlay:'cart'}), closeOverlay:() => this.setState({overlay:null}),
+      pvF:s.pv.toLocaleString('ru-RU'), lvlName:lvl.name, lvlPct:lvl.pct,
+      lvlProgress: nx ? Math.round((s.pv-lvl.from)/(nx.from-lvl.from)*100)+'%' : '100%',
+      lvlNextText: nx ? `До уровня «${nx.name}» (−${nx.pct}%) — ещё ${(nx.from-s.pv).toLocaleString('ru-RU')} PV` : 'Максимальный уровень карты',
+      levels: LEVELS.map((l,i) => ({name:l.name, pct:l.pct, fromF:l.from.toLocaleString('ru-RU'), dot:i===li?'#2f9c80':i<li?'#9fcbbf':'rgba(29,58,54,.15)', weight:i===li?'800':'600', border:i<LEVELS.length-1?'1px solid rgba(29,58,54,.08)':'none'})),
+      intake, intakeDone, intakeTotal:s.intake.length, week,
+      refillShow: !s.cart.val, refill:() => this.add('val'),
+      mDay:s.mDay, mNextDay:s.mDay+1, mDays, mTasks, mTasksDone, mDoneCount:s.mDone.length, mProgress:Math.round(s.mDone.length/21*100)+'%', mDayComplete:s.mDone.includes(s.mDay),
+      askMarathon:() => { this.go('chat'); setTimeout(() => this.send('Вопрос по марафону очищения'), 50); },
+      seg:{intakeBg:s.seg==='intake'?'#1d3a36':'transparent',intakeColor:s.seg==='intake'?'#fff':'#4f6d68',marBg:s.seg==='marathon'?'#1d3a36':'transparent',marColor:s.seg==='marathon'?'#fff':'#4f6d68'},
+      isSegIntake:s.seg==='intake', isSegMarathon:s.seg==='marathon', segIntake:() => this.setState({seg:'intake'}), segMarathon:() => this.setState({seg:'marathon'}),
+      notifBg:s.notif?'#2f9c80':'rgba(29,58,54,.2)', notifJustify:s.notif?'flex-end':'flex-start',
+      toggleNotif:() => { this.setState({notif:!s.notif}); this.showToast(s.notif?'Напоминания выключены':'Напоминания включены'); },
+      hits:['set1','col','chl','omega'].map(id => this.vm(BY[id])),
+      q:s.q, hasQuery:!!s.q, onSearch:e => this.setState({q:e.target.value}), clearSearch:() => this.setState({q:''}),
+      cats: CATS.map(c => ({name:c, bg:s.cat===c?'#1d3a36':'rgba(255,255,255,.45)', color:s.cat===c?'#fff':'#1d3a36', onPick:() => this.setState({cat:c})})),
+      products:list.map(p => this.vm(p)), foundCount:list.length, noResults:list.length===0,
+      msgs, typing:s.typing, typingDots:'Марина печатает' + '.'.repeat(s.dots), chatRef:this.chatRef,
+      quick: QUICK.map(text => ({text, onPick:() => this.send(text)})),
+      chatInput:s.chatInput, onChatInput:e => this.setState({chatInput:e.target.value}), onChatKey:e => { if (e.key==='Enter') this.send(s.chatInput); }, sendChat:() => this.send(s.chatInput),
+      unread:s.unread, hasUnread:s.unread>0 && s.tab!=='chat',
+      showProduct:s.overlay==='product' && !!P, prod,
+      showCart:s.overlay==='cart', cartItems, subF:fmt(t.sub), discF:fmt(t.disc), totalF:fmt(t.total), cartPv:t.pv, checkout:() => this.checkout(),
+      showSuccess:s.overlay==='success' && !!s.lastOrder, lastOrder: s.lastOrder ? {...s.lastOrder, totalF:fmt(s.lastOrder.total)} : {},
+      orders: s.orders.map(o => ({...o, totalF:fmt(o.total), stBg:o.status==='Доставлен'?'rgba(29,58,54,.08)':'rgba(47,156,128,.16)', stColor:o.status==='Доставлен'?'#4f6d68':'#1f6f5c'})),
+      showTest:s.overlay==='test', testRunning:!s.tDone, testFinished:s.tDone,
+      openTest:() => this.setState({overlay:'test'}),
+      testBack:() => { if (s.tDone) this.setState({tDone:false, tStep:TEST.length-1}); else if (s.tStep>0) this.setState({tStep:s.tStep-1}); else this.setState({overlay:null}); },
+      testNum:s.tStep+1, testTotal:TEST.length, testProgress:Math.round((s.tStep+(s.tDone?1:0))/TEST.length*100)+'%', testQ:cur.q,
+      testOpts:cur.o.map((o,i) => ({text:o[0], onPick:() => this.pick(i)})),
+      hasTestResult:s.tDone, testTopName: top ? SYS[top].name : '', testTopDesc: top ? SYS[top].desc : '',
+      testCardSub: top ? `Ваш результат: ${SYS[top].name}. Открыть рекомендации` : '5 вопросов — подберём продукты под системы организма',
+      testBars: Object.keys(SYS).map(k => ({name:SYS[k].name, color:SYS[k].color, pctLabel:Math.round(sc[k]/maxSc*100)+'%'})).sort((a,b) => parseInt(b.pctLabel)-parseInt(a.pctLabel)),
+      testRecs: top ? SYS[top].recs.map(id => this.vm(BY[id])) : [],
+      addCourse:() => { SYS[top].recs.forEach(id => this.setState(st => ({cart:{...st.cart,[id]:(st.cart[id]||0)+1}}))); this.showToast('Курс добавлен в корзину'); },
+      discussTest:() => { this.go('chat'); setTimeout(() => this.send(`Мой результат теста: ${SYS[top].name}. Что подобрать?`), 50); },
+      restartTest:() => this.setState({tStep:0,tAns:[],tDone:false}),
+      hasToast:!!s.toast, toast:s.toast,
+    };
+  }
+}

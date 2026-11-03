@@ -1,0 +1,378 @@
+.test-title {
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.test-title p {
+    margin-bottom: 50px;
+	line-height: 2;
+}
+
+.table-title {
+    margin-bottom: 15px;
+    color: #0a263c;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.table-wrapper {
+    display: flex;
+    position: relative;
+}
+
+.info-block-wrapper {
+    min-width: 270px;
+    margin-left: auto;
+    padding-bottom: 25px;
+}
+
+.test-info-block {
+    color: #454545;
+    border: 1px solid #c0c0c0;
+}
+
+.info-block-title {
+    text-align: start;
+    border-bottom: 1px solid #e8eae2;
+    font-weight: 600;
+    padding: 6px 15px;
+    font-size: 14px;
+    background-color: #f8ffe8;
+}
+
+.test-info-block ul {
+    padding: 10px;
+    padding-bottom: 15px;
+    margin: 0;
+    list-style: none !important;
+}
+
+.test-info-block ul li:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.test-info-block ul li {
+    display: flex;
+    padding: 0;
+    list-style: none !important;
+    align-items: center;
+    font-size: 14px;
+}
+
+.test-info-block p {
+    margin: 0;
+    padding: 0;
+}
+
+.test-info-block ul li::before {
+    display: none;
+    margin: 0;
+    padding: 0;
+}
+
+.test-info-block ul li span {
+    display: block;
+    min-width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.test-table {
+    width: auto;
+    height: 100%;
+    max-width: 870px;
+    border: 1px solid #c0c0c0;
+    border-bottom: none;
+    background-color: #f8ffe8;
+    color: #454545;
+    margin-right: 30px;
+    font-family: inherit;
+}
+
+.test-table-row {
+    display: flex;
+    border-bottom: 1px solid #c0c0c0;
+    min-height: 34px;
+    font-family: inherit;
+}
+
+.test-table-row > div:not(:last-child) {
+    border-right: 1px solid #c0c0c0;
+}
+
+.test-table-title .table-title {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+}
+
+.test-table-title .table-title p {
+    font-weight: 600;
+    font-size: 14px;
+    padding: 6px 0px;
+    margin: 0;
+}
+
+.table-title:nth-of-type(2) {
+    width: 320px;
+    padding-left: 10px;
+}
+
+.table-title:nth-of-type(3) {
+    width: auto;
+    padding: 0px 10px;
+    text-align: center;
+    justify-content: center;
+}
+
+.test-checkbox {
+    width: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.test-label {
+    width: 320px;
+    display: flex;
+    align-items: center;
+}
+
+.test-label > label {
+    padding: 6px 0px;
+    padding-left: 10px;
+    font-size: 14px;
+    display: block;
+    margin: 0;
+    font-weight: 500;
+    width: 100%;
+    font-family: inherit;
+}
+
+
+.test-table-row.on .cross {
+    background-image: url(../images/cross.png);
+    background-color: #fff !important;
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.total-row {
+    font-size: 14px;
+}
+
+.total-row p {
+    font-size: 14px;
+    padding: 6px 0px;
+    margin: 0;
+}
+
+.total {
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    width: 348px;
+}
+
+.test-td {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-width: 38px;
+}
+
+.result-container {
+    width: 100%;
+    padding-top: 40px;
+}
+
+.result-container-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.result-container-button-wrapper a:hover,
+a.result-product-btn-more:hover {
+    background: #7ac143;
+    color: #fff;
+}
+
+.result-container-button-wrapper a:focus {
+    color: #23527c;
+}
+
+.result-item {
+    width: 100%;
+    margin-bottom: 60px;
+}
+
+.result-item p,
+.result-item h3 {
+    margin: 0;
+}
+
+.result-header {
+    display: flex;
+}
+
+.color-block {
+    min-width: 42px;
+    margin-right: 10px;
+}
+
+.result-title > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.result-title > p {
+    font-size: 16px;
+}
+
+.result-value {
+    padding-left: 10px;
+    font-size: 26px;
+}
+
+.result-value.good {
+    color: #7bd500;
+}
+
+.result-value.normal {
+    color: #66afe9;
+}
+
+.result-value.bad {
+    color: #ff5752;
+}
+
+.result-product-container {
+    padding-top: 30px;
+}
+
+.result-item .result-product-title {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.result-product-list {
+    margin-bottom: 55px;
+}
+
+.result-product-btn-more:hover {
+    background: #63A70A;
+    color: #fff;
+    text-decoration: none;
+}
+
+.result-product-item {
+    width: 100%;
+}
+
+.result-product-btn-more {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    display: flex;
+    transition: all ease 0.3s;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 14px;
+    width: 250px;
+    height: 55px;
+    border-radius: 50px;
+    background: #63A70A;
+    color: #fff;
+    border: none;
+}
+
+.result-container-button-wrapper .result-product-btn-more:focus,
+.result-container-button-wrapper .result-product-btn-more:active
+{
+    color: #fff;
+    text-decoration: none;
+}
+
+
+@media screen and (max-width: 1200px) {
+    .test-td {
+        min-width: 33px;
+    }
+
+    .table-title:nth-of-type(3) {
+        min-width: 297px;
+    }
+
+    .result-title > div {
+        flex-wrap: wrap;
+    }
+
+    .result-value {
+        width: 100%;
+        padding-top: 10px;
+        padding-left: 0px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .test-info-block {
+        display: none;
+    }
+
+    .test-table {
+        min-width: 100%;
+    }
+
+    .result-container {
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 715px) {
+    .test-td {
+        min-width: 0;
+        width: 0;
+        border: none;
+        overflow: hidden;
+    }
+
+    .table-title:nth-of-type(3) {
+        min-width: 0px;
+        width: 0;
+        overflow: hidden;
+        font-size: 0;
+		display: none;
+    }
+
+    .test-table-row > div:not(:last-child) {
+        border-right: none;
+    }
+
+    .test-table-title {
+        max-height: 33px;
+    }
+
+    .total-row {
+        min-height: 0;
+        height: 0;
+        border: none;
+        overflow: hidden;
+    }
+
+    .table-title {
+        max-height: 33px;
+    }
+
+    .test-table-row > div:nth-child(1) {
+        border-right: 1px solid #c0c0c0;
+    }
+}

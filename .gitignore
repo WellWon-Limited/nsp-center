@@ -1,0 +1,16 @@
+.wellwon/canvas/
+.wellwon/plugins/
+.agent/
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Generated runtime copies; original snapshot is the reproducible source.
+/dist/
+/public/media/
+/public/prototype/
+/src/generated/
+references/nsp-center.ru/__pycache__/
+references/nsp-center.ru/.venv/

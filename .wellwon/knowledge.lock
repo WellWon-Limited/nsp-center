@@ -1,0 +1,43 @@
+schema: 1
+guidance:
+  pack:
+    id: wellwon/project-guidance
+    version: 1.2.0
+    hash: sha256:a7b644111e3881b56ff608a97180bdf4c52d675ec9dccafb83bfe92826a28296
+    generated_on: 2026-09-25
+  artifacts:
+    agents-router:
+      path: "AGENTS.md"
+      ownership: seeded
+      template: agents-router
+      base_hash: sha256:f1728972aa32ff9fad581a0c4d88bafb7c00a0534a0bff6abd8239c01ccf6cdf
+    claude-adapter:
+      path: "CLAUDE.md"
+      ownership: generated-adapter
+      template: claude-adapter
+      base_hash: sha256:336cc4fbf19beaada7ccf9986414fa91851a8d7a07dfb3ccbe800a69eed0ab49
+    readme:
+      path: "README.md"
+      ownership: seeded
+      template: readme
+      base_hash: sha256:6617038b32292917175b3f1690cbd56818a96cb40af8f6274f8d9784c4fd71af
+    project-passport:
+      path: "docs/PASSPORT.md"
+      ownership: seeded
+      template: project-passport
+      base_hash: sha256:cd5208a8f035884fec0caddd034e28d575114dce75083c2546dacb1307144d4e
+    active-plan:
+      path: "docs/PLAN.md"
+      ownership: seeded
+      template: active-plan
+      base_hash: sha256:7faf385eff176d3f3a792eabc3c33bde1d7146e11ea194ed422087ba0cf6970a
+    development-guide:
+      path: "docs/DEVELOPMENT.md"
+      ownership: seeded
+      template: development-guide
+      base_hash: sha256:b1c12da27a487a7a4a5213a1c7db1d5b2df7453715bfafd1f4b835323e272130
+    initial-decision:
+      path: "docs/decisions/0001-initial-stack.md"
+      ownership: seeded
+      template: initial-decision
+      base_hash: sha256:a71d722771e454905520a10b9eb43eaa14265e2a8ca6d8d7ea1d5b9761bb6d04
