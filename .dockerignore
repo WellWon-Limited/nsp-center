@@ -1,0 +1,14 @@
+.git
+node_modules
+dist
+public/media
+public/prototype
+src/generated
+.wellwon/canvas
+.wellwon/plugins
+.agent
+.claude
+.env
+.env.*
+references/nsp-center.ru/.venv
+references/nsp-center.ru/__pycache__

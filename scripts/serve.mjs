@@ -17,4 +17,4 @@ const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http:/
  let status=200;try{const info=await stat(target);if(!info.isFile())throw new Error('not file');}catch{target=resolve(dist,'404/index.html');status=404;}
  const bytes=await readFile(target);res.writeHead(status,{'Content-Type':mime[extname(target)]||'application/octet-stream','Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});if(req.method==='HEAD')res.end();else res.end(bytes);
 }catch{res.writeHead(400);res.end('Bad request');}});
-const port=Number(process.env.PORT)||5217;server.listen(port,'127.0.0.1',()=>console.log(`NSP Center: http://127.0.0.1:${port} ${process.env.WW_TEST==='1'?`(isolated ${process.env.WW_TEST_ID||''})`:''}`));
+const port=Number(process.env.PORT)||5217;const host=process.env.HOST||'127.0.0.1';server.listen(port,host,()=>console.log(`NSP Center: http://${host}:${port} ${process.env.WW_TEST==='1'?`(isolated ${process.env.WW_TEST_ID||''})`:''}`));

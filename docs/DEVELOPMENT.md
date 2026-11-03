@@ -96,5 +96,13 @@ WW_TEST=1 WW_TEST_ID=nsp-acceptance NSP_TEST_URL=http://127.0.0.1:5217 npm run c
 
 `.github/workflows/check.yml` выполняет npm ci / npm run check на Node 24.
 CI требует source snapshot в checkout; производные copies и dist игнорируются.
-Build готовит локальный артефакт `dist/`; deployment, DNS, оплата и API в этот
-scope не входят. Секреты и реальный пользовательский ввод в git не сохраняются.
+Build готовит локальный артефакт `dist/`; оплата и API в этот scope не входят.
+
+## Dev-стенд
+
+https://nsp-center.dev.codimax.ru — российский dev-сервер (Coolify WellWon,
+AdminVPS). Каждый push в `main` пересобирает стенд сам: `Dockerfile` выполняет
+`npm run build` и запускает `scripts/serve.mjs` с `HOST=0.0.0.0`, `PORT=4173`.
+Выкладка занимает около 10 минут: с этого сервера GitHub скачивается медленно.
+Доступ к Coolify и серверу для выкладки не нужен; статус и логи — у владельца
+инфраструктуры (репозиторий wellwon-dev). Секреты и реальный пользовательский ввод в git не сохраняются.
