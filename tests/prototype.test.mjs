@@ -19,7 +19,8 @@ test('The adapted prototype drops the drawn phone, caption and fake status bar',
   assert.doesNotMatch(after, /<span>9:41<\/span>/, 'Fake status bar must be gone; the device frame draws the real one');
   assert.match(after, /viewport-fit=cover/);
   assert.match(after, /env\(safe-area-inset-top/);
-  assert.match(after, /safe-area-inset-top,0px\) - 48px\)\);overflow:clip;/, 'Screen must clip, not scroll, the off-edge background blobs');
+  assert.match(after, /<div style="position:absolute;inset:0;--safe-extra:max\(0px,calc\(env\(safe-area-inset-top,0px\) - 48px\)\);overflow:clip;/, 'Screen must fill the frame to the top and clip the off-edge background blobs');
+  assert.equal(after.split('var(--safe-extra)').length - 1, 10, 'Every top-anchored layer must move under the real status bar');
 });
 
 test('The adapted prototype keeps every screen, behaviour and resource of the original', () => {

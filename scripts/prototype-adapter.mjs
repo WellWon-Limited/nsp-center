@@ -41,11 +41,35 @@ const TEMPLATE_EDITS = [
     replace: `<div style="position:relative;width:min(100%,${MAX_APP_WIDTH}px);height:100%;background:#eaf3f1;flex:none">`,
   },
   {
+    // The screen (and its gradient blobs) covers the whole frame up to the top edge; only the
+    // content moves down by --safe-extra, the part of the real safe area the design did not reserve.
     // overflow:clip, not hidden: the blurred background blobs reach 120px past the right edge,
     // and a hidden-overflow box can still be scrolled sideways by focus or scrollIntoView.
-    name: 'screen starts under the real status bar and cannot scroll sideways',
+    name: 'screen fills the frame and cannot scroll sideways',
     find: '<div style="position:relative;width:100%;height:100%;border-radius:44px;overflow:hidden;',
-    replace: `<div style="position:absolute;left:0;right:0;bottom:0;top:max(0px,calc(env(safe-area-inset-top,0px) - ${DESIGN_STATUS_BAR}px));overflow:clip;`,
+    replace: `<div style="position:absolute;inset:0;--safe-extra:max(0px,calc(env(safe-area-inset-top,0px) - ${DESIGN_STATUS_BAR}px));overflow:clip;`,
+  },
+  {
+    name: 'scrolling screens start under the real status bar',
+    find: 'position:absolute;inset:0;overflow-y:auto;padding:58px 18px 120px;',
+    replace: 'position:absolute;inset:0;overflow-y:auto;padding:calc(58px + var(--safe-extra)) 18px 120px;',
+    count: 4,
+  },
+  {
+    name: 'chat screen starts under the real status bar',
+    find: 'position:absolute;inset:0;padding:52px 0 100px;',
+    replace: 'position:absolute;inset:0;padding:calc(52px + var(--safe-extra)) 0 100px;',
+  },
+  {
+    name: 'full-screen sheets start under the real status bar',
+    find: 'position:absolute;inset:0;z-index:20;',
+    replace: 'position:absolute;inset:0;z-index:20;padding-top:var(--safe-extra);box-sizing:border-box;',
+    count: 4,
+  },
+  {
+    name: 'toast sits under the real status bar',
+    find: 'position:absolute;top:54px;left:50%;',
+    replace: 'position:absolute;top:calc(54px + var(--safe-extra));left:50%;',
   },
   {
     // The catalog pointed set cards at a Claude Design upload path that the export does not ship,
@@ -69,10 +93,11 @@ window.addEventListener('error', function (e) {
 }, true);
 </script>`;
 
-const replaceOnce = (text, { name, find, replace }) => {
-  const count = typeof find === 'string' ? text.split(find).length - 1 : (text.match(new RegExp(find.source, 'g')) ?? []).length;
-  assert.equal(count, 1, `Prototype edit "${name}" expected one match, found ${count}`);
-  return text.replace(find, () => replace);
+const replaceOnce = (text, { name, find, replace, count: expected = 1 }) => {
+  const pattern = typeof find === 'string' ? find : new RegExp(find.source, 'g');
+  const count = typeof find === 'string' ? text.split(find).length - 1 : (text.match(pattern) ?? []).length;
+  assert.equal(count, expected, `Prototype edit "${name}" expected ${expected} match(es), found ${count}`);
+  return typeof find === 'string' ? text.replaceAll(find, () => replace) : text.replace(pattern, () => replace);
 };
 
 export function readTemplate(html) {
