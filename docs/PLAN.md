@@ -1,20 +1,32 @@
 # Активный результат
 
-Полный локальный сайт и дизайн-система из предоставленного прототипа/снимка.
+Основа SEO под Яндекс: сайт измеряется, тестовые копии закрыты от поиска,
+страницы готовы к работе с ключевыми словами. Принципы и полный список задач —
+[SEO.md](SEO.md).
 
-Реализованы импорт 227 source routes, 166 products, 17 categories, 8 articles и
-16 info pages; runtime компонентов, responsive layout, interactive local flows;
-SSR, исправления 13 links, Product/Offer, sitemap и isolated query-aware preview.
+Задачи этого этапа:
+
+- [#3](https://github.com/WellWon-Limited/nsp-center/issues/3) — тестовый
+  сервер закрыт от индексации.
+- [#4](https://github.com/WellWon-Limited/nsp-center/issues/4) — Яндекс Метрика
+  с целями.
+- [#5](https://github.com/WellWon-Limited/nsp-center/issues/5) — Яндекс
+  Вебмастер: права, карта сайта, регион.
+- [#6](https://github.com/WellWon-Limited/nsp-center/issues/6) — семантическое
+  ядро и таблица «запрос → страница».
 
 Приёмка:
 
-- Все исходные route variants имеют собственный HTML и HTTP 200.
-- Весь текст и структурированные поля сверяются с source; bytes медиа проверены.
-- Категории через фактическую SSR-пагинацию показывают каждый продукт один раз.
-- Дизайн опирается на prototype tokens; исходник не меняется.
-- Production build, TypeScript и 22 независимых теста проходят.
-- Основные шаблоны и интерактивные сценарии проверены через холст.
+- `https://nsp-center.dev.codimax.ru/robots.txt` запрещает индексацию, ответы
+  тестового сервера несут `X-Robots-Tag: noindex`; правила боевого домена
+  разрешают индексацию.
+- Счётчик Метрики есть на всех страницах боевого домена и не срабатывает на
+  тестовом; цели видны в отчёте Метрики (проверяет владелец).
+- Вебмастер подтвердил права и принял `sitemap.xml` (проверяет владелец).
+- Семантическое ядро лежит в репозитории, у каждой страницы раздела и статьи
+  есть главный запрос.
+- `npm run check` проходит.
 
-Фактические evidence и оставшиеся source/backend ограничения находятся в
-[CONTENT-AUDIT.md](CONTENT-AUDIT.md) и [VERIFICATION.md](VERIFICATION.md).
-Production deployment не запрошен и не выполнялся.
+Предыдущий результат — полный сайт из снимка nsp-center.ru, дизайн-система и
+прототип приложения — выполнен; проверки в [VERIFICATION.md](VERIFICATION.md)
+и [CONTENT-AUDIT.md](CONTENT-AUDIT.md).
