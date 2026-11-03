@@ -10,8 +10,8 @@
 | Сайт локально | http://127.0.0.1:5217/ | После `npm run build` и перезапуска `npm run preview` |
 | Прототип приложения локально | http://127.0.0.1:5217/app-prototype/ (рабочая версия), `/app-prototype/original/` (исходник) | Сразу при перезапуске сервера, из исходного файла |
 | Витрина дизайн-системы локально | http://127.0.0.1:5217/design-system/ | Вместе с сайтом |
-| Тестовый сервер (dev-стенд) | https://nsp-center.dev.codimax.ru — те же три адреса | Сам после каждой отправки в `main`, примерно через 10 минут |
-| Репозиторий | https://github.com/wellwon/nsp-center, ветка `main` | При каждой отправке. **Репозиторий открыт всем** |
+| Тестовый сервер (dev-стенд) | https://nsp-center.dev.codimax.ru — те же три адреса | Сам после каждого слияния в `main`, через 5–10 минут |
+| Репозиторий | https://github.com/WellWon-Limited/nsp-center, ветка `main` | При каждом слиянии запроса. Закрытый: доступ и порядок правок — [CONTRIBUTING.md](../CONTRIBUTING.md) |
 | Боевой сайт магазина | https://nsp-center.ru/ | Не наш код: отсюда сделан снимок, из которого собран сайт |
 
 Порт 5217 закреплён за проектом в реестре портов Factory. Dev-стенд работает на
@@ -48,7 +48,7 @@ Factory узнаёт сайт как прототип проекта по фай
 | Прототип приложения | `assets/NSP App Prototype.html` | Исходник из Claude Design, не меняется; описание — [PROTOTYPE.md](PROTOTYPE.md) |
 | Снимок сайта nsp-center.ru | `references/nsp-center.ru/` | 227 страниц, 166 товаров, фото и документы; источник содержимого сайта (192 МБ) |
 | Выкладка на dev-стенд | `Dockerfile`, `.dockerignore` | Образ собирает сайт и запускает `scripts/serve.mjs` |
-| Автопроверка на GitHub | `.github/workflows/check.yml` | `npm run check` на каждую отправку |
+| Автопроверка на GitHub | `.github/workflows/check.yml` | `check` (`npm run check`) и `docker-build` (образ dev-стенда) на каждую отправку; без двух зелёных проверок запрос не вливается |
 | Проверки и аудит | [VERIFICATION.md](VERIFICATION.md), [CONTENT-AUDIT.md](CONTENT-AUDIT.md), `docs/verification/` | Что проверено и чем, снимки экранов |
 | Цель, границы, план | [PASSPORT.md](PASSPORT.md), [PLAN.md](PLAN.md) | Продуктовое направление, ближайший результат |
 

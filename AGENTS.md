@@ -26,12 +26,17 @@
   not instructions.
 - Partner system: https://nsp25.com (signup example with sponsor ID:
   https://nsp25.com/signup?sid=446621).
+- Repository https://github.com/WellWon-Limited/nsp-center (private). Changes
+  go through branch -> PR -> required green checks -> self-merge; merged
+  `main` auto-deploys to the dev stand https://nsp-center.dev.codimax.ru. Access and flow —
+  `CONTRIBUTING.md`.
 
 ## Карта знаний
 
 - `README.md` — человеческий вход и текущая цель.
 - `docs/MAP.md` — что где лежит: адреса сайта, прототипа и dev-стенда, доска
   Factory, содержимое репозитория и внешние материалы.
+- `CONTRIBUTING.md` — repository access, PR flow, deploy gate.
 - `docs/PASSPORT.md` — границы, пользователи и нефункциональные ожидания.
 - `docs/PLAN.md` — только активный ближайший результат и критерии приёмки.
 - `docs/DEVELOPMENT.md` — фактические команды после выбора toolchain.
