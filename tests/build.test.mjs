@@ -155,12 +155,3 @@ test('The isolated running app serves all 227 source URLs without a 404', { skip
   }
   assert.deepEqual(failures, []);
 });
-
-test('The local server serves the original app prototype unchanged, and the build does not publish it', { skip: !process.env.NSP_TEST_URL }, async () => {
-  const original = readFileSync(resolve(root, 'assets/NSP App Prototype.html'));
-  const response = await fetch(new URL('/app-prototype/', process.env.NSP_TEST_URL), { signal: AbortSignal.timeout(10000) });
-  assert.equal(response.status, 200);
-  assert.match(response.headers.get('content-type') ?? '', /^text\/html/);
-  assert.ok(Buffer.from(await response.arrayBuffer()).equals(original), 'Served prototype differs from assets/NSP App Prototype.html');
-  assert.equal(existsSync(resolve(dist, 'app-prototype')), false, 'The prototype must not be part of the published build');
-});

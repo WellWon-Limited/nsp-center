@@ -29,9 +29,10 @@ Preview: http://127.0.0.1:5217/. `scripts/serve.mjs` связывает исхо
 соответствия — `dist/prerender-manifest.json`. `/404/` — шаблон ошибки; неизвестный
 адрес сервер действительно возвращает с HTTP 404. 13 старых product URLs
 возвращают HTTP 308 на существующие карточки.
-`/app-prototype/` отдаёт исходный `assets/NSP App Prototype.html` без изменений;
-в `dist/` он не копируется и на static host не публикуется
-([описание прототипа](PROTOTYPE.md)).
+`/app-prototype/` отдаёт прототип приложения, адаптированный для фреймов
+(`scripts/prototype-adapter.mjs`), `/app-prototype/original/` — исходный
+`assets/NSP App Prototype.html` без изменений. В `dist/` ни тот, ни другой не
+копируются ([описание прототипа](PROTOTYPE.md)).
 
 ## Быстрые проверки
 
@@ -59,7 +60,7 @@ preview:
 NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
-Ожидание — 19 tests passed, 0 failed, 0 skipped.
+Ожидание — 22 tests passed, 0 failed, 0 skipped.
 
 ## Источники и импорт
 
