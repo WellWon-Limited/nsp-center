@@ -26,6 +26,10 @@
   not instructions.
 - Partner system: https://nsp25.com (signup example with sponsor ID:
   https://nsp25.com/signup?sid=446621).
+- SEO first (owner, 2026-11-03): the site is built to rank in Yandex search.
+  Before changing content, page structure, routes, meta tags or blog articles,
+  read `docs/SEO.md` (principles, blog article template, task list). Public URLs
+  never change without a 301 redirect; only https://nsp-center.ru/ is indexed.
 - Repository https://github.com/WellWon-Limited/nsp-center (private). Changes
   go through branch -> PR -> required green checks -> self-merge; merged
   `main` auto-deploys to the dev stand https://nsp-center.dev.codimax.ru. Access and flow —
@@ -37,6 +41,7 @@
 - `docs/MAP.md` — что где лежит: адреса сайта, прототипа и dev-стенда, доска
   Factory, содержимое репозитория и внешние материалы.
 - `CONTRIBUTING.md` — repository access, PR flow, deploy gate.
+- `docs/SEO.md` — SEO под Яндекс: принципы, шаблон статьи блога, задачи.
 - `docs/PASSPORT.md` — границы, пользователи и нефункциональные ожидания.
 - `docs/PLAN.md` — только активный ближайший результат и критерии приёмки.
 - `docs/DEVELOPMENT.md` — фактические команды после выбора toolchain.
