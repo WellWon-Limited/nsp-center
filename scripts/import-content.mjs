@@ -218,6 +218,8 @@ function semanticHtml(input, base, title = '') {
   $('span').each((_, node) => $(node).replaceWith($(node).html() || ''));
   $('p').filter((_, node) => !$(node).text().trim() && !$(node).find('img').length).remove();
   $.root().contents().add($('*').contents()).each((_, node) => { if (node.type === 'comment') $(node).remove(); });
+  // The source call-back button opened a popup form that does not exist here; only its dead label survived.
+  $('p, div, span, a').filter((_, node) => $(node).text().trim() === 'Заказать звонок').remove();
   return $.html().trim();
 }
 

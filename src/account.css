@@ -1,0 +1,270 @@
+/* Signed-in profile: one centred column — greeting, white cards stacked one under another
+   (each only as tall as its content, so editing one card never stretches the others),
+   favourites, and the sign-out button at the very bottom. */
+
+.account {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.account-head h1 {
+  font-size: clamp(30px, 4vw, 44px);
+  margin: var(--space-8) 0 var(--space-6);
+}
+
+.account-stack {
+  display: grid;
+  gap: var(--space-14);
+  margin-top: var(--space-24);
+}
+
+.account-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--space-20) var(--space-24);
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-24);
+  background: var(--color-white);
+  box-shadow: 0 10px 24px -18px rgb(29 58 54 / .45);
+}
+
+.account-card h2 {
+  font-size: var(--text-18);
+}
+
+/* Short cards: text on the left, the action on the right. */
+.account-card--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-20);
+}
+
+.account-card--row > div {
+  display: grid;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.account-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-card--card {
+  background: linear-gradient(135deg, var(--color-ink), #2c5a51);
+  color: var(--color-white);
+  border-color: transparent;
+}
+
+.account-card--card h2 {
+  color: var(--color-white);
+}
+
+.account-card--card .ds-muted {
+  color: rgb(255 255 255 / .75);
+}
+
+.account-card--card .partner-signup {
+  color: var(--color-mint-light);
+}
+
+.account-card-number {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--text-22);
+  letter-spacing: .08em;
+}
+
+.account-card-remove {
+  align-self: flex-start;
+  margin-top: var(--space-4);
+  padding: var(--space-8) var(--space-14);
+  border: 1px solid rgb(255 255 255 / .35);
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  font-size: var(--text-13);
+  font-weight: var(--weight-700);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.account-card-remove:hover {
+  border-color: var(--color-white);
+}
+
+.account-data {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+}
+
+.account-data div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+  font-size: var(--text-14);
+}
+
+.account-data dt {
+  color: var(--color-muted);
+}
+
+.account-data dd {
+  margin: 0;
+  font-weight: var(--weight-700);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-12);
+}
+
+.account-form label {
+  display: grid;
+  gap: var(--space-6);
+  font-size: var(--text-13);
+  font-weight: var(--weight-700);
+}
+
+.account-form .field,
+.account-inline .field {
+  background: #f3f7f5;
+  border-color: var(--color-ink-line);
+}
+
+.account-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.account-inline {
+  display: flex;
+  gap: var(--space-10);
+}
+
+.account-inline .field {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-orders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-8);
+}
+
+.account-orders li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-16);
+}
+
+.account-orders small {
+  display: block;
+  font-size: var(--text-12);
+  color: var(--color-muted);
+}
+
+.account-link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--text-13);
+  font-weight: var(--weight-700);
+  color: var(--color-link);
+  white-space: nowrap;
+}
+
+.account-favorites {
+  margin-top: var(--space-32);
+}
+
+.account-section-title {
+  font-size: var(--text-24);
+  margin-bottom: var(--space-16);
+}
+
+/* Empty favourites: a white row card — an orange heart with an ink outline, the text, one action. */
+.account-empty {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-20);
+}
+
+.account-empty > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-empty h3 {
+  font-size: var(--text-18);
+  margin-bottom: var(--space-4);
+}
+
+/* Same orange as the footer stripe and the cart badge, outlined in ink; no tile behind it. */
+.account-empty-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: var(--color-ink);
+}
+
+.account-empty-icon svg {
+  fill: #ad6338;
+}
+
+/* Sign-out: at the bottom, centred; a plain dark-green button like the primary buttons, no outline or shadow. */
+.account-logout {
+  display: block;
+  width: min(100%, 360px);
+  min-height: 52px;
+  margin: var(--space-32) auto 0;
+  border: 0;
+  border-radius: var(--radius-20);
+  background: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-15);
+  font-weight: var(--weight-700);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.account-logout:hover {
+  background: var(--color-success);
+}
+
+@media (max-width: 639px) {
+  .account-card {
+    padding: var(--space-18);
+  }
+
+  .account-card--row,
+  .account-empty {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-empty .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .account-logout {
+    width: 100%;
+  }
+}

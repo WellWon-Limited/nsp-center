@@ -1,4 +1,4 @@
-body:has(.company-page){background:#ecf3f1}
+/* Company page uses the common page gradient (app.css). */
 body:has(.company-page) .ambient{display:none}
 .company-page{color:#1d3a36;padding-bottom:24px}
 .company-heading{max-width:760px;padding:24px 0 16px}
