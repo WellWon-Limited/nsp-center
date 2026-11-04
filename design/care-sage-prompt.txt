@@ -1,0 +1,3 @@
+Tool: built-in image_gen
+Output: public/images/care-sage.jpg
+Prompt: Premium editorial botanical still life background for a wellness website card. Horizontal 3:2 composition. Matte deep forest green background (#1d3a36 approximate). On the rightmost third only, one elegant fresh sage herb sprig with softly textured green leaves and a tiny subtle cream flower cluster, rising diagonally from lower right. Refined natural soft studio light, realistic leaf veins, restrained photographic composition. Left two thirds remain calm dark forest green negative space for white headline and paragraph. No bottles, pills, pots, paper, text, icons, UI or border. Exactly one modest botanical sprig. Seamless backdrop, no horizon or harsh shadows.

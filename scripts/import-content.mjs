@@ -3,8 +3,10 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { load } from 'cheerio';
+import { pricesFor, readPriceList } from './pricing.mjs';
 
-// Offline import: the snapshot is the only source and is never written to.
+// Offline import: the snapshot is the content source and is never written to;
+// the NSP price list (references/prices/) adds retail and partner prices.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const snapshot = resolve(root, 'references/nsp-center.ru');
 const generated = resolve(root, 'src/generated/content.json');
@@ -18,6 +20,7 @@ const sourceSite = readData('site');
 const crawl = readData('crawl');
 const assets = readData('assets');
 const sourceAudit = readData('audit');
+const priceList = readPriceList();
 const sourcePages = readFileSync(resolve(snapshot, 'data/pages.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
 const sourceByUrl = new Map(sourcePages.map(page => [page.url, page]));
 const successfulPages = crawl.filter(page => page.kind === 'page' && page.status === 200);
@@ -249,6 +252,7 @@ const products = sourceProducts.map(product => {
     description: product.sections['Описание'] || '',
     descriptionHtml: sectionsHtml['Описание'] || '',
     sectionsHtml,
+    prices: pricesFor(product, priceList),
   };
   fragmentStats(path, output.descriptionHtml);
   return output;

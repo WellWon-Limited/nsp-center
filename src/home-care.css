@@ -1,0 +1,101 @@
+.home-care--editorial .care-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 370px;
+  padding: var(--space-32);
+  border-radius: var(--radius-28);
+  border: 1px solid var(--color-ink-line);
+  color: var(--color-ink);
+}
+.care-card--reflection {
+  background: var(--color-ink) url('/images/care-sage.jpg') center / cover no-repeat;
+}
+.home-care--editorial .care-card--reflection { color: var(--color-white); }
+.care-card--reflection::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, var(--color-ink) 0%, transparent 80%);
+}
+.home-care--editorial .care-card--marathon {
+  /* Sage sampled from the quiet backdrop of hero-botanical-final.jpg. */
+  background: #bdc7b3;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-panel);
+}
+.care-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--text-11);
+  font-weight: var(--weight-700);
+  letter-spacing: var(--tracking-kicker);
+}
+.care-card--reflection .care-eyebrow { color: var(--color-mint-light); }
+.care-card-copy { width: 67%; margin-top: var(--space-28); position: relative; z-index: 1; }
+.home-care--editorial .care-card h2 { font-size: var(--text-28); line-height: var(--leading-tight); }
+.home-care--editorial .care-card p { font-size: var(--text-14); margin-top: var(--space-16); max-width: 280px; text-wrap: pretty; }
+.care-card--reflection p { color: var(--color-on-dark-muted); }
+.care-card--marathon p { color: var(--color-body); }
+.care-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-16);
+  padding-top: var(--space-28);
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+.care-card-action { display: inline-flex; align-items: center; gap: var(--space-16); font-size: var(--text-14); font-weight: var(--weight-700); }
+.care-card-action svg { transition: transform var(--motion-fast) var(--motion-ease); }
+.care-card:hover .care-card-action svg { transform: translateX(4px); }
+.care-card:focus-visible { outline: 3px solid var(--color-action); outline-offset: 4px; }
+.care-question-dots { display: flex; gap: var(--space-5); }
+.care-question-dots i { width: 5px; height: 5px; border-radius: var(--radius-circle); background: var(--color-on-dark-muted); }
+.care-calendar {
+  position: absolute;
+  right: var(--space-24);
+  top: 50%;
+  width: 192px;
+  padding: var(--space-18) var(--space-14);
+  border-radius: var(--radius-18);
+  background: var(--color-white);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-panel);
+  transform: translateY(-42%) rotate(5deg);
+}
+.care-calendar-heading { display: flex; align-items: center; gap: var(--space-10); margin-bottom: var(--space-16); }
+.care-calendar-heading strong { font-size: var(--text-40); letter-spacing: var(--tracking-display); line-height: 1; font-weight: var(--weight-500); }
+.care-calendar-heading > span { font-size: var(--text-11); line-height: var(--leading-compact); color: var(--color-muted); }
+.care-calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--space-4); }
+.care-calendar-days span { display: grid; place-items: center; aspect-ratio: 1; font-size: var(--text-11); color: var(--color-muted); }
+.care-calendar-days span:last-child { border-radius: var(--radius-circle); outline: 1px solid var(--color-link); color: var(--color-link); }
+.care-calendar-note { display: flex; align-items: center; justify-content: center; gap: var(--space-5); margin-top: var(--space-16); font-size: var(--text-10); color: var(--color-link); }
+.care-card--marathon .care-card-copy { width: calc(100% - 198px); }
+@media (min-width: 640px) and (max-width: 1100px) {
+  .home-care--editorial .care-card { padding: var(--space-24); min-height: 390px; }
+  .home-care--editorial .care-card h2 { font-size: var(--text-24); }
+  .care-calendar { width: 166px; right: var(--space-16); padding: var(--space-14) var(--space-10); }
+  .care-card--marathon .care-card-copy { width: calc(100% - 168px); }
+}
+@media (max-width: 639px) {
+  .home-care--editorial .care-card { min-height: 340px; padding: var(--space-24); }
+  .home-care--editorial .care-card h2 { font-size: var(--text-24); }
+  .care-card-copy { width: 75%; }
+  .care-card--marathon .care-card-copy { width: 100%; }
+  .care-calendar { position: relative; top: auto; right: auto; width: 180px; margin: var(--space-24) auto var(--space-8); padding: var(--space-18); transform: rotate(3deg); }
+  .care-calendar-heading strong { font-size: var(--text-40); }
+  .care-calendar-heading > span { font-size: var(--text-10); }
+  .care-question-dots { display: none; }
+  .home-care--editorial .care-card p { font-size: var(--text-13); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .care-card-action svg { transition: none; }
+}
+
+.care-card--marathon h2 { text-wrap: balance; }

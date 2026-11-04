@@ -2,6 +2,9 @@ export type Breadcrumb = { name: string; url: string | null };
 export type DocumentLink = { name: string; size: string; url: string | null };
 export type SiteLink = { text: string | null; url: string };
 
+/** Retail is for everyone; partner is for discount-card holders (null when the price list lacks the product). */
+export type ProductPrices = { retail: number; partner: number | null; source: 'price-list' | 'snapshot' };
+
 export type Product = {
   id: string;
   path: string;
@@ -30,6 +33,7 @@ export type Product = {
   documents: DocumentLink[];
   microdata_outside_product: string[];
   related: string[];
+  prices: ProductPrices;
 };
 
 export type Category = {

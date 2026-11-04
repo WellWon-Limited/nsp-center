@@ -4,9 +4,11 @@ import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import { root, readContent, readSource } from '../scripts/check-content.mjs';
+import { pricesFor, readPriceList } from '../scripts/pricing.mjs';
 
 const content = readContent();
 const source = readSource();
+const priceList = readPriceList();
 const dist = resolve(root, 'dist');
 const manifest = JSON.parse(readFileSync(resolve(dist, 'prerender-manifest.json'), 'utf8'));
 const base = 'https://nsp-center.ru';
@@ -54,7 +56,23 @@ test('All 227 SSR documents expose content before JavaScript: title, exactly one
   }
 });
 
-test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with preserved prices', () => {
+test('Every product carries the retail and partner prices of the NSP price list, or its snapshot price when unlisted', () => {
+  let listed = 0;
+  for (const original of source.products) {
+    const product = productMap.get(pathOf(original.url));
+    const expected = pricesFor(original, priceList);
+    assert.deepEqual(product.prices, expected, `${product.path}: prices differ from the price list`);
+    if (expected.source === 'price-list') {
+      listed += 1;
+      assert.ok(expected.partner > 0 && expected.partner < expected.retail, `${product.path}: partner price must be below retail`);
+    } else assert.equal(expected.retail, original.price, `${product.path}: unlisted product must keep the snapshot price`);
+    const $ = cheerio.load(htmlFor(product.path));
+    assert.equal($('.price-row--partner').length, expected.partner === null ? 0 : 1, `${product.path}: partner price row before JavaScript`);
+  }
+  assert.equal(listed, 118, 'Products matched to the November 2026 price list');
+});
+
+test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with retail prices', () => {
   for (const original of source.products) {
     const path = pathOf(original.url);
     const product = productMap.get(path);
@@ -68,7 +86,7 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     assert.equal(structured.name, original.name, `${path}: Product name differs`);
     const offer = Array.isArray(structured.offers) ? structured.offers[0] : structured.offers;
     assert.ok(offer && offer['@type'] === 'Offer', `${path}: price must be nested under Product.offers`);
-    assert.equal(Number(offer.price), original.price, `${path}: structured price differs`);
+    assert.equal(Number(offer.price), pricesFor(original, priceList).retail, `${path}: structured price must be the retail price`);
     assert.equal(offer.priceCurrency, 'RUB', `${path}: currency differs`);
     assert.equal(offer.availability?.split('/').at(-1), original.availability, `${path}: stock status differs`);
     assert.ok(String(structured.image).includes(product.image), `${path}: structured image differs`);
