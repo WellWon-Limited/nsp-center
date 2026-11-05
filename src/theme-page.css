@@ -18,117 +18,16 @@
   color: var(--color-ink);
 }
 
-.theme-meta {
-  margin-top: var(--space-14);
-  font-size: var(--text-12);
-  color: var(--color-muted);
-}
-
-.theme-main {
-  display: flex;
-  align-items: center;
-  gap: var(--space-28);
-  margin-top: var(--space-32);
-  padding: var(--space-24);
-}
-
-.theme-main-image {
-  flex-shrink: 0;
-  width: 200px;
-  height: 200px;
-  border-radius: var(--radius-24);
-  background: var(--color-white);
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.theme-main-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.theme-main-body h2 {
-  font-size: var(--text-24);
-  margin: var(--space-6) 0;
-}
-
-.theme-main-buy,
-.theme-pair-buy {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-12);
-  margin-top: var(--space-16);
-}
-
-.theme-main-buy strong {
-  font-size: var(--text-24);
-}
-
-.theme-more {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-6);
-  margin-top: var(--space-14);
-  font-size: var(--text-13);
-  font-weight: var(--weight-700);
-  color: var(--color-link);
-}
-
-.theme-pairs,
 .theme-section,
 .theme-faq,
 .theme-sources {
   margin-top: var(--space-32);
 }
 
-.theme-pairs h2,
 .theme-section h2,
 .theme-faq h2 {
   font-size: var(--text-24);
   margin-bottom: var(--space-16);
-}
-
-.theme-pair-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-16);
-}
-
-.theme-pair {
-  display: flex;
-  gap: var(--space-16);
-  padding: var(--space-18);
-}
-
-.theme-pair-image {
-  flex-shrink: 0;
-  width: 88px;
-  height: 88px;
-  border-radius: var(--radius-18);
-  background: var(--color-white);
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-}
-
-.theme-pair-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.theme-pair h3 {
-  font-size: var(--text-16);
-}
-
-.theme-pair p {
-  margin-top: var(--space-6);
-  font-size: var(--text-13);
-  color: var(--color-muted);
-  line-height: var(--leading-long);
 }
 
 .theme-bundle {
@@ -198,46 +97,10 @@
   margin-top: var(--space-24);
 }
 
-/* Product page: the "taken together" block that links to the theme. */
-.product-theme {
-  margin-top: var(--space-32);
-  padding: var(--space-24);
-}
-
-.product-theme h2 {
-  font-size: var(--text-22);
-}
-
-.product-theme > p {
-  margin-top: var(--space-6);
-  color: var(--color-muted);
-}
-
-.product-theme .theme-pair-grid {
-  margin-top: var(--space-16);
-}
-
 @media (max-width: 639px) {
   .theme-lead {
     font-size: var(--text-16);
   }
-
-  .theme-main {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-16);
-    padding: var(--space-18);
-  }
-
-  .theme-main-image {
-    width: 100%;
-    height: 220px;
-  }
-
-  .theme-pair-grid {
-    grid-template-columns: 1fr;
-  }
-
   .theme-bundle {
     flex-direction: column;
     align-items: stretch;
@@ -246,4 +109,146 @@
   .theme-bundle .btn {
     justify-content: center;
   }
+}
+
+/* Catalog product cards for the main product (centred) and the pairs, each pair with its
+   one-line "why" under the card; FAQ items on white. */
+.theme-cards-section {
+  margin-top: var(--space-32);
+}
+
+.theme-cards-section h2 {
+  font-size: var(--text-24);
+  margin-bottom: var(--space-16);
+}
+
+.theme-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-16);
+}
+
+.theme-cards--main {
+  grid-template-columns: minmax(0, 280px);
+}
+
+.theme-card-with-note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.theme-card-with-note > p {
+  font-size: var(--text-13);
+  line-height: var(--leading-long);
+  color: var(--color-muted);
+}
+
+.theme-faq details {
+  /* white question cards */
+  background: var(--color-white);
+  border: 1px solid var(--color-ink-line);
+  box-shadow: 0 10px 24px -18px rgb(29 58 54 / .45);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (max-width: 639px) {
+  .theme-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .theme-cards--main {
+    grid-template-columns: minmax(0, 220px);
+  }
+}
+
+/* Sources fold away behind a chevron that turns down when opened. */
+.theme-cards-section--main {
+  text-align: center;
+}
+
+.theme-cards-section--main .theme-cards--main {
+  justify-content: center;
+  text-align: left;
+}
+
+.theme-sources--collapsible summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  cursor: pointer;
+  list-style: none;
+}
+
+.theme-sources--collapsible summary::-webkit-details-marker {
+  display: none;
+}
+
+.theme-sources--collapsible summary h2 {
+  margin: 0;
+}
+
+.theme-sources--collapsible summary svg {
+  transition: transform var(--motion-fast) var(--motion-ease);
+}
+
+.theme-sources--collapsible[open] summary svg {
+  transform: rotate(90deg);
+}
+
+.theme-sources--collapsible ul {
+  margin-top: var(--space-10);
+}
+
+/* Body text of theme pages: justified, with a first-line indent for every paragraph; hyphenation (the page is
+   lang="ru") keeps justified lines from opening wide gaps on narrow phone screens. */
+.theme-lead,
+.theme-section p,
+.theme-faq details p {
+  text-align: justify;
+  text-indent: 1.5em;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+/* Paragraphs inside one section sit close together (the red-line indent already marks a new paragraph). */
+.theme-section p {
+  margin-bottom: var(--space-4);
+}
+
+/* "Что принимают вместе?": the product card and its "why" form one white card — the note is the card's
+   lower part, under a hairline, with a small green "Зачем?" label. */
+.theme-card-with-note {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-14);
+  background: var(--color-white);
+  box-shadow: 0 10px 24px -18px rgb(29 58 54 / .45);
+}
+
+.theme-card-with-note > .product-card.panel {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.theme-card-with-note > p {
+  flex: 1;
+  margin: 0 var(--space-14);
+  padding: var(--space-12) 0 var(--space-16);
+  border-top: 1px solid var(--color-ink-line);
+  font-size: var(--text-13);
+  line-height: 1.5;
+  color: var(--color-ink);
+}
+
+.theme-card-with-note > p strong {
+  display: block;
+  margin-bottom: var(--space-4);
+  font-size: var(--text-11);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--color-success);
 }

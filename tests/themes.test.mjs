@@ -4,9 +4,10 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import { root, readContent } from '../scripts/check-content.mjs';
-import { themes } from '../src/themes.ts';
+import { readThemes } from '../scripts/themes.mjs';
 
 const content = readContent();
+const themes = readThemes();
 const products = new Map(content.products.map((product) => [product.id, product]));
 const dist = resolve(root, 'dist');
 const manifest = new Map(JSON.parse(readFileSync(resolve(dist, 'prerender-manifest.json'), 'utf8')).routes.map((route) => [route.url, route.file]));
@@ -38,5 +39,15 @@ test('Every theme is a prerendered page with one H1, its products, FAQ markup an
     const main = products.get(theme.mainProductId);
     const $product = cheerio.load(readFileSync(resolve(dist, manifest.get(main.path)), 'utf8'));
     assert.ok($product(`[data-ds-id="product-theme"] a[href="${theme.path}"]`).length === 1, `${theme.slug}: main product page does not link to the theme`);
+  }
+});
+
+test('The browser bundle carries only the theme index; each theme page embeds its own full theme', () => {
+  const summary = JSON.parse(readFileSync(resolve(root, 'src/generated/summary.json'), 'utf8'));
+  assert.equal(summary.themes.length, themes.length);
+  for (const entry of summary.themes) assert.ok(!('sections' in entry) && !('faq' in entry), `${entry.slug}: full text leaked into the browser summary`);
+  for (const theme of themes) {
+    const $ = cheerio.load(readFileSync(resolve(dist, manifest.get(theme.path)), 'utf8'));
+    assert.equal(JSON.parse($('#nsp-page-data').text()).theme?.slug, theme.slug, `${theme.slug}: page data lacks its theme`);
   }
 });

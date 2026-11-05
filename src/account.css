@@ -53,48 +53,6 @@
   justify-content: space-between;
 }
 
-.account-card--card {
-  background: linear-gradient(135deg, var(--color-ink), #2c5a51);
-  color: var(--color-white);
-  border-color: transparent;
-}
-
-.account-card--card h2 {
-  color: var(--color-white);
-}
-
-.account-card--card .ds-muted {
-  color: rgb(255 255 255 / .75);
-}
-
-.account-card--card .partner-signup {
-  color: var(--color-mint-light);
-}
-
-.account-card-number {
-  font-family: var(--font-mono, monospace);
-  font-size: var(--text-22);
-  letter-spacing: .08em;
-}
-
-.account-card-remove {
-  align-self: flex-start;
-  margin-top: var(--space-4);
-  padding: var(--space-8) var(--space-14);
-  border: 1px solid rgb(255 255 255 / .35);
-  border-radius: 999px;
-  background: transparent;
-  font: inherit;
-  font-size: var(--text-13);
-  font-weight: var(--weight-700);
-  color: var(--color-white);
-  cursor: pointer;
-}
-
-.account-card-remove:hover {
-  border-color: var(--color-white);
-}
-
 .account-data {
   display: grid;
   gap: var(--space-8);
@@ -132,8 +90,7 @@
   font-weight: var(--weight-700);
 }
 
-.account-form .field,
-.account-inline .field {
+.account-form .field {
   background: #f3f7f5;
   border-color: var(--color-ink-line);
 }
@@ -143,16 +100,6 @@
   display: flex;
   align-items: center;
   gap: var(--space-16);
-}
-
-.account-inline {
-  display: flex;
-  gap: var(--space-10);
-}
-
-.account-inline .field {
-  flex: 1;
-  min-width: 0;
 }
 
 .account-orders {
@@ -267,4 +214,178 @@
   .account-logout {
     width: 100%;
   }
+}
+
+/* Discount card under the greeting, drawn as a card: dark green with a dark-orange ring, the discount, a white barcode strip with
+   the number, and a footer line. Without a number the same card holds the field and the link to get one. */
+.discount-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: var(--space-16);
+  margin-top: var(--space-20);
+  padding: var(--space-22) var(--space-24);
+  border-radius: var(--radius-24);
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgb(94 143 113 / .45), transparent 62%),
+    linear-gradient(125deg, #142f2b 0%, #214d42 55%, #153b33 100%);
+  border: 1px solid rgb(255 255 255 / .18);
+  color: var(--color-white);
+  box-shadow: 0 18px 36px -22px rgb(29 58 54 / .8);
+}
+
+.discount-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: repeating-linear-gradient(125deg, transparent 0 22px, rgb(213 232 211 / .055) 23px, transparent 24px 46px);
+  mask-image: linear-gradient(to right, transparent 15%, #000 100%);
+  pointer-events: none;
+}
+
+.discount-card::after {
+  content: '';
+  position: absolute;
+  top: -70px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border: 3px solid #a65a2e;
+  box-shadow: 0 0 0 20px rgb(166 90 46 / .09), 0 0 0 42px rgb(213 232 211 / .045);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.discount-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+  font-size: var(--text-13);
+  color: #e5eee6;
+  line-height: 1.5;
+}
+
+.discount-card-top > span:last-child { text-align: right; }
+
+.discount-card-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.discount-card-main strong {
+  font-size: var(--text-26);
+  line-height: 1.15;
+  color: #fff;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.discount-card-rate {
+  font-size: var(--text-28);
+  font-weight: var(--weight-800);
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -.04em;
+}
+
+.discount-card-code {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-16) var(--space-8);
+  border-radius: var(--radius-14);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.discount-barcode {
+  width: 100%;
+  height: 54px;
+  fill: #111;
+}
+
+.discount-card-code span {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-13);
+  letter-spacing: .2em;
+}
+
+.discount-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  font-size: var(--text-13);
+  color: #e5eee6;
+  line-height: 1.5;
+}
+
+.discount-card-foot button {
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: var(--weight-700);
+  color: rgb(255 255 255 / .9);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.discount-card-text {
+  margin: 0;
+  font-size: var(--text-14);
+  color: #e5eee6;
+}
+
+.discount-card-form {
+  display: flex;
+  gap: var(--space-10);
+}
+
+.discount-card-form .field {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-white);
+  border-color: transparent;
+}
+
+.discount-card-form .btn {
+  background: var(--color-white);
+  color: var(--color-ink);
+  border-color: var(--color-white);
+}
+
+.discount-card-link {
+  font-size: var(--text-14);
+  font-weight: var(--weight-700);
+  color: var(--color-mint-light, #bfe7d6);
+}
+
+@media (max-width: 639px) {
+  .discount-card {
+    padding: var(--space-18) var(--space-18);
+  }
+
+  .discount-card-main strong {
+    font-size: var(--text-20);
+  }
+
+  .discount-card-rate {
+    font-size: var(--text-24);
+  }
+}
+
+/* The ring lies under the card's content (it must not cross the white barcode strip). */
+.discount-card::after {
+  z-index: 0;
+}
+
+.discount-card > * {
+  position: relative;
+  z-index: 1;
 }

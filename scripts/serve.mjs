@@ -11,7 +11,7 @@ const content=JSON.parse(await readFile('src/generated/content.json','utf8'));
 // and the untouched original for comparison.
 const originalPrototype=await readFile(resolve(ORIGINAL_PROTOTYPE));
 const prototypes=new Map([['/app-prototype/',Buffer.from(adaptPrototype(originalPrototype.toString('utf8')))],['/app-prototype/original/',originalPrototype]]);
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif','.webp':'image/webp','.woff2':'font/woff2','.woff':'font/woff','.pdf':'application/pdf','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
+const mime={'.html':'text/html; charset=utf-8','.webmanifest':'application/manifest+json','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif','.webp':'image/webp','.woff2':'font/woff2','.woff':'font/woff','.pdf':'application/pdf','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
 const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');let path=decodeURIComponent(url.pathname);
  // Only the production domain is indexable; every other host (dev stand, local) is blocked.
  const indexable=isIndexableHost(req.headers.host);if(!indexable)res.setHeader('X-Robots-Tag',NOINDEX_HEADER);

@@ -34,7 +34,11 @@ export type Product = {
   microdata_outside_product: string[];
   related: string[];
   prices: ProductPrices;
+  /** Rewritten text from src/product-copy (only on the product's own page, not in the browser summary). */
+  copy?: ProductCopy;
 };
+
+export type ProductCopy = { about: string[]; highlights: string[] };
 
 export type Category = {
   id: string;
@@ -90,8 +94,24 @@ export type Route = {
   products?: string[];
 };
 
+export type ThemePair = { productId: string; why: string };
+export type ThemeSection = { heading: string; paragraphs: string[] };
+export type ThemeFaq = { question: string; answer: string };
+export type ThemeSource = { course: string; lecture: string; speaker?: string };
+/** Thematic sales page (src/theme-data/<slug>.json); the browser summary carries only ThemeIndex. */
+export type Theme = {
+  slug: string; path: string;
+  /** <title> without the site suffix; carries the main search query. */
+  title: string; description: string; h1: string; lead: string;
+  mainProductId: string; pairs: ThemePair[]; sections: ThemeSection[]; faq: ThemeFaq[]; sources: ThemeSource[];
+  /** Specialist who checked the text; null until the owner names one. */
+  reviewedBy: string | null; updated: string;
+};
+export type ThemeIndex = Pick<Theme, 'slug' | 'path' | 'title' | 'description' | 'h1' | 'mainProductId'>;
+
 export type Content = {
   products: Product[];
+  themes: ThemeIndex[];
   categories: Category[];
   articles: Article[];
   pages: ContentPage[];

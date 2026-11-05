@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { load } from 'cheerio';
 import { pricesFor, readPriceList } from './pricing.mjs';
+import { readThemes } from './themes.mjs';
+import { readProductCopy } from './product-copy.mjs';
 
 // Offline import: the snapshot is the content source and is never written to;
 // the NSP price list (references/prices/) adds retail and partner prices.
@@ -21,6 +23,7 @@ const crawl = readData('crawl');
 const assets = readData('assets');
 const sourceAudit = readData('audit');
 const priceList = readPriceList();
+const productCopy = readProductCopy();
 const sourcePages = readFileSync(resolve(snapshot, 'data/pages.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
 const sourceByUrl = new Map(sourcePages.map(page => [page.url, page]));
 const successfulPages = crawl.filter(page => page.kind === 'page' && page.status === 200);
@@ -255,6 +258,7 @@ const products = sourceProducts.map(product => {
     descriptionHtml: sectionsHtml['Описание'] || '',
     sectionsHtml,
     prices: pricesFor(product, priceList),
+    ...(productCopy.has(id) ? { copy: productCopy.get(id) } : {}),
   };
   fragmentStats(path, output.descriptionHtml);
   return output;
@@ -346,6 +350,7 @@ const routes = successfulPages.map(record => {
 
 const content = {
   products, categories, articles, pages, site, routes, redirects,
+  themes: readThemes(),
   audit: {
     source: sourceAudit,
     sourcePages: successfulPages.length, routeCount: routes.length, copiedMedia: copied.size,

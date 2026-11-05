@@ -1,11 +1,11 @@
 {
   "source": "PriceNSPnew_November2026.xls, sheet \"Лист1\": main tables only (code RU…, name, PV, Dealers, Dist, Retail); the left helper columns are ignored",
   "savedAt": "2026-10-30",
-  "unit": "у.е.",
+  "unit": "USD (у.е. = доллар)",
   "partnerColumn": "dist",
   "retailColumn": "retail",
-  "rubPerUnit": 74.15,
-  "rubPerUnitNote": "Provisional (owner, 2026-11-04: \"take the average for now\"): median ratio (the figure shown to the owner as about 74) of the snapshot price to the list retail price over 118 matched products. Replace with the official rate.",
+  "rubPerUnit": 94,
+  "rubPerUnitNote": "Warehouse rate set by the owner on 2026-11-05: 94 ₽ per $ (the price list is in dollars). The rate changes over time: update this number and rebuild.",
   "items": {
     "30": {
       "name": "Alfalfa",

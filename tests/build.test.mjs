@@ -67,7 +67,9 @@ test('Every product carries the retail and partner prices of the NSP price list,
       assert.ok(expected.partner > 0 && expected.partner < expected.retail, `${product.path}: partner price must be below retail`);
     } else assert.equal(expected.retail, original.price, `${product.path}: unlisted product must keep the snapshot price`);
     const $ = cheerio.load(htmlFor(product.path));
-    assert.equal($('.price-row--partner').length, expected.partner === null ? 0 : 1, `${product.path}: partner price row before JavaScript`);
+    // Before JavaScript everyone sees the retail price; a listed product also offers the discount card with its card price.
+    assert.ok($('[data-ds-id="purchase-prices"] .price-row.current').text().includes(String(expected.retail).replace(/\B(?=(\d{3})+$)/g, '\u00a0')), `${product.path}: retail price before JavaScript`);
+    assert.equal($('.card-offer').length, expected.partner === null ? 0 : 1, `${product.path}: discount-card offer before JavaScript`);
   }
   assert.equal(listed, 118, 'Products matched to the November 2026 price list');
 });
@@ -95,7 +97,13 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
       assert.equal(Number(structured.aggregateRating.ratingValue), original.rating, `${path}: rating differs`);
     }
     assert.ok($('main').text().includes(original.name.split('(')[0].trim()), `${path}: product title absent from SSR`);
-    for (const key of Object.keys(original.properties)) assert.ok($('main').text().includes(key), `${path}: property omitted from SSR: ${key}`);
+    // The product card shows a curated facts list; these snapshot fields are left out on purpose.
+    const curatedOmissions = new Set([
+      'Назначение', // a list of diseases: supplements may not be advertised as treatment (docs/SEO.md principle 4)
+      'Здоровье всей семьи', // audience tags that can contradict the label (e.g. "Кормящим мамам" vs breastfeeding contraindication)
+      'Тип', // the product type is already the breadcrumb and the card kicker
+    ]);
+    for (const key of Object.keys(original.properties)) if (!curatedOmissions.has(key)) assert.ok($('main').text().includes(key) || (key === 'pv' && $('main').text().includes('PV')) || (key.startsWith('Состав') && $('main').text().includes('Состав')) || (key.startsWith('Противопоказания') && $('main').text().includes('Противопоказания')) || (key === 'Применение' && $('main').text().includes('Как принимать')) || (key === 'Нанесение' && $('main').text().includes('Как наносить')), `${path}: property omitted from SSR: ${key}`);
   }
 });
 
@@ -172,4 +180,22 @@ test('The isolated running app serves all 227 source URLs without a 404', { skip
     if ($('#root').attr('data-route') !== path) failures.push(`${path}: HTTP server returned the wrong pagination document`);
   }
   assert.deepEqual(failures, []);
+});
+
+test('The site is installable and works offline: manifest, icons and a service worker that precaches the app shell', () => {
+  const app = JSON.parse(readFileSync(resolve(dist, 'manifest.webmanifest'), 'utf8'));
+  assert.equal(app.name, 'NSP Center');
+  assert.equal(app.display, 'standalone');
+  assert.equal(app.start_url, '/');
+  for (const size of ['192x192', '512x512']) assert.ok(app.icons.some((icon) => icon.sizes === size && existsSync(resolve(dist, icon.src.slice(1)))), `manifest icon ${size} is missing`);
+  assert.ok(app.icons.some((icon) => icon.purpose === 'maskable'), 'manifest needs a maskable icon');
+  const sw = readFileSync(resolve(dist, 'sw.js'), 'utf8');
+  const precache = JSON.parse(sw.match(/const PRECACHE = (\[.*\]);/)[1]);
+  for (const page of ['/', '/health/', '/profile/']) assert.ok(precache.includes(page), `${page} must work offline`);
+  const built = readFileSync(resolve(dist, 'index.html'), 'utf8').match(/\/assets\/[^"]+/g);
+  for (const file of built) assert.ok(precache.includes(file), `${file} must be precached`);
+  for (const file of precache) if (!file.endsWith('/')) assert.ok(existsSync(resolve(dist, file.slice(1))), `precached ${file} does not exist`);
+  const $ = cheerio.load(htmlFor('/'));
+  assert.equal($('link[rel="manifest"]').attr('href'), '/manifest.webmanifest');
+  assert.equal($('link[rel="apple-touch-icon"]').attr('href'), '/icons/apple-touch-icon.png');
 });

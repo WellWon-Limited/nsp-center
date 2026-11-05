@@ -1,97 +1,12 @@
 // Thematic sales pages: a page answers one search question ("для чего нужен витамин D3")
-// and leads to the main product plus the products taken together with it.
-// Texts are grounded in the doctors' lecture base and phrased as support, never as
-// treatment (Russian BAD advertising law, docs/SEO.md principle 4).
+// and leads to the main product plus the products taken together with it. Texts live in
+// src/theme-data/<slug>.json (scripts/themes.mjs), grounded in the doctors' lecture base and
+// phrased as support, never as treatment (Russian BAD advertising law, docs/SEO.md principle 4).
+// The browser only has the index below; a page gets its full theme through its page data.
+import type { ThemeIndex } from './content-types';
+import { data } from './store';
 
-export type ThemePair = { productId: string; why: string };
-export type ThemeSection = { heading: string; paragraphs: string[] };
-export type ThemeFaq = { question: string; answer: string };
-export type ThemeSource = { course: string; lecture: string; speaker?: string };
+export type { Theme, ThemeFaq, ThemeIndex, ThemePair, ThemeSection, ThemeSource } from './content-types';
 
-export type Theme = {
-  slug: string;
-  path: string;
-  /** <title> without the site suffix; carries the main search query. */
-  title: string;
-  description: string;
-  h1: string;
-  lead: string;
-  mainProductId: string;
-  pairs: ThemePair[];
-  sections: ThemeSection[];
-  faq: ThemeFaq[];
-  sources: ThemeSource[];
-  /** Specialist who checked the text; null until the owner names one. */
-  reviewedBy: string | null;
-  updated: string;
-};
-
-// Doses and target levels differ between speakers, so pages name no doses: the dose is
-// chosen by the 25(OH)D test with a specialist and by the product label.
-const vitaminD3: Theme = {
-  slug: 'vitamin-d3',
-  path: '/temy/vitamin-d3/',
-  title: 'Для чего нужен витамин D3 и с чем его принимать',
-  description: 'Зачем организму витамин D3, кому его часто не хватает и с чем его сочетают: магний, кальций, омега-3. По материалам лекций врачей.',
-  h1: 'Для чего нужен витамин D3',
-  lead: 'Витамин D3 помогает организму усваивать кальций и фосфор, поддерживает кости, мышцы и работу иммунной системы. В северных широтах его не хватает многим, поэтому врачи-нутрициологи советуют знать свой уровень и принимать D3 вместе с веществами, которые помогают ему работать.',
-  mainProductId: 'vitamin-d3',
-  pairs: [
-    { productId: 'magnesium-complex', why: 'Магний нужен, чтобы витамин D перешёл в активную форму: без него D3 работает хуже.' },
-    { productId: 'calcium-magnesium-chelate', why: 'Кальций и магний в соотношении 2 к 1 вместе с D3 — основа для поддержки костей и зубов.' },
-    { productId: 'omega-3-epa', why: 'Витамин D растворяется в жирах: его удобно принимать утром вместе с омегой-3.' },
-  ],
-  sections: [
-    {
-      heading: 'Что делает витамин D3 в организме',
-      paragraphs: [
-        'Главная задача витамина D — обмен кальция и фосфора. Без него кальций из еды усваивается хуже, а кости и зубы недополучают строительный материал.',
-        'Витамин D важен и для мышц: при его нехватке врачи часто отмечают мышечную слабость. Он участвует в регуляции иммунной системы и в обновлении коллагена соединительной ткани.',
-      ],
-    },
-    {
-      heading: 'Кому витамина D3 часто не хватает',
-      paragraphs: [
-        'Витамин D образуется в коже под солнцем, но жителям северного полушария солнца обычно мало, особенно тем, кто много времени проводит в помещении.',
-        'Врачи отдельно называют беременных и кормящих, пожилых людей и людей с избыточным весом. Хуже витамин усваивается и при особенностях работы желчного пузыря и кишечника.',
-      ],
-    },
-    {
-      heading: 'Как узнать свой уровень',
-      paragraphs: [
-        'Уровень показывает анализ крови на 25(OH)D — не просто «витамин D». Его советуют сдавать хотя бы раз в год.',
-        'Ориентир, который приводят на лекциях: меньше 20 нг/мл — дефицит, 20–30 — недостаточность, от 30 — нормальный уровень. Целевые значения у специалистов различаются, поэтому дозировку подбирают по результату анализа вместе со специалистом.',
-      ],
-    },
-    {
-      heading: 'Как принимать витамин D3',
-      paragraphs: [
-        'Витамин D жирорастворимый: его принимают во время еды, в которой есть жиры, или вместе с омегой-3. Удобнее всего — в первой половине дня.',
-        'Лучше небольшие дозы регулярно, чем редкие большие. Высокие дозы — только после анализа и по рекомендации специалиста; противопоказания указаны на упаковке.',
-      ],
-    },
-  ],
-  faq: [
-    { question: 'Как правильно принимать витамин D3?', answer: 'Во время еды, в которой есть жиры, или вместе с омегой-3, в первой половине дня. Дозировку указывает упаковка или специалист по результату анализа.' },
-    { question: 'Нужно ли сдавать анализ перед приёмом?', answer: 'Да, анализ крови на 25(OH)D советуют сдавать хотя бы раз в год и обязательно перед приёмом высоких доз.' },
-    { question: 'С чем лучше сочетать витамин D3?', answer: 'С магнием — он нужен для перехода витамина D в активную форму, с кальцием и магнием для поддержки костей и с омегой-3 для лучшего усвоения.' },
-    { question: 'Нужно ли принимать витамин D3 летом?', answer: 'Многие специалисты летом не отменяют приём, а уменьшают дозу. Точнее подскажет анализ на 25(OH)D.' },
-    { question: 'Почему уровень витамина D не растёт?', answer: 'Чаще всего мешает плохое усвоение жиров, в том числе из-за слабого оттока желчи. Обсудите это со специалистом.' },
-  ],
-  sources: [
-    { course: 'Академия нутрициолога', lecture: 'Значение витаминов', speaker: 'Лысиков' },
-    { course: 'Базовый курс «Основы нутрициологии от А до Я» 2026', lecture: 'Аутоиммунные процессы', speaker: 'Н. П. Смирнова, биолог' },
-    { course: 'Базовый курс «Основы нутрициологии от А до Я» 2026', lecture: 'Типы питания', speaker: 'З. Сакис, нутрициолог' },
-    { course: 'Курсы практической нутрициологии, август 2024', lecture: 'Питание для костей', speaker: 'Бибиков' },
-    { course: 'Курсы практической нутрициологии, август 2024', lecture: 'Как на самом деле работают БАДы', speaker: 'К. Филипп' },
-    { course: 'Школа нутрициологии Бибикова', lecture: 'Сон', speaker: 'Федяева' },
-    { course: 'Весенняя женская конференция 2026', lecture: 'Щитовидная железа и надпочечники', speaker: 'Чернявская, эндокринолог' },
-  ],
-  reviewedBy: null,
-  updated: '2026-11-04',
-};
-
-export const themes: Theme[] = [vitaminD3];
-
+export const themes: ThemeIndex[] = data.themes ?? [];
 export const themeByPath = (path: string) => themes.find(theme => theme.path === path);
-export const themesForProduct = (productId: string) => themes.filter(theme => theme.mainProductId === productId);

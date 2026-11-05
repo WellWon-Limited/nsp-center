@@ -2,9 +2,10 @@ import './account.css';
 import { useEffect, useState, type FormEvent } from 'react';
 import { data, money, partnerSignupUrl, useStore, type Account } from './store';
 import { Icon, ProductGrid } from './ui';
+import { InstallAppCard } from './pwa';
 
-// Signed-in profile of the demo account (see auth.tsx): personal data, order drafts, the
-// intake plan, the discount card and favourites, all kept in this browser.
+// Signed-in profile of the demo account (see auth.tsx): the discount card under the greeting, then personal data,
+// order drafts, the intake plan, the app install card (until the app is installed) and favourites, all kept in this browser.
 
 const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 const russianDate = (iso: string) => { const [y, m, d] = iso.split('-').map(Number); return y && m && d ? `${d} ${months[m - 1]} ${y}` : ''; };
@@ -33,6 +34,20 @@ function PersonalData({ account }: { account: Account }) {
   </section>;
 }
 
+// Code 128 (set B) bars for the card number, so the barcode on the card encodes the real number.
+const code128 = '212222 222122 222221 121223 121322 131222 122213 122312 132212 221213 221312 231212 112232 122132 122231 113222 123122 123221 223211 221132 221231 213212 223112 312131 311222 321122 321221 312212 322112 322211 212123 212321 232121 111323 131123 131321 112313 132113 132311 211313 231113 231311 112133 112331 132131 113123 113321 133121 313121 211331 231131 213113 213311 213131 311123 311321 331121 312113 312311 332111 314111 221411 431111 111224 111422 121124 121421 141122 141221 112214 112412 122114 122411 142112 142211 241211 221114 413111 241112 134111 111242 121142 121241 114212 124112 124211 411212 421112 421211 212141 214121 412121 111143 111341 131141 114113 114311 411113 411311 113141 114131 311141 411131 211412 211214 211232 2331112'.split(' ');
+function Barcode({ value }: { value: string }) {
+  const codes = [...value].map(ch => ch.charCodeAt(0) - 32);
+  const check = codes.reduce((sum, c, i) => sum + c * (i + 1), 104) % 103;
+  const widths = [104, ...codes, check, 106].flatMap(c => [...code128[c]].map(Number));
+  let x = 10; const bars: [number, number][] = [];
+  widths.forEach((w, i) => { if (i % 2 === 0) bars.push([x, w]); x += w; });
+  return <svg className="discount-barcode" viewBox={`0 0 ${x + 10} 40`} preserveAspectRatio="none" role="img" aria-label={`Штрихкод карты ${value}`}>{bars.map(([bx, w]) => <rect key={bx} x={bx} y="0" width={w} height="40" />)}</svg>;
+}
+const groupDigits = (id: string) => id.replace(/\B(?=(\d{3})+$)/g, ' ');
+
+// The discount card right under the greeting: with a number — the card itself (discount, barcode, number); without —
+// the same card shape with a field for the number and a link to get a card.
 function DiscountCard({ account }: { account: Account }) {
   const { setState, notify } = useStore();
   const [id, setId] = useState('');
@@ -47,19 +62,20 @@ function DiscountCard({ account }: { account: Account }) {
     setState(s => s.account ? { ...s, card: false, account: { ...s.account, partnerId: '' } } : s);
     notify('Дисконтная карта удалена');
   };
-  return <section className="account-card account-card--card" data-ds-id="account-card">
-    <h2>Дисконтная карта</h2>
+  return <section className="discount-card" data-ds-id="account-card">
+    <div className="discount-card-top"><span>Дисконтная карта</span><span>Nature’s Sunshine</span></div>
     {account.partnerId ? <>
-      <p className="account-card-number">№ {account.partnerId}</p>
-      <p className="ds-muted">В каталоге и корзине действуют цены по карте.</p>
-      <button type="button" className="account-card-remove" onClick={remove}>Удалить карту</button>
+      <div className="discount-card-main"><strong>{account.firstName} {account.lastName}</strong><span className="discount-card-rate">−30%</span></div>
+      <div className="discount-card-code"><Barcode value={account.partnerId} /><span>{groupDigits(account.partnerId)}</span></div>
+      <div className="discount-card-foot"><span>Скидка до 30% на все товары в каталоге и корзине</span><button type="button" onClick={remove}>Удалить</button></div>
     </> : <>
-      <p className="ds-muted">Добавьте номер карты (ID партнёра NSP), чтобы видеть цены по карте.</p>
-      <form className="account-inline" onSubmit={attach}>
+      <div className="discount-card-main"><strong>Скидка до 30%</strong></div>
+      <p className="discount-card-text">Добавьте номер карты (ID партнёра NSP) — в каталоге и корзине появятся цены по карте.</p>
+      <form className="discount-card-form" onSubmit={attach}>
         <input className="field" inputMode="numeric" placeholder="Номер карты" aria-label="Номер дисконтной карты" value={id} onChange={e => setId(e.target.value)} />
-        <button className="btn btn--primary">Добавить</button>
+        <button className="btn">Добавить</button>
       </form>
-      <a className="partner-signup" href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту ↗</a>
+      <a className="discount-card-link" href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту ↗</a>
     </>}
   </section>;
 }
@@ -78,6 +94,8 @@ export function AccountPage({ account }: { account: Account }) {
       {created && <p className="ds-muted">Аккаунт создан {created}</p>}
     </header>
 
+    <DiscountCard account={account} />
+
     <div className="account-stack">
       <PersonalData account={account} />
       <section className="account-card account-card--row" data-ds-id="account-orders">
@@ -95,7 +113,7 @@ export function AccountPage({ account }: { account: Account }) {
         </div>
         <a className="account-link" href="/health/">Открыть план <Icon name="arrow" size={16} /></a>
       </section>
-      <DiscountCard account={account} />
+      <InstallAppCard />
     </div>
 
     <section className="account-favorites" data-ds-id="account-favorites">

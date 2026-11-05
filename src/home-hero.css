@@ -380,3 +380,129 @@ body:has(.home-hero--banner) {
   .hero-photo img { object-fit: contain; }
   .home-hero--banner > .hero-copy { max-width: 540px; justify-self: center; }
 }
+
+/* Phone: centred introduction and catalog action, photo, personal plan. */
+.hero-cta-phone { display: none; }
+@media (max-width: 639px) {
+  .home-first-screen { min-height: 0; }
+  .home-hero.home-hero--banner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    padding: var(--space-20) var(--space-18) var(--space-14);
+  }
+  .hero-backdrop { background: #afbca1; }
+  .home-hero--banner > .hero-copy { grid-row: 1; text-align: center; }
+  .home-hero--banner .hero-copy h1 {
+    font-size: clamp(30px, 8.2vw, 38px);
+    line-height: 1.12;
+    margin: 0 0 var(--space-10);
+    text-wrap: balance;
+  }
+  .home-hero--banner .hero-copy > p {
+    font-size: var(--text-14);
+    line-height: 1.45;
+    max-width: 360px;
+    margin: 0 auto var(--space-14);
+    text-wrap: balance;
+  }
+  .home-hero--banner .hero-copy .ds-cluster { justify-content: center; margin: 0; }
+  .home-hero--banner .hero-copy .btn--lg { min-height: 46px; padding-inline: var(--space-24); }
+  .home-hero--banner .hero-copy .btn--lg > svg { display: none; }
+  .home-hero--banner .hero-copy .hero-note { display: none; }
+  .hero-cta-wide { display: none; }
+  .hero-cta-phone { display: inline; }
+  .home-hero--banner .hero-photo {
+    grid-row: 2;
+    height: 66vw;
+    margin-block: 0;
+    container-type: size;
+  }
+  .hero-photo-link, .hero-photo-link--1 { inset: 0 auto; width: 28cqh; }
+  .hero-photo-link { left: calc(50% - 28cqh); }
+  .hero-photo-link--1 { left: 50%; }
+  .home-hero--banner > .hero-daily {
+    grid-row: 3;
+    width: 100%;
+    max-width: 360px;
+    padding: var(--space-8) 0 var(--space-14);
+    background: transparent;
+    text-align: center;
+  }
+  .home-hero--banner .hero-daily-eyebrow { justify-content: center; margin-bottom: var(--space-8); }
+  .home-hero--banner .hero-daily h2 { font-size: var(--text-22); margin: 0; }
+  .home-hero--banner .hero-daily p { font-size: var(--text-14); line-height: 1.5; margin: var(--space-8) 0 0; }
+  .home-hero--banner .hero-daily-action { justify-content: center; min-height: 44px; margin-top: var(--space-6); }
+}
+
+/* The heading's two lines (they replace the old <br/>). On a phone they are staggered across the full width:
+   "Забота о себе" from the left edge, "в вашем ритме" lower and to the right; the "ВАШ ЕЖЕДНЕВНЫЙ РИТМ"
+   label above the plan is hidden there, and the banner keeps filling the first screen. */
+.hero-title-line {
+  display: block;
+}
+
+@media (max-width: 639px) {
+  .home-hero--banner .hero-copy h1 {
+    width: 100%;
+    max-width: none;
+    text-align: left;
+  }
+
+  /* Both lines step in a little from the edges: the first from the left, the second from the right. */
+  .home-hero--banner .hero-copy h1 .hero-title-line:first-child {
+    padding-left: 6vw;
+  }
+
+  .home-hero--banner .hero-copy h1 .hero-title-line--end {
+    padding-right: 6vw;
+    text-align: right;
+  }
+
+  /* The photo sits lower, so its faded top edge stays clear of the button; the plan keeps its place near the bottom bar. */
+  .home-hero--banner .hero-photo {
+    margin-top: var(--space-30, 30px);
+  }
+
+  .home-hero--banner > .hero-daily {
+    margin-top: 0;
+  }
+
+  .home-hero--banner .hero-daily-eyebrow {
+    display: none;
+  }
+
+  /* The sage banner still reaches the bottom bar, so its end only shows on scrolling. */
+  .home-hero.home-hero--banner {
+    min-height: calc(100svh - var(--header-h) - 68px - env(safe-area-inset-bottom));
+  }
+}
+
+/* Guest invitation under the plan action: a small muted link to the profile. */
+.hero-daily-signup {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--text-13);
+  color: var(--color-ink);
+  opacity: .75;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* One continuous asymmetric ribbon, entering and leaving beyond the banner; near the top it keeps to the left edge so it
+   does not cross the first letters of the heading (owner, 2026-11-05). */
+@media (max-width: 639px) {
+  .home-hero.home-hero--banner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 900' preserveAspectRatio='none'%3E%3Cpath d='M-50 -45 C40 20 26 105 16 190 C6 270 -10 368 38 439 C100 526 294 482 355 565 C423 658 310 731 350 820 C369 862 414 903 445 945' fill='none' stroke='%23ad6338' stroke-width='12'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    opacity: .7;
+    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 5%, rgb(0 0 0 / .2) 23%, rgb(0 0 0 / .2) 77%, #000 95%, #000 100%);
+    mask-image: linear-gradient(to right, #000 0%, #000 5%, rgb(0 0 0 / .2) 23%, rgb(0 0 0 / .2) 77%, #000 95%, #000 100%);
+  }
+  .home-hero--banner > .hero-copy,
+  .home-hero--banner > .hero-daily { z-index: 1; }
+}

@@ -16,6 +16,12 @@ async function hashPassword(email: string, password: string) {
 }
 const matchesLogin = (account: Account, login: string) => login.includes('@') ? account.email.toLowerCase() === login.trim().toLowerCase() : Boolean(digits(login)) && digits(account.phone).slice(-10) === digits(login).slice(-10);
 
+// Trial account for looking around the profile until the account server exists: signing in with it puts a ready demo
+// account (with a discount card) into this browser in place of any local one.
+const DEMO_LOGIN = 'demo@nsp-center.ru';
+const DEMO_PASSWORD = 'demo2026';
+const demoAccount = async (): Promise<Account> => ({ firstName: 'Анна', lastName: 'Демо', email: DEMO_LOGIN, phone: '', partnerId: '7204118', passwordHash: await hashPassword(DEMO_LOGIN, DEMO_PASSWORD), createdAt: '2026-11-05' });
+
 type Mode = 'signin' | 'register';
 
 function ProviderButtons({ onPick }: { onPick: () => void }) {
@@ -53,6 +59,12 @@ export function AuthScreen() {
   const switchTo = (next: Mode) => { setMode(next); setNotice(false); setError(''); setPassword(''); };
   const signIn = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false);
+    if (login.trim().toLowerCase() === DEMO_LOGIN && password === DEMO_PASSWORD) {
+      const demo = await demoAccount();
+      setPassword(''); setError('');
+      setState(s => ({ ...s, account: demo, signedIn: true, name: demo.firstName, card: true }));
+      return;
+    }
     const account = state.account;
     if (!account || !matchesLogin(account, login) || await hashPassword(account.email, password) !== account.passwordHash) { setError('Неверный телефон, email или пароль. Пока аккаунт хранится только в этом браузере: если вы регистрировались на другом устройстве, войти здесь не получится.'); return; }
     setPassword(''); setError('');
