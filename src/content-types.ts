@@ -35,10 +35,12 @@ export type Product = {
   related: string[];
   prices: ProductPrices;
   /** Rewritten text from src/product-copy (only on the product's own page, not in the browser summary). */
-  copy?: ProductCopy;
+  copy?: ProductCopy; experts?: ExpertNote[];
 };
 
 export type ProductCopy = { about: string[]; highlights: string[] };
+/** An expert comment from the doctors' lecture base (scripts/product-experts.mjs). */
+export type ExpertNote = { speaker: string; role: string; course: string; lecture: string; text: string };
 
 export type Category = {
   id: string;

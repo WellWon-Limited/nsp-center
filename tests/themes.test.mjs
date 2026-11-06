@@ -51,3 +51,25 @@ test('The browser bundle carries only the theme index; each theme page embeds it
     assert.equal(JSON.parse($('#nsp-page-data').text()).theme?.slug, theme.slug, `${theme.slug}: page data lacks its theme`);
   }
 });
+
+test('Expert comments are attributed to a named speaker and lecture, contain no treatment claims and open the Reviews tab', () => {
+  for (const product of content.products.filter((item) => item.experts?.length)) {
+    for (const note of product.experts) {
+      assert.ok(note.speaker && note.lecture && note.text, `${product.id}: expert note lacks speaker, lecture or text`);
+      assert.doesNotMatch(note.text, treatmentClaim, `${product.id}: treatment claim in expert note "${note.text}"`);
+      assert.ok(note.text.length <= 400, `${product.id}: expert note longer than 400 characters`);
+    }
+    const $ = cheerio.load(readFileSync(resolve(dist, manifest.get(product.path)), 'utf8'));
+    assert.equal($('#panel-reviews .expert-note').length, product.experts.length, `${product.id}: expert notes not rendered before JavaScript`);
+  }
+});
+
+test('The recommendation test only suggests catalog products, with reasons free of treatment claims', () => {
+  const source = readFileSync(resolve(root, 'src/recommend.tsx'), 'utf8');
+  const pairs = [...source.matchAll(/\['([a-z0-9-]+)', '([^']{20,})'\]/gu)];
+  assert.ok(pairs.length >= 15, 'recommendation areas list too few products');
+  for (const [, id, reason] of pairs) {
+    assert.ok(products.has(id), `recommend: unknown product ${id}`);
+    assert.doesNotMatch(reason, treatmentClaim, `recommend: treatment claim in "${reason}"`);
+  }
+});

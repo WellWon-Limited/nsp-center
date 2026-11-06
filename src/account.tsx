@@ -44,6 +44,7 @@ function Barcode({ value }: { value: string }) {
   widths.forEach((w, i) => { if (i % 2 === 0) bars.push([x, w]); x += w; });
   return <svg className="discount-barcode" viewBox={`0 0 ${x + 10} 40`} preserveAspectRatio="none" role="img" aria-label={`Штрихкод карты ${value}`}>{bars.map(([bx, w]) => <rect key={bx} x={bx} y="0" width={w} height="40" />)}</svg>;
 }
+const DEMO_POINTS = 100;
 const groupDigits = (id: string) => id.replace(/\B(?=(\d{3})+$)/g, ' ');
 
 // The discount card right under the greeting: with a number — the card itself (discount, barcode, number); without —
@@ -65,7 +66,8 @@ function DiscountCard({ account }: { account: Account }) {
   return <section className="discount-card" data-ds-id="account-card">
     <div className="discount-card-top"><span>Дисконтная карта</span><span>Nature’s Sunshine</span></div>
     {account.partnerId ? <>
-      <div className="discount-card-main"><strong>{account.firstName} {account.lastName}</strong><span className="discount-card-rate">−30%</span></div>
+      {/* The card shows the points balance, not the owner's name (it is their own cabinet). A fixed 100 until the partner
+          system is connected and accrues points (owner, 2026-11-06). */}<div className="discount-card-main"><strong className="discount-card-points">{DEMO_POINTS} <span>баллов</span></strong><span className="discount-card-rate">−30%</span></div>
       <div className="discount-card-code"><Barcode value={account.partnerId} /><span>{groupDigits(account.partnerId)}</span></div>
       <div className="discount-card-foot"><span>Скидка до 30% на все товары в каталоге и корзине</span><button type="button" onClick={remove}>Удалить</button></div>
     </> : <>
@@ -83,6 +85,7 @@ function DiscountCard({ account }: { account: Account }) {
 export function AccountPage({ account }: { account: Account }) {
   const { state, setState } = useStore();
   const favorites = data.products.filter(p => state.favorites.includes(p.id));
+  const waiting = data.products.filter(p => state.waitlist.some(x => x.id === p.id));
   const done = state.intake.filter(x => x.done).length;
   const created = russianDate(account.createdAt);
   // Entering the account (after sign-in or registration) starts at the top of the page.
@@ -125,6 +128,10 @@ export function AccountPage({ account }: { account: Account }) {
       </div>}
     </section>
 
+    <section className="account-favorites" data-ds-id="account-waitlist">
+      <h2 className="account-section-title">Лист ожидания</h2>
+      {waiting.length ? <ProductGrid products={waiting}/> : <p className="account-waitlist-empty">Пока пусто</p>}
+    </section>
     <button className="account-logout" onClick={() => setState(s => ({ ...s, signedIn: false }))}>Выйти из аккаунта</button>
   </div>;
 }

@@ -34,7 +34,7 @@ export function NotificationsButton() {
     {open && <div className="notifications-panel" id={panelId} role="dialog" aria-label="Уведомления">
       <div className="notifications-head"><h2>Уведомления</h2>{state.notices.length > 0 && <button type="button" className="text-button" onClick={() => setState(s => ({ ...s, notices: [] }))}>Очистить</button>}</div>
       {state.notices.length ? <ul>{state.notices.map(n => <li key={n.id}><a href={n.url}><strong>{n.title}</strong><p>{n.text}</p><small>{n.date}</small></a></li>)}</ul>
-        : <div className="notifications-empty"><Icon name="bell" size={28} /><p><strong>Уведомлений пока нет</strong></p><p>Здесь появятся напоминания о плане приёма в указанное время.</p></div>}
+        : <div className="notifications-empty"><Icon name="bell" size={28} /><p><strong>Уведомлений пока нет</strong></p></div>}
       {permission === 'default' && <button type="button" className="btn btn--primary notifications-enable" onClick={enable}>Присылать на телефон</button>}
       {permission === 'granted' && <p className="notifications-note">Напоминания приходят и на телефон, пока приложение открыто или свёрнуто.</p>}
       {permission === 'denied' && <p className="notifications-note">Уведомления на телефон выключены в настройках браузера.</p>}

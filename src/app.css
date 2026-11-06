@@ -144,14 +144,8 @@ body:has(.catalog-layout) .site-main .catalog-tools .search-field{background-col
 .planner-row.is-done .planner-name,.planner-row.is-done .planner-time{color:var(--color-ink);text-decoration:none}
 .personal-grid .product-picker .field{border:1px solid var(--color-ink-line);background-color:#f5f7f5;box-shadow:none}
 .personal-grid p.intake-date{margin-top:var(--space-4);font-size:var(--text-14);color:var(--color-muted)}
-/* Intake calendar under the plan: a month grid (Mon-first), a green dot on days with ticks, today ringed, the chosen day
-   (shown in the plan card above) filled. */
+/* Plan column: the day's plan card on white. */
 .plan-column{display:grid;gap:var(--space-18);align-content:start}.personal-grid .plan-column>.panel{padding:var(--space-28);background:var(--color-white);border:1px solid var(--color-ink-line);box-shadow:0 14px 32px -24px rgb(29 58 54 / .5);-webkit-backdrop-filter:none;backdrop-filter:none}
-.calendar-head{display:flex;align-items:center;justify-content:space-between;gap:var(--space-12);margin-bottom:var(--space-14)}.calendar-head h2{font-size:var(--text-20)}.calendar-arrow{display:grid;place-items:center;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:rgb(29 58 54 / .06);color:var(--color-ink);cursor:pointer}.calendar-arrow:disabled{opacity:.3;cursor:default}.calendar-arrow--prev svg{transform:rotate(180deg)}
-.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}.calendar-weekday{padding-bottom:var(--space-6);font-size:var(--text-12);font-weight:var(--weight-700);color:var(--color-muted)}
-.calendar-day{position:relative;display:grid;place-items:center;aspect-ratio:1;padding:0;border:0;border-radius:10px;background:none;color:var(--color-ink);font-size:var(--text-14);font-weight:var(--weight-600);font-variant-numeric:tabular-nums;cursor:pointer}.calendar-day:disabled{color:rgb(29 58 54 / .3);cursor:default}.calendar-day.has-intake{background:rgb(77 150 120 / .12)}.calendar-day>i{position:absolute;bottom:5px;width:5px;height:5px;border-radius:50%;background:var(--color-action)}.calendar-day.is-today{box-shadow:inset 0 0 0 2px var(--color-ink)}.calendar-day.is-picked{background:var(--color-ink);color:var(--color-white)}.calendar-day.is-picked>i{background:var(--color-white)}
-.calendar-stats{margin-top:var(--space-18);padding-top:var(--space-14);border-top:1px solid var(--color-ink-line)}.calendar-stats h3{font-size:var(--text-15);margin-bottom:var(--space-8)}.calendar-stats ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--space-6)}
-.calendar-stats li{display:flex;justify-content:space-between;gap:var(--space-12);font-size:var(--text-14)}.calendar-stats strong{white-space:nowrap}
 @media(max-width:639px){.personal-grid .plan-column>.panel{padding:var(--space-20)}}
 .intake-today{margin-left:var(--space-10);padding:0;border:0;background:none;color:var(--color-link);font:inherit;font-weight:var(--weight-700);cursor:pointer}
 /* Plan page: one centred column on every screen, like an app — heading, switch, the day's plan, the calendar, then the test link. */
@@ -169,3 +163,41 @@ body:has(.catalog-layout) .site-main .catalog-tools .search-field{background-col
 @media(max-width:639px){.bottom-nav{background:#10241f}}
 /* Cart: the product list and "Ваш заказ" are white cards so they stand out from the page background. */
 .cart-items.panel,.order-summary.panel{background:var(--color-white);border:1px solid var(--color-ink-line);box-shadow:0 14px 32px -24px rgb(29 58 54 / .5);-webkit-backdrop-filter:none;backdrop-filter:none}
+/* Plan, adding a product: the product field, then the time field (same look, with ready times in a list), then "Добавить". */
+.intake-add{flex-wrap:wrap}.intake-add .product-picker{flex:1 1 100%}.intake-add>.btn{flex:1 1 100%;margin:0}
+.time-picker-list button{justify-content:space-between}.time-picker-list strong{font-variant-numeric:tabular-nums}.time-picker-list span{color:var(--color-muted);font-size:var(--text-13)}
+/* Catalog card action: a full-width "В корзину" button in the logo's dark green, the same size and place as "Сообщить о поступлении". */
+.product-meta>.card-cart-button{width:100%;min-height:44px;margin-top:12px;padding:10px 8px;border:1px solid var(--color-ink);background:var(--color-ink);color:var(--color-white);font-size:12px;line-height:1.35;white-space:normal}.product-meta>.card-cart-button:hover,.product-meta>.card-cart-button:focus-visible{border-color:#10241f;background:#10241f;color:var(--color-white)}.product-meta>.card-cart-button:active{color:var(--color-white)}
+/* Product cards: a favourite heart is solid orange, no dark outline. */
+.favorite.selected{color:#ad6338}
+/* "Сообщить о поступлении" on cards: white with a dark-green outline, like the install button. */
+.product-meta>.btn.waitlist-button{border:1.5px solid rgb(29 58 54 / .25);background:var(--color-white);color:var(--color-ink);font-weight:var(--weight-800);-webkit-backdrop-filter:none;backdrop-filter:none}.product-meta>.btn.waitlist-button:hover,.product-meta>.btn.waitlist-button:focus-visible{background:rgb(29 58 54 / .06);color:var(--color-ink)}.product-meta>.btn.waitlist-button:active{background:rgb(29 58 54 / .16);color:var(--color-ink)}
+/* All product cards (catalog, home, favourites, waiting list): larger product photos with a small inner margin. */
+body .site-main .product-card .product-visual{height:220px}body .site-main .product-card .product-visual>a{padding:var(--space-12)}
+@media(max-width:639px){body .site-main .product-card .product-visual{height:190px}body .site-main .product-card .product-visual>a{padding:var(--space-8)}}
+/* "В корзину" and "Сообщить о поступлении" are the same size; the longer label wraps inside the same height. */
+.product-meta>.card-cart-button,.product-meta>.btn.waitlist-button{height:52px;min-height:52px;padding:4px 8px;font-size:13px;line-height:1.2;gap:var(--space-6)}
+
+/* Shared brand asset for the header, footer and installed application. */
+.brand-mark{border-radius:50%;overflow:hidden}.brand-mark img{display:block;width:100%;height:100%}
+.intake-date-choice{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}.intake-date-choice .field{width:auto;max-width:100%}.planner-row .check:disabled{opacity:.35;cursor:default}
+/* Product page: the favourite heart sits in the photo's top-right corner, as on catalog cards; the buy and waiting-list
+   buttons share the catalog cards' look and fill the row next to the quantity. */
+.main-product-image{position:relative}.main-product-image>.favorite{top:var(--space-12);right:var(--space-12);width:40px;height:40px}
+.purchase-actions>.card-cart-button,.purchase-actions>.btn.waitlist-button{flex:1;min-height:52px;height:52px;margin:0;padding:4px 12px;font-size:14px;line-height:1.2;gap:var(--space-8)}
+.purchase-actions>.card-cart-button{border:1px solid var(--color-ink);background:var(--color-ink);color:var(--color-white)}.purchase-actions>.card-cart-button:hover,.purchase-actions>.card-cart-button:focus-visible{border-color:#10241f;background:#10241f;color:var(--color-white)}
+.purchase-actions>.btn.waitlist-button{border:1.5px solid rgb(29 58 54 / .25);background:var(--color-white);color:var(--color-ink);font-weight:var(--weight-800);-webkit-backdrop-filter:none;backdrop-filter:none}.purchase-actions>.btn.waitlist-button:hover,.purchase-actions>.btn.waitlist-button:focus-visible{background:rgb(29 58 54 / .06);color:var(--color-ink)}
+/* Expert comments in the «Отзывы» tab, above customer reviews. */
+.expert-notes{display:grid;gap:var(--space-14);margin-bottom:var(--space-20)}.expert-note{padding:var(--space-16) var(--space-18);border:1px solid #c9dbd2;border-left:4px solid var(--color-ink);border-radius:var(--radius-16);background:#e8f1ec}
+.expert-badge{display:inline-flex;align-items:center;gap:var(--space-6);padding:var(--space-4) var(--space-10);border-radius:999px;background:var(--color-ink);color:var(--color-white);font-size:var(--text-12);font-weight:var(--weight-700)}
+.expert-text{margin:var(--space-12) 0;font-size:var(--text-15);line-height:var(--leading-long);color:var(--color-ink)}.expert-note footer{display:grid;gap:2px}.expert-note footer strong{font-size:var(--text-14)}.expert-note footer span{font-size:var(--text-13);color:var(--color-muted)}.expert-note footer small{font-size:var(--text-12);color:var(--color-muted)}
+.reviews-empty{margin:0;color:var(--color-muted);font-size:var(--text-15)}
+/* Recommendation test: answers and the result areas (each with "Почему вам" and product cards with "Зачем?"). */
+.recommend{max-width:880px;margin:0 auto}.recommend-question h2{margin-top:var(--space-18)}.answer-list>.is-selected{border-color:var(--color-ink);background:#e8f1ec}.recommend-next{width:100%;min-height:52px;margin-top:var(--space-16);border:1px solid var(--color-ink);background:var(--color-ink);color:var(--color-white)}.recommend-next:disabled{opacity:.45}
+.recommend-area{margin-top:var(--space-28)}.recommend-area h2{font-size:var(--text-24);margin-bottom:var(--space-8)}.recommend-why{margin:0 0 var(--space-14);font-size:var(--text-15);color:var(--color-ink)}.recommend-why strong{color:var(--color-success)}
+.recommend-actions{display:grid;gap:var(--space-10);margin:var(--space-28) 0 var(--space-16)}.recommend-actions .btn{width:100%;min-height:52px}.recommend-actions .card-cart-button{border:1px solid var(--color-ink);background:var(--color-ink);color:var(--color-white)}.recommend-actions .waitlist-button{border:1.5px solid rgb(29 58 54 / .25);background:var(--color-white);color:var(--color-ink);font-weight:var(--weight-800)}
+/* Recommendation test card on white, like the plan cards; answer buttons on a light grey so they read as buttons. */
+.recommend-question.panel{background:var(--color-white);border:1px solid var(--color-ink-line);box-shadow:0 14px 32px -24px rgb(29 58 54 / .5);-webkit-backdrop-filter:none;backdrop-filter:none}.recommend-question .answer-list>.panel{background:#f5f7f5;border:1px solid var(--color-ink-line);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}.recommend-question .answer-list>.is-selected{border-color:var(--color-ink);background:#e8f1ec}
+/* Plan: the date under «Приём на сегодня» opens the date picker (the native input lies invisibly over it). */
+.intake-date-pick{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:pointer}.intake-date-pick svg{transform:rotate(90deg);opacity:.6}.intake-date-pick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}
+.profile-loading{min-height:60vh}

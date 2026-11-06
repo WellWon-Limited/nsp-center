@@ -10,7 +10,7 @@ const icons = ['/icons/icon.svg', '/icons/splash.svg', '/icons/icon-192.png', '/
 const pages = ['/', '/health/', '/profile/', '/cart/', '/catalog/'];
 const precache = [...pages, ...assets, ...icons];
 const hash = createHash('sha256');
-for (const file of assets) hash.update(file).update(await readFile(`dist${file}`));
+for (const file of [...assets,...icons]) hash.update(file).update(await readFile(`dist${file}`));
 const version = hash.digest('hex').slice(0, 12);
 const template = await readFile('scripts/sw-template.js', 'utf8');
 await writeFile('dist/sw.js', template.replace('__VERSION__', version).replace('__PRECACHE__', JSON.stringify(precache)));

@@ -133,3 +133,17 @@
 .install-card .btn.install-banner-action {
   margin-top: var(--space-4);
 }
+
+/* «Больше не спрашивать»: a quiet text button under «Установить». */
+.install-banner-never {
+  display: block;
+  width: 100%;
+  margin-top: var(--space-8);
+  padding: var(--space-8);
+  border: 0;
+  background: none;
+  color: var(--color-muted);
+  font: inherit;
+  font-size: var(--text-14);
+  cursor: pointer;
+}

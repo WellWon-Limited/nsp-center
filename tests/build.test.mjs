@@ -199,3 +199,18 @@ test('The site is installable and works offline: manifest, icons and a service w
   assert.equal($('link[rel="manifest"]').attr('href'), '/manifest.webmanifest');
   assert.equal($('link[rel="apple-touch-icon"]').attr('href'), '/icons/apple-touch-icon.png');
 });
+
+test('Products added after the snapshot have a page, price-list prices, a local image and a place on the first category page', () => {
+  const added = content.products.filter((product) => product.added);
+  assert.ok(added.length >= 2, 'expected the added products (src/product-new)');
+  for (const product of added) {
+    assert.ok(manifestMap.has(product.path), `${product.path}: no prerendered page`);
+    assert.deepEqual(product.prices, pricesFor(product, priceList), `${product.path}: prices differ from the price list`);
+    assert.ok(existsSync(resolve(root, 'public', product.image.slice(1))), `${product.path}: image file missing`);
+    const $ = cheerio.load(htmlFor(product.path));
+    assert.ok($('h1').text().includes(product.name.split('(')[0].trim()), `${product.path}: title absent`);
+    assert.equal($('.card-offer').length, 1, `${product.path}: discount-card offer missing`);
+    const category = cheerio.load(htmlFor(product.categoryPath));
+    assert.ok(category(`[data-ds-id="product-card"] h3 a[href="${product.path}"]`).length === 1, `${product.path}: not on the first page of its category`);
+  }
+});

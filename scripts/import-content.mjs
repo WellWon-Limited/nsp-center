@@ -6,6 +6,8 @@ import { load } from 'cheerio';
 import { pricesFor, readPriceList } from './pricing.mjs';
 import { readThemes } from './themes.mjs';
 import { readProductCopy } from './product-copy.mjs';
+import { readNewProducts } from './new-products.mjs';
+import { readProductExperts } from './product-experts.mjs';
 
 // Offline import: the snapshot is the content source and is never written to;
 // the NSP price list (references/prices/) adds retail and partner prices.
@@ -24,6 +26,7 @@ const assets = readData('assets');
 const sourceAudit = readData('audit');
 const priceList = readPriceList();
 const productCopy = readProductCopy();
+const productExperts = readProductExperts();
 const sourcePages = readFileSync(resolve(snapshot, 'data/pages.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
 const sourceByUrl = new Map(sourcePages.map(page => [page.url, page]));
 const successfulPages = crawl.filter(page => page.kind === 'page' && page.status === 200);
@@ -364,6 +367,18 @@ const content = {
 if (products.length !== 166 || categories.length !== 17 || articles.length !== 8 || routes.length !== 227 || pages.length !== 16) {
   throw new Error('Snapshot completeness invariants failed');
 }
+// Products added after the snapshot: their own routes, first in their category (its first page) and in the catalog.
+for (const product of readNewProducts(priceList, categories)) {
+  if (products.some(p => p.path === product.path || p.article === product.article)) throw new Error(`New product ${product.id} duplicates a catalog product`);
+  products.push(product);
+  routes.push({ url: product.path, path: product.path, type: 'product', id: product.id, title: product.name, sourceUrl: null, canonicalPath: product.path });
+  const category = categories.find(c => c.path === product.categoryPath);
+  category.products.unshift(product.path);
+  const firstPage = routes.find(r => r.type === 'category' && r.path === category.path && r.page === 1);
+  if (firstPage?.products) firstPage.products.unshift(product.path);
+}
+for (const product of products) if (productExperts.has(product.id)) product.experts = productExperts.get(product.id);
+for (const id of productExperts.keys()) if (!products.some(product => product.id === id)) throw new Error(`Product experts: unknown product ${id}`);
 if (new Set(routes.map(route => route.url)).size !== routes.length) throw new Error('Duplicate imported routes');
 for (const html of [...products.flatMap(product => Object.values(product.sectionsHtml)), ...articles.map(article => article.html), ...pages.map(page => page.html), homeHtml]) {
   const unsafe = /<(?:script|style|h1|iframe|form|input|button)\b|\son\w+=|\sstyle=/i.exec(html);

@@ -360,3 +360,21 @@
   position: relative;
   z-index: 1;
 }
+.waitlist-button{background:#e5f0eb;color:var(--color-ink);border:1px solid #bfd3c9;white-space:normal;line-height:1.35;min-height:44px}
+.waitlist-button.is-waiting{background:#fff;border-color:#789f8d}
+.product-meta>.waitlist-button{width:100%;margin-top:12px;font-size:12px;padding:10px 8px}
+.account-favorites>.ds-muted{max-width:680px;line-height:1.6;margin-bottom:20px}
+.loyalty-status{padding:16px;background:#eaf2ee;border-radius:14px;color:var(--color-ink);margin:12px 0}
+.loyalty-status>div{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.loyalty-status strong{font-size:26px}
+.loyalty-status p{font-size:13px;line-height:1.5;margin:6px 0}
+.loyalty-status small{display:block;font-size:12px;line-height:1.5}
+.loyalty-status--card{margin:0;background:rgb(0 0 0 / .22);border:1px solid rgb(255 255 255 / .2);color:#fff}
+
+
+/* Points balance in place of the owner's name: a large number with a small "баллов". */
+.discount-card-points span {
+  font-size: var(--text-16);
+  font-weight: var(--weight-600);
+  opacity: .8;
+}

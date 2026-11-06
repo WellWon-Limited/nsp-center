@@ -65,6 +65,10 @@ export function useInstall() {
 
 const InstallSteps = () => <p className="install-banner-help">Нажмите <strong>«Поделиться»</strong> внизу экрана Safari, затем <strong>«На экран „Домой“»</strong> и <strong>«Добавить»</strong>.</p>;
 
+// «Больше не спрашивать» turns the card at the top off for good in this browser (the profile card still offers the install).
+const neverAskKey = 'nsp-center:install-never';
+const neverAsk = () => { try { return localStorage.getItem(neverAskKey) === '1'; } catch { return false; } };
+
 // The card at the top comes up when the visitor enters the site or reloads a page, not on every move between pages.
 const enteredOrReloaded = () => {
   const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
@@ -75,20 +79,22 @@ const enteredOrReloaded = () => {
 /** "Установите приложение": after the page has loaded (and the loading screen is gone) a card drops in at the top and the
  *  rest of the screen dims until "×" or "Установить". On Android and desktop Chrome/Edge the button starts the browser's
  *  install right away; iPhone Safari has no such call, so the button shows the taps that add the app to the home screen.
- *  Shown again on every visit and reload until the app is installed; never inside the installed app. */
+ *  Shown again on every visit and reload until the app is installed or the visitor taps «Больше не спрашивать»; never inside
+ *  the installed app. */
 export function InstallBanner() {
   const { available, ios, install } = useInstall();
   const [help, setHelp] = useState(false);
   const [open, setOpen] = useState(false);
   const [closed, setClosed] = useState(false);
   useEffect(() => {
-    if (!available || closed || open || !enteredOrReloaded()) return;
+    if (!available || closed || open || !enteredOrReloaded() || neverAsk()) return;
     let timer = 0;
     whenReady(() => { timer = window.setTimeout(() => setOpen(true), 400); });
     return () => clearTimeout(timer);
   }, [available, closed, open]);
   if (!open || closed || !available) return null;
   const close = () => setClosed(true);
+  const stopAsking = () => { try { localStorage.setItem(neverAskKey, '1'); } catch { /* ignore */ } close(); };
   const start = async () => { if (await install()) close(); else if (ios) setHelp(v => !v); };
   return <><div className="install-backdrop" aria-hidden="true" />
   <div className="install-banner" role="dialog" aria-modal="true" aria-label="Установка приложения" data-ds-id="install-banner">
@@ -98,6 +104,7 @@ export function InstallBanner() {
       <button type="button" className="install-banner-close" onClick={close} aria-label="Скрыть"><Icon name="close" size={18} /></button>
     </div>
     <button type="button" className="btn btn--primary install-banner-action" onClick={start}>Установить</button>
+    <button type="button" className="install-banner-never" onClick={stopAsking}>Больше не спрашивать</button>
     {help && <InstallSteps />}
   </div></>;
 }
