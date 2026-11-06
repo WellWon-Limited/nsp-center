@@ -1,0 +1,77 @@
+{
+  "mode": "built-in image_gen",
+  "briefs": [
+    {
+      "id": "botanical-immunity",
+      "series": "botanical",
+      "topic": "immunity",
+      "title": "Иммунитет тоже нуждается в защите",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a botanically accurate pink echinacea flower, fresh green leaves, cut fresh ginger and a sliced lemon arranged as a restrained natural still life; topic is everyday nutrition and immune health, no disease depiction. Art direction: Very tactile botanical editorial photography, a soft muted sage green natural background, gentle directional daylight, intimate close-up composition, believable organic imperfections, sophisticated restrained colours. Main ingredients grouped centrally with breathing room at edges. Clearly readable thumbnail composition. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/botanical-immunity.jpg"
+    },
+    {
+      "id": "botanical-magnesium",
+      "series": "botanical",
+      "topic": "magnesium",
+      "title": "Интересные факты про магний",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a beautifully balanced real-food still life of green pumpkin seeds, almonds, a few dark green spinach leaves and one small piece of dark chocolate; these actual foods are the visual subject for an article about magnesium; no pills, chemical symbols or fake molecules. Art direction: Very tactile botanical editorial photography, a soft muted sage green natural background, gentle directional daylight, intimate close-up composition, believable organic imperfections, sophisticated restrained colours. Main ingredients grouped centrally with breathing room at edges. Clearly readable thumbnail composition. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/botanical-magnesium.jpg"
+    },
+    {
+      "id": "botanical-balance",
+      "series": "botanical",
+      "topic": "balance",
+      "title": "Коррекция веса с NSP",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a genuinely appetizing balanced everyday meal: a ceramic plate with leafy greens, cucumber, cherry tomatoes, chickpeas and whole grains, with a few fresh ingredients nearby; topic is balanced eating and sustainable everyday habits; no scales, tape measures, body transformations, pills or dieting slogans. Art direction: Very tactile botanical editorial photography, a soft muted sage green natural background, gentle directional daylight, intimate close-up composition, believable organic imperfections, sophisticated restrained colours. Main ingredients grouped centrally with breathing room at edges. Clearly readable thumbnail composition. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/botanical-balance.jpg"
+    },
+    {
+      "id": "sunlight-immunity",
+      "series": "sunlight",
+      "topic": "immunity",
+      "title": "Иммунитет тоже нуждается в защите",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a botanically accurate pink echinacea flower, fresh green leaves, cut fresh ginger and a sliced lemon arranged as a restrained natural still life; topic is everyday nutrition and immune health, no disease depiction. Art direction: Elegant lifestyle food editorial photography on a warm limestone table beside a garden window, dappled golden morning sun, fresh leaf shadows, warm cream and rich forest green colour harmony, soft depth of field, authentic inviting scene. Main subject centred, beautifully clear in small landscape card. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/sunlight-immunity.jpg"
+    },
+    {
+      "id": "sunlight-magnesium",
+      "series": "sunlight",
+      "topic": "magnesium",
+      "title": "Интересные факты про магний",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a beautifully balanced real-food still life of green pumpkin seeds, almonds, a few dark green spinach leaves and one small piece of dark chocolate; these actual foods are the visual subject for an article about magnesium; no pills, chemical symbols or fake molecules. Art direction: Elegant lifestyle food editorial photography on a warm limestone table beside a garden window, dappled golden morning sun, fresh leaf shadows, warm cream and rich forest green colour harmony, soft depth of field, authentic inviting scene. Main subject centred, beautifully clear in small landscape card. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/sunlight-magnesium.jpg"
+    },
+    {
+      "id": "sunlight-balance",
+      "series": "sunlight",
+      "topic": "balance",
+      "title": "Коррекция веса с NSP",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a genuinely appetizing balanced everyday meal: a ceramic plate with leafy greens, cucumber, cherry tomatoes, chickpeas and whole grains, with a few fresh ingredients nearby; topic is balanced eating and sustainable everyday habits; no scales, tape measures, body transformations, pills or dieting slogans. Art direction: Elegant lifestyle food editorial photography on a warm limestone table beside a garden window, dappled golden morning sun, fresh leaf shadows, warm cream and rich forest green colour harmony, soft depth of field, authentic inviting scene. Main subject centred, beautifully clear in small landscape card. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/sunlight-balance.jpg"
+    },
+    {
+      "id": "minimal-immunity",
+      "series": "minimal",
+      "topic": "immunity",
+      "title": "Иммунитет тоже нуждается в защите",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a botanically accurate pink echinacea flower, fresh green leaves, cut fresh ginger and a sliced lemon arranged as a restrained natural still life; topic is everyday nutrition and immune health, no disease depiction. Art direction: Clean high-end botanical nutrition magazine still life on a pale ivory matte background with delicate natural window shadows, a few ingredients arranged deliberately with generous negative space, fresh pale green and warm cream tones, realistic tactile detail, simple large shapes easily recognizable as a small card thumbnail. Avoid sterile medical styling. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/minimal-immunity.jpg"
+    },
+    {
+      "id": "minimal-magnesium",
+      "series": "minimal",
+      "topic": "magnesium",
+      "title": "Интересные факты про магний",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a beautifully balanced real-food still life of green pumpkin seeds, almonds, a few dark green spinach leaves and one small piece of dark chocolate; these actual foods are the visual subject for an article about magnesium; no pills, chemical symbols or fake molecules. Art direction: Clean high-end botanical nutrition magazine still life on a pale ivory matte background with delicate natural window shadows, a few ingredients arranged deliberately with generous negative space, fresh pale green and warm cream tones, realistic tactile detail, simple large shapes easily recognizable as a small card thumbnail. Avoid sterile medical styling. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/minimal-magnesium.jpg"
+    },
+    {
+      "id": "minimal-balance",
+      "series": "minimal",
+      "topic": "balance",
+      "title": "Коррекция веса с NSP",
+      "prompt": "Generate a premium photorealistic landscape editorial photograph, aspect ratio 3:2, high resolution, for a wellness journal article cover. Subject: a genuinely appetizing balanced everyday meal: a ceramic plate with leafy greens, cucumber, cherry tomatoes, chickpeas and whole grains, with a few fresh ingredients nearby; topic is balanced eating and sustainable everyday habits; no scales, tape measures, body transformations, pills or dieting slogans. Art direction: Clean high-end botanical nutrition magazine still life on a pale ivory matte background with delicate natural window shadows, a few ingredients arranged deliberately with generous negative space, fresh pale green and warm cream tones, realistic tactile detail, simple large shapes easily recognizable as a small card thumbnail. Avoid sterile medical styling. All food and plant details must be believable and natural, no CGI sheen, tasteful premium photographic quality. The image will be cropped to a wide website card, keep all important objects within central 80% and leave edge breathing room. No text, words, letters, logos, labels, packaging, supplement bottles, interface, icons, orange ribbons, collage or before-and-after. This is an illustrative photograph; do not imply any treatment result.",
+      "asset": "public/images/journal-concepts/minimal-balance.jpg"
+    }
+  ]
+}

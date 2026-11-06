@@ -1,0 +1,89 @@
+{
+  "immunitet-tozhe-nuzhdaetsya-v-zashchite": {
+    "cover": "/images/article-concepts/virus-centered-v1.jpg",
+    "alt": "Объёмная научная иллюстрация вирусной частицы в зелёной палитре",
+    "inline": [
+      {
+        "src": "/images/article-concepts/nutrition-v2-v1.jpg",
+        "alt": "Красный перец, брокколи, миндаль и зелёные листья"
+      }
+    ]
+  },
+  "interesnye-fakty-pro-magniy": {
+    "cover": "/images/journal-final/magnesium-cover-v1.jpg",
+    "alt": "Тыквенные семечки, миндаль и шпинат — растительные источники магния",
+    "inline": [
+      {
+        "src": "/images/journal-final/magnesium-foods-v1.jpg",
+        "alt": "Тёмный шоколад, какао-бобы и цельные злаки"
+      }
+    ]
+  },
+  "korrektsiya-vesa-s-nsp": {
+    "cover": "/images/journal-final/weight-cover-v1.jpg",
+    "alt": "Сбалансированный обед с цельными злаками, нутом и зелёными овощами",
+    "inline": []
+  },
+  "letnyaya-perezagruzka": {
+    "cover": "/images/journal-final/summer-cover-v4.jpg",
+    "alt": "Корзина с персиками, абрикосами, яблоками и виноградом в летнем саду",
+    "inline": [
+      {
+        "src": "/images/journal-final/summer-water-v1.jpg",
+        "alt": "Утренняя вода с лимоном и мятой, рядом мёд"
+      },
+      {
+        "src": "/images/journal-final/summer-herbs-v1.jpg",
+        "alt": "Мята, ромашка и лаванда в травяном саду"
+      }
+    ]
+  },
+  "nauchnyy-konsultant-nsp-o-vitamine-s": {
+    "cover": "/images/journal-final/vitamin-c-cover-v4.jpg",
+    "alt": "Крупный план сочного апельсина в разрезе",
+    "inline": [
+      {
+        "src": "/images/journal-final/vitamin-c-kiwi-v3.jpg",
+        "alt": "Свежий киви в разрезе — продукт с витамином C"
+      }
+    ]
+  },
+  "o-vitamine-e": {
+    "cover": "/images/journal-final/vitamin-e-cover-v1.jpg",
+    "alt": "Золотистая капля растительного масла на фоне зелени и семян",
+    "inline": [
+      {
+        "src": "/images/journal-final/vitamin-e-cells-v1.jpg",
+        "alt": "Концептуальная иллюстрация клеточной мембраны и липидных капель"
+      },
+      {
+        "src": "/images/journal-final/vitamin-e-foods-v1.jpg",
+        "alt": "Миндаль, семена подсолнечника, грецкий орех и зелёный лист"
+      }
+    ]
+  },
+  "omega-3-i-krasota-nashey-kozhi": {
+    "cover": "/images/journal-final/omega-skin-cover-v1.jpg",
+    "alt": "Естественный портрет женщины с акцентом на текстуру кожи",
+    "inline": [
+      {
+        "src": "/images/journal-final/omega-foods-v1.jpg",
+        "alt": "Лосось, грецкие орехи и семена льна — пищевые источники омега‑3"
+      }
+    ]
+  },
+  "zachem-nam-nuzhny-bady": {
+    "cover": "/images/journal-final/supplements-cover-v3.jpg",
+    "alt": "Немаркированная растительная капсула на камне с мягким природным фоном",
+    "inline": [
+      {
+        "src": "/images/journal-final/supplements-nutrition-v1.jpg",
+        "alt": "Овощи, цельные злаки и зелень к теме питательных веществ"
+      },
+      {
+        "src": "/images/journal-final/supplements-botanical-v1.jpg",
+        "alt": "Растительные образцы, корень и порошок в стеклянной лабораторной посуде"
+      }
+    ]
+  }
+}

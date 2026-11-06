@@ -1,6 +1,6 @@
 import './auth.css';
 import { useId, useState, type FormEvent, type ReactNode } from 'react';
-import { partnerSignupUrl, useStore, type Account } from './store';
+import { partnerSignupUrl, restoreAccountLists, useStore, type Account } from './store';
 import { Icon } from './ui';
 
 // Sign-in and registration screens of the profile. There is no account server yet
@@ -62,13 +62,13 @@ export function AuthScreen() {
     if (login.trim().toLowerCase() === DEMO_LOGIN && password === DEMO_PASSWORD) {
       const demo = await demoAccount();
       setPassword(''); setError('');
-      setState(s => ({ ...s, account: demo, signedIn: true, name: demo.firstName, card: true }));
+      setState(s => ({ ...s, ...restoreAccountLists(s, demo.email), account: demo, signedIn: true, name: demo.firstName, card: true }));
       return;
     }
     const account = state.account;
     if (!account || !matchesLogin(account, login) || await hashPassword(account.email, password) !== account.passwordHash) { setError('Неверный телефон, email или пароль. Пока аккаунт хранится только в этом браузере: если вы регистрировались на другом устройстве, войти здесь не получится.'); return; }
     setPassword(''); setError('');
-    setState(s => ({ ...s, signedIn: true, card: account.partnerId ? true : s.card }));
+    setState(s => ({ ...s, ...restoreAccountLists(s, account.email), signedIn: true, card: account.partnerId ? true : s.card }));
   };
   const register = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false); setError('');
@@ -104,8 +104,8 @@ export function AuthScreen() {
         <Field label="Email" required>{id => <input id={id} className="field" type="email" autoComplete="email" placeholder="mail@example.ru" value={form.email} onChange={e => set('email')(e.target.value)} required />}</Field>
         <Field label="Телефон">{id => <input id={id} className="field" type="tel" autoComplete="tel" placeholder="+7 900 000-00-00" value={form.phone} onChange={e => set('phone')(e.target.value)} />}</Field>
         <Field label="Пароль" required hint="Не меньше 8 символов.">{id => <PasswordInput id={id} autoComplete="new-password" value={password} onChange={setPassword} />}</Field>
-        <Field label="Номер дисконтной карты (ID партнёра NSP)" hint="Если есть, тогда в корзине будут цены по карте.">{id => <input id={id} className="field" inputMode="numeric" placeholder="Например, 446621" value={form.partnerId} onChange={e => set('partnerId')(e.target.value)} />}</Field>
-        <p className="auth-hint">Нет карты? <a href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту ↗</a></p>
+        <Field label="Номер дисконтной карты (ID партнёра NSP)">{id => <input id={id} className="field" inputMode="numeric" placeholder="Например, 446621" value={form.partnerId} onChange={e => set('partnerId')(e.target.value)} />}</Field>
+        <p className="auth-hint auth-hint--tight">Нет карты? <a href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту ↗</a></p>
         <label className="auth-consent"><input type="checkbox" checked={form.consent} onChange={e => set('consent')(e.target.checked)} required /> <span>Я согласен(на) на обработку персональных данных согласно <a href="/company/consent/">политике конфиденциальности</a></span></label>
         <button className="btn btn--primary auth-submit" disabled={!form.consent || password.length < 8}>Создать аккаунт</button>
       </form>

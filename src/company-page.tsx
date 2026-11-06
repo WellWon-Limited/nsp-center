@@ -1,34 +1,5 @@
-import { Breadcrumbs } from './ui';
+import { CompanyContent } from './company-content';
 import './company-page.css';
 
-export function CompanyPage(){return <div className="company-page" data-ds-id="page-company">
- <Breadcrumbs items={[{name:'О компании'}]}/>
- <header className="company-heading"><p className="ds-kicker">Nature’s Sunshine Products</p><h1>О компании</h1></header>
- <article>
-  <section className="company-chapter">
-   <div className="company-copy"><h2>История, которая началась с семьи</h2>
-    <p>Иногда небольшое семейное начинание становится делом, которое объединяет людей по всему миру. Так началась история Nature’s Sunshine Products.</p>
-    <p>В семье Хьюзов из Прово, США, первые желатиновые капсулы наполняли красным перцем вручную. С этой идеи начался путь от семейного дела к международной компании.</p>
-    <p>С 1972 года NSP разрабатывает биологически активные добавки, косметику и средства личной гигиены. С 1999 года продукция стала доступна жителям Украины и стран СНГ через официальных дистрибьюторов.</p>
-   </div>
-   <figure><img src="/images/journal/company-history.jpg" alt="Красный перец и капсулы — иллюстрация первых шагов компании" width="1440" height="1080" fetchPriority="high"/></figure>
-  </section>
-  <section className="company-chapter company-chapter--reverse">
-   <div className="company-copy"><h2>Природа и научный подход</h2>
-    <p>Производство компании расположено в США. В работе сочетаются современное оборудование, развитие технологий и внимание к качеству продукции.</p>
-    <p>В разработке участвуют специалисты в области биохимии, медицины и диетологии. Они изучают свойства ингредиентов и их применение в составе готовых продуктов.</p>
-    <p>За каждым этапом — от выбора сырья до производства — стоит последовательная работа с составом и характеристиками продукта.</p>
-   </div>
-   <figure><img src="/images/journal/about-laboratory.jpg" alt="Иллюстрация исследования растительных ингредиентов в лаборатории" width="1440" height="1080" loading="lazy"/></figure>
-  </section>
-  <section className="company-chapter">
-   <div className="company-copy"><h2>Внимание к каждому ингредиенту</h2>
-    <p>Основой продукции служат природные ингредиенты. До переработки сырьё проверяют по микроскопическим, химическим и физическим показателям.</p>
-    <p>Жидкостная и газовая хроматография помогают определять состав и содержание активных веществ. Эти методы используются для проверки сырья и работы над составом готового продукта.</p>
-    <p>Так забота о качестве начинается ещё до того, как продукт оказывается в упаковке.</p>
-   </div>
-   <figure><img src="/images/journal/company-ingredients.jpg" alt="Растительные образцы, семена и порошок в стеклянных чашках" width="1440" height="1080" loading="lazy"/></figure>
-  </section>
-  <section className="company-closing"><h2>Забота о себе — каждый день</h2><p>В основе подхода NSP — интерес к природе и внимание к здоровью. Мы помогаем знакомиться с продукцией, разбираться в ассортименте и находить место для заботы о себе и близких в повседневной жизни.</p><p>Если появились вопросы, обратитесь за консультацией. Команда NSP Center поможет сориентироваться в продуктах и оформлении заказа.</p><a className="btn btn--primary" href="/consultation/">Задать вопрос</a></section>
- </article>
-</div>;}
+// Only the company article changes. App owns the existing header, footer and bottom navigation.
+export function CompanyPage(){return <div className="company-page company-page--nature" data-ds-id="page-company"><CompanyContent/></div>;}

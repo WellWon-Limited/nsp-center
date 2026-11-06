@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { RichContent } from './ui';
 import './home-story.css';
+import { homeStoryLinks } from './home-story-navigation.mjs';
 
 const chapters = [
  {id:'care', title:'Забота о себе каждый день', marker:'', photo:'botanical', alt:'Свежая мята, мелисса и цитрус на светлом зелёном фоне'},
@@ -46,22 +47,35 @@ export function homeStorySections(source:string){
 
 export function HomeStory({html,reviewsHtml=''}:{html:string;reviewsHtml?:string}){
  const [allReviews,setAllReviews]=useState(false);
+ const details=useRef<HTMLDetailsElement>(null);
+ useEffect(()=>{
+  const restore=()=>{
+   const id=decodeURIComponent(location.hash.slice(1));
+   if(!/^about-(service|answers|reading|reviews|company|contacts)$/.test(id)&&id!=='home-about')return;
+   const target=id==='home-about'?details.current:details.current?.querySelector<HTMLElement>(`#${id}`);
+   if(!target||!details.current)return;
+   details.current.open=true;
+   requestAnimationFrame(()=>target.scrollIntoView({block:'start',behavior:'instant'}));
+  };
+  restore();addEventListener('hashchange',restore);addEventListener('pageshow',restore);
+  return()=>{removeEventListener('hashchange',restore);removeEventListener('pageshow',restore);};
+ },[]);
  const fullReviews=reviewsHtml.replace(/<img\b[^>]*>/g,'').replace(/<p>\s*<\/p>/g,'');
  const order=['service','answers','reading','reviews','company','contacts'];
  const sections=homeStorySections(html).sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
- return <details className="panel source-description home-story" data-ds-id="home-source">
-  <summary>Подробнее о NSP Center<span className="home-story-toggle" aria-hidden="true">+</span></summary>
+ return <details ref={details} id="home-about" className="panel source-description home-story" data-ds-id="home-source">
+  <summary>Подробнее о NSP Center<span className="home-story-toggle" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m9 5 7 7-7 7"/></svg></span></summary>
   <article className="home-story-layout">
-   <div className="home-story-body">{sections.map(section=><section className={`home-story-chapter home-story-chapter--${section.id}`} id={`about-${section.id}`} key={section.id}>
-    <div className="home-story-copy"><header><h2>{section.title}</h2></header>
+   <div className="home-story-body">{sections.map((section,index)=><section className={`home-story-chapter home-story-chapter--${section.id}`} id={`about-${section.id}`} key={section.id} data-ds-id={`home-about-${section.id}`}>
+    <div className="home-story-copy"><header><span className="home-story-kicker">{String(index+1).padStart(2,'0')} · NSP CENTER</span><h2>{section.title}</h2></header>
     {section.id==='reviews'?<div className="home-story-reviews">
      <div id="home-story-review-list"><RichContent html={allReviews&&fullReviews?fullReviews:section.html}/></div>
      {fullReviews&&<button type="button" className="home-story-reviews-toggle" aria-expanded={allReviews} aria-controls="home-story-review-list" onClick={()=>setAllReviews(value=>!value)}>{allReviews?'Свернуть отзывы':'Показать все'}</button>}
-    </div>:<RichContent html={section.html}/>}
+    </div>:<RichContent html={homeStoryLinks(section.html,section.id)}/>}
     </div>
     {section.photo&&<figure><img src={`/images/journal/about-${section.photo}.jpg`} alt={section.alt} width="1440" height="1080" loading="lazy" decoding="async"/></figure>}
-    {section.id==='service'&&<figure><img src="/images/journal/about-delivery.jpg" alt="Бережная упаковка заказа в картонную коробку" width="1536" height="1024" loading="lazy"/></figure>}
-    {section.id==='company'&&<figure><img src="/images/journal/about-laboratory.jpg" alt="Иллюстрация лаборатории по исследованию растительных ингредиентов" width="1440" height="1080" loading="lazy"/></figure>}
+    {section.id==='service'&&<figure><img src="/images/home-about/careful-packing-v1.jpg" alt="Руки бережно упаковывают заказ в крафтовую коробку у окна" width="1536" height="1024" loading="lazy" decoding="async"/></figure>}
+    {section.id==='company'&&<figure><img src="/images/home-about/botanical-research-v1.jpg" alt="Растительные образцы в стеклянной посуде на светлом лабораторном столе" width="1536" height="1024" loading="lazy" decoding="async"/></figure>}
    </section>)}</div>
   </article>
  </details>;

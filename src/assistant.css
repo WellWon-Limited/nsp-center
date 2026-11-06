@@ -112,3 +112,26 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 @media (max-width: 639px) {
   .chat-input { bottom: max(calc(68px + env(safe-area-inset-bottom) + var(--space-10)), calc(var(--chat-kb, 0px) + var(--space-8))); }
 }
+
+/* «↓» to the latest messages, floating at the right above the input row while the visitor reads older messages. */
+.chat-down {
+  position: fixed;
+  z-index: calc(var(--layer-navigation) - 1);
+  right: max(var(--space-18), calc((100vw - 760px) / 2));
+  bottom: calc(var(--space-16) + 70px);
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-ink-line);
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-ink);
+  box-shadow: 0 8px 20px -10px rgb(29 58 54 / .45);
+  cursor: pointer;
+}
+.chat-down svg { transform: rotate(90deg); }
+@media (max-width: 639px) {
+  .chat-down { bottom: max(calc(68px + env(safe-area-inset-bottom) + var(--space-10) + 70px), calc(var(--chat-kb, 0px) + var(--space-8) + 70px)); }
+}

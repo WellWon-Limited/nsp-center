@@ -1,10 +1,10 @@
 import type { Product, Category, Article, ContentPage } from './content-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { data, StoreProvider, useStore } from './store';
 import { Catalog, ProductDetail } from './catalog';
 import { Home, Blog, ArticlePage, InfoPage, DesignSystem } from './pages';
 import { Cart, Profile, Health, Diagnostic } from './personal';
-import { BackLink, Empty, Heading, Icon, RichContent } from './ui';
+import { BackLink, Empty, Heading, Icon, RichContent, useCameFrom } from './ui';
 import { ThemePage } from './theme-page';
 import { themeByPath, themes, type Theme } from './themes';
 import { NotificationsButton } from './notifications';
@@ -20,7 +20,16 @@ function BottomNav({path}:{path:string}){const items=[['/','home','Главна�
 function RouteView({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;if(path==='/')return <Home homeHtml={pageData?.homeHtml} homeReviewsHtml={pageData?.homeReviewsHtml}/>;if(path==='/cart/'||path==='/personal/basket/')return <Cart/>;if(path==='/profile/'||path==='/personal/profile/')return <Profile/>;if(path==='/consultation/')return <AssistantChat/>;if(path==='/health/'||path==='/health-marafon/')return <Health marathon={path==='/health-marafon/'}/>;if(path==='/diagnostic-test/')return <Diagnostic/>;if(path==='/design-system/')return <DesignSystem/>;if(path==='/blog/')return <Blog/>;if(themeByPath(path))return pageData?.theme?<ThemePage theme={pageData.theme}/>:<Heading title={themeByPath(path)!.h1}/>;const target=data.redirects[path]||path;const product=pageData?.product||data.products.find(p=>p.path===target);if(product)return <ProductDetail product={product} themes={pageData?.productThemes}/>;const category=pageData?.category||data.categories.find(c=>c.path===path);if(category)return <Catalog category={category} url={url}/>;const article=pageData?.article||data.articles.find(a=>a.path===path);if(article)return <ArticlePage article={article}/>;const page=pageData?.page||data.pages.find(p=>p.path===path);if(page)return <InfoPage page={page}/>;return <><Heading title="Страница не найдена"/><Empty title="Найдём другой путь" icon="search"><p>Проверьте адрес или вернитесь в каталог.</p><a className="btn btn--primary" href="/catalog/">Открыть каталог</a></Empty></>;}
 // Plan reminders run on every page while the app is open (pwa.tsx).
 function Reminders(){useIntakeReminders();return null;}
-// A page opened from the assistant chat (?from=chat) gets «Назад к чату» at the top (product and theme pages use their own
-// «Назад», which goes back the same way).
-function ChatBack({url}:{url:string}){const u=new URL(url,'http://nsp.local');if(u.searchParams.get('from')!=='chat'||u.pathname.startsWith('/product/')||u.pathname.startsWith('/temy/'))return null;return <BackLink fallback="/consultation/" label="Назад к чату"/>;}
-export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;return <StoreProvider><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><div className="ambient" aria-hidden="true"><i/><i/><i/></div><Header path={path}/><main id="main" className="site-main"><ChatBack url={url}/><RouteView url={url} pageData={pageData}/></main>{path!=='/consultation/'&&<Footer/>}<BottomNav path={path}/></StoreProvider>;}
+// Pages without a back link of their own get one at the top when they were opened from another page of the site (see
+// BackLink: it is named after that page). Main tabs (catalog, plan, profile) show it only when opened from the home page;
+// the home page, the chat and the company page show none.
+const ownBack=(p:string)=>p.startsWith('/product/')||p.startsWith('/temy/')||(p.startsWith('/blog/')&&p!=='/blog/')||p==='/company/sertifikaty/';
+const noBack=(p:string)=>p==='/'||p==='/consultation/'||p==='/company/';
+const tabs=(p:string)=>p.startsWith('/catalog/')||p==='/health/'||p==='/health-marafon/'||p==='/profile/'||p==='/blog/';
+// A tab reached through the site navigation (bottom bar, header, menu, logo) gets no back link even from the home page;
+// only a link on the home page itself (e.g. «Перейти к товарам») leads to a tab with «На главную». main.tsx marks such
+// navigation in sessionStorage ('nsp-center:via-nav').
+function PageBack({url}:{url:string}){const u=new URL(url,'http://nsp.local');const p=u.pathname;const from=useCameFrom();const [viaNav,setViaNav]=useState(false);
+ useEffect(()=>{try{setViaNav(sessionStorage.getItem('nsp-center:via-nav')===p);sessionStorage.removeItem('nsp-center:via-nav');}catch{/* ignore */}},[p]);
+ if(['plan','marathon'].includes(u.searchParams.get('from')??'')||!from||ownBack(p)||noBack(p)||(tabs(p)&&(from!=='/'||viaNav)))return null;return <BackLink fallback="/"/>;}
+export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;return <StoreProvider><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><div className="ambient" aria-hidden="true"><i/><i/><i/></div><Header path={path}/><main id="main" className="site-main"><PageBack url={url}/><RouteView url={url} pageData={pageData}/></main>{path!=='/consultation/'&&<Footer/>}<BottomNav path={path}/></StoreProvider>;}

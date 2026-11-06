@@ -260,3 +260,8 @@
 .auth-notice--error {
   background: rgb(173 99 56 / .12);
 }
+
+/* «Нет карты? Оформить…» sits right under the card number field. */
+.auth-hint--tight {
+  margin-top: calc(-1 * var(--space-12));
+}

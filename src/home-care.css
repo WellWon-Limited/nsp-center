@@ -24,7 +24,7 @@
 .home-care--editorial .care-card--marathon {
   /* Sage sampled from the quiet backdrop of hero-botanical-final.jpg. */
   background: #bdc7b3;
-  border-color: var(--color-border);
+  border-color: var(--color-ink);
   box-shadow: var(--shadow-panel);
 }
 .care-eyebrow {

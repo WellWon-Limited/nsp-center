@@ -2,6 +2,7 @@ import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App';
 import './design-system.css';
 import './app.css';
+import { installHomeScrollReturn } from './home-scroll-return.mjs';
 import { finishSplash, registerServiceWorker } from './pwa';
 const root=document.getElementById('root')!;
 const url=location.pathname+location.search;
@@ -12,8 +13,15 @@ const scrollKey=()=>`nsp-scroll:${location.pathname}${location.search}`;
 history.scrollRestoration='manual';
 addEventListener('pagehide',()=>{try{sessionStorage.setItem(scrollKey(),String(Math.round(scrollY)));}catch{}});
 if(root.hasChildNodes()&&root.dataset.route===url)hydrateRoot(root,<App url={url} pageData={pageData}/>);else createRoot(root).render(<App url={url} pageData={pageData}/>);
+const homeReturn=installHomeScrollReturn(window,document);
 const navigation=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;
-const saved=navigation?.type==='back_forward'||navigation?.type==='reload'?Number(sessionStorage.getItem(scrollKey())):0;
-if(saved>0)requestAnimationFrame(()=>requestAnimationFrame(()=>scrollTo({top:saved,behavior:'instant'})));
+const saved=homeReturn??(navigation?.type==='back_forward'||navigation?.type==='reload'?Number(sessionStorage.getItem(scrollKey())):0);
+// Coming back with «Назад»: the page stays hidden (class nsp-restoring, set in index.html before the first paint) until it
+// is scrolled to where the visitor left it, so the top of the page never flashes. The page may still be growing (images,
+// client-rendered lists), so the scroll is retried for a moment; after 1.2 s the page is shown regardless.
+const reveal=()=>document.documentElement.classList.remove('nsp-restoring');
+if(saved>0){const started=performance.now();const tryScroll=()=>{scrollTo({top:saved,behavior:'instant'});if(Math.abs(scrollY-saved)<4||performance.now()-started>1200){reveal();return;}requestAnimationFrame(tryScroll);};requestAnimationFrame(tryScroll);}else reveal();
+// Clicks on the site navigation (bottom bar, header links, menu, logo) are marked, so the opened tab shows no back link.
+addEventListener('click',e=>{const link=(e.target as Element|null)?.closest?.('.bottom-nav a,.desktop-nav a,.mobile-menu a,a.brand') as HTMLAnchorElement|null;if(link)try{sessionStorage.setItem('nsp-center:via-nav',new URL(link.href).pathname);}catch{/* ignore */}},true);
 registerServiceWorker();
 finishSplash();

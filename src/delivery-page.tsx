@@ -1,12 +1,12 @@
-import { Breadcrumbs } from './ui';
+import {InformationHeader,InformationClosing} from './information-layout';
 import './delivery-page.css';
 
-export function DeliveryPage(){return <div className="delivery-page" data-ds-id="page-delivery">
- <Breadcrumbs items={[{name:'Условия доставки'}]}/>
- <header className="delivery-heading"><p className="ds-kicker">NSP Center</p><h1>Условия доставки</h1></header>
+export function DeliveryPage(){return <div className="delivery-page information-page" data-ds-id="page-delivery">
+ 
+ <InformationHeader title="Условия доставки" kicker="" description="Самовывоз, курьерская доставка и отправка по России."/><div className="delivery-content">
  <section className="delivery-intro">
   <div><h2>Доставим ваш заказ удобным для вас способом</h2><p>Заберите продукцию в нашем сервисном центре в Санкт-Петербурге, оформите курьерскую доставку по городу или получите посылку CDEK в другом регионе России.</p><p>Здесь собраны адрес самовывоза, сроки подготовки заказа и условия доставки — чтобы вы могли спокойно выбрать подходящий вариант.</p></div>
-  <img src="/images/delivery-editorial.jpg" alt="Иллюстрация доставки: курьер передаёт покупательнице коробку с заказом" width="1448" height="1086" fetchPriority="high"/>
+  <img src="/images/information/delivery-v1.jpg" alt="Бережная упаковка заказа в крафтовую коробку у садового окна" width="1536" height="1024" fetchPriority="high"/>
  </section>
  <section className="delivery-section">
   <h2>Самовывоз в Санкт-Петербурге</h2>
@@ -24,4 +24,4 @@ export function DeliveryPage(){return <div className="delivery-page" data-ds-id=
   <h2>CDEK по России</h2>
   <div className="delivery-copy"><p>Отправляем заказы в регионы России до пункта выдачи (ПВЗ) или по указанному вами адресу. Этот способ доставки доступен только по полной предоплате.</p><p>Обработка заказа занимает до 1 рабочего дня, с понедельника по пятницу. Отгрузка в курьерскую службу CDEK занимает 2 рабочих дня.</p><p>Стоимость и сроки доставки рассчитываются индивидуально при оформлении заказа. Они зависят от веса и габаритов посылки, стоимости товаров и адреса получения. Доставка оплачивается по тарифам перевозчика.</p><p>После передачи посылки на отправку вы получите SMS с номером экспресс-накладной. По нему можно следить за заказом на сайте CDEK.</p><a className="delivery-tracking" href="https://www.cdek.ru/ru/tracking" target="_blank" rel="noopener noreferrer">Отследить посылку в CDEK <span aria-hidden="true">↗</span></a></div>
  </section>
-</div>;}
+</div><InformationClosing>Поможем уточнить условия получения вашего заказа.</InformationClosing></div>;}

@@ -3,8 +3,8 @@
    three pathway cards. Selectors carry .home-hero--banner to win over the older grid
    rules in app.css, which load later in the bundle. */
 
-/* First screen = banner + pathway cards, exactly one viewport tall: the cards keep the
-   same gap above (to the photo) and below (to the screen edge); the banner takes the rest.
+/* The hero and pathway cards share one group. Tablets follow content height;
+   desktop pointers fill the first viewport by growing the hero, not a blank gap.
    --header-h is the site header height at each breakpoint (logo tile + paddings + border). */
 .home-first-screen {
   --header-h: 97px;
@@ -489,20 +489,293 @@ body:has(.home-hero--banner) {
   text-underline-offset: 3px;
 }
 
-/* One continuous asymmetric ribbon, entering and leaving beyond the banner; near the top it keeps to the left edge so it
-   does not cross the first letters of the heading (owner, 2026-11-05). */
-@media (max-width: 639px) {
-  .home-hero.home-hero--banner::before {
-    content: '';
+/* Every non-phone viewport keeps the approved three-zone composition and three pathway cards. */
+@media (min-width: 640px) {
+  body:has(.home-first-screen) .site-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  body:has(.home-first-screen) .site-header .header-inner {
+    max-width: none;
+    padding: 1.78vw 4.2vw;
+    gap: 2.4vw;
+  }
+
+  body:has(.home-first-screen) .site-header .brand {
+    font-size: max(var(--text-16), 1.78vw);
+    gap: max(var(--space-6), .74vw);
+  }
+
+  body:has(.home-first-screen) .site-header .brand-mark {
+    width: max(var(--space-32), 3.55vw);
+    height: max(var(--space-32), 3.55vw);
+    background: transparent;
+  }
+
+  body:has(.home-first-screen) .site-header .brand-mark img {
+    width: 100%;
+    height: 100%;
+  }
+
+  body:has(.home-first-screen) .site-header .desktop-nav {
+    display: flex;
+    gap: 2.1vw;
+    font-size: max(var(--text-12), 1.04vw);
+  }
+
+  body:has(.home-first-screen) .site-header .menu-toggle {
+    display: none;
+  }
+
+  body:has(.home-first-screen) .site-header .header-actions {
+    --header-icon-size: max(var(--icon-size), 1.63vw);
+    gap: max(var(--space-4), .59vw);
+    font-size: max(var(--text-12), 1.04vw);
+  }
+
+  body:has(.home-first-screen) .site-header .header-actions .icon-btn {
+    width: max(var(--control-height-small), 3.4vw);
+    height: max(var(--control-height-small), 3.4vw);
+  }
+
+  body:has(.home-first-screen) .site-header .header-actions .icon-btn svg {
+    width: var(--header-icon-size);
+    height: var(--header-icon-size);
+  }
+
+  body:has(.home-first-screen) .site-header .header-actions .cart-count {
+    --cart-badge-size: max(var(--text-14), calc(.65 * var(--header-icon-size)));
+    left: calc(50% + .34 * var(--header-icon-size));
+    top: calc(50% - .34 * var(--header-icon-size));
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    min-width: var(--cart-badge-size);
+    height: var(--cart-badge-size);
+    padding: 0 .15em;
+    font-size: max(var(--text-9), calc(.4 * var(--header-icon-size)));
+    line-height: 1;
+  }
+
+  .home-first-screen {
+    min-height: 0;
+    --paths-gap: clamp(var(--space-24), 3.55vw, calc(2 * var(--space-24)));
+  }
+
+  .home-first-screen > .home-paths {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-self: center;
+    width: 91.6vw;
+    gap: max(var(--space-8), 1.33vw);
+    margin-right: 0;
+    margin-bottom: 0;
+    padding-right: 0;
+    overflow: visible;
+  }
+
+  .home-first-screen .home-paths > a.home-path {
+    min-width: 0;
+    gap: max(var(--space-6), .9vw);
+    padding: max(var(--space-10), 1.48vw) max(var(--space-10), 1.63vw);
+    border-radius: max(var(--radius-12), 1.78vw);
+  }
+
+  .home-first-screen .home-paths h2 {
+    font-size: max(var(--text-12), 1.33vw);
+  }
+
+  .home-first-screen .home-paths p {
+    font-size: max(var(--text-10), .89vw);
+  }
+
+  .home-first-screen .home-paths .home-path-thumb {
+    width: 6vw;
+    height: 6vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--care {
+    width: 6.8vw;
+    height: 6.5vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--set {
+    width: 8vw;
+    height: 6.5vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--set img {
+    flex-basis: 3vw;
+    width: 3vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--set img + img {
+    margin-left: -.45vw;
+  }
+
+  .home-first-screen .home-paths .home-path-arrow {
+    width: max(var(--space-22), 2.96vw);
+    height: max(var(--space-22), 2.96vw);
+  }
+
+  .home-first-screen + .section {
+    margin-top: var(--space-32);
+  }
+
+  .home-hero.home-hero--banner {
+    --pad-x: 4.2vw;
+    --copy-w: 26.5vw;
+    grid-template-columns: var(--copy-w) minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 2vw;
+    min-height: max(33.35vw, calc(10 * var(--space-30)));
+    margin-top: calc(-1 * var(--main-pad));
+    padding: 4.3vw var(--pad-x);
+    overflow: visible;
+  }
+
+  .home-hero--banner > .hero-copy {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: none;
+    align-self: center;
+    justify-self: stretch;
+    text-align: left;
+  }
+
+  .home-hero--banner .hero-copy h1 {
+    font-size: max(var(--text-22), 3.3vw);
+    margin: 0 0 1.78vw;
+  }
+
+  .home-hero--banner .hero-copy > p {
+    max-width: none;
+    font-size: max(var(--text-12), 1.18vw);
+    line-height: var(--leading-relaxed);
+    margin: 0 0 2.07vw;
+  }
+
+  .home-hero--banner .hero-copy .ds-cluster {
+    justify-content: flex-start;
+  }
+
+  .home-hero--banner .hero-copy .btn--lg {
+    min-height: max(var(--control-height-small), 4vw);
+    padding: 1.04vw 1.48vw;
+    font-size: max(var(--text-12), 1.11vw);
+  }
+
+  .home-hero--banner .hero-note {
+    font-size: max(var(--text-9), .81vw);
+    margin-top: 1.78vw;
+  }
+
+  .home-hero--banner .hero-photo {
     position: absolute;
     inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 900' preserveAspectRatio='none'%3E%3Cpath d='M-50 -45 C40 20 26 105 16 190 C6 270 -10 368 38 439 C100 526 294 482 355 565 C423 658 310 731 350 820 C369 862 414 903 445 945' fill='none' stroke='%23ad6338' stroke-width='12'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-    opacity: .7;
-    -webkit-mask-image: linear-gradient(to right, #000 0%, #000 5%, rgb(0 0 0 / .2) 23%, rgb(0 0 0 / .2) 77%, #000 95%, #000 100%);
-    mask-image: linear-gradient(to right, #000 0%, #000 5%, rgb(0 0 0 / .2) 23%, rgb(0 0 0 / .2) 77%, #000 95%, #000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: auto;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    transform: none;
   }
-  .home-hero--banner > .hero-copy,
-  .home-hero--banner > .hero-daily { z-index: 1; }
+
+  .home-hero--banner .hero-backdrop {
+    background: #afbca1;
+  }
+
+  .home-hero--banner .hero-photo img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .home-hero--banner > .hero-daily {
+    position: absolute;
+    grid-row: auto;
+    right: var(--pad-x);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 19.23vw;
+    max-width: none;
+    padding: 0;
+  }
+
+  .home-hero--banner .hero-daily-eyebrow {
+    font-size: max(var(--text-9), .74vw);
+    margin-bottom: max(var(--space-8), 1.18vw);
+  }
+
+  .home-hero--banner .hero-daily h2 {
+    font-size: max(var(--text-18), 1.92vw);
+  }
+
+  .home-hero--banner .hero-daily p {
+    font-size: max(var(--text-12), 1.04vw);
+    margin-top: max(var(--space-8), 1.04vw);
+  }
+
+  .home-hero--banner .hero-daily-action {
+    font-size: max(var(--text-12), 1.04vw);
+    gap: max(var(--space-6), 1.04vw);
+  }
+
+  .home-hero--banner .hero-daily-signup {
+    font-size: max(var(--text-10), .96vw);
+  }
+
+  .home-hero.home-hero--banner::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: clamp(var(--space-32), 4vw, calc(2 * var(--space-28)));
+    transform: translateY(50%);
+    background: url('/images/ribbon-only/satin-desktop-strip.svg') center / 100% 100% no-repeat;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Keep the accepted tablet composition. Desktop fills the window with the banner and cards. */
+@media (min-width: 960px) and (pointer: fine) {
+  .home-first-screen {
+    --header-h: calc(3.56vw + max(var(--control-height-small), 3.55vw) + var(--space-1) + env(safe-area-inset-top));
+    min-height: calc(100svh - var(--header-h) - var(--main-pad));
+  }
+
+  .home-first-screen > .home-hero--banner {
+    flex: 1 0 auto;
+  }
+
+  .home-first-screen > .home-paths {
+    margin-bottom: var(--space-24);
+  }
+
+  .home-hero--banner .hero-photo img {
+    height: 100%;
+    object-fit: cover;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* The owner removed the ribbon from the phone composition. Desktop stays unchanged. */
+@media (max-width: 639px) {
+  .home-hero.home-hero--banner::before,
+  .home-hero--banner .hero-photo::after {
+    content: none;
+  }
+
+  .home-hero--banner .hero-photo {
+    margin-top: var(--space-30);
+  }
+
+  .home-hero--banner > .hero-daily {
+    padding-top: var(--space-8);
+  }
 }

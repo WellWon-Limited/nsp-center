@@ -1,4 +1,4 @@
-import { useId, type ReactNode } from 'react';
+import { useId, type ReactNode , useEffect, useState} from 'react';
 import type { Product } from './content-types';
 import { useStore, money, shortName, partnerSignupUrl } from './store';
 export function Icon({name,size=22}:{name:string;size?:number}) {
@@ -8,7 +8,15 @@ export function Icon({name,size=22}:{name:string;size?:number}) {
 export function Heading({eyebrow,title,description,action}:{eyebrow?:string;title:string;description?:string;action?:ReactNode}){return <div className="page-heading" data-ds-id="page-heading"><div>{eyebrow&&<span className="ds-kicker">{eyebrow}</span>}<h1>{title}</h1>{description&&<p>{description}</p>}</div>{action}</div>;}
 // "Назад" returns to the previous screen of the site — the browser (with main.tsx) brings back its scroll position and the
 // catalog keeps its filters in the URL; opened from outside the site, it leads to the fallback page instead.
-export function BackLink({fallback,label='Назад'}:{fallback:string;label?:string}){return <a className="back-link" href={fallback} onClick={e=>{let fromSite=false;try{fromSite=new URL(document.referrer).origin===location.origin;}catch{}if(fromSite&&history.length>1){e.preventDefault();history.back();}}}><Icon name="chevron" size={18}/>{label}</a>;}
+// One «back» link per page, named after the screen the visitor came from: from the home page «На главную», from the journal
+// «Журнал о заботе», from the catalog «Каталог» and so on, from any other page simply «Назад». It goes back in history, so
+// that screen reopens where it was left. Opened from outside the site, it leads to the fallback page and is named after it.
+const backNames:[RegExp,string][]=[[/^\/$/,'На главную'],[/^\/blog\/$/,'Журнал о заботе'],[/^\/catalog\//,'Каталог'],[/^\/health\/$/,'План'],[/^\/health-marafon\/$/,'Марафон'],[/^\/consultation\/$/,'К чату'],[/^\/company\/$/,'О компании'],[/^\/profile\/$/,'Профиль'],[/^\/cart\/$/,'Корзина'],[/^\/diagnostic-test\/$/,'К тесту']];
+const nameOf=(path:string)=>backNames.find(([re])=>re.test(path))?.[1];
+/** The page this one was opened from on the site, if any (known only in the browser). */
+export function useCameFrom(){const [from,setFrom]=useState<string|null>(null);useEffect(()=>{try{const r=new URL(document.referrer);if(r.origin===location.origin&&r.pathname!==location.pathname)setFrom(r.pathname);}catch{/* no referrer */}},[]);return from;}
+export function BackLink({fallback,label}:{fallback:string;label?:string}){const from=useCameFrom();const text=from?nameOf(from)??'Назад':label??nameOf(fallback)??'Назад';
+ return <a className="back-link" href={fallback} onClick={e=>{if(from&&history.length>1){e.preventDefault();history.back();}}}><span aria-hidden="true">←</span>{text}</a>;}
 export function Breadcrumbs({items}:{items:{name:string;path?:string}[]}){return <nav className="breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a>{items.map((it,i)=><span key={i}><span aria-hidden="true">/</span>{it.path?<a href={it.path}>{it.name}</a>:it.name}</span>)}</nav>;}
 export function Empty({title,children,icon='leaf'}:{title:string;children?:ReactNode;icon?:string}){return <div className="panel empty-state"><Icon name={icon} size={36}/><h2>{title}</h2>{children}</div>;}
 export function WaitlistButton({product:p}:{product:Product}){

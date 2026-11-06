@@ -1,6 +1,6 @@
 import './account.css';
 import { useEffect, useState, type FormEvent } from 'react';
-import { data, money, partnerSignupUrl, useStore, type Account } from './store';
+import { data, money, partnerSignupUrl, signOut, useStore, type Account } from './store';
 import { Icon, ProductGrid } from './ui';
 import { InstallAppCard } from './pwa';
 
@@ -132,6 +132,6 @@ export function AccountPage({ account }: { account: Account }) {
       <h2 className="account-section-title">Лист ожидания</h2>
       {waiting.length ? <ProductGrid products={waiting}/> : <p className="account-waitlist-empty">Пока пусто</p>}
     </section>
-    <button className="account-logout" onClick={() => setState(s => ({ ...s, signedIn: false }))}>Выйти из аккаунта</button>
+    <button className="account-logout" onClick={() => { setState(signOut); window.scrollTo({ top: 0, behavior: 'instant' }); }}>Выйти из аккаунта</button>
   </div>;
 }

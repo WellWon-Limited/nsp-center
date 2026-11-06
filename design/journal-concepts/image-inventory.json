@@ -1,0 +1,153 @@
+{
+  "stage": "main_page_previews",
+  "articleCount": 8,
+  "imageCount": 18,
+  "articles": [
+    {
+      "id": "immunitet-tozhe-nuzhdaetsya-v-zashchite",
+      "title": "Иммунитет тоже нуждается в защите",
+      "path": "/blog/immunitet-tozhe-nuzhdaetsya-v-zashchite/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/3cd/3cd2a62f79d9233555b5cfb4c8eb09bc.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/27c/27c53b768d31e3863aa99dc59f28a021.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "interesnye-fakty-pro-magniy",
+      "title": "Интересные факты про магний",
+      "path": "/blog/interesnye-fakty-pro-magniy/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/83b/83b5abac607cb73ac97472d6ca02485d.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/baa/baa4f914407c12ad7c51b392d236a55c.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "korrektsiya-vesa-s-nsp",
+      "title": "Коррекция веса с NSP",
+      "path": "/blog/korrektsiya-vesa-s-nsp/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/ac2/ac217bc2f896725bb4548b4d274ebf7f.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "letnyaya-perezagruzka",
+      "title": "Летняя перезагрузка",
+      "path": "/blog/letnyaya-perezagruzka/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/55c/55c11ca345982cf8b313fa7920bf81bf.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/593/5931e6149c21d43a2e871c73e0ccc58e.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 3,
+          "original": "/media/upload/medialibrary/bfb/bfb2199a36cd9a63b4b1ed181349ee2b.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "nauchnyy-konsultant-nsp-o-vitamine-s",
+      "title": "Научный консультант NSP о витамине С",
+      "path": "/blog/nauchnyy-konsultant-nsp-o-vitamine-s/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/7ed/7edcc28ca0d3417ec93f2a43801d6ef4.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/e97/e971e6528f76aa5539668db6a75514c8.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "o-vitamine-e",
+      "title": "О Витамине E",
+      "path": "/blog/o-vitamine-e/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/c1f/c1f93d775f66c56273d148390f581efb.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/e93/e935dae4e4e63d3dbc759ea850ab237e.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 3,
+          "original": "/media/upload/medialibrary/3cd/3cdb35488b8fb67ea898d1823bfb6697.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "omega-3-i-krasota-nashey-kozhi",
+      "title": "Омега-3 и красота нашей кожи",
+      "path": "/blog/omega-3-i-krasota-nashey-kozhi/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/medialibrary/2f5/2f5d6969ea2056357887938e48bf58c4.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/3a4/3a4f3cac166ad1c46953221746815c62.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    },
+    {
+      "id": "zachem-nam-nuzhny-bady",
+      "title": "Зачем нам нужны БАДы",
+      "path": "/blog/zachem-nam-nuzhny-bady/",
+      "images": [
+        {
+          "slot": 1,
+          "original": "/media/upload/iblock/d9e/d9e83a7fec8f29068c5f5a0503fbd6ad.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 2,
+          "original": "/media/upload/medialibrary/4c0/4c0b7e631117ac513e612df1642b5790.jpg",
+          "status": "awaiting_visual_series_choice"
+        },
+        {
+          "slot": 3,
+          "original": "/media/upload/medialibrary/949/949119d55a321c0c8189445c270ffd36.jpg",
+          "status": "awaiting_visual_series_choice"
+        }
+      ]
+    }
+  ]
+}

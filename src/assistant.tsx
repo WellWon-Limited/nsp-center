@@ -178,6 +178,10 @@ export function AssistantChat() {
   const end = useRef<HTMLDivElement>(null);
   const log = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(false);
+  // «↓» appears when the visitor has scrolled up more than a screen's worth from the latest messages.
+  const [away, setAway] = useState(false);
+  const onScroll = () => { const el = log.current; if (el) setAway(el.scrollHeight - el.scrollTop - el.clientHeight > 240); };
+  const toBottom = () => { log.current?.scrollTo({ top: log.current.scrollHeight, behavior: 'smooth' }); };
   // Phone keyboard: how much of the screen it covers (visualViewport), so the input row can ride above it; the log stays
   // scrolled to the latest messages. The bottom bar is never hidden.
   useEffect(() => {
@@ -208,7 +212,7 @@ export function AssistantChat() {
   const submit = (e: FormEvent) => { e.preventDefault(); send(draft); };
   const last = messages[messages.length - 1];
   return <div className="chat" data-ds-id="assistant-chat">
-    <div className="chat-log" role="log" aria-live="polite" ref={log}>
+    <div className="chat-log" role="log" aria-live="polite" ref={log} onScroll={onScroll}>
       {messages.map((m, i) => <div className={`chat-msg chat-msg--${m.from}`} key={i}>
         <p>{m.text}</p>
         {m.sections && <dl className="chat-sections">{m.sections.map(x => <div key={x.title}><dt>{x.title}</dt><dd>{x.text}</dd></div>)}</dl>}
@@ -221,6 +225,7 @@ export function AssistantChat() {
       {!typing && last?.from === 'bot' && last.chips && <div className="chat-suggest" aria-label="Подсказки">{last.chips.map(c => <button type="button" key={c} onClick={() => send(c)}>{c}</button>)}</div>}
       <div ref={end} />
     </div>
+    {away && <button type="button" className="chat-down" onClick={toBottom} aria-label="К последним сообщениям"><Icon name="chevron" size={22} /></button>}
     <form className="chat-input" onSubmit={submit}><input value={draft} onChange={e => setDraft(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить"><Icon name="arrow" size={20} /></button></form>
   </div>;
 }

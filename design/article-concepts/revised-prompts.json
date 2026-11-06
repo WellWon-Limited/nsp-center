@@ -1,0 +1,20 @@
+{
+  "mode": "built-in image_gen",
+  "briefs": [
+    {
+      "id": "virus-forest",
+      "prompt": "Create a full, richly composed premium editorial SCIENTIFIC ILLUSTRATION for a Russian wellness magazine article about immunity and viruses. Landscape 3:2, high resolution. A large, scientifically plausible generic enveloped viral particle with a detailed spherical membrane and short organic protein projections, shown at microscopic scale, occupying about 60 percent of the right half and centre; two much smaller heavily blurred distant particles create real depth. Rich deep forest green and sage colours, small warm cream highlights, restrained soft mauve details. Tactile organic material, soft natural-looking cinematic backlight, sophisticated macro-photography feeling with beautiful shallow depth of field, like a nature editorial translated into microscopy. Entire frame has continuous atmospheric microscopic texture and depth, not empty flat background. Keep left quarter quieter and darker to support separate HTML text, but do not leave a large blank space. The visual should look polished, dimensional and calm rather than frightening or garish. Not a claim to be an actual microscope photo, not a diagram of a specific virus. No neon, red warning colour, glossy plastic CGI, medical crosses, shields, arrows, labels, lettering, numbers, logos, plants, fruit, bottles or interface.",
+      "asset": "public/images/article-concepts/virus-forest-v1.jpg"
+    },
+    {
+      "id": "virus-sage",
+      "prompt": "Create a premium full-frame editorial scientific conceptual micrograph illustration for an article on immunity and viruses. Landscape 3:2, high resolution. One large intricately textured generic spherical enveloped viral particle in the right-centre, with small realistic organic protein protrusions and a soft pale sage membrane, surrounded by a gently blurred deep green microscopic environment. A smaller out-of-focus round cellular form in the background, subtle flowing depth, no narrative of a specific cure or treatment. Composition occupies the frame, strong recognizable subject suitable for a webpage cover, NOT a tiny object on an empty background. Sophisticated botanical-wellness visual mood: natural forest and sage green, cream highlights, subdued warm gold lighting, soft realistic macro depth, tactile organic surface. Beautiful, calm, rich and controlled, NOT flashy science fiction, no aggressive red or neon, no horror. Keep edges atmospheric and softly detailed. No text, labels, icons, shields, arrows, logos, supplement bottles, leaves, tableware, graphic symbols or UI. Clearly conceptual scientific illustration, not a specific labelled pathogen.",
+      "asset": "public/images/article-concepts/virus-sage-v1.jpg"
+    },
+    {
+      "id": "nutrition-v2",
+      "prompt": "Create a beautiful full-frame photorealistic editorial photograph for a botanical wellness article discussing nutrition, vitamins, carotenoids and green tea. Landscape 3:2, high resolution. A carefully restrained close-up food composition with one cut red bell pepper, a small broccoli crown, a handful of almonds held together in one simple dark ceramic dish, and fresh deep green spinach leaves as the natural backdrop. The red pepper and broccoli are the main foreground subjects, ingredients fill most of the frame, no empty tabletop. Soft warm natural backlighting on the real vegetable textures, forest green background with delicate organic depth, warm cream highlights, desaturated natural red as a small colour accent. Refined premium nature magazine photography, a unified green palette, calm balanced composition with only these four ingredients. No scattered decorative seeds, lemons, flowers, fruit bowls, napkins, table settings, drinking glasses, supplement packaging, labels or medical claims. Avoid busy abundance and exaggerated gloss; natural tactile realism, not a commercial supermarket collage. No text, letters, logos, diagrams, ribbons or people.",
+      "asset": "public/images/article-concepts/nutrition-v2-v1.jpg"
+    }
+  ]
+}

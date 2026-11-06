@@ -1,2 +1,2 @@
 import { defineConfig } from 'vite';
-export default defineConfig({server:{host:'127.0.0.1',port:5217,strictPort:true},preview:{host:'127.0.0.1',port:5217,strictPort:true},build:{chunkSizeWarningLimit:1600}});
+export default defineConfig({server:{host:'127.0.0.1',port:5217,strictPort:true},preview:{host:'127.0.0.1',port:5217,strictPort:true},build:{chunkSizeWarningLimit:1600,rollupOptions:{input:{main:'index.html',imageLab:'image-lab.html',bannerVariants:'banner-variants.html',companyVariants:'company-variants.html',homeBlockVariants:'home-block-variants.html',journalVariants:'journal-variants.html',articleVariants:'article-variants.html',heroPhotoOptions:'hero-photo-options.html'}}}});
