@@ -1,3 +1,4 @@
+import { randomBytes } from 'node:crypto';
 // Site management (the administrator's part of the profile) and customer reviews, on the accounts database
 // (scripts/accounts.mjs routes /api/site, /api/reviews and /api/admin/* here).
 //
@@ -25,6 +26,12 @@ create table if not exists hidden_notes (
   note_key text not null,
   primary key (product_id, note_key)
 );
+create table if not exists note_stars (
+  product_id text not null,
+  note_key text not null,
+  rating integer not null check (rating between 1 and 5),
+  primary key (product_id, note_key)
+);
 create table if not exists reviews (
   id bigserial primary key,
   product_id text not null,
@@ -36,6 +43,21 @@ create table if not exists reviews (
   moderated_at timestamptz
 );
 create index if not exists reviews_product_idx on reviews (product_id, status);
+create table if not exists product_content (
+  product_id text primary key,
+  data jsonb not null,
+  updated_at timestamptz not null default now()
+);
+create table if not exists files (
+  id text primary key,
+  product_id text not null,
+  kind text not null,
+  name text not null,
+  mime text not null,
+  size integer not null,
+  data bytea not null,
+  created_at timestamptz not null default now()
+);
 create table if not exists admin_log (
   id bigserial primary key,
   user_id bigint references users(id) on delete set null,
@@ -45,6 +67,35 @@ create table if not exists admin_log (
 );`;
 
 const AVAILABILITY = new Set(['InStock', 'OutOfStock']);
+// Uploads: photos and certificate scans only, as images (no SVG — it can carry scripts).
+const UPLOAD_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const MAX_UPLOAD = 8 * 1024 * 1024;
+
+/** A product's card content as built (scripts/serve.mjs passes content.json products): what the editor starts from. */
+export function productBase(p) {
+  if (!p) return null;
+  return { name: p.name, about: p.copy?.about ?? [], highlights: p.copy?.highlights ?? [], description: p.description ?? '', properties: p.properties ?? {}, documents: (p.documents ?? []).filter(d => d.url).map(d => ({ name: d.name, url: d.url })) };
+}
+const localUrl = v => typeof v === 'string' && /^\/(api\/files|media|images)\/[\w./%-]+$/.test(v) && !v.includes('..');
+const textList = (v, items, max) => Array.isArray(v) ? v.filter(x => typeof x === 'string').map(x => x.trim()).filter(Boolean).slice(0, items).map(x => x.slice(0, max)) : undefined;
+/** The administrator's card content: only what is set replaces the built card; anything malformed is an error. */
+export function validateContent(c) {
+  if (!c || typeof c !== 'object') return { error: 'Нет данных карточки.' };
+  const out = {};
+  if (c.name !== undefined) { const name = String(c.name).trim(); if (name.length < 2 || name.length > 200) return { error: 'Название — от 2 до 200 знаков.' }; out.name = name; }
+  if (c.about !== undefined) out.about = textList(c.about, 20, 2000) ?? [];
+  if (c.highlights !== undefined) out.highlights = textList(c.highlights, 20, 300) ?? [];
+  if (c.properties !== undefined) {
+    if (!c.properties || typeof c.properties !== 'object') return { error: 'Состав и применение заполнены неверно.' };
+    out.properties = Object.fromEntries(Object.entries(c.properties).slice(0, 40).filter(([k, v]) => k.length <= 120 && typeof v === 'string').map(([k, v]) => [k, v.trim().slice(0, 6000)]));
+  }
+  if (c.documents !== undefined) {
+    if (!Array.isArray(c.documents) || c.documents.length > 30 || c.documents.some(d => !localUrl(d?.url))) return { error: 'Сертификаты заполнены неверно.' };
+    out.documents = c.documents.map(d => ({ name: String(d.name ?? '').slice(0, 160), url: d.url }));
+  }
+  if (c.image !== undefined && c.image !== null) { if (!localUrl(c.image)) return { error: 'Фото заполнено неверно.' }; out.image = c.image; }
+  return { value: out };
+}
 const REVIEW_STATUS = new Set(['pending', 'published', 'hidden']);
 /** A price in у.е. or rubles from the form: empty means «as in the price list» (null); otherwise a positive number. */
 const amount = (v, max, integer) => {
@@ -73,10 +124,13 @@ export async function cbrUsd() {
 
 /** Public settings every page applies: the rate, product overrides and hidden expert comments. */
 export async function siteSettings(pool) {
-  const [{ rows: rate }, { rows: products }, { rows: notes }] = await Promise.all([
+  const [{ rows: rate }, { rows: products }, { rows: notes }, { rows: cards }, { rows: ratings }, { rows: stars }] = await Promise.all([
     pool.query("select value, updated_at from site_settings where key = 'rate'"),
     pool.query('select * from product_overrides'),
     pool.query('select product_id, note_key from hidden_notes'),
+    pool.query("select product_id, data->>'name' as name, data->>'image' as image from product_content"),
+    pool.query("select product_id, sum(rating)::int as sum, count(*)::int as count from reviews where status = 'published' group by product_id"),
+    pool.query('select product_id, note_key, rating from note_stars'),
   ]);
   const hiddenNotes = {};
   for (const n of notes) (hiddenNotes[n.product_id] ??= []).push(n.note_key);
@@ -84,6 +138,12 @@ export async function siteSettings(pool) {
     rate: rate[0] ? { rubPerUnit: Number(rate[0].value.rubPerUnit), updatedAt: rate[0].updated_at } : null,
     products: Object.fromEntries(products.map(p => [p.product_id, { retailUnits: num(p.retail_units), partnerUnits: num(p.partner_units), retailRub: p.retail_rub, partnerRub: p.partner_rub, availability: p.availability }])),
     hiddenNotes,
+    // Stars of published customer reviews, added to the old site's rating on every card and product page.
+    ratings: Object.fromEntries(ratings.map(r => [r.product_id, { sum: r.sum, count: r.count }])),
+    // Stars of expert comments that differ from the default five (set by the administrator on the product page).
+    noteStars: stars.reduce((all, s) => ({ ...all, [s.product_id]: { ...all[s.product_id], [s.note_key]: s.rating } }), {}),
+    // A card's own name and photo (the rest of the content is fetched on the product's page: /api/product-content).
+    cards: Object.fromEntries(cards.map(c => [c.product_id, { ...(c.name ? { name: c.name } : {}), ...(c.image ? { image: c.image } : {}) }]).filter(([, c]) => Object.keys(c).length)),
   };
 }
 
@@ -99,6 +159,21 @@ export async function siteRoute(ctx, req, res, path, url) {
 
   if (path === '/api/site' && method === 'GET') { send(res, 200, await siteSettings(pool)); return true; }
 
+  if (path === '/api/product-content' && method === 'GET') {
+    const id = url.searchParams.get('id');
+    if (!knownProduct(id)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    const { rows } = await pool.query('select data from product_content where product_id = $1', [id]);
+    send(res, 200, { content: rows[0]?.data ?? null, base: ctx.productBase?.(id) ?? null });
+    return true;
+  }
+  if (path.startsWith('/api/files/') && method === 'GET') {
+    const id = path.slice('/api/files/'.length);
+    const { rows } = /^[a-f0-9]{32}$/.test(id) ? await pool.query('select mime, data from files where id = $1', [id]) : { rows: [] };
+    if (!rows[0]) { send(res, 404, { error: 'Нет такого файла.' }); return true; }
+    res.writeHead(200, { 'Content-Type': rows[0].mime, 'Content-Length': rows[0].data.length, 'Cache-Control': 'public, max-age=31536000, immutable', 'X-Content-Type-Options': 'nosniff', 'Content-Disposition': 'inline' });
+    res.end(req.method === 'HEAD' ? undefined : rows[0].data);
+    return true;
+  }
   if (path === '/api/reviews' && method === 'GET') {
     const product = url.searchParams.get('product');
     if (!knownProduct(product)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
@@ -150,8 +225,35 @@ export async function siteRoute(ctx, req, res, path, url) {
     });
     return true;
   }
+  if (path === '/api/admin/upload' && method === 'POST') {
+    const product = url.searchParams.get('product'), kind = url.searchParams.get('kind');
+    const mime = String(req.headers['content-type'] || '').split(';')[0].trim();
+    if (!knownProduct(product) || !['image', 'document'].includes(kind)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!UPLOAD_TYPES.has(mime)) { send(res, 415, { error: 'Загрузите картинку: JPG, PNG или WEBP.' }); return true; }
+    const chunks = []; let size = 0;
+    for await (const chunk of req) { size += chunk.length; if (size > MAX_UPLOAD) { send(res, 413, { error: 'Файл больше 8 МБ.' }); return true; } chunks.push(chunk); }
+    if (!size) { send(res, 400, { error: 'Пустой файл.' }); return true; }
+    const id = randomBytes(16).toString('hex');
+    const name = String(url.searchParams.get('name') || 'файл').slice(0, 160);
+    await pool.query('insert into files (id, product_id, kind, name, mime, size, data) values ($1, $2, $3, $4, $5, $6, $7)', [id, product, kind, name, mime, size, Buffer.concat(chunks)]);
+    await log(user, 'upload', { productId: product, kind, id, name, size });
+    send(res, 201, { url: `/api/files/${id}`, name });
+    return true;
+  }
   if (method !== 'PUT') { send(res, 404, { error: 'Нет такого адреса.' }); return true; }
   const body = await readJson(req);
+  if (path === '/api/admin/content') {
+    if (!knownProduct(body?.productId)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (body.reset === true) await pool.query('delete from product_content where product_id = $1', [body.productId]);
+    else {
+      const checked = validateContent(body.content);
+      if (checked.error) { send(res, 400, { error: checked.error }); return true; }
+      await pool.query('insert into product_content (product_id, data, updated_at) values ($1, $2, now()) on conflict (product_id) do update set data = excluded.data, updated_at = now()', [body.productId, JSON.stringify(checked.value)]);
+    }
+    await log(user, body.reset === true ? 'content-reset' : 'content', { productId: body.productId });
+    send(res, 200, await siteSettings(pool));
+    return true;
+  }
 
   if (path === '/api/admin/rate') {
     const rate = amount(body?.rubPerUnit, 1000, false);
@@ -187,6 +289,15 @@ export async function siteRoute(ctx, req, res, path, url) {
     if (body.hidden === true) await pool.query('insert into hidden_notes (product_id, note_key) values ($1, $2) on conflict do nothing', [body.productId, body.key]);
     else await pool.query('delete from hidden_notes where product_id = $1 and note_key = $2', [body.productId, body.key]);
     await log(user, body.hidden === true ? 'note-hide' : 'note-show', { productId: body.productId, key: body.key });
+    send(res, 200, await siteSettings(pool));
+    return true;
+  }
+  if (path === '/api/admin/note-stars') {
+    const rating = Number(body?.rating);
+    if (!knownProduct(body?.productId) || typeof body?.key !== 'string' || !body.key || body.key.length > 400 || !Number.isInteger(rating) || rating < 1 || rating > 5) { send(res, 400, { error: 'Оценка — от 1 до 5 звёзд.' }); return true; }
+    if (rating === 5) await pool.query('delete from note_stars where product_id = $1 and note_key = $2', [body.productId, body.key]);
+    else await pool.query('insert into note_stars (product_id, note_key, rating) values ($1, $2, $3) on conflict (product_id, note_key) do update set rating = excluded.rating', [body.productId, body.key, rating]);
+    await log(user, 'note-stars', { productId: body.productId, key: body.key, rating });
     send(res, 200, await siteSettings(pool));
     return true;
   }

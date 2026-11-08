@@ -30,7 +30,7 @@ export function reviewSections(html){
 }
 export function videoSections(html){
  return [...html.matchAll(/<figure>([\s\S]*?)<\/figure>/gi)].map(m=>{
-  const href=m[1].match(/href="([^"]+)"/)?.[1]||'';const id=href.match(/youtu\.be\/([\w-]{11})/)?.[1];
+  const href=m[1].match(/href="([^"]+)"/)?.[1]||'';const id=href.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([\w-]{11})/)?.[1];
   const title=plainInfo(m[1].match(/<figcaption>([\s\S]*?)<\/figcaption>/i)?.[1]||'Видео').replace(/_2$/,'');
   return id?{id,title,href,poster:`/images/video-thumbnails/${id}.jpg`}:null;
  }).filter(Boolean);

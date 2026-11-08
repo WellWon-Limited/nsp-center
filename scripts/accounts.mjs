@@ -109,9 +109,10 @@ async function readJson(req) {
   try { return JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}'); } catch { throw Object.assign(new Error('bad json'), { status: 400 }); }
 }
 // A form or script on another site cannot send JSON here without a CORS preflight, and the Origin it sends must be ours.
-function sameOrigin(req) {
-  if (!String(req.headers['content-type'] || '').startsWith('application/json')) return false;
+// An upload (a photo or certificate scan, /api/admin/upload) is not JSON; it must then carry our Origin.
+function sameOrigin(req, upload = false) {
   const origin = req.headers.origin;
+  if (upload ? !origin : !String(req.headers['content-type'] || '').startsWith('application/json')) return false;
   if (!origin) return true;
   try { return new URL(origin).host === String(req.headers['x-forwarded-host'] || req.headers.host || '').split(',')[0].trim(); } catch { return false; }
 }
@@ -132,10 +133,11 @@ const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, 
  * Returns `handle(req, res, url)` for every /api/ request. With no `databaseUrl` (or `pool`) it answers 503.
  * `productIds` (a Set) limits reviews and product settings to the site's products. `adminEmails`: accounts with these
  * emails are administrators (on the server: ADMIN_EMAILS, comma-separated); more can be appointed in the admin section.
- * `cbr: false` skips asking cbr.ru for the reference rate (tests).
+ * `cbr: false` skips asking cbr.ru for the reference rate (tests). `productBase(id)`: a product's built card content
+ * (name, description, properties, certificates, photo), shown in the administrator's editor next to the changes.
  * The schema is created on the first request; a database that is down gives 503 and is retried on the next request.
  */
-export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, adminEmails = [], cbr = true } = {}) {
+export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, adminEmails = [], cbr = true } = {}) {
   const admins = adminEmails.map(e => e.trim().toLowerCase()).filter(Boolean);
   if (!databaseUrl && !givenPool) return { enabled: false, handle: (req, res) => send(res, 503, { error: 'Сервер аккаунтов не подключён.' }), close: async () => {} };
   const pool = givenPool ?? new (await import('pg')).default.Pool({ connectionString: databaseUrl, max: 5 });
@@ -165,8 +167,8 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
 
   async function route(req, res, path, url) {
     const method = req.method;
-    if (method !== 'GET' && !sameOrigin(req)) return send(res, 403, { error: 'Запрос отклонён.' });
-    if (await siteRoute({ pool, send, readJson, sessionUser, productIds, cbr }, req, res, path, url)) return;
+    if (method !== 'GET' && !sameOrigin(req, path === '/api/admin/upload')) return send(res, 403, { error: 'Запрос отклонён.' });
+    if (await siteRoute({ pool, send, readJson, sessionUser, productIds, productBase, cbr }, req, res, path, url)) return;
     if (path === '/api/auth/me' && method === 'GET') {
       const user = await sessionUser(req);
       return user ? send(res, 200, await accountWithData(user)) : send(res, 401, { error: 'Вы не вошли в аккаунт.' });

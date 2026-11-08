@@ -51,9 +51,6 @@
 .admin-entry strong { font-size: var(--text-16); }
 .admin-entry small { display: block; color: var(--color-on-dark-muted); font-size: var(--text-13); }
 @media (max-width: 639px) { .admin-card { padding: var(--space-16); } .admin-product-row { flex-direction: column; } .admin-product-prices { justify-items: start; } .admin-users li { flex-direction: column; align-items: start; } }
-/* Expert comments as an administrator sees them on a product page: hidden ones faded, with «Показать». */
-.expert-note--hidden { opacity: .55; }
-.expert-admin { margin-top: var(--space-10); padding: var(--space-4) var(--space-12); border: 1.5px solid var(--color-ink); border-radius: 999px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-12); font-weight: var(--weight-700); cursor: pointer; }
 .admin-card .field { border: 1px solid var(--color-ink-line); background: var(--color-white); }
 .admin-choice { display: flex; flex-wrap: wrap; gap: var(--space-6); }
 .admin-choice button { min-height: 38px; padding: 0 var(--space-14); border: 1.5px solid var(--color-ink-line); border-radius: 999px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-13); font-weight: var(--weight-700); cursor: pointer; }
@@ -74,3 +71,17 @@
 .admin-dialog blockquote { margin: 0; padding: var(--space-10) var(--space-14); border-left: 3px solid var(--color-ink-line); color: var(--color-ink); font-size: var(--text-14); max-height: 160px; overflow: auto; }
 .admin-dialog .btn--danger { border: 0; background: var(--color-danger); color: var(--color-white); }
 .admin-dialog .btn--secondary { border: 1.5px solid var(--color-ink-line); background: var(--color-white); }
+/* Product editor: sub-tabs for prices and the card's content. */
+.admin-subtabs { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+.admin-subtabs button { min-height: 34px; padding: 0 var(--space-12); border: 1.5px solid var(--color-ink-line); border-radius: 999px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-13); font-weight: var(--weight-700); cursor: pointer; }
+.admin-subtabs button.active { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-white); }
+.admin-price, .admin-content { display: grid; gap: var(--space-12); }
+.admin-content label { display: grid; gap: var(--space-4); font-size: var(--text-13); font-weight: var(--weight-700); }
+.admin-content textarea { font: inherit; font-size: var(--text-14); font-weight: var(--weight-400); line-height: 1.5; resize: vertical; }
+.admin-content .field { border: 1px solid var(--color-ink-line); background: var(--color-white); }
+.admin-docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-10); }
+.admin-docs figure { display: grid; gap: var(--space-6); margin: 0; }
+.admin-docs img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border: 1px solid var(--color-ink-line); border-radius: 8px; background: #fff; }
+.admin-photo img { max-width: 240px; max-height: 240px; object-fit: contain; border-radius: 12px; background: #fff; }
+.admin-file input { font-weight: var(--weight-400); }
+.admin-hint-muted { font-size: var(--text-12); color: var(--color-muted); }

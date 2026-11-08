@@ -274,3 +274,72 @@ body:has(.catalog-layout) .site-main .catalog-tools .search-field:focus-within{o
 .expert-about{display:inline-block;margin-left:var(--space-8);font-size:var(--text-12);font-weight:var(--weight-700);color:var(--color-success)}
 /* Empty cart: one plain line, like the empty «Акции» page; no card around it. */
 .cart-empty{margin:0;padding:var(--space-12) 0 var(--space-32);text-align:center;font-size:18px;line-height:1.6;color:var(--color-muted)}
+/* Product page price: the label stands right next to the amount («Цена 3 501 ₽»), and the pair sits at the right edge. */
+.purchase-prices--plain .price-row{justify-content:flex-end;gap:var(--space-10)}
+/* Product cards: no empty gaps. A name takes at most two lines (the full name is the link's text, shown with «…» when
+   cut); the article and rating follow it at once, then the price and the button. */
+.product-meta h3 a{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-meta .product-info{margin-top:0}
+.product-meta .product-bottom{margin-top:var(--space-12);padding-top:0}
+/* All cards in a row are the same size, without an empty gap inside: every varying part keeps a fixed height — the
+   category line is one line, the name always takes two lines' room, and «Нет в наличии» sits over the bottom of the
+   photo instead of pushing the text down. The price and the button end each card at the same level. */
+.product-meta{position:relative}
+.product-meta .ds-kicker{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-meta h3{min-height:calc(2em * 1.35)}
+.product-meta>.stock-pill{position:absolute;top:0;left:var(--space-8);margin:0;transform:translateY(-100%)}
+.product-meta .product-bottom{margin-top:auto;padding-top:var(--space-12)}
+/* Product «Видеообзоры»: the video gallery's look (posters in a grid, the video in a window), in the product's tab. */
+.product-video-gallery{--info-paper:#f7f5ee;--info-green:#0b3b34;--info-rule:#dcded6;color:var(--info-green)}
+.product-video-gallery .information-videos{gap:28px 22px}
+.product-video-gallery .information-video h2{font-size:16px;margin:8px 0 12px}
+@media(max-width:959px){.product-video-gallery .information-videos{grid-template-columns:1fr 1fr}}
+@media(max-width:639px){.product-video-gallery .information-videos{grid-template-columns:1fr}}
+/* Catalog card lines (owner's choice: variant 2 with the composition line of variant 3). */
+.product-meta .card-sub{margin:2px 0 0;font-size:var(--text-13);font-weight:var(--weight-600);line-height:1.35;color:var(--color-success);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1.35em}
+.product-meta .card-parts{display:flex;gap:var(--space-4);align-items:baseline;margin:var(--space-6) 0 0;font-size:var(--text-12);line-height:1.4;color:var(--color-muted);min-height:1.4em}
+.product-meta .card-parts em{min-width:0;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-meta .card-parts b{flex:none;font-weight:var(--weight-700);color:var(--color-ink)}
+.product-meta .product-info{margin-top:var(--space-8);font-size:var(--text-13);color:var(--color-ink)}
+.product-meta .product-info .rating{display:inline-flex;align-items:center;gap:var(--space-4);font-size:var(--text-13)}
+.product-meta .product-info .rating svg{color:#ad6338}
+.product-meta .product-info .rating strong{font-weight:var(--weight-800)}
+.product-meta .product-info .rating span{color:var(--color-muted)}
+.product-meta .product-info .rating--none{color:var(--color-muted)}
+.product-meta .product-bottom{padding-top:var(--space-6)}
+@media(max-width:639px){.product-meta .product-info .rating{display:inline-flex}.product-meta .card-sub{font-size:var(--text-12)}.product-meta .card-parts{font-size:var(--text-11)}}
+.product-meta h3{margin-bottom:var(--space-2)}
+/* Name (up to two lines) and the support line (two lines: «Поддержка иммунной / и нервной систем») follow each
+   other with no gap. Every photo is the same height, so «Нет в наличии» and the text start level across a row; the
+   price and button end level, and a one-line name leaves at most one line before the price. */
+.product-meta .card-title h3{min-height:0;margin:0 0 var(--space-2)}
+.product-meta .card-title .card-sub{margin:0;min-height:0;white-space:pre-line;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.product-card>.product-visual{flex:0 0 auto}
+.product-card>.product-meta{flex:1 1 auto}
+.product-card>.product-meta>.product-bottom{margin-top:auto}
+/* Card price with a discount card: «2 260 ₽ по карте» in one line, the label to the right of the amount. */
+.product-bottom .price-stack{flex-direction:row;align-items:baseline;gap:var(--space-6)}
+/* Stars of an expert comment (the administrator can click them on the product page). */
+.star-row{display:inline-flex;gap:1px;margin-left:var(--space-8);vertical-align:middle;color:#d9cfc4;font-size:16px;line-height:1}
+.star-row .on{color:#ad6338}
+.star-row button{padding:0 1px;border:0;background:none;color:inherit;font:inherit;cursor:pointer}
+.star-row button.on{color:#ad6338}
+/* The rating star on cards and the product page is the same filled star as in the reviews. */
+.rating .rating-star{color:#ad6338;font-size:16px;line-height:1}
+.product-meta .product-info .rating .rating-star{color:#ad6338}
+/* Plan day picker (src/date-picker.tsx): a month under the date on a computer, a sheet above the bottom bar on a phone —
+   always inside the screen. */
+.date-picker{position:relative;display:inline-block}
+.date-picker .intake-date-pick{border:0;background:none;padding:0;color:inherit;font:inherit}
+.date-picker-panel{position:absolute;z-index:40;top:calc(100% + 8px);left:0;width:300px;padding:var(--space-14);border:1px solid var(--color-ink-line);border-radius:var(--radius-18);background:var(--color-white);box-shadow:0 18px 40px -18px rgb(29 58 54 / .45);color:var(--color-ink)}
+.date-picker-panel header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-10)}
+.date-picker-panel header strong{font-size:var(--text-15)}
+.date-picker-panel header button{display:grid;place-items:center;width:36px;height:36px;border:0;border-radius:50%;background:#eef4f0;color:var(--color-ink);cursor:pointer}
+.date-picker-panel header button:first-child svg{transform:rotate(180deg)}
+.date-picker-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.date-picker-weekday{font-size:var(--text-11);font-weight:var(--weight-700);color:var(--color-muted);padding:4px 0}
+.date-picker-grid button{aspect-ratio:1;border:0;border-radius:50%;background:none;color:var(--color-ink);font:inherit;font-size:var(--text-14);cursor:pointer}
+.date-picker-grid button.today{box-shadow:inset 0 0 0 1.5px var(--color-ink)}
+.date-picker-grid button.selected{background:var(--color-ink);color:var(--color-white)}
+.date-picker-today{width:100%;min-height:40px;margin-top:var(--space-10);border:1.5px solid var(--color-ink-line);border-radius:999px;background:var(--color-white);color:var(--color-ink);font:inherit;font-size:var(--text-13);font-weight:var(--weight-700);cursor:pointer}
+@media(max-width:639px){.date-picker-panel{position:fixed;left:var(--space-12);right:var(--space-12);top:auto;bottom:calc(68px + env(safe-area-inset-bottom) + var(--space-12));width:auto;z-index:calc(var(--layer-navigation) + 1)}}

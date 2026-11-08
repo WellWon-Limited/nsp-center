@@ -3,7 +3,8 @@ import layouts from './product-image-layout.json' with {type:'json'};
 import legacy from './product-image-overrides.json' with {type:'json'};
 export const productImage=src=>legacy[src]||src;
 // Display replacements are separate from the imported catalog and original gallery files.
-export const productCover=product=>images[product.id]?.image||(product.image?productImage(product.image):undefined);
+// An administrator's photo (src/site.ts) comes first.
+export const productCover=product=>product.adminImage||images[product.id]?.image||(product.image?productImage(product.image):undefined);
 export function productGalleryImages(product){const cover=productCover(product);return cover?[cover]:[];}
 
 export function productPackshotStyle(product){

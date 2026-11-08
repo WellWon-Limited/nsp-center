@@ -36,6 +36,13 @@ export type Product = {
   prices: ProductPrices;
   /** Rewritten text from src/product-copy (only on the product's own page, not in the browser summary). */
   copy?: ProductCopy; experts?: ExpertNote[];
+  /** Short lines of a catalog card (scripts/card-facts.mjs; browser summary only). */
+  card?: { kicker: string; sub: string; parts: string[]; more: number; notes: number };
+  /** Stars of published customer reviews (src/site.ts); absent until there is one. The snapshot's `rating` and
+   *  `review_count` are kept as source data but not shown: no reviews stood behind them. */
+  stars?: { value: number; count: number; sum: number };
+  /** A photo the administrator uploaded in place of the built one (src/site.ts). */
+  adminImage?: string;
   /** A set's products (src/set-contents.json). */
   setProducts?: string[];
 };

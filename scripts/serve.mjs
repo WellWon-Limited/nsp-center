@@ -4,6 +4,7 @@ import { resolve, extname, sep } from 'node:path';
 import { adaptPrototype, ORIGINAL_PROTOTYPE } from './prototype-adapter.mjs';
 import { isIndexableHost, BLOCKED_ROBOTS, NOINDEX_HEADER } from './indexing.mjs';
 import { createAccounts } from './accounts.mjs';
+import { productBase } from './site-admin.mjs';
 // Local settings (DATABASE_URL of the local Postgres, scripts/local-db.mjs) live in .env, which git ignores; the dev stand
 // gets them from its environment instead.
 try{process.loadEnvFile('.env');}catch{/* no .env */}
@@ -11,7 +12,7 @@ const dist=resolve('dist');
 const manifest=JSON.parse(await readFile(resolve(dist,'prerender-manifest.json'),'utf8'));
 const routes=new Map(manifest.routes.map(r=>[r.url,r.file]));
 const content=JSON.parse(await readFile('src/generated/content.json','utf8'));
-const accounts=await createAccounts({databaseUrl:process.env.DATABASE_URL,productIds:new Set(content.products.map(p=>p.id)),adminEmails:(process.env.ADMIN_EMAILS||'').split(',')});
+const accounts=await createAccounts({databaseUrl:process.env.DATABASE_URL,productIds:new Set(content.products.map(p=>p.id)),productBase:id=>productBase(content.products.find(p=>p.id===id)),adminEmails:(process.env.ADMIN_EMAILS||'').split(',')});
 // Local-only design reference, never copied into dist: the app prototype adapted for device frames,
 // and the untouched original for comparison.
 const originalPrototype=await readFile(resolve(ORIGINAL_PROTOTYPE));

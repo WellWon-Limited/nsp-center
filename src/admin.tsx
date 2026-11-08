@@ -3,12 +3,14 @@ import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { ProductPicker } from './personal';
 import type { Product } from './content-types';
 import { data, money, shortName, useStore } from './store';
-import { pricesUnder, readSite, type ProductOverride, type SiteSettings } from './site';
+import { pricesUnder, readSite, type ProductContent, type ProductOverride, type SiteSettings } from './site';
+import { factOrder } from './catalog';
+import { productCover } from './product-media.mjs';
 import { BackLink, Icon } from './ui';
 
 // «Управление сайтом» (/profile/?admin=1), only for administrator accounts; the server checks the role on every
 // request (scripts/site-admin.mjs). Sections: the warehouse rate, a product's prices and stock, customer reviews,
-// administrators. Expert comments are hidden right on the product page (the «Скрыть» button an administrator sees).
+// administrators. An expert comment's stars are set right on the product page (clickable stars an administrator sees).
 
 type Overview = SiteSettings & {
   cbr: { rubPerUsd: number; date: string } | null;
@@ -72,7 +74,7 @@ function RateSection({ overview, run }: { overview: Overview; run: Run }) {
   const valid = Number.isFinite(next) && next > 0 && next <= 1000;
   const big = valid && Math.abs(next - current) / current > 0.2;
   const sample = data.products.find(p => p.prices.units && p.availability !== 'OutOfStock');
-  const sampleAt = (rate: number) => sample ? pricesUnder(sample, { retail: sample.prices.retail, partner: sample.prices.partner, availability: null, availability_text: null }, { rate: { rubPerUnit: rate, updatedAt: '' }, products: {}, hiddenNotes: {} }, data.pricing.rubPerUnit).retail : 0;
+  const sampleAt = (rate: number) => sample ? pricesUnder(sample, { retail: sample.prices.retail, partner: sample.prices.partner }, { rate: { rubPerUnit: rate, updatedAt: '' }, products: {}, hiddenNotes: {} }, data.pricing.rubPerUnit).retail : 0;
   const save = async (e?: FormEvent) => {
     e?.preventDefault();
     if (!valid) return;
@@ -109,7 +111,7 @@ function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
       <span><strong>{shortName(p.name)}</strong><small>Арт. {p.article ?? '—'}{overview.products[p.id] ? ' · изменён' : ''}</small></span>
       <span className="admin-product-prices">{money(p.prices.retail)}{p.prices.partner !== null && <small>по карте {money(p.prices.partner)}</small>}<small className={p.availability === 'OutOfStock' ? 'out' : 'in'}>{p.availability === 'OutOfStock' ? 'Нет в наличии' : 'В наличии'}</small></span>
     </button>
-    {open === p.id && <ProductEditor key={p.id} product={p} override={overview.products[p.id]} run={run} />}
+    {open === p.id && <ProductTabs key={p.id} product={p} override={overview.products[p.id]} run={run} />}
   </li>;
   return <section className="admin-card" data-ds-id="admin-products">
     <h2>Цены и наличие</h2>
@@ -121,19 +123,99 @@ function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
   </section>;
 }
 
+type EditTab = 'price' | 'about' | 'facts' | 'docs' | 'photo';
+const editTabs: [EditTab, string][] = [['price', 'Цены и наличие'], ['about', 'Название и описание'], ['facts', 'Состав и применение'], ['docs', 'Сертификаты'], ['photo', 'Фото']];
+/** A product's editor: prices and stock, and the card's content (everything a visitor sees on the product page). */
+function ProductTabs({ product: p, override, run }: { product: Product; override?: ProductOverride; run: Run }) {
+  const [tab, setTab] = useState<EditTab>('price');
+  return <div className="admin-editor">
+    <nav className="admin-subtabs" role="tablist">{editTabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</nav>
+    {tab === 'price' ? <ProductEditor product={p} override={override} run={run} /> : <ContentEditor product={p} tab={tab} run={run} />}
+  </div>;
+}
+
+type Base = { name: string; about: string[]; highlights: string[]; description: string; properties: Record<string, string>; documents: { name: string; url: string }[] };
+const paragraphs = (s: string) => s.split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
+const lines = (s: string) => s.split('\n').map(x => x.trim()).filter(Boolean);
+/** Name, description, composition, certificates and photo of a card. It starts from what the card shows now (the
+ *  administrator's earlier changes, else the built card) and saves the whole content at once. */
+function ContentEditor({ product: p, tab, run }: { product: Product; tab: Exclude<EditTab, 'price'>; run: Run }) {
+  const { notify } = useStore();
+  const [base, setBase] = useState<Base | null>(null);
+  const [saved, setSaved] = useState<ProductContent | null>(null);
+  const [f, setF] = useState<{ name: string; about: string; highlights: string; properties: Record<string, string>; documents: { name: string; url: string }[]; image: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    let off = false;
+    fetch(`/api/product-content?id=${encodeURIComponent(p.id)}`, { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then((b: { base: Base | null; content: ProductContent | null } | null) => {
+      if (off || !b?.base) return;
+      const c = b.content ?? {};
+      setBase(b.base); setSaved(b.content);
+      setF({ name: c.name ?? b.base.name, about: (c.about ?? (b.base.about.length ? b.base.about : paragraphs(b.base.description))).join('\n\n'), highlights: (c.highlights ?? b.base.highlights).join('\n'), properties: Object.fromEntries(factOrder.map(([key]) => [key, c.properties?.[key] ?? b.base!.properties[key] ?? ''])), documents: c.documents ?? b.base.documents, image: c.image ?? '' });
+    }).catch(() => { /* shown as loading */ });
+    return () => { off = true; };
+  }, [p.id]);
+  if (!f || !base) return <p className="ds-muted">Загружаем карточку…</p>;
+  const set = <K extends keyof NonNullable<typeof f>>(k: K, v: NonNullable<typeof f>[K]) => setF(x => x && { ...x, [k]: v });
+  const upload = async (file: File, kind: 'image' | 'document') => {
+    setBusy(true);
+    try {
+      const r = await fetch(`/api/admin/upload?product=${encodeURIComponent(p.id)}&kind=${kind}&name=${encodeURIComponent(file.name)}`, { method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file });
+      const b = await r.json().catch(() => null);
+      if (!r.ok) { notify(b?.error || 'Не удалось загрузить файл.'); return null; }
+      return b as { url: string; name: string };
+    } catch { notify('Нет связи с сервером.'); return null; } finally { setBusy(false); }
+  };
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    const props = Object.fromEntries(Object.entries(f.properties).filter(([k, v]) => v.trim() !== (base.properties[k] ?? '').trim()));
+    const content: ProductContent = {
+      ...(f.name.trim() !== base.name ? { name: f.name.trim() } : {}),
+      ...(paragraphs(f.about).join('\n\n') !== (base.about.length ? base.about : paragraphs(base.description)).join('\n\n') ? { about: paragraphs(f.about) } : {}),
+      ...(lines(f.highlights).join('\n') !== base.highlights.join('\n') ? { highlights: lines(f.highlights) } : {}),
+      ...(Object.keys(props).length ? { properties: props } : {}),
+      ...(JSON.stringify(f.documents) !== JSON.stringify(base.documents) ? { documents: f.documents } : {}),
+      ...(f.image ? { image: f.image } : {}),
+    };
+    if (await run('/api/admin/content', Object.keys(content).length ? { productId: p.id, content } : { productId: p.id, reset: true }, `Сохранено: ${shortName(f.name)}`)) setSaved(Object.keys(content).length ? content : null);
+  };
+  const reset = async () => { if (await run('/api/admin/content', { productId: p.id, reset: true }, `Как было: ${shortName(base.name)}`)) { setSaved(null); setF({ name: base.name, about: (base.about.length ? base.about : paragraphs(base.description)).join('\n\n'), highlights: base.highlights.join('\n'), properties: Object.fromEntries(factOrder.map(([key]) => [key, base.properties[key] ?? ''])), documents: base.documents, image: '' }); } };
+  const cover = f.image || productCover({ ...p, adminImage: undefined });
+  return <form className="admin-content" onSubmit={save}>
+    {tab === 'about' && <>
+      <label>Название<input className="field" value={f.name} onChange={e => set('name', e.target.value)} /></label>
+      <label>Описание — абзацы через пустую строку<textarea className="field" rows={8} value={f.about} onChange={e => set('about', e.target.value)} /></label>
+      <label>Главное о продукте — по одному пункту в строке<textarea className="field" rows={4} value={f.highlights} onChange={e => set('highlights', e.target.value)} /></label>
+    </>}
+    {tab === 'facts' && factOrder.map(([key, label]) => <label key={key}>{label}<textarea className="field" rows={key.startsWith('Состав') || key === 'Применение' ? 4 : 2} placeholder="Пусто — пункт не показывается" value={f.properties[key]} onChange={e => set('properties', { ...f.properties, [key]: e.target.value })} /></label>)}
+    {tab === 'docs' && <>
+      <div className="admin-docs">{f.documents.map((d, i) => <figure key={d.url}><img src={d.url} alt={`Сертификат, страница ${i + 1}`} loading="lazy" /><button type="button" className="btn btn--secondary" onClick={() => set('documents', f.documents.filter((_, j) => j !== i))}>Убрать</button></figure>)}</div>
+      {!f.documents.length && <p className="ds-muted">Сертификатов нет — вкладка «Сертификаты» на странице товара не показывается.</p>}
+      <label className="admin-file">Добавить скан сертификата (JPG, PNG, WEBP)<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async e => { const file = e.target.files?.[0]; e.target.value = ''; if (!file) return; const up = await upload(file, 'document'); if (up) set('documents', [...f.documents, up]); }} /></label>
+    </>}
+    {tab === 'photo' && <>
+      <div className="admin-photo">{cover && <img src={cover} alt={p.name} />}</div>
+      <label className="admin-file">Загрузить другое фото (JPG, PNG, WEBP)<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async e => { const file = e.target.files?.[0]; e.target.value = ''; if (!file) return; const up = await upload(file, 'image'); if (up) set('image', up.url); }} /></label>
+      {f.image && <button type="button" className="btn btn--secondary" onClick={() => set('image', '')}>Вернуть исходное фото</button>}
+    </>}
+    <p className="admin-hint-muted">Изменения видны на сайте после «Сохранить». Новый файл сохраняется вместе с карточкой.</p>
+    <div className="admin-editor-actions"><button className="btn btn--primary" disabled={busy}>{busy ? 'Загружаем файл…' : 'Сохранить'}</button>{saved && <button type="button" className="btn btn--secondary" onClick={() => void reset()}>Вернуть всё как было</button>}<a href={p.path} className="admin-link">Открыть товар</a></div>
+  </form>;
+}
+
 function ProductEditor({ product: p, override: o, run }: { product: Product; override?: ProductOverride; run: Run }) {
-  const [f, setF] = useState({ retailUnits: number(o?.retailUnits), partnerUnits: number(o?.partnerUnits), retailRub: number(o?.retailRub), partnerRub: number(o?.partnerRub), availability: o?.availability ?? '' });
+  const [f, setF] = useState({ retailUnits: number(o?.retailUnits), partnerUnits: number(o?.partnerUnits), retailRub: number(o?.retailRub), partnerRub: number(o?.partnerRub), availability: o?.availability ?? (p.availability === 'OutOfStock' ? 'OutOfStock' : 'InStock') });
   const set = (k: keyof typeof f) => (v: string) => setF(x => ({ ...x, [k]: v }));
   const save = (e: FormEvent) => { e.preventDefault(); void run('/api/admin/product', { productId: p.id, ...f }, `Сохранено: ${shortName(p.name)}`); };
   const units = p.prices.units;
-  return <form className="admin-editor" onSubmit={save}>
+  return <form className="admin-price" onSubmit={save}>
     <div className="admin-editor-grid">
       <label>Розничная, у.е.<input className="field" inputMode="decimal" placeholder={units ? `${number(units.retail)} по прайсу` : 'нет в прайсе'} value={f.retailUnits} onChange={e => set('retailUnits')(e.target.value)} /></label>
       <label>По карте, у.е.<input className="field" inputMode="decimal" placeholder={units ? `${number(units.partner)} по прайсу` : 'нет в прайсе'} value={f.partnerUnits} onChange={e => set('partnerUnits')(e.target.value)} /></label>
       <label>Розничная, ₽ — вместо расчёта<input className="field" inputMode="numeric" placeholder="не задана" value={f.retailRub} onChange={e => set('retailRub')(e.target.value)} /></label>
       <label>По карте, ₽ — вместо расчёта<input className="field" inputMode="numeric" placeholder="не задана" value={f.partnerRub} onChange={e => set('partnerRub')(e.target.value)} /></label>
     </div>
-    <div className="admin-choice" role="radiogroup" aria-label="Наличие">{([['', 'Как в каталоге'], ['InStock', 'В наличии'], ['OutOfStock', 'Нет в наличии']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={f.availability === v} className={f.availability === v ? 'active' : ''} onClick={() => set('availability')(v)}>{label}</button>)}</div>
+    <div className="admin-choice" role="radiogroup" aria-label="Наличие">{([['InStock', 'В наличии'], ['OutOfStock', 'Нет в наличии']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={f.availability === v} className={f.availability === v ? 'active' : ''} onClick={() => set('availability')(v)}>{label}</button>)}</div>
     <div className="admin-editor-actions"><button className="btn btn--primary">Сохранить</button>{o && <button type="button" className="btn btn--secondary" onClick={() => void run('/api/admin/product', { productId: p.id, reset: true }, `Как в прайсе: ${shortName(p.name)}`)}>Вернуть как в прайсе</button>}<a href={p.path} className="admin-link">Открыть товар</a></div>
   </form>;
 }
@@ -143,7 +225,7 @@ function ReviewsSection({ overview, run }: { overview: Overview; run: Run }) {
   const label = { pending: 'Ждёт проверки', published: 'Опубликован', hidden: 'Скрыт' };
   return <section className="admin-card" data-ds-id="admin-reviews">
     <h2>Отзывы покупателей</h2>
-    <p className="admin-lead">Новый отзыв появляется на сайте только после того, как вы его опубликуете. Комментарии экспертов скрываются прямо на странице товара — кнопкой «Скрыть», её видит только администратор.</p>
+    <p className="admin-lead">Новый отзыв появляется на сайте только после того, как вы его опубликуете. Звёзды у комментариев экспертов администратор меняет прямо на странице товара, во вкладке «Отзывы».</p>
     {!overview.reviews.length && <p className="ds-muted">Отзывов пока нет.</p>}
     <ul className="admin-reviews">{overview.reviews.map(r => <li key={r.id} className={`admin-review admin-review--${r.status}`}>
       <header><strong>{productName(r.productId)}</strong><span className="admin-status">{label[r.status]}</span></header>

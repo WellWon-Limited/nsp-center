@@ -4,7 +4,7 @@ import { createServer } from 'node:http';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { applySite, noteKey, visibleNotes } from '../src/site.ts';
+import { applyContent, applySite, noteKey, visibleNotes } from '../src/site.ts';
 import { createAccounts, hashPassword, verifyPassword, validateRegistration, phoneKey, pickData, parseCookies } from '../scripts/accounts.mjs';
 
 test('passwords are salted scrypt hashes and verify only with the same password', async () => {
@@ -110,6 +110,8 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.deepEqual(site.products.alfalfa, { retailUnits: 15, partnerUnits: null, retailRub: null, partnerRub: null, availability: 'OutOfStock' });
   assert.equal((await call('/api/admin/note', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', hidden: true })).body.hiddenNotes.alfalfa[0], 'Врач|Лекция|Текст');
   assert.equal((await call('/api/admin/pending')).body.reviews, 1);
+  assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 9 })).status, 400);
+  assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 3 })).body.noteStars.alfalfa['Врач|Лекция|Текст'], 3);
   const overview = (await call('/api/admin/overview')).body;
   assert.equal(overview.rateHistory[0].rubPerUnit, 96.5);
   assert.equal(overview.rateHistory[0].by, 'boss@example.ru');
@@ -121,6 +123,27 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.deepEqual((await call('/api/reviews?product=bee-pollen')).body.reviews, []);
   assert.equal((await call('/api/admin/user', 'PUT', { email: 'boss@example.ru', role: 'customer' })).status, 400, 'cannot demote yourself');
   assert.equal((await call('/api/admin/user', 'PUT', { email: 'anna@example.ru', role: 'admin' })).status, 200);
+
+  // A card's own content: an uploaded certificate scan is served back; name and photo reach every page via /api/site.
+  const png = Buffer.from('89504e470d0a1a0a0000000d4948445200000001000000010806000000', 'hex');
+  const up = await fetch(base + '/api/admin/upload?product=alfalfa&kind=document&name=scan.png', { method: 'POST', headers: { 'Content-Type': 'image/png', Origin: base, Cookie: session }, body: png });
+  assert.equal(up.status, 201);
+  const file = await up.json();
+  assert.match(file.url, /^\/api\/files\/[a-f0-9]{32}$/);
+  assert.equal((await fetch(base + '/api/admin/upload?product=alfalfa&kind=document', { method: 'POST', headers: { 'Content-Type': 'image/svg+xml', Origin: base, Cookie: session }, body: '<svg/>' })).status, 415, 'no SVG uploads');
+  assert.equal((await fetch(base + '/api/admin/upload?product=alfalfa&kind=document', { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: session }, body: png })).status, 403, 'an upload needs our Origin');
+  const served = await fetch(base + file.url);
+  assert.equal(served.headers.get('content-type'), 'image/png');
+  assert.deepEqual(Buffer.from(await served.arrayBuffer()), png);
+  assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { name: 'X' } })).status, 400);
+  assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { documents: [{ name: 'evil', url: 'https://evil.example/x.png' }] } })).status, 400);
+  assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { name: 'Люцерна новая', about: ['Первый абзац.'], properties: { 'Применение': 'По одной капсуле.' }, documents: [file], image: file.url } })).body.cards.alfalfa.name, 'Люцерна новая');
+  const card = (await call('/api/product-content?id=alfalfa')).body;
+  assert.deepEqual(card.content.documents, [file]);
+  assert.equal(card.content.properties['Применение'], 'По одной капсуле.');
+  assert.deepEqual((await call('/api/site')).body.cards.alfalfa, { name: 'Люцерна новая', image: file.url });
+  assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', reset: true })).status, 200);
+  assert.equal((await call('/api/product-content?id=alfalfa')).body.content, null);
 });
 
 test('site settings recompute rubles from у.е. and never compound', () => {
@@ -139,4 +162,12 @@ test('site settings recompute rubles from у.е. and never compound', () => {
   const notes = [{ speaker: 'Врач', lecture: 'Лекция', text: 'Текст', role: '', course: '' }, { speaker: 'Другой', lecture: 'Лекция', text: 'Текст', role: '', course: '' }];
   assert.equal(noteKey(notes[0]), 'Врач|Лекция|Текст');
   assert.deepEqual(visibleNotes('a', notes, site).map(n => n.speaker), ['Другой']);
+});
+
+test('a card\'s own content replaces only what is set and can be taken back', () => {
+  const p = { id: 'a', name: 'Люцерна', copy: { about: ['Было.'], highlights: ['Пункт'] }, properties: { 'Применение': 'Было', 'Состав': 'Люцерна' }, documents: [{ name: 'стр.1', size: '1 КБ', url: '/media/a.jpg' }] };
+  applyContent(p, { name: 'Новая', about: ['Стало.'], properties: { 'Применение': 'Стало', 'Состав': '' }, documents: [], image: '/api/files/' + 'a'.repeat(32) });
+  assert.deepEqual([p.name, p.copy.about, p.copy.highlights, p.properties, p.documents.length, p.adminImage], ['Новая', ['Стало.'], ['Пункт'], { 'Применение': 'Стало' }, 0, '/api/files/' + 'a'.repeat(32)]);
+  applyContent(p, null);
+  assert.deepEqual([p.name, p.copy.about, p.properties['Состав'], p.documents.length], ['Люцерна', ['Было.'], 'Люцерна', 1]);
 });
