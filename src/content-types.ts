@@ -3,7 +3,7 @@ export type DocumentLink = { name: string; size: string; url: string | null };
 export type SiteLink = { text: string | null; url: string };
 
 /** Retail is for everyone; partner is for discount-card holders (null when the price list lacks the product). */
-export type ProductPrices = { retail: number; partner: number | null; source: 'price-list' | 'snapshot' };
+export type ProductPrices = { retail: number; partner: number | null; source: 'price-list' | 'snapshot'; units?: { retail: number; partner: number } };
 
 export type Product = {
   id: string;
@@ -36,11 +36,13 @@ export type Product = {
   prices: ProductPrices;
   /** Rewritten text from src/product-copy (only on the product's own page, not in the browser summary). */
   copy?: ProductCopy; experts?: ExpertNote[];
+  /** A set's products (src/set-contents.json). */
+  setProducts?: string[];
 };
 
 export type ProductCopy = { about: string[]; highlights: string[] };
 /** An expert comment from the doctors' lecture base (scripts/product-experts.mjs). */
-export type ExpertNote = { speaker: string; role: string; course: string; lecture: string; text: string };
+export type ExpertNote = { speaker: string; role: string; course: string; lecture: string; text: string; about?: string };
 
 export type Category = {
   id: string;
@@ -117,6 +119,7 @@ export type Content = {
   categories: Category[];
   articles: Article[];
   pages: ContentPage[];
+  pricing: { rubPerUnit: number };
   site: {
     title: string;
     logo: string | null;

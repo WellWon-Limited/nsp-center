@@ -142,35 +142,6 @@
   margin-bottom: var(--space-16);
 }
 
-/* Empty favourites: a white row card — an orange heart with an ink outline, the text, one action. */
-.account-empty {
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-20);
-}
-
-.account-empty > div {
-  flex: 1;
-  min-width: 0;
-}
-
-.account-empty h3 {
-  font-size: var(--text-18);
-  margin-bottom: var(--space-4);
-}
-
-/* Same orange as the footer stripe and the cart badge, outlined in ink; no tile behind it. */
-.account-empty-icon {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  color: var(--color-ink);
-}
-
-.account-empty-icon svg {
-  fill: #ad6338;
-}
-
 /* Sign-out: at the bottom, centred; a plain dark-green button like the primary buttons, no outline or shadow. */
 .account-logout {
   display: block;
@@ -196,19 +167,13 @@
     padding: var(--space-18);
   }
 
-  .account-card--row,
-  .account-empty {
+  .account-card--row {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .account-form {
     grid-template-columns: 1fr;
-  }
-
-  .account-empty .btn {
-    width: 100%;
-    justify-content: center;
   }
 
   .account-logout {
@@ -377,4 +342,14 @@
   font-size: var(--text-16);
   font-weight: var(--weight-600);
   opacity: .8;
+}
+
+/* Favourites and waiting list in the profile: just the heart on the photo, with no circle behind it. */
+.account-favorites .favorite,
+.account-favorites .favorite.selected,
+.account-favorites .favorite:hover { background: none; box-shadow: none; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* Favourites and waiting list: cards as wide as in the catalog (about 310px), not squeezed four to a row. */
+@media (min-width: 640px) {
+  .account-favorites .product-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 310px)); justify-content: center; gap: var(--space-18); }
 }

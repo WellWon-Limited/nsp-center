@@ -127,7 +127,7 @@ body:has(.information-page) .site-main>.back-link{margin:12px max(24px,calc((100
 @media(max-width:639px){.information-page--legal .information-heading h1{font-size:clamp(28px,7.5vw,34px)}}
 
 .information-home{display:inline-flex;align-items:center;min-height:44px;margin:0 0 24px;font-size:12px;font-weight:500;color:var(--info-green);text-decoration:none}
-.information-home:hover{text-decoration:underline;text-underline-offset:4px}
+.information-home:hover{text-decoration:none}
 .information-heading--dark .information-home{color:var(--color-white)}
 @media(max-width:639px){.information-home{margin-bottom:18px;font-size:11px}}
 

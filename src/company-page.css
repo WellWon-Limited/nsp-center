@@ -9,3 +9,6 @@ body:has(.company-page--nature) .site-main{max-width:none;padding:0}
 .co-home-return{display:flex;align-items:center;width:fit-content;min-height:44px;margin:0 0 12px;color:inherit;font-family:var(--font-sans);font-size:12px;font-weight:400;text-decoration:none}
 .company-page--nature .co-home-return:is(:hover,:focus-visible,:active){color:var(--color-white);text-decoration:none}
 .company-page--nature .co-home-return:focus-visible{outline-color:var(--color-white)}
+
+.company-page--nature .co-home-return .back-link{margin:0;color:inherit}
+.company-page--nature .co-home-return .back-link:focus-visible{outline-color:var(--color-white)}

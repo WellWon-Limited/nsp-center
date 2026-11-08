@@ -16,5 +16,6 @@ export function pricesFor(product, list) {
   const item = list.items[String(product.article ?? '').trim()];
   if (!item) return { retail: product.price, partner: null, source: 'snapshot' };
   const rub = units => Math.round(units * list.rubPerUnit);
-  return { retail: rub(item[list.retailColumn]), partner: rub(item[list.partnerColumn]), source: 'price-list' };
+  // `units` (у.е.) let the site recompute rubles when the administrator changes the rate (src/site.ts).
+  return { retail: rub(item[list.retailColumn]), partner: rub(item[list.partnerColumn]), source: 'price-list', units: { retail: item[list.retailColumn], partner: item[list.partnerColumn] } };
 }

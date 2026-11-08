@@ -12,8 +12,8 @@ export function registerServiceWorker() {
   addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => { /* the site works without it */ }); });
 }
 
-// Loading screen on a phone: index.html covers the first page of a visit with the logo on white (class nsp-splash, set
-// before anything paints); once the page has loaded and rendered it fades out, and the app counts as ready.
+// Loading screen on phones only: index.html covers the first page of a visit with the circular logo on a warm light
+// background before anything paints. Once the page has loaded and rendered it fades out, and the app counts as ready.
 let ready = false;
 const readyListeners: (() => void)[] = [];
 const markReady = () => { ready = true; readyListeners.splice(0).forEach(fn => fn()); };
@@ -143,7 +143,7 @@ export function useIntakeReminders() {
         reminded: [...s.reminded, ...due.map(it => `${today()}:${it.id}:${it.time}`)].slice(-100),
         notices: [...items.map(({ it, name }) => ({ id: `${today()}-${it.id}-${it.time}`, title: 'Время приёма', text: `${it.time} — ${name}`, date: now.toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }), url: '/health/', read: false })), ...s.notices].slice(0, 50) }));
       if ('Notification' in window && Notification.permission === 'granted') navigator.serviceWorker?.ready.then(reg => {
-        for (const { it, name } of items) reg.showNotification('Время приёма', { body: `${it.time} — ${name}`, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', tag: `intake-${it.id}`, data: { url: '/health/' } });
+        for (const { it, name } of items) reg.showNotification('Время приёма', { body: `${it.time} — ${name}\nПерейти к плану`, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', tag: `intake-${it.id}`, data: { url: '/health/' } });
       }).catch(() => { /* no service worker: the bell still has it */ });
     };
     check();

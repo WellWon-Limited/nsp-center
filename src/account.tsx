@@ -1,6 +1,7 @@
 import './account.css';
+import { AdminPanel } from './admin';
 import { useEffect, useState, type FormEvent } from 'react';
-import { data, money, partnerSignupUrl, signOut, useStore, type Account } from './store';
+import { data, money, partnerSignupUrl, useStore, type Account } from './store';
 import { Icon, ProductGrid } from './ui';
 import { InstallAppCard } from './pwa';
 
@@ -83,13 +84,17 @@ function DiscountCard({ account }: { account: Account }) {
 }
 
 export function AccountPage({ account }: { account: Account }) {
-  const { state, setState } = useStore();
+  const { state, logout, pendingReviews } = useStore();
+  // An administrator's «Управление сайтом» opens in place of the account (/profile/?admin=1). The account renders only in
+  // the browser (the profile waits for the store), so the address is read at once and the account never flashes first.
+  const adminView = Boolean(account.admin) && typeof location !== 'undefined' && new URLSearchParams(location.search).get('admin') === '1';
   const favorites = data.products.filter(p => state.favorites.includes(p.id));
   const waiting = data.products.filter(p => state.waitlist.some(x => x.id === p.id));
   const done = state.intake.filter(x => x.done).length;
   const created = russianDate(account.createdAt);
   // Entering the account (after sign-in or registration) starts at the top of the page.
   useEffect(() => { window.scrollTo({ top: 0 }); }, []);
+  if (adminView) return <AdminPanel />;
   return <div className="account" data-ds-id="account">
     <header className="account-head">
       <span className="ds-kicker">Личный кабинет</span>
@@ -97,6 +102,7 @@ export function AccountPage({ account }: { account: Account }) {
       {created && <p className="ds-muted">Аккаунт создан {created}</p>}
     </header>
 
+    {account.admin && <a className="admin-entry" href="/profile/?admin=1" data-ds-id="admin-entry"><span><strong>Управление сайтом</strong><small>{pendingReviews ? `Новых отзывов на проверку: ${pendingReviews}` : 'Курс у.е., цены и наличие, отзывы, администраторы'}</small></span>{pendingReviews > 0 && <span className="admin-count">{pendingReviews}</span>}<Icon name="arrow" size={20} /></a>}
     <DiscountCard account={account} />
 
     <div className="account-stack">
@@ -121,17 +127,13 @@ export function AccountPage({ account }: { account: Account }) {
 
     <section className="account-favorites" data-ds-id="account-favorites">
       <h2 className="account-section-title">Избранное</h2>
-      {favorites.length ? <ProductGrid products={favorites} /> : <div className="account-card account-empty">
-        <span className="account-empty-icon" aria-hidden="true"><Icon name="heart" size={34} /></span>
-        <div><h3>Здесь будет то, что вам понравилось</h3><p className="ds-muted">Отмечайте товары сердечком в каталоге — они соберутся в этом списке.</p></div>
-        <a className="btn btn--primary" href="/catalog/">Выбрать продукты <Icon name="arrow" size={18} /></a>
-      </div>}
+      {favorites.length ? <ProductGrid products={favorites} /> : <p className="account-waitlist-empty">Пока пусто</p>}
     </section>
 
     <section className="account-favorites" data-ds-id="account-waitlist">
       <h2 className="account-section-title">Лист ожидания</h2>
       {waiting.length ? <ProductGrid products={waiting}/> : <p className="account-waitlist-empty">Пока пусто</p>}
     </section>
-    <button className="account-logout" onClick={() => { setState(signOut); window.scrollTo({ top: 0, behavior: 'instant' }); }}>Выйти из аккаунта</button>
+    <button className="account-logout" onClick={() => { void logout(); window.scrollTo({ top: 0, behavior: 'instant' }); }}>Выйти из аккаунта</button>
   </div>;
 }

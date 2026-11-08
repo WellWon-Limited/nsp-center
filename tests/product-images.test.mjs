@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 const root=new URL('../',import.meta.url);
 const read=p=>readFileSync(new URL(p,root));
 const overrides=JSON.parse(read('src/product-image-overrides.json'));
+const preferred=JSON.parse(read('src/product-images.json'));
 const targets=JSON.parse(read('design/product-shadow-cleanup/targets.json'));
 const products=JSON.parse(read('src/generated/summary.json')).products;
 test('Cleaned covers preserve imported originals and are used on product pages',()=>{
@@ -16,6 +17,6 @@ test('Cleaned covers preserve imported originals and are used on product pages',
   const p=products.find(p=>p.id===target.id);
   assert.equal(p.image,target.image,'Import remains unchanged');
   const html=read('dist'+p.path+'index.html').toString();
-  assert.ok(html.includes('src="'+replacement+'"'),p.path);
+  assert.ok(html.includes('src="'+(preferred[p.id]?.image??replacement)+'"'),p.path);
  }
 });

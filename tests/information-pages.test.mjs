@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {ownsBackLink} from '../src/page-navigation.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
@@ -12,7 +13,7 @@ const words=text=>text.normalize('NFKC').match(/[\p{L}\p{N}]+/gu)||[];
 
 test('Footer destinations share the editorial page frame and render one title before JavaScript',()=>{
  for(const path of ['/delivery/','/payments/','/company/faq/','/contacts/','/shares/','/company/reviews/','/photo/','/video/','/design-system/','/company/consent/','/company/privacy-policy/','/company/refund/']){
-  const $=read(path);assert.equal($('.information-page').length,1,path);assert.equal($('h1').length,1,path);assert.ok($('h1').text().trim(),path);assert.equal($('.information-heading .information-home[href="/"]').length,1,path);
+  const $=read(path);assert.equal(ownsBackLink(path),true,`${path}: shared navigation must defer to the internal back link`);assert.equal($('.information-page').length,1,path);assert.equal($('h1').length,1,path);assert.ok($('h1').text().trim(),path);assert.equal($('.information-heading .information-home[href="/"]').length,1,path);
   assert.equal($('.site-header,.site-footer,.bottom-nav').length,3,path);
  }
 });
@@ -34,7 +35,7 @@ test('FAQ retains every question and answer; reviews retain authors and complete
 test('Empty offers and photos say so, and all twenty videos retain their destinations and local posters',()=>{
  assert.equal(read('/shares/')('.information-empty-message').text(),'Акций пока нет');
  assert.equal(read('/photo/')('.information-empty-message').text(),'Фото пока нет');assert.equal(read('/photo/')('.information-empty svg').length,0);assert.ok(read('/photo/')('.information-empty').hasClass('information-empty--plain'));assert.equal(read('/video/')('input[type=search]').length,0);
- for(const path of ['/photo/','/video/','/shares/','/contacts/','/company/reviews/','/payments/']){const $=read(path);assert.ok($('.information-heading').hasClass('information-heading--plain'));assert.equal($('.information-heading .information-kicker').length,0);}
+ for(const path of ['/photo/','/video/','/shares/','/contacts/','/company/reviews/','/payments/','/delivery/','/company/faq/']){const $=read(path);assert.ok($('.information-heading').hasClass('information-heading--plain'));assert.equal($('.information-heading .information-kicker').length,0);}
  for(const path of ['/photo/','/shares/']){const $=read(path);assert.equal($('.information-empty a,.information-empty svg,.information-empty h2').length,0);}
  for(const path of ['/contacts/','/company/reviews/','/payments/'])assert.equal(read(path)('.information-heading img').length,0);
  assert.equal(read('/delivery/')('.information-heading .information-kicker').length,0);

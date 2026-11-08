@@ -1,6 +1,7 @@
+import {productCover} from './product-media.mjs';
 import './assistant.css';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
-import { data, money, shortName, useStore } from './store';
+import { data, money, partnerSignupUrl, priceOf, shortName, useStore } from './store';
 import { Icon, WaitlistButton } from './ui';
 
 // «Консультация» (/consultation/): a chat with the shop's assistant. Until the AI server exists (an API key cannot live in
@@ -14,7 +15,7 @@ type ChatProduct = { id: string; name: string; path: string; price: number; part
 type Index = { themes: ChatTheme[]; products: ChatProduct[] };
 type Link = { label: string; href: string };
 type Section = { title: string; text: string };
-type Message = { sections?: Section[]; from: 'bot' | 'user'; text: string; product?: string; altProduct?: string; links?: Link[]; chips?: string[]; ask?: string; warning?: boolean; alts?: string[] };
+type Message = { source?: string; sections?: Section[]; from: 'bot' | 'user'; text: string; product?: string; altProduct?: string; links?: Link[]; chips?: string[]; ask?: string; warning?: boolean; alts?: string[] };
 
 const greeting: Message = { from: 'bot', text: 'Здравствуйте! Чем могу помочь?', chips: ['Плохо сплю', 'Нет сил днём', 'Тяжесть после еды', 'Часто простываю', 'Как получить скидку?', 'Где вы находитесь?', 'Связаться со специалистом'] };
 const storeKey = 'nsp-center:chat';
@@ -58,7 +59,7 @@ function intent(text: string): Message | null {
   if (/(адрес|где вы|где находит|как добрат|самовывоз|пункт выдачи|офис|приехать|забрать)/.test(t)) return { from: 'bot', text: `Наш пункт выдачи: ${data.site.address}. Перед визитом лучше позвонить — ${data.site.phones?.[0] ?? ''}.`, links: [{ label: 'Контакты и карта', href: '/contacts/' }, ...consultantLinks.slice(0, 2)] };
   if (/(доставк|привез|курьер)/.test(t)) return { from: 'bot', text: 'Доставляем по всей России, условия и сроки зависят от города и способа.', links: [{ label: 'Условия доставки', href: '/delivery/' }] };
   if (/(оплат|заплат)/.test(t)) return { from: 'bot', text: 'Способы оплаты описаны на странице «Оплата».', links: [{ label: 'Оплата', href: '/payments/' }] };
-  if (/(скидк|дисконт|карт|дешевле|партн)/.test(t)) return { from: 'bot', text: 'С дисконтной картой NSP товары дешевле — скидка до 30%. Карту можно оформить онлайн, а номер добавить в профиле, тогда цены по карте будут в каталоге и корзине.', links: [{ label: 'Оформить карту', href: 'https://nsp25.com/signup?sid=446621' }, { label: 'Профиль', href: '/profile/' }] };
+  if (/(скидк|дисконт|карт|дешевле|партн)/.test(t)) return { from: 'bot', text: 'С дисконтной картой NSP товары дешевле — скидка до 30%. Карту можно оформить онлайн, а номер добавить в профиле, тогда цены по карте будут в каталоге и корзине.', links: [{ label: 'Оформить карту', href: partnerSignupUrl }, { label: 'Профиль', href: '/profile/' }] };
   if (/(врач|специалист|доктор|нутрициолог|консультац|консультант|человек|менеджер|позвон|живой|живым|связат)/.test(t)) return { from: 'bot', text: 'Помогу связаться со специалистом NSP Center: он разберёт вашу ситуацию и подскажет схему приёма. Выберите, как удобнее. Если есть боль, температура или другие тревожные признаки — сначала обратитесь к врачу.', links: consultantLinks };
   return null;
 }
@@ -117,17 +118,22 @@ function productSections(product: ChatProduct | undefined, theme: ChatTheme | un
   if (product?.contra) out.push({ title: 'Не подходит', text: product.contra.replace(/\.$/, '') + '.' });
   return out;
 }
+/** «Источник: врач, лекция» under advice (owner, 2026-11-08): the theme page's lecture, or the product's expert comment. */
+function sourceOf(product: ChatProduct | undefined, theme: ChatTheme | undefined) {
+  const s = theme?.source?.speaker ? theme.source : product?.expert ? { speaker: `${product.expert.speaker}${product.expert.role ? `, ${product.expert.role}` : ''}`, lecture: product.expert.lecture } : theme?.source;
+  return s ? `Источник: ${s.speaker ? `${s.speaker}, ` : ''}лекция «${s.lecture}»` : '';
+}
 function adviceFor(id: string, topicText: string, rest: string[], index: Index, chips?: string[]): Message {
   const product = index.products.find(p => p.id === id);
   const theme = index.themes.find(t => t.product === id);
   const name = shortName(product?.name ?? '');
   const text = `Попробуйте попить ${name}.`;
   const sections = productSections(product, theme, topicText);
-  const alt = !product?.available ? rest[0] : undefined;
+  const alt = product && !inStock(product.id) ? rest[0] : undefined;
   const path = pathOf(id, index);
   const tail = alt ? ` Сейчас его нет в наличии — нажмите «Сообщить о поступлении», и я напомню, когда он появится. А пока можно попробовать ${shortName(index.products.find(p => p.id === alt)?.name ?? '')}.` : '';
   const left = alt ? rest.slice(1) : rest;
-  return { from: 'bot', text: text + tail, sections, product: id, ...(alt ? { altProduct: alt } : {}), links: path ? [{ label: 'Подробнее', href: path }] : undefined, warning: true, alts: left, chips: [...(left.length ? [anotherOption] : []), ...(chips ?? [])] } as Message;
+  return { from: 'bot', text: text + tail, sections, ...(sourceOf(product, theme) ? { source: sourceOf(product, theme) } : {}), product: id, ...(alt ? { altProduct: alt } : {}), links: path ? [{ label: 'Подробнее', href: path }] : undefined, warning: true, alts: left, chips: [...(left.length ? [anotherOption] : []), ...(chips ?? [])] } as Message;
 }
 export { productSections };
 export function recommend(text: string, index: Index): Message {
@@ -145,7 +151,7 @@ export function answer(text: string, index: Index): Message {
   const productHit = index.products.map(p => ({ p, n: overlap(q, shortName(p.name)) })).filter(x => x.n > 0).sort((a, b) => b.n - a.n)[0];
   const scored = index.themes.map(t => {
     const name = shortName(index.products.find(p => p.id === t.product)?.name ?? '');
-    const score = overlap(q, `${t.h1} ${name}`) * 4 + overlap(q, t.lead) * 2 + Math.max(0, ...t.faq.map(f => overlap(q, f.q))) * 2 + overlap(q, t.sections.map(s => s.h).join(' ')) + (productHit && t.product === productHit.p.id ? 6 : 0) + (aliases.some(([re, id]) => re.test(text) && id === t.product) ? 8 : 0) + (index.products.find(p => p.id === t.product)?.available ? 1 : 0);
+    const score = overlap(q, `${t.h1} ${name}`) * 4 + overlap(q, t.lead) * 2 + Math.max(0, ...t.faq.map(f => overlap(q, f.q))) * 2 + overlap(q, t.sections.map(s => s.h).join(' ')) + (productHit && t.product === productHit.p.id ? 6 : 0) + (aliases.some(([re, id]) => re.test(text) && id === t.product) ? 8 : 0) + (inStock(t.product) ? 1 : 0);
     return { t, score };
   }).filter(x => x.score >= 3).sort((a, b) => b.score - a.score);
   if (!scored.length) return { from: 'bot', text: 'Пока не могу ответить на этот вопрос. Опишите подробнее, что хочется поддержать, или задайте вопрос консультанту.', links: consultantLinks };
@@ -156,18 +162,21 @@ export function answer(text: string, index: Index): Message {
   const more = [...scored.slice(1, 3).map(x => x.t.h1), ...(risky.test(text) ? ['Связаться со специалистом'] : [])];
   // Alternatives: first the products the lecture topics pair with the best one (same theme page), then the next matches.
   const paired = siblings[best.product] ?? [];
-  const alts = [...paired, ...scored.slice(1).map(x => x.t.product)].filter((id, i, all) => id !== best.product && all.indexOf(id) === i && index.products.find(p => p.id === id)?.available).slice(0, 5);
+  const alts = [...paired, ...scored.slice(1).map(x => x.t.product)].filter((id, i, all) => id !== best.product && all.indexOf(id) === i && index.products.some(p => p.id === id) && inStock(id)).slice(0, 5);
   return { from: 'bot', text: body + caution, product: best.product, links: [{ label: 'Подробнее', href: best.path }], chips: [...(alts.length ? [anotherOption] : []), ...more], alts };
 }
 
 const fromChat = (href: string) => (href.startsWith('/') ? `${href}${href.includes('?') ? '&' : '?'}from=chat` : href);
 
+/** In stock now: the site's product data, which carries the administrator's stock changes. */
+const inStock = (id: string) => data.products.find(x => x.id === id)?.availability !== 'OutOfStock';
 function ProductMini({ id, index }: { id: string; index: Index }) {
   const { state, add } = useStore();
   const p = index.products.find(x => x.id === id); const full = data.products.find(x => x.id === id);
   if (!p || !full) return null;
-  const price = state.card && p.partner ? p.partner : p.price;
-  return <div className="chat-product"><img src={full.image || undefined} alt="" width="56" height="56" /><a href={fromChat(p.path)}>{shortName(p.name)}<span>{money(price)}{state.card && p.partner ? ' по карте' : ''}</span></a>{p.available ? <button type="button" className="btn card-cart-button" onClick={() => add(full)}>В корзину</button> : <WaitlistButton product={full} />}</div>;
+  // Price and stock from the site's product (the administrator may have changed them, src/site.ts), not the chat index.
+  const price = priceOf(full, state.card); const partner = state.card && full.prices.partner !== null;
+  return <div className="chat-product"><img src={productCover(full)} alt="" width="56" height="56" /><a href={fromChat(p.path)}>{shortName(p.name)}<span>{money(price)}{partner ? ' по карте' : ''}</span></a>{inStock(full.id) ? <button type="button" className="btn card-cart-button" onClick={() => add(full)}>В корзину</button> : <WaitlistButton product={full} />}</div>;
 }
 
 export function AssistantChat() {
@@ -205,7 +214,7 @@ export function AssistantChat() {
       if (!index) reply = { from: 'bot', text: 'Секунду, готовлюсь… Повторите вопрос, пожалуйста.' };
       else if (value === anotherOption) { const lastBot = [...messages].reverse().find(m => m.from === 'bot'); const rest = lastBot?.alts ?? []; reply = rest.length ? adviceFor(rest[0], '', rest.slice(1), index) : { from: 'bot', text: 'К сожалению, больше ничего предложить не могу. Спросите что-то ещё.' }; }
       else if (asked) reply = recommend(/^больше ничего/i.test(value) ? asked : `${asked} ${value}`, index);
-      else { const first = answer(value, index); reply = !first.product ? first : asksAboutProduct(value, index) ? { ...first, text: `Расскажу про ${shortName(index.products.find(p => p.id === first.product)?.name ?? '')}.`, sections: productSections(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product), first.text), warning: true } : clarify(value); }
+      else { const first = answer(value, index); reply = !first.product ? first : asksAboutProduct(value, index) ? { ...first, text: `Расскажу про ${shortName(index.products.find(p => p.id === first.product)?.name ?? '')}.`, sections: productSections(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product), first.text), source: sourceOf(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product)) || undefined, warning: true } : clarify(value); }
       setMessages(m => [...m, reply]); setTyping(false);
     }, 600);
   };
@@ -218,6 +227,7 @@ export function AssistantChat() {
         {m.sections && <dl className="chat-sections">{m.sections.map(x => <div key={x.title}><dt>{x.title}</dt><dd>{x.text}</dd></div>)}</dl>}
         {m.product && index && <ProductMini id={m.product} index={index} />}
         {m.altProduct && index && <ProductMini id={m.altProduct} index={index} />}
+        {m.source && <p className="chat-source">{m.source}</p>}
         {m.warning && <p className="chat-warning">БАД не является лекарственным средством. Перед применением проконсультируйтесь со специалистом.</p>}
         {m.links && <div className="chat-links">{m.links.map(l => <a key={l.href} href={fromChat(l.href)} target={l.href.startsWith('http') ? '_blank' : undefined} rel={l.href.startsWith('http') ? 'noopener' : undefined}>{l.label}</a>)}</div>}
       </div>)}

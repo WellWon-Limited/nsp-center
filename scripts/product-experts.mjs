@@ -17,3 +17,12 @@ export function readProductExperts() {
   }
   return experts;
 }
+
+// What a product set («Набор …») contains (src/set-contents.json: set id -> product ids, read from the set's photo).
+// A set has no lecture comments of its own; its «Отзывы» tab shows one comment on each product inside it, marked with
+// the product it is about (`about`).
+export const setContentsUrl = new URL('../src/set-contents.json', import.meta.url);
+export function readSetContents() {
+  if (!existsSync(setContentsUrl)) return new Map();
+  return new Map(Object.entries(JSON.parse(readFileSync(setContentsUrl, 'utf8'))).map(([id, ids]) => [id, ids]));
+}

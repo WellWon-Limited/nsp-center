@@ -10,6 +10,7 @@ import { themeByPath, themes, type Theme } from './themes';
 import { NotificationsButton } from './notifications';
 import { InstallBanner, useIntakeReminders } from './pwa';
 import { AssistantChat } from './assistant';
+import { ownsBackLink } from './page-navigation.mjs';
 export type PageData={theme?:Theme;productThemes?:Theme[];product?:Product;category?:Category;article?:Article;page?:ContentPage;homeHtml?:string;homeReviewsHtml?:string};
 export const extraRoutes=[{url:'/consultation/',title:'Консультация'},{url:'/health/',title:'Моё здоровье'},{url:'/profile/',title:'Профиль'},{url:'/cart/',title:'Корзина'},{url:'/design-system/',title:'Дизайн-система NSP'},...themes.map(theme=>({url:theme.path,title:theme.title}))];
 export function normalizeUrl(value:string){const u=new URL(value,'http://nsp.local');return u.pathname.replace(/\/{2,}/g,'/').replace(/([^/])$/,'$1/')+u.search;}
@@ -23,7 +24,7 @@ function Reminders(){useIntakeReminders();return null;}
 // Pages without a back link of their own get one at the top when they were opened from another page of the site (see
 // BackLink: it is named after that page). Main tabs (catalog, plan, profile) show it only when opened from the home page;
 // the home page, the chat and the company page show none.
-const ownBack=(p:string)=>p.startsWith('/product/')||p.startsWith('/temy/')||(p.startsWith('/blog/')&&p!=='/blog/')||p==='/company/sertifikaty/';
+
 const noBack=(p:string)=>p==='/'||p==='/consultation/'||p==='/company/';
 const tabs=(p:string)=>p.startsWith('/catalog/')||p==='/health/'||p==='/health-marafon/'||p==='/profile/'||p==='/blog/';
 // A tab reached through the site navigation (bottom bar, header, menu, logo) gets no back link even from the home page;
@@ -31,5 +32,5 @@ const tabs=(p:string)=>p.startsWith('/catalog/')||p==='/health/'||p==='/health-m
 // navigation in sessionStorage ('nsp-center:via-nav').
 function PageBack({url}:{url:string}){const u=new URL(url,'http://nsp.local');const p=u.pathname;const from=useCameFrom();const [viaNav,setViaNav]=useState(false);
  useEffect(()=>{try{setViaNav(sessionStorage.getItem('nsp-center:via-nav')===p);sessionStorage.removeItem('nsp-center:via-nav');}catch{/* ignore */}},[p]);
- if(['plan','marathon'].includes(u.searchParams.get('from')??'')||!from||ownBack(p)||noBack(p)||(tabs(p)&&(from!=='/'||viaNav)))return null;return <BackLink fallback="/"/>;}
+ if(['plan','marathon'].includes(u.searchParams.get('from')??'')||!from||ownsBackLink(p)||noBack(p)||(tabs(p)&&(from!=='/'||viaNav)))return null;return <BackLink fallback="/"/>;}
 export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;return <StoreProvider><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><div className="ambient" aria-hidden="true"><i/><i/><i/></div><Header path={path}/><main id="main" className="site-main"><PageBack url={url}/><RouteView url={url} pageData={pageData}/></main>{path!=='/consultation/'&&<Footer/>}<BottomNav path={path}/></StoreProvider>;}

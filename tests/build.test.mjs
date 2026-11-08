@@ -1,3 +1,4 @@
+import {productCover} from '../src/product-media.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, statSync } from 'node:fs';
@@ -91,7 +92,7 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     assert.equal(Number(offer.price), pricesFor(original, priceList).retail, `${path}: structured price must be the retail price`);
     assert.equal(offer.priceCurrency, 'RUB', `${path}: currency differs`);
     assert.equal(offer.availability?.split('/').at(-1), original.availability, `${path}: stock status differs`);
-    assert.ok(String(structured.image).includes(product.image), `${path}: structured image differs`);
+    assert.ok(String(structured.image).includes(productCover(product)), `${path}: structured image differs`);
     if (structured.aggregateRating) {
       assert.equal(structured.aggregateRating['@type'], 'AggregateRating', `${path}: invalid aggregate rating type`);
       assert.equal(Number(structured.aggregateRating.ratingValue), original.rating, `${path}: rating differs`);
@@ -187,6 +188,7 @@ test('The site is installable and works offline: manifest, icons and a service w
   assert.equal(app.name, 'NSP Center');
   assert.equal(app.display, 'standalone');
   assert.equal(app.start_url, '/');
+  assert.equal(app.background_color, '#faf7ee');
   for (const size of ['192x192', '512x512']) assert.ok(app.icons.some((icon) => icon.sizes === size && existsSync(resolve(dist, icon.src.slice(1)))), `manifest icon ${size} is missing`);
   assert.ok(app.icons.some((icon) => icon.purpose === 'maskable'), 'manifest needs a maskable icon');
   const sw = readFileSync(resolve(dist, 'sw.js'), 'utf8');
@@ -198,6 +200,7 @@ test('The site is installable and works offline: manifest, icons and a service w
   const $ = cheerio.load(htmlFor('/'));
   assert.equal($('link[rel="manifest"]').attr('href'), '/manifest.webmanifest');
   assert.equal($('link[rel="apple-touch-icon"]').attr('href'), '/icons/apple-touch-icon.png');
+  assert.equal($('.nsp-launch').length,1);assert.equal($('.nsp-launch img').attr('src'),'/icons/splash.svg');assert.equal($('.nsp-launch-tagline').text(),'Забота о себе в вашем ритме.');assert.equal($('.nsp-launch-tagline br,.nsp-launch .loading').length,0);assert.equal($('.nsp-launch').attr('aria-hidden'),'true');
 });
 
 test('Products added after the snapshot have a page, price-list prices, a local image and a place on the first category page', () => {

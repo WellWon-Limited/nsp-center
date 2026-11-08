@@ -3,7 +3,7 @@ import './delivery-page.css';
 
 export function DeliveryPage(){return <div className="delivery-page information-page" data-ds-id="page-delivery">
  
- <InformationHeader title="Условия доставки" kicker="" description="Самовывоз, курьерская доставка и отправка по России."/><div className="delivery-content">
+ <InformationHeader title="Условия доставки" plain kicker="" description="Самовывоз, курьерская доставка и отправка по России."/><div className="delivery-content">
  <section className="delivery-intro">
   <div><h2>Доставим ваш заказ удобным для вас способом</h2><p>Заберите продукцию в нашем сервисном центре в Санкт-Петербурге, оформите курьерскую доставку по городу или получите посылку CDEK в другом регионе России.</p><p>Здесь собраны адрес самовывоза, сроки подготовки заказа и условия доставки — чтобы вы могли спокойно выбрать подходящий вариант.</p></div>
   <img src="/images/information/delivery-v1.jpg" alt="Бережная упаковка заказа в крафтовую коробку у садового окна" width="1536" height="1024" fetchPriority="high"/>

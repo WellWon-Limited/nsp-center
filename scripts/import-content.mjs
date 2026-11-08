@@ -7,7 +7,7 @@ import { pricesFor, readPriceList } from './pricing.mjs';
 import { readThemes } from './themes.mjs';
 import { readProductCopy } from './product-copy.mjs';
 import { readNewProducts } from './new-products.mjs';
-import { readProductExperts } from './product-experts.mjs';
+import { readProductExperts, readSetContents } from './product-experts.mjs';
 
 // Offline import: the snapshot is the content source and is never written to;
 // the NSP price list (references/prices/) adds retail and partner prices.
@@ -353,6 +353,8 @@ const routes = successfulPages.map(record => {
 
 const content = {
   products, categories, articles, pages, site, routes, redirects,
+  // The warehouse rate the rubles were computed with; the administrator may set another one at runtime (src/site.ts).
+  pricing: { rubPerUnit: priceList.rubPerUnit },
   themes: readThemes(),
   audit: {
     source: sourceAudit,
@@ -379,6 +381,15 @@ for (const product of readNewProducts(priceList, categories)) {
 }
 for (const product of products) if (productExperts.has(product.id)) product.experts = productExperts.get(product.id);
 for (const id of productExperts.keys()) if (!products.some(product => product.id === id)) throw new Error(`Product experts: unknown product ${id}`);
+for (const [setId, ids] of readSetContents()) {
+  const set = products.find(product => product.id === setId);
+  if (!set) throw new Error(`Set contents: unknown set ${setId}`);
+  const parts = ids.map(id => products.find(product => product.id === id) ?? (() => { throw new Error(`Set contents ${setId}: unknown product ${id}`); })());
+  set.setProducts = parts.map(part => part.id);
+  // One comment per product keeps the tab readable (a set may hold a dozen products).
+  const notes = parts.flatMap(part => (part.experts ?? []).slice(0, 1).map(note => ({ ...note, about: part.name.replace(/\s*\([^)]*\)/g, '').trim() })));
+  if (!set.experts?.length && notes.length) set.experts = notes;
+}
 if (new Set(routes.map(route => route.url)).size !== routes.length) throw new Error('Duplicate imported routes');
 for (const html of [...products.flatMap(product => Object.values(product.sectionsHtml)), ...articles.map(article => article.html), ...pages.map(page => page.html), homeHtml]) {
   const unsafe = /<(?:script|style|h1|iframe|form|input|button)\b|\son\w+=|\sstyle=/i.exec(html);

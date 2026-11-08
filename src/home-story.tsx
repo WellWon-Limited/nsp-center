@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { RichContent } from './ui';
 import './home-story.css';
-import { homeStoryLinks } from './home-story-navigation.mjs';
+import { homeStoryLinks, homeStoryIsOpen, rememberHomeStory } from './home-story-navigation.mjs';
 
 const chapters = [
  {id:'care', title:'Забота о себе каждый день', marker:'', photo:'botanical', alt:'Свежая мята, мелисса и цитрус на светлом зелёном фоне'},
@@ -51,7 +51,7 @@ export function HomeStory({html,reviewsHtml=''}:{html:string;reviewsHtml?:string
  useEffect(()=>{
   const restore=()=>{
    const id=decodeURIComponent(location.hash.slice(1));
-   if(!/^about-(service|answers|reading|reviews|company|contacts)$/.test(id)&&id!=='home-about')return;
+   if(!/^about-(service|answers|reading|reviews|company|contacts)$/.test(id)&&id!=='home-about'){if(details.current&&homeStoryIsOpen(history.state))details.current.open=true;return;}
    const target=id==='home-about'?details.current:details.current?.querySelector<HTMLElement>(`#${id}`);
    if(!target||!details.current)return;
    details.current.open=true;
@@ -63,7 +63,7 @@ export function HomeStory({html,reviewsHtml=''}:{html:string;reviewsHtml?:string
  const fullReviews=reviewsHtml.replace(/<img\b[^>]*>/g,'').replace(/<p>\s*<\/p>/g,'');
  const order=['service','answers','reading','reviews','company','contacts'];
  const sections=homeStorySections(html).sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
- return <details ref={details} id="home-about" className="panel source-description home-story" data-ds-id="home-source">
+ return <details ref={details} onToggle={e=>rememberHomeStory(history,e.currentTarget.open)} onClickCapture={()=>{if(details.current)rememberHomeStory(history,details.current.open);}} id="home-about" className="panel source-description home-story" data-ds-id="home-source">
   <summary>Подробнее о NSP Center<span className="home-story-toggle" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m9 5 7 7-7 7"/></svg></span></summary>
   <article className="home-story-layout">
    <div className="home-story-body">{sections.map((section,index)=><section className={`home-story-chapter home-story-chapter--${section.id}`} id={`about-${section.id}`} key={section.id} data-ds-id={`home-about-${section.id}`}>

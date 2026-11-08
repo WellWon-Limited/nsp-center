@@ -219,7 +219,58 @@ body .site-main .product-card .product-visual{height:220px}body .site-main .prod
 /* The page-level back link sits close to the page heading (no extra gap above or below). */
 .site-main>.back-link{margin-block:0;min-height:32px}.site-main>.back-link+.page-heading{margin-top:var(--space-6)}
 /* Back links on dark photo heroes (articles, certificates) stay light when hovered, focused or pressed. */
-.av-journal-link .back-link:is(:hover,:focus-visible,:active,:visited),.cert-back .back-link:is(:hover,:focus-visible,:active,:visited){color:#fff;text-decoration:none}
+.av-journal-link .back-link,.cert-back .back-link,
+.av-journal-link .back-link:is(:hover,:focus-visible,:active,:visited),.cert-back .back-link:is(:hover,:focus-visible,:active,:visited){color:var(--color-white);text-decoration:none}
 .av-journal-link .back-link:focus-visible,.cert-back .back-link:focus-visible{outline-color:#fff}
 /* Back links («На главную», «Журнал о заботе», «О компании», «Назад»…) are never underlined, in any state. */
-.back-link,.back-link:is(:hover,:focus-visible,:active,:visited),.co-home-return:is(:hover,:focus-visible,:active,:visited){text-decoration:none}
+.site-main :is(.back-link,.information-home,.co-home-return,.home-story-return a),
+.site-main :is(.back-link,.information-home,.co-home-return,.home-story-return a):is(:hover,:focus-visible,:active,:visited){font-family:var(--font-sans);font-size:var(--text-12);font-weight:var(--weight-400);text-decoration:none}
+
+/* Use the install action's dark-green outline for the planner, auth card and catalog search. */
+.plan-page .personal-grid :is([data-ds-id="intake-plan"],[data-ds-id="marathon-progress"]),
+.site-main .auth,
+body:has(.catalog-layout) .site-main .catalog-tools .search-field{border:1.5px solid var(--color-ink)}
+
+/* Center the plan/marathon switch within the desktop plan column. */
+@media(min-width:960px){.plan-page .segmented.health-tabs{display:flex;width:fit-content;margin-inline:auto}}
+
+/* Status messages must stay readable over photos and page content. */
+.toast{background:var(--color-ink);color:var(--color-white);backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* Outline the price and purchase panel inside the product detail, keeping catalog cards unchanged. */
+.site-main .product-detail .purchase-box.panel{border:1.5px solid var(--color-ink)}
+
+/* Cart order summary uses the same outline as the product price panel. */
+.site-main .order-summary.panel{border:1.5px solid var(--color-ink)}
+
+/* Product photography sits on clean white, with no decorative image shadow. */
+body .site-main :is(.main-product-image,.product-gallery.panel,.thumbnail){background-color:var(--color-white);box-shadow:none}
+body .site-main :is(.product-visual,.main-product-image,.thumbnail) img{filter:none;box-shadow:none}
+
+/* Size single bottles by the visible packaging, rather than the white margins in their source files. */
+.product-packshot-frame{position:relative;display:block;flex:0 0 auto;width:min(100%,calc(var(--packshot-target,204px) * var(--packshot-ratio)));aspect-ratio:var(--packshot-ratio);overflow:hidden}
+body .site-main .product-packshot-frame>img,body .site-main .home-path-thumb .product-packshot-frame>img{position:absolute;left:var(--packshot-left);top:var(--packshot-top);width:var(--packshot-width);height:var(--packshot-height);max-width:none;object-fit:fill;mix-blend-mode:normal;transform:none;transition:none}
+body .site-main .product-detail .product-gallery.panel{padding:12px}
+body .site-main .product-detail .main-product-image{height:clamp(340px,32vw,480px);padding:12px;--packshot-target:calc(clamp(340px,32vw,480px) - 24px)}
+@media(max-width:639px){body .site-main .product-detail .main-product-image{height:340px;--packshot-target:316px}}
+.product-card:hover .product-visual .product-packshot-frame>img{transform:none}
+
+/* Larger complete products on the home page's three category cards. */
+.home-first-screen .home-paths .home-path-thumb{width:96px;height:100px;padding:4px;overflow:visible;--packshot-target:100px}
+.home-first-screen .home-paths .home-path-thumb--care{width:88px;height:100px;--packshot-target:100px}
+.home-first-screen .home-paths .home-path-thumb--set{width:140px;height:108px;display:flex;justify-content:center;align-items:flex-end;gap:3px;padding:0;--packshot-target:92px}
+.home-path-thumb--set .product-packshot-frame:nth-child(2){--packshot-target:108px}
+@media(max-width:639px){.home-first-screen .home-paths .home-path-thumb{width:88px;height:96px;--packshot-target:96px}.home-first-screen .home-paths .home-path-thumb--care{width:80px;height:96px}.home-first-screen .home-paths .home-path-thumb--set{width:128px;height:100px;--packshot-target:84px}.home-path-thumb--set .product-packshot-frame:nth-child(2){--packshot-target:100px}}
+@media(min-width:960px) and (pointer:fine){.home-first-screen .home-paths .home-path-thumb{width:max(96px,7vw);height:max(100px,7.3vw);--packshot-target:max(100px,7.3vw)}.home-first-screen .home-paths .home-path-thumb--care{width:max(88px,6.3vw)}.home-first-screen .home-paths .home-path-thumb--set{width:max(140px,10vw);height:max(108px,7.9vw);--packshot-target:max(92px,6.8vw)}.home-path-thumb--set .product-packshot-frame:nth-child(2){--packshot-target:max(108px,7.9vw)}}
+
+/* Short wide cosmetic jars have a quieter visual weight than tall supplement bottles. */
+.product-card .product-packshot-frame--wide-care{max-width:74%}
+
+.product-meta>.stock-pill{position:static;align-self:flex-start;margin:0 0 8px;max-width:100%}
+/* Computer: larger bell, cart and profile icons in the header (the home page sizes them from --header-icon-size). */
+@media(min-width:960px){.site-header .header-actions .icon-btn{width:46px;height:46px}.site-header .header-actions .icon-btn svg{width:28px;height:28px}body:has(.home-first-screen) .site-header .header-actions{--header-icon-size:max(28px,1.9vw)}}
+/* Catalog search: its dark-green border is the only frame; typing adds no second focus ring around it. */
+body:has(.catalog-layout) .site-main .catalog-tools .search-field:focus-within{outline:none}
+.expert-about{display:inline-block;margin-left:var(--space-8);font-size:var(--text-12);font-weight:var(--weight-700);color:var(--color-success)}
+/* Empty cart: one plain line, like the empty «Акции» page; no card around it. */
+.cart-empty{margin:0;padding:var(--space-12) 0 var(--space-32);text-align:center;font-size:18px;line-height:1.6;color:var(--color-muted)}

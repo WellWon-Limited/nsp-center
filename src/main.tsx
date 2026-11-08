@@ -1,5 +1,6 @@
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App';
+import { trackProducts } from './store';
 import './design-system.css';
 import './app.css';
 import { installHomeScrollReturn } from './home-scroll-return.mjs';
@@ -7,6 +8,7 @@ import { finishSplash, registerServiceWorker } from './pwa';
 const root=document.getElementById('root')!;
 const url=location.pathname+location.search;
 const pageData=JSON.parse(document.getElementById('nsp-page-data')?.textContent||'{}');
+trackProducts([pageData.product]);
 // Returning with "Назад" puts the visitor where they left off: the scroll position is saved when leaving a page and
 // restored after the page has rendered (the catalog may render client-side, after the browser's own restore attempt).
 const scrollKey=()=>`nsp-scroll:${location.pathname}${location.search}`;

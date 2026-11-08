@@ -14,3 +14,9 @@ export function homeStoryLinks(html,section){
   return `href="${u.pathname}${u.search.replace(/&/g,'&amp;')}${u.hash}"`;
  });
 }
+
+export const homeStoryIsOpen=state=>state?.nspHomeStoryOpen===true;
+export function rememberHomeStory(history,open){
+ const current=history.state&&typeof history.state==='object'?history.state:{};
+ history.replaceState({...current,nspHomeStoryOpen:open},'');
+}

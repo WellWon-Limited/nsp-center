@@ -64,6 +64,17 @@ test('Expert comments are attributed to a named speaker and lecture, contain no 
   }
 });
 
+test('A product set shows the expert comments of the products inside it, each marked with its product', () => {
+  const sets = content.products.filter((item) => item.setProducts?.length);
+  for (const set of sets) {
+    const ids = new Set(set.setProducts);
+    for (const id of ids) assert.ok(content.products.some((p) => p.id === id && p.id !== set.id), `${set.id}: unknown product ${id} in the set`);
+    const expected = set.setProducts.filter((id) => content.products.find((p) => p.id === id).experts?.length).length;
+    assert.equal(set.experts?.length ?? 0, expected, `${set.id}: the set should carry one comment per product that has one`);
+    for (const note of set.experts ?? []) assert.ok(note.about, `${set.id}: a set's comment must name its product`);
+  }
+});
+
 test('The recommendation test only suggests catalog products, with reasons free of treatment claims', () => {
   const source = readFileSync(resolve(root, 'src/recommend.tsx'), 'utf8');
   const pairs = [...source.matchAll(/\['([a-z0-9-]+)', '([^']{20,})'\]/gu)];

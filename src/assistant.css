@@ -135,3 +135,6 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 @media (max-width: 639px) {
   .chat-down { bottom: max(calc(68px + env(safe-area-inset-bottom) + var(--space-10) + 70px), calc(var(--chat-kb, 0px) + var(--space-8) + 70px)); }
 }
+
+/* The lecture an answer comes from: a quiet line under the advice. */
+.chat-source { margin: var(--space-10) 0 0; font-size: var(--text-12); line-height: 1.4; color: var(--color-muted); }

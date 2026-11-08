@@ -33,7 +33,7 @@ export function NotificationsButton() {
     <button className="icon-btn" aria-label={unread ? `Уведомления: ${unread} новых` : 'Уведомления'} aria-expanded={open} aria-controls={panelId} onClick={() => setOpen(v => !v)}><Icon name="bell" />{unread > 0 && <span className="cart-count">{unread}</span>}</button>
     {open && <div className="notifications-panel" id={panelId} role="dialog" aria-label="Уведомления">
       <div className="notifications-head"><h2>Уведомления</h2>{state.notices.length > 0 && <button type="button" className="text-button" onClick={() => setState(s => ({ ...s, notices: [] }))}>Очистить</button>}</div>
-      {state.notices.length ? <ul>{state.notices.map(n => <li key={n.id}><a href={n.url}><strong>{n.title}</strong><p>{n.text}</p><small>{n.date}</small></a></li>)}</ul>
+      {state.notices.length ? <ul>{state.notices.map(n => <li key={n.id}><a href={n.url}><strong>{n.title}</strong><p>{n.text}</p><small>{n.date}</small>{n.url==='/health/'&&<span className="notification-plan-link">Перейти к плану <span aria-hidden="true">→</span></span>}</a></li>)}</ul>
         : <div className="notifications-empty"><Icon name="bell" size={28} /><p><strong>Уведомлений пока нет</strong></p></div>}
       {permission === 'default' && <button type="button" className="btn btn--primary notifications-enable" onClick={enable}>Присылать на телефон</button>}
       {permission === 'granted' && <p className="notifications-note">Напоминания приходят и на телефон, пока приложение открыто или свёрнуто.</p>}

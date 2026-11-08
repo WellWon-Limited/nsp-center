@@ -1,13 +1,13 @@
 import './auth.css';
 import { useId, useState, type FormEvent, type ReactNode } from 'react';
-import { partnerSignupUrl, restoreAccountLists, useStore, type Account } from './store';
+import { partnerSignupUrl, restoreAccountLists, useStore, type Account, type ServerSession } from './store';
 import { Icon } from './ui';
 
-// Sign-in and registration screens of the profile. There is no account server yet
-// (docs/PASSPORT.md: authorization is not connected), so this is a demo account kept in
-// this browser: registration stores it and signs in, sign-in checks it. The password is
-// kept only as a salted SHA-256 hash; nothing leaves the browser. Yandex ID, VK ID and
-// password recovery need the server and only explain that.
+// Sign-in and registration screens of the profile. With the accounts server (scripts/accounts.mjs; the store learns of it
+// from /api/auth/me) both go to it, and the account with its cart, lists and plan follows the visitor to any device.
+// Without it (no database connected) this is a demo account kept in this browser: registration stores it and signs in,
+// sign-in checks it; the password is kept only as a salted SHA-256 hash. Yandex ID, VK ID and password recovery are not
+// connected yet and only explain that.
 
 const digits = (value: string) => value.replace(/\D/g, '');
 async function hashPassword(email: string, password: string) {
@@ -23,6 +23,15 @@ const DEMO_PASSWORD = 'demo2026';
 const demoAccount = async (): Promise<Account> => ({ firstName: 'Анна', lastName: 'Демо', email: DEMO_LOGIN, phone: '', partnerId: '7204118', passwordHash: await hashPassword(DEMO_LOGIN, DEMO_PASSWORD), createdAt: '2026-11-05' });
 
 type Mode = 'signin' | 'register';
+
+/** A request to the accounts server; `error` is a sentence for the visitor. */
+async function callAccounts(path: string, body: unknown): Promise<{ session?: ServerSession; error?: string }> {
+  try {
+    const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
+    const answer = await r.json().catch(() => null);
+    return r.ok && answer?.account ? { session: answer } : { error: answer?.error || 'Что-то пошло не так. Попробуйте ещё раз.' };
+  } catch { return { error: 'Нет связи с сервером. Проверьте интернет и попробуйте ещё раз.' }; }
+}
 
 function ProviderButtons({ onPick }: { onPick: () => void }) {
   return <div className="auth-providers">
@@ -50,7 +59,8 @@ function PasswordInput({ id, autoComplete, value, onChange }: { id: string; auto
 
 export function AuthScreen() {
   const [mode, setMode] = useState<Mode>('signin');
-  const { state, setState } = useStore();
+  const { state, setState, accounts, startSession } = useStore();
+  const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState(false);
   const [error, setError] = useState('');
   const [login, setLogin] = useState('');
@@ -59,6 +69,11 @@ export function AuthScreen() {
   const switchTo = (next: Mode) => { setMode(next); setNotice(false); setError(''); setPassword(''); };
   const signIn = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false);
+    if (accounts === 'server') {
+      setBusy(true); const { session, error } = await callAccounts('/api/auth/login', { login, password }); setBusy(false);
+      if (!session) { setError(error!); return; }
+      setPassword(''); setError(''); startSession(session); return;
+    }
     if (login.trim().toLowerCase() === DEMO_LOGIN && password === DEMO_PASSWORD) {
       const demo = await demoAccount();
       setPassword(''); setError('');
@@ -72,6 +87,11 @@ export function AuthScreen() {
   };
   const register = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false); setError('');
+    if (accounts === 'server') {
+      setBusy(true); const { session, error } = await callAccounts('/api/auth/register', { ...form, password }); setBusy(false);
+      if (!session) { setError(error!); return; }
+      setPassword(''); startSession(session); return;
+    }
     const account: Account = { firstName: form.firstName.trim(), lastName: form.lastName.trim(), email: form.email.trim(), phone: form.phone.trim(), partnerId: digits(form.partnerId), passwordHash: await hashPassword(form.email, password), createdAt: new Date().toISOString().slice(0, 10) };
     setPassword('');
     setState(s => ({ ...s, account, signedIn: true, name: account.firstName, card: account.partnerId ? true : s.card }));
@@ -85,7 +105,7 @@ export function AuthScreen() {
       <form className="auth-form" onSubmit={signIn}>
         <Field label="Телефон или email">{id => <input id={id} className="field" autoComplete="username" placeholder="+7 900 000-00-00 или mail@example.ru" value={login} onChange={e => setLogin(e.target.value)} required />}</Field>
         <Field label="Пароль">{id => <PasswordInput id={id} autoComplete="current-password" value={password} onChange={setPassword} />}</Field>
-        <button className="btn btn--primary auth-submit" disabled={!login.trim() || password.length < 8}>Войти</button>
+        <button className="btn btn--primary auth-submit" disabled={!accounts || busy || !login.trim() || password.length < 8}>{busy ? 'Входим…' : 'Войти'}</button>
         <button type="button" className="auth-link auth-forgot" onClick={() => setNotice(true)}>Забыли пароль?</button>
       </form>
       <div className="auth-divider"><span>или</span></div>
@@ -107,11 +127,11 @@ export function AuthScreen() {
         <Field label="Номер дисконтной карты (ID партнёра NSP)">{id => <input id={id} className="field" inputMode="numeric" placeholder="Например, 446621" value={form.partnerId} onChange={e => set('partnerId')(e.target.value)} />}</Field>
         <p className="auth-hint auth-hint--tight">Нет карты? <a href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту ↗</a></p>
         <label className="auth-consent"><input type="checkbox" checked={form.consent} onChange={e => set('consent')(e.target.checked)} required /> <span>Я согласен(на) на обработку персональных данных согласно <a href="/company/consent/">политике конфиденциальности</a></span></label>
-        <button className="btn btn--primary auth-submit" disabled={!form.consent || password.length < 8}>Создать аккаунт</button>
+        <button className="btn btn--primary auth-submit" disabled={!accounts || busy || !form.consent || password.length < 8}>{busy ? 'Создаём…' : 'Создать аккаунт'}</button>
       </form>
     </>}
     {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
-    {notice && <div className="auth-notice" role="status"><Icon name="clock" size={20} /><p><strong>Скоро заработает.</strong> Вход через Яндекс ID и VK ID и восстановление пароля появятся, когда подключим сервер аккаунтов.</p></div>}
+    {notice && <div className="auth-notice" role="status"><Icon name="clock" size={20} /><p><strong>Скоро заработает.</strong> Вход через Яндекс ID и VK ID и восстановление пароля появятся позже.</p></div>}
     <a className="auth-guest" href="/">Продолжить без входа <Icon name="arrow" size={16} /></a>
   </section>;
 }

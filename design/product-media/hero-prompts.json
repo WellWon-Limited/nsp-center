@@ -1,0 +1,19 @@
+{
+  "mode": "built-in imagegen",
+  "images": [
+    {
+      "kind": "desktop",
+      "prompt": "Edit image 1, the existing website hero photograph. Replace ONLY the amber Omega-3 bottle with the precise real package in image 2. Match image 2's black hinged cap, amber opaque bottle shape, proportions, cream/beige label, orange horizontal band, exact Russian and English lettering, logo and quantities: Омега-3 ПНЖК НСП / Omega-3 EPA NSP / 60 капсул / по 1638 мг. Use the actual reference bottle identity, not a redesigned or transparent generic bottle. Place it at the existing Omega bottle's position and scale, immediately beside the unchanged white Chlorophyll bottle. Integrate gently with the existing light and scene. Preserve the entire rest of image 1: composition, crop, aspect ratio, exact Chlorophyll bottle, pink echinacea, leaves, mossy stone, forest background, and all blank green text areas. No text or extra objects added. The camera and the other bottle must not move.",
+      "source": "public/images/hero-photo-options/forest-desktop-v2.jpg",
+      "output": "public/images/hero-photo-options/forest-desktop-v3.jpg",
+      "reference": "Owner-provided Omega-3 packaging photograph"
+    },
+    {
+      "kind": "mobile",
+      "prompt": "Edit image 1, the existing website hero photograph. Replace ONLY the amber Omega-3 bottle with the precise real package in image 2. Match image 2's black hinged cap, amber opaque bottle shape, proportions, cream/beige label, orange horizontal band, exact Russian and English lettering, logo and quantities: Омега-3 ПНЖК НСП / Omega-3 EPA NSP / 60 капсул / по 1638 мг. Use the actual reference bottle identity, not a redesigned or transparent generic bottle. Place it at the existing Omega bottle's position and scale, immediately beside the unchanged white Chlorophyll bottle. Integrate gently with the existing light and scene. Preserve the entire rest of image 1: composition, crop, aspect ratio, exact Chlorophyll bottle, pink echinacea, leaves, mossy stone, forest background, and all blank green text areas. No text or extra objects added. The camera and the other bottle must not move.",
+      "source": "public/images/hero-photo-options/forest-mobile-v2.jpg",
+      "output": "public/images/hero-photo-options/forest-mobile-v3.jpg",
+      "reference": "Owner-provided Omega-3 packaging photograph"
+    }
+  ]
+}

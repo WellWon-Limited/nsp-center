@@ -88,3 +88,6 @@
   font-size: var(--text-12);
   color: var(--color-muted);
 }
+
+.notifications-panel .notification-plan-link{margin-top:var(--space-6);font-size:var(--text-13);font-weight:var(--weight-600);color:var(--color-ink);text-decoration:none}
+.notifications-panel li a:is(:hover,:focus-visible,:active){text-decoration:none}

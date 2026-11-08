@@ -1,0 +1,24 @@
+/* Customer reviews under the expert comments: white cards with the author, stars and date; the form below. */
+.customer-reviews { display: grid; gap: var(--space-12); margin-bottom: var(--space-20); }
+.customer-review { padding: var(--space-16) var(--space-18); border: 1px solid var(--color-ink-line); border-radius: var(--radius-16); background: var(--color-white); }
+.customer-review header { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-4) var(--space-10); }
+.customer-review header strong { font-size: var(--text-14); }
+.customer-review header small { font-size: var(--text-12); color: var(--color-muted); }
+.customer-review p { margin: var(--space-10) 0 0; font-size: var(--text-15); line-height: var(--leading-long); }
+.review-stars { color: #d9cfc4; letter-spacing: 1px; }
+.review-stars .on { color: #ad6338; }
+
+.review-form { display: grid; gap: var(--space-12); max-width: 560px; margin-top: var(--space-20); }
+.review-form h3 { font-size: var(--text-18); }
+.review-rate { display: flex; gap: var(--space-4); }
+.review-rate button { padding: 0 var(--space-2); border: 0; background: none; color: #d9cfc4; font-size: 30px; line-height: 1; cursor: pointer; }
+.review-rate button.on { color: #ad6338; }
+.review-form textarea { min-height: 110px; resize: vertical; font: inherit; }
+.review-form .btn { justify-self: start; }
+.review-error { margin: 0; color: #9b2c2c; font-size: var(--text-14); }
+.review-signin, .review-sent { margin: var(--space-16) 0 0; font-size: var(--text-15); color: var(--color-muted); }
+.review-signin a { color: var(--color-link); font-weight: var(--weight-700); }
+.review-sent { color: var(--color-success); font-weight: var(--weight-700); }
+.review-hint { margin: 0; font-size: var(--text-13); color: var(--color-muted); }
+.review-sent { display: grid; gap: var(--space-4); padding: var(--space-14) var(--space-16); border-radius: var(--radius-14); background: #e8f1ec; }
+.review-sent span { font-weight: var(--weight-400); color: var(--color-ink); }
