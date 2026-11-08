@@ -139,6 +139,8 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
   const admins = adminEmails.map(e => e.trim().toLowerCase()).filter(Boolean);
   if (!databaseUrl && !givenPool) return { enabled: false, handle: (req, res) => send(res, 503, { error: 'Сервер аккаунтов не подключён.' }), close: async () => {} };
   const pool = givenPool ?? new (await import('pg')).default.Pool({ connectionString: databaseUrl, max: 5 });
+  // An idle connection dropped by the database (restart, shutdown) must not take the whole site server down.
+  pool.on('error', error => console.error('Accounts database connection lost:', error.message));
   let ready = null;
   const migrate = () => (ready ??= pool.query(SCHEMA + SITE_SCHEMA).then(() => admins.length && pool.query("update users set role = 'admin' where lower(email) = any($1)", [admins])).catch(error => { ready = null; throw error; }));
   const signIns = limiter(10, 15 * 60 * 1000), registrations = limiter(20, 60 * 60 * 1000);
