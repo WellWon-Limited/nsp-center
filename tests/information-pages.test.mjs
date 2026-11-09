@@ -54,9 +54,9 @@ test('The care journal keeps its original heading and card-grid structure',()=>{
  assert.equal($('.information-home').length,0);assert.equal($('.page-heading .information-home').length,0);
 });
 
-// Owner, 2026-11-07: the company page has no «На главную» (the bottom bar and the logo lead home); the certificates page
-// returns to «О компании».
-test('The company page has no homepage link and the certificates page returns to the company page',()=>{
- assert.equal(read('/company/')('.co-home-return').length,0);
+// Owner, 2026-11-09: every destination from the homepage must provide an explicit way back.
+test('The company page provides a homepage return and the certificates page keeps its company fallback',()=>{
+ assert.equal(read('/company/')('.co-home-return .back-link[href="/"]').length,1);
+ assert.ok(read('/company/')('.co-home-return').text().includes('На главную'));
  const $=read('/company/sertifikaty/');assert.equal($('.cert-back .back-link').attr('href'),'/company/');assert.ok($('.cert-back .back-link').text().includes('О компании'));
 });

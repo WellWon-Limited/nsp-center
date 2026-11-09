@@ -353,3 +353,8 @@
 @media (min-width: 640px) {
   .account-favorites .product-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 310px)); justify-content: center; gap: var(--space-18); }
 }
+
+/* Keep a deep forest tone behind the text on the narrow discount card. */
+@media(max-width:639px){
+ .discount-card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,27,22,.65),rgba(9,27,22,.2) 55%,transparent)}
+}

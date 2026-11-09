@@ -21,8 +21,31 @@ const saved=homeReturn??(navigation?.type==='back_forward'||navigation?.type==='
 // Coming back with «Назад»: the page stays hidden (class nsp-restoring, set in index.html before the first paint) until it
 // is scrolled to where the visitor left it, so the top of the page never flashes. The page may still be growing (images,
 // client-rendered lists), so the scroll is retried for a moment; after 1.2 s the page is shown regardless.
-const reveal=()=>document.documentElement.classList.remove('nsp-restoring');
-if(saved>0){const started=performance.now();const tryScroll=()=>{scrollTo({top:saved,behavior:'instant'});if(Math.abs(scrollY-saved)<4||performance.now()-started>1200){reveal();return;}requestAnimationFrame(tryScroll);};requestAnimationFrame(tryScroll);}else reveal();
+const reveal=()=>{
+ const html=document.documentElement;
+ html.classList.remove('nsp-restoring','nsp-route-pending');
+};
+// Reveal the destination only after hydration restores local plan/account state. A cached offline shell may belong
+// to another route; the head guard keeps that shell hidden until React has rendered the requested destination.
+const restoreAndReveal=()=>{
+ const started=performance.now();
+ const tryScroll=()=>{
+  if(saved>0)scrollTo({top:saved,behavior:'instant'});
+  if(!(saved>0)||Math.abs(scrollY-saved)<4||performance.now()-started>1200){
+   reveal();return;
+  }
+  requestAnimationFrame(tryScroll);
+ };
+ tryScroll();
+};
+if(root.dataset.hydrated==='true')restoreAndReveal();else{
+ const observer=new MutationObserver(()=>{
+  if(root.dataset.hydrated==='true'){observer.disconnect();restoreAndReveal();}
+ });
+ observer.observe(root,{attributes:true,attributeFilter:['data-hydrated']});
+}
+// Restored browser snapshots must not retain an unfinished entry state.
+addEventListener('pageshow',event=>{if(event.persisted)reveal();});
 // Clicks on the site navigation (bottom bar, header links, menu, logo) are marked, so the opened tab shows no back link.
 addEventListener('click',e=>{const link=(e.target as Element|null)?.closest?.('.bottom-nav a,.desktop-nav a,.mobile-menu a,a.brand') as HTMLAnchorElement|null;if(link)try{sessionStorage.setItem('nsp-center:via-nav',new URL(link.href).pathname);}catch{/* ignore */}},true);
 registerServiceWorker();

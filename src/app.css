@@ -29,7 +29,7 @@ html{scroll-behavior:smooth}body{font-size:var(--text-14);line-height:var(--lead
 .footer-legal-inner{padding-top:22px;padding-bottom:24px}
 .footer-legal .footer-bottom{position:relative;border-top:1px solid #142e28;padding-top:20px;color:inherit;font-size:12px;line-height:1.6}
 .footer-legal .fine-print{margin:12px 0 0;color:var(--color-muted);font-size:11px;line-height:1.6}
-@media(max-width:639px){.site-footer{padding:0}.footer-main{padding:24px 18px}.footer-legal-inner{padding:20px 18px calc(110px + env(safe-area-inset-bottom))}.footer-legal .footer-bottom{font-size:11px;gap:10px 16px}.footer-legal .fine-print{font-size:10px}}
+@media(max-width:639px){.site-footer{padding:0}.footer-main{padding:24px 18px}.footer-legal-inner{padding:20px 18px}.footer-legal .footer-bottom{font-size:11px;gap:10px 16px}.footer-legal .fine-print{font-size:10px}}
 /* Every page: a visible diagonal gradient tied to the window (fixed layer, works on iOS too), so every screen shows it
    while scrolling: mint top-left, warm cream bottom-right, a soft light patch top-right. The old ambient blobs are off. */
 body{background:transparent}.ambient{display:none}body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(55% 45% at 88% 12%,rgb(255 255 255 / .75),rgb(255 255 255 / 0) 70%),radial-gradient(50% 45% at 8% 92%,rgb(196 222 206 / .7),rgb(196 222 206 / 0) 70%),linear-gradient(135deg,#d6e8df 0%,#e8f1ec 45%,#f5efe2 100%)}
@@ -50,7 +50,7 @@ body::before{transform:translateZ(0);will-change:transform}.site-main :is(.panel
 @media(max-width:639px){.bottom-nav{left:0;right:0;bottom:0;border:0;border-radius:22px 22px 0 0;background:var(--color-ink);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:0 -10px 28px -18px rgb(29 58 54 / .8);padding:var(--space-8) var(--space-6) calc(var(--space-8) + env(safe-area-inset-bottom))}.bottom-nav a{color:rgb(255 255 255 / .72)}.bottom-nav a[aria-current=page]{color:var(--color-white)}.bottom-nav a[aria-current=page]>span{background:var(--color-mint-light);color:var(--color-ink)}body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}.notifications-panel{position:fixed;top:calc(env(safe-area-inset-top) + 80px);left:50%;right:auto;transform:translateX(-50%);width:calc(100vw - 32px);max-width:360px}}
 /* Phone bottom bar: straight edges like the header, a shade darker; the open section is marked by a dot under its label,
    the same way the desktop menu marks it. */
-@media(max-width:639px){.bottom-nav{border-radius:0;background:#142d29}.bottom-nav a{position:relative}.bottom-nav a[aria-current=page]>span{background:none;color:var(--color-white)}.bottom-nav a[aria-current=page]::after{content:"";position:absolute;left:50%;bottom:-8px;width:5px;height:5px;border-radius:50%;background:var(--color-mint-light);transform:translateX(-50%)}}
+@media(max-width:639px){.bottom-nav{border-radius:0;background:#142d29}.bottom-nav a{position:relative}.bottom-nav a[aria-current=page]>span{background:none;color:var(--color-white)}}
 /* Phone catalog: the category strip stays inside the screen (scrolls within its own rounded box), and every select draws
    its own chevron with room on the right, so the arrow never touches the rounded border. */
 select.field{-webkit-appearance:none;appearance:none;padding-right:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231d3a36' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 18px center;background-size:16px}
@@ -274,8 +274,8 @@ body:has(.catalog-layout) .site-main .catalog-tools .search-field:focus-within{o
 .expert-about{display:inline-block;margin-left:var(--space-8);font-size:var(--text-12);font-weight:var(--weight-700);color:var(--color-success)}
 /* Empty cart: one plain line, like the empty «Акции» page; no card around it. */
 .cart-empty{margin:0;padding:var(--space-12) 0 var(--space-32);text-align:center;font-size:18px;line-height:1.6;color:var(--color-muted)}
-/* Product page price: the label stands right next to the amount («Цена 3 501 ₽»), and the pair sits at the right edge. */
-.purchase-prices--plain .price-row{justify-content:flex-end;gap:var(--space-10)}
+/* Product page price: the label and amount occupy opposite ends of the row. */
+.purchase-prices--plain .price-row{justify-content:space-between;gap:var(--space-14)}
 /* Product cards: no empty gaps. A name takes at most two lines (the full name is the link's text, shown with «…» when
    cut); the article and rating follow it at once, then the price and the button. */
 .product-meta h3 a{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -342,4 +342,115 @@ body:has(.catalog-layout) .site-main .catalog-tools .search-field:focus-within{o
 .date-picker-grid button.today{box-shadow:inset 0 0 0 1.5px var(--color-ink)}
 .date-picker-grid button.selected{background:var(--color-ink);color:var(--color-white)}
 .date-picker-today{width:100%;min-height:40px;margin-top:var(--space-10);border:1.5px solid var(--color-ink-line);border-radius:999px;background:var(--color-white);color:var(--color-ink);font:inherit;font-size:var(--text-13);font-weight:var(--weight-700);cursor:pointer}
-@media(max-width:639px){.date-picker-panel{position:fixed;left:var(--space-12);right:var(--space-12);top:auto;bottom:calc(68px + env(safe-area-inset-bottom) + var(--space-12));width:auto;z-index:calc(var(--layer-navigation) + 1)}}
+@media(max-width:639px){.date-picker-panel{position:fixed;left:var(--space-12);right:var(--space-12);top:auto;bottom:calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-12));width:auto;z-index:calc(var(--layer-navigation) + 1)}}
+
+/* Icon-only phone navigation: labels remain available to assistive technology. */
+@media(max-width:639px){
+ html:root{--phone-icon-size:26px;--phone-nav-height:52px;background:#091b16}
+ body{background:var(--color-bg)}
+ /* Keep the screen edge opaque, outside the clipped application content. */
+ body::after{content:"";position:fixed;z-index:2147483646;left:0;right:0;bottom:-2px;height:4px;background:#091b16;pointer-events:none}
+ /* Paint beyond the safe-area edge without moving the navigation or its icons. */
+ .bottom-nav{bottom:0;padding:var(--space-4) var(--space-6) calc(var(--space-4) + env(safe-area-inset-bottom));box-shadow:none;transform:none}
+ .bottom-nav::after{content:"";position:absolute;top:calc(100% - 1px);left:0;right:0;height:100px;background:inherit;pointer-events:none}
+ .bottom-nav a{min-height:44px;gap:0;color:rgb(255 255 255 / .5);text-decoration:none}
+ .bottom-nav a>span{width:44px;height:44px;border-radius:0;background:none}
+ .bottom-nav a[aria-current=page],.bottom-nav a[aria-current=page]>span{color:var(--color-white);background:none}
+ .bottom-nav a[aria-current=page]::after{content:none}
+ .bottom-nav a:focus-visible{outline:2px solid var(--color-white);outline-offset:-4px;border-radius:var(--radius-14)}
+ body{padding-bottom:calc(var(--phone-nav-height) + env(safe-area-inset-bottom))}
+}
+
+/* Full-photo opening screens share the phone's available height. */
+@media(max-width:639px){
+ html:root{--phone-header-height:calc(61px + env(safe-area-inset-top));--phone-first-screen-height:calc(100svh - var(--phone-header-height) - var(--phone-nav-height) - env(safe-area-inset-bottom))}
+ body .site-main :is(.company-page--nature .co-hero,.journal-article-page .av-document--ivory .av-hero,.immune-article-page .av-document--ivory .av-hero){min-height:var(--phone-first-screen-height)}
+}
+
+/* Shared help sections use the same quiet beige on every page. */
+body .site-main :is(.information-closing,.co-closing){background:#f7f5ee;color:var(--color-ink)}
+body .site-main :is(.information-closing,.co-closing) :is(p,.information-kicker,.co-kicker){color:var(--color-muted)}
+body .site-main .co-closing .co-text-link{color:var(--color-ink)}
+body .site-main :is(.information-closing .information-button,.co-closing .co-button){background:var(--color-ink);border-color:var(--color-ink);color:var(--color-white)}
+body .site-main :is(.information-closing .information-button,.co-closing .co-button):hover{background:var(--color-success);border-color:var(--color-success);color:var(--color-white)}
+
+/* Menu labels and chevrons keep the same dark ink in every link state. */
+.site-header .mobile-menu a:is(:link,:visited,:hover,:focus-visible,:active){color:var(--color-ink)}
+.site-header .mobile-menu a>svg{color:inherit}
+
+/* Shorter phone header: artwork and controls keep their existing dimensions. */
+@media(max-width:639px){
+ .site-header .header-inner{padding-block:var(--space-2) var(--space-14)}
+ body .home-first-screen{--header-h:var(--phone-header-height)}
+}
+.recommend-question.panel{border:1.5px solid var(--color-ink)}
+
+@media(max-width:639px){
+ :is(.site-header .header-actions .icon-btn,.bottom-nav a) svg{width:var(--phone-icon-size);height:var(--phone-icon-size);stroke-width:1.8}
+}
+
+@media(max-width:639px){.site-header .brand-mark{width:40px;height:40px;flex-shrink:0}}
+
+/* Header popovers share one offset; the controls stay clear above both cards. */
+@media(max-width:639px){
+ .site-header :is(.mobile-menu.panel,.notifications-panel){position:fixed;top:calc(var(--phone-header-height) + var(--space-10));left:50%;right:auto;transform:translateX(-50%);width:calc(100vw - 32px);max-width:360px;max-height:calc(100svh - var(--phone-header-height) - var(--phone-nav-height) - env(safe-area-inset-bottom) - var(--space-20));overflow-y:auto}
+}
+body:has(.catalog-layout) .catalog-sidebar a.active>span{color:var(--color-white)}
+
+.purchase-prices--plain .price-row>span:first-child{margin-left:var(--space-8)}
+.cart-item>div>a:is(:link,:visited,:hover,:focus-visible,:active){color:var(--color-ink)}
+
+/* Readable cart rows use the catalog's complete, normalized product photography. */
+.cart-item{grid-template-columns:132px minmax(0,1fr) auto auto;grid-template-areas:"image info quantity total";gap:var(--space-20);padding-block:var(--space-18)}
+.cart-item>.cart-product-image{grid-area:image;display:flex;align-items:center;justify-content:center;width:100%;min-height:180px;--packshot-target:180px}
+.cart-item>.cart-product-copy{grid-area:info;min-width:0}
+.cart-item>.quantity{grid-area:quantity;justify-self:start}
+.cart-item>.cart-line-total{grid-area:total;font-size:var(--text-16);white-space:nowrap;justify-self:end}
+.cart-item h2{font-size:var(--text-16);line-height:1.35;overflow-wrap:anywhere}
+.cart-item p{font-size:var(--text-13);line-height:1.5;margin-top:var(--space-6)}
+.cart-item .text-button{font-size:var(--text-12);margin-top:var(--space-4)}
+.cart-item .price-alt--partner{font-size:inherit}
+.cart-item .quantity output{font-size:var(--text-13)}
+.cart-item .cart-product-image>img{width:100%;height:180px;object-fit:contain;mix-blend-mode:normal}
+@media(max-width:1100px){
+ .cart-item{grid-template-columns:116px minmax(0,1fr) auto;grid-template-areas:"image info info" "image quantity total";column-gap:var(--space-20);row-gap:var(--space-14)}
+}
+@media(max-width:639px){
+ .cart-items.panel{padding:var(--space-14)}
+ .cart-item{grid-template-columns:96px minmax(0,1fr) auto;column-gap:var(--space-16);padding-block:var(--space-14)}
+ .cart-item>.cart-product-image{min-height:160px;--packshot-target:160px}
+ .cart-item .cart-product-image>img{height:160px}
+ .cart-item h2{font-size:var(--text-14)}
+ .cart-item p{font-size:var(--text-12)}
+ .cart-item>.cart-line-total{font-size:var(--text-14)}
+}
+@media(max-width:359px){
+ .cart-item{grid-template-columns:80px minmax(0,1fr);grid-template-areas:"image info" "image quantity" "image total";column-gap:var(--space-12)}
+ .cart-item>.cart-line-total{justify-self:start}
+}
+
+/* The source image determines its height: never stretch a cart packshot in either axis. */
+body .site-main .cart-product-image .product-packshot-frame>img{height:auto;aspect-ratio:auto}
+@media(max-width:639px){
+ .cart-item{grid-template-columns:116px minmax(0,1fr) auto}
+ .cart-item>.cart-product-image{min-height:180px;--packshot-target:180px}
+}
+@media(max-width:379px){
+ .cart-item{grid-template-columns:104px minmax(0,1fr);grid-template-areas:"image info" "image quantity" "image total"}
+ .cart-item>.cart-line-total{justify-self:start}
+}
+
+@media(max-width:639px){
+ .cart-item{padding-block:var(--space-8);row-gap:var(--space-8)}
+ .cart-item>.cart-product-image{min-height:144px;--packshot-target:144px}
+ .cart-item .cart-product-image>img{height:144px}
+}
+
+/* Broad powder tubs are quieter than tall bottles in the cart, on every device. */
+.cart-product-image--tub .product-packshot-frame{max-width:74%}
+.cart-item .cart-product-image--tub>img{max-width:74%;object-fit:contain}
+
+@media(max-width:639px){
+ .site-main .product-card .product-packshot-frame{transform:scale(.92);transform-origin:center}
+ .site-main .product-card .product-visual>a>img{transform:scale(.92)}
+}

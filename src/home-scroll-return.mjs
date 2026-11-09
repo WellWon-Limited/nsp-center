@@ -1,4 +1,4 @@
-// Keep the homepage position across footer pages without changing their public URLs.
+// Keep the homepage position across content destinations without changing their public URLs.
 const originKey='nsp-footer-home-position';
 const pendingKey='nsp-footer-home-return';
 const position=value=>value!==null&&Number.isFinite(Number(value))&&Number(value)>=0?Number(value):null;
@@ -18,7 +18,7 @@ export function installHomeScrollReturn(win,doc){
   const target=new URL(link.href,win.location.href);
   if(target.origin!==win.location.origin)return;
   try{
-   if(win.location.pathname==='/'&&link.closest('.site-footer')&&target.pathname!=='/'){
+   if(win.location.pathname==='/'&&!link.closest('.bottom-nav,.desktop-nav,.mobile-menu,a.brand')&&target.pathname!=='/'){
     win.sessionStorage.setItem(originKey,String(Math.round(win.scrollY)));
    }else if(win.location.pathname!=='/'&&target.pathname==='/'&&!target.hash){
     const saved=position(win.sessionStorage.getItem(originKey));

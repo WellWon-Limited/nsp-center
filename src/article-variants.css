@@ -11,13 +11,13 @@
 /* One uninterrupted reading column; no empty sidebar. */
 .av-reading-layout,.av-document--sage .av-reading-layout{display:block;max-width:860px;padding:52px 28px 70px;margin:auto}.av-reading{max-width:760px;margin:auto}
 @media(max-width:639px){
- .av-document--ivory .av-hero{min-height:calc(100svh - 46px - env(safe-area-inset-top) - 73px - 68px - env(safe-area-inset-bottom))}
+ .av-document--ivory .av-hero{min-height:calc(var(--phone-first-screen-height) - 46px)}
  .av-reading-layout,.av-document--sage .av-reading-layout{padding:20px 24px 48px}
  .av-inline-image{margin:26px -24px 20px;width:calc(100% + 48px)}
 }
 /* The approved first article now shares its body and cover with local site routes. */
 body:has(.immune-article-page) .site-main{max-width:none;padding:0}.immune-article-page.article-detail{max-width:none;margin:0;padding:0}body:has(.immune-article-page) .site-main>.section{max-width:1280px;margin:52px auto;padding-inline:28px}.immune-article-page .av-document--ivory .av-hero-image{object-position:center center}
-@media(max-width:639px){.immune-article-page .av-document--ivory .av-hero{min-height:calc(100svh - 73px - env(safe-area-inset-top) - 68px - env(safe-area-inset-bottom))}.av-preview .immune-article-page .av-document--ivory .av-hero{min-height:calc(100svh - 46px - env(safe-area-inset-top) - 73px - 68px - env(safe-area-inset-bottom))}body:has(.immune-article-page) .site-main>.section{padding-inline:18px;margin-block:36px}}
+@media(max-width:639px){.immune-article-page .av-document--ivory .av-hero{min-height:var(--phone-first-screen-height)}.av-preview .immune-article-page .av-document--ivory .av-hero{min-height:calc(var(--phone-first-screen-height) - 46px)}body:has(.immune-article-page) .site-main>.section{padding-inline:18px;margin-block:36px}}
 .immune-article-page~.article-related-products>h2{margin-bottom:var(--space-24)}
 @media(max-width:639px){.immune-article-page~.article-related-products>h2{margin-bottom:var(--space-20)}}
 /* The article's back link keeps the hero's light text (it is the shared BackLink, named after the page left). */

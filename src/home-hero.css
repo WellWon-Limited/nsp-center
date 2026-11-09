@@ -474,7 +474,7 @@ body:has(.home-hero--banner) {
 
   /* The sage banner still reaches the bottom bar, so its end only shows on scrolling. */
   .home-hero.home-hero--banner {
-    min-height: calc(100svh - var(--header-h) - 68px - env(safe-area-inset-bottom));
+    min-height: calc(100svh - var(--header-h) - var(--phone-nav-height) - env(safe-area-inset-bottom));
   }
 }
 

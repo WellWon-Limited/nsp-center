@@ -74,7 +74,7 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 .chat-log { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-14) 0 var(--space-12); }
 @media (max-width: 959px) { .chat { height: calc(100svh - 89px); } }
 @media (max-width: 639px) {
-  .chat { height: calc(100svh - 69px - env(safe-area-inset-top) - 68px - env(safe-area-inset-bottom)); }
+  .chat { height: var(--phone-first-screen-height); }
   .chat-input { margin-bottom: var(--space-10); }
 }
 
@@ -99,7 +99,7 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 .chat-log { padding-bottom: 84px; }
 @media (max-width: 959px) { .chat-input { width: calc(100vw - 2 * var(--space-22)); } }
 @media (max-width: 639px) {
-  .chat-input { width: calc(100vw - 2 * var(--space-18)); bottom: calc(68px + env(safe-area-inset-bottom) + var(--space-10)); }
+  .chat-input { width: calc(100vw - 2 * var(--space-18)); bottom: calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10)); }
 }
 
 /* Advice details: why, what it does, how to take it (the label), by age, contraindications. */
@@ -110,7 +110,7 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 /* The bottom bar always stays; the input row sits above it, and when the phone keyboard is open (it covers the bar) the
    row rides just above the keyboard (--chat-kb, set from visualViewport in assistant.tsx). */
 @media (max-width: 639px) {
-  .chat-input { bottom: max(calc(68px + env(safe-area-inset-bottom) + var(--space-10)), calc(var(--chat-kb, 0px) + var(--space-8))); }
+  .chat-input { bottom: max(calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10)), calc(var(--chat-kb, 0px) + var(--space-8))); }
 }
 
 /* «↓» to the latest messages, floating at the right above the input row while the visitor reads older messages. */
@@ -133,7 +133,7 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 }
 .chat-down svg { transform: rotate(90deg); }
 @media (max-width: 639px) {
-  .chat-down { bottom: max(calc(68px + env(safe-area-inset-bottom) + var(--space-10) + 70px), calc(var(--chat-kb, 0px) + var(--space-8) + 70px)); }
+  .chat-down { bottom: max(calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10) + 70px), calc(var(--chat-kb, 0px) + var(--space-8) + 70px)); }
 }
 
 /* The lecture an answer comes from: a quiet line under the advice. */
