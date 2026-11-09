@@ -61,7 +61,7 @@ function restoreFrom(parsed:any):LocalState {
 // short pause. Until the server confirms it, 'nsp-center:sync-dirty' is set: the next page then keeps this browser's copy
 // and sends it; otherwise the server's copy (possibly changed on another device) replaces it.
 /** The parts of the state that belong to the account (scripts/accounts.mjs DATA_KEYS). */
-export const SYNC_KEYS=['cart','favorites','waitlist','intake','intakeDate','intakePlans','intakeLog','habits','tasks','day'] as const;
+export const SYNC_KEYS=['cart','favorites','waitlist','intake','intakeDate','intakePlans','intakeLog','habits','tasks','day','orders'] as const;
 type Synced=Pick<LocalState,typeof SYNC_KEYS[number]>;
 export type ServerSession={account:Omit<Account,'passwordHash'|'server'>;data:Record<string,unknown>};
 const DIRTY='nsp-center:sync-dirty';
@@ -77,7 +77,7 @@ export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load
   if(mode==='load')return {...base,...remote};
   const cart={...remote.cart};for(const [id,q] of Object.entries(s.cart))cart[id]=Math.min(99,(cart[id]||0)+q);
   const hasPlan=remote.intake.length>0||Object.values(remote.intakePlans).some(list=>list.length>0);
-  return {...base,...remote,cart,favorites:[...new Set([...remote.favorites,...s.favorites])],waitlist:[...remote.waitlist,...s.waitlist.filter(w=>!remote.waitlist.some(x=>x.id===w.id))],...(hasPlan?{}:{intake:s.intake,intakeDate:s.intakeDate,intakePlans:s.intakePlans})};
+  return {...base,...remote,cart,favorites:[...new Set([...remote.favorites,...s.favorites])],waitlist:[...remote.waitlist,...s.waitlist.filter(w=>!remote.waitlist.some(x=>x.id===w.id))],orders:[...remote.orders,...s.orders.filter(o=>!remote.orders.some(x=>x.id===o.id))],...(hasPlan?{}:{intake:s.intake,intakeDate:s.intakeDate,intakePlans:s.intakePlans})};
 }
 /** Sign-out of a server account: the device keeps nothing of it (the server has it all). */
 export const closeSession=(s:LocalState):LocalState=>({...s,...pickSynced(initial),intakeDate:today(),account:null,signedIn:false,card:false,saved:null,name:''});

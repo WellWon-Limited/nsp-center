@@ -15,7 +15,7 @@ const SESSION_DAYS = 30;
 const MAX_BODY = 256 * 1024;
 const MAX_DATA = 200 * 1024;
 /** The parts of the visitor's state that belong to the account (src/store.tsx SYNC_KEYS mirrors this list). */
-export const DATA_KEYS = ['cart', 'favorites', 'waitlist', 'intake', 'intakeDate', 'intakePlans', 'intakeLog', 'habits', 'tasks', 'day'];
+export const DATA_KEYS = ['cart', 'favorites', 'waitlist', 'intake', 'intakeDate', 'intakePlans', 'intakeLog', 'habits', 'tasks', 'day', 'orders'];
 
 export const SCHEMA = `
 create table if not exists users (
