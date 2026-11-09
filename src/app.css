@@ -454,3 +454,14 @@ body .site-main .cart-product-image .product-packshot-frame>img{height:auto;aspe
  .site-main .product-card .product-packshot-frame{transform:scale(.92);transform-origin:center}
  .site-main .product-card .product-visual>a>img{transform:scale(.92)}
 }
+
+/* A completed plan entry has an ink tick in an unfilled square. */
+.personal-grid .check.is-checked{background:transparent;border-color:var(--color-ink);color:var(--color-ink)}
+
+/* Reserve the first screen while account data loads so the footer cannot flash above the phone navigation. */
+@media(max-width:639px){.site-main{min-height:var(--phone-first-screen-height)}}
+
+/* Keep the same badge node and preview its saved count before hydration on every page. */
+.site-header .cart-link .cart-count--bag{display:none}
+html[data-cart-count]:not([data-cart-count="0"]) .site-header .cart-link .cart-count--bag{display:grid}
+.site-header .cart-count--bag::before{content:var(--header-cart-count,"0")}
