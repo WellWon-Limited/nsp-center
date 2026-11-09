@@ -52,11 +52,15 @@ const queryTerms = (text: string) => { const out = terms(text); const t = text.t
 const overlap = (q: Set<string>, text: string) => { let n = 0; const t = terms(text); for (const s of q) if (t.has(s)) n += 1; return n; };
 const risky = /(беремен|кормлю|грудн|ребен|ребён|дет|боль|кров|температур|лекарств|таблетк|давлен|диабет|онко)/iu;
 
+// Warning signs: no product advice, a doctor (or an ambulance) first.
+const emergency = /(температур\S*\s*(под\s*)?(3[89]|4\d)|высок\S* температур|бол\S* в груди|болит груд|груд\S* болит|задыха|одышк|теря\S* сознан|обморок|кровотеч|кровь в|судорог|инсульт|инфаркт|онемел|онемени|сильн\S* боль|острая боль)/iu;
+const emergencyReply: Message = { from: 'bot', text: 'С такими признаками нужно сразу обратиться к врачу. Если состояние тяжёлое или быстро ухудшается — вызовите скорую: 103 или 112. Я не ставлю диагнозы и не подбираю лечение, БАД здесь не поможет.', chips: ['Связаться со специалистом'] };
+
 function intent(text: string): Message | null {
   const t = text.toLowerCase();
   if (/^(привет|здравств|добрый)/.test(t)) return { from: 'bot', text: 'Здравствуйте! Расскажите, что хочется поддержать — сон, энергию, пищеварение, иммунитет — или спросите о конкретном продукте.' };
   if (/спасиб/.test(t)) return { from: 'bot', text: 'Пожалуйста! Если появятся вопросы — пишите.' };
-  if (/(адрес|где вы|где находит|как добрат|самовывоз|пункт выдачи|офис|приехать|забрать)/.test(t)) return { from: 'bot', text: `Наш пункт выдачи: ${data.site.address}. Перед визитом лучше позвонить — ${data.site.phones?.[0] ?? ''}.`, links: [{ label: 'Контакты и карта', href: '/contacts/' }, ...consultantLinks.slice(0, 2)] };
+  if (/(адрес|где вы|где вас|найти вас|вас найти|где находит|как добрат|самовывоз|пункт выдачи|офис|приехать|забрать)/.test(t)) return { from: 'bot', text: `Наш пункт выдачи: ${data.site.address}. Перед визитом лучше позвонить — ${data.site.phones?.[0] ?? ''}.`, links: [{ label: 'Контакты и карта', href: '/contacts/' }, ...consultantLinks.slice(0, 2)] };
   if (/(доставк|привез|курьер)/.test(t)) return { from: 'bot', text: 'Доставляем по всей России, условия и сроки зависят от города и способа.', links: [{ label: 'Условия доставки', href: '/delivery/' }] };
   if (/(оплат|заплат)/.test(t)) return { from: 'bot', text: 'Способы оплаты описаны на странице «Оплата».', links: [{ label: 'Оплата', href: '/payments/' }] };
   if (/(скидк|дисконт|карт|дешевле|партн)/.test(t)) return { from: 'bot', text: 'С дисконтной картой NSP товары дешевле — скидка до 30%. Карту можно оформить онлайн, а номер добавить в профиле, тогда цены по карте будут в каталоге и корзине.', links: [{ label: 'Оформить карту', href: partnerSignupUrl }, { label: 'Профиль', href: '/profile/' }] };
@@ -213,6 +217,8 @@ export function AssistantChat() {
       let reply: Message;
       if (!index) reply = { from: 'bot', text: 'Секунду, готовлюсь… Повторите вопрос, пожалуйста.' };
       else if (value === anotherOption) { const lastBot = [...messages].reverse().find(m => m.from === 'bot'); const rest = lastBot?.alts ?? []; reply = rest.length ? adviceFor(rest[0], '', rest.slice(1), index) : { from: 'bot', text: 'К сожалению, больше ничего предложить не могу. Спросите что-то ещё.' }; }
+      else if (emergency.test(value)) reply = emergencyReply;
+      else if (intent(value)) reply = intent(value)!;
       else if (asked) reply = recommend(/^больше ничего/i.test(value) ? asked : `${asked} ${value}`, index);
       else { const first = answer(value, index); reply = !first.product ? first : asksAboutProduct(value, index) ? { ...first, text: `Расскажу про ${shortName(index.products.find(p => p.id === first.product)?.name ?? '')}.`, sections: productSections(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product), first.text), source: sourceOf(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product)) || undefined, warning: true } : clarify(value); }
       setMessages(m => [...m, reply]); setTyping(false);
@@ -220,7 +226,8 @@ export function AssistantChat() {
   };
   const submit = (e: FormEvent) => { e.preventDefault(); send(draft); };
   const last = messages[messages.length - 1];
-  return <div className="chat" data-ds-id="assistant-chat">
+  // The page heading is for search engines and screen readers only (owner: no visible title above the chat).
+  return <div className="chat" data-ds-id="assistant-chat"><h1 className="sr-only">Консультация NSP Center</h1>
     <div className="chat-log" role="log" aria-live="polite" ref={log} onScroll={onScroll}>
       {messages.map((m, i) => <div className={`chat-msg chat-msg--${m.from}`} key={i}>
         <p>{m.text}</p>

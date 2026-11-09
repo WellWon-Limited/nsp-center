@@ -43,7 +43,8 @@ test('All 227 SSR documents expose content before JavaScript: title, exactly one
     const route = routeMap.get(pathOf(page.url));
     const $ = cheerio.load(htmlFor(page.url));
     assert.ok(route, `No route contract: ${page.url}`);
-    assert.ok($('title').text().trim().includes(route.title.trim()), `${page.url}: SEO title differs`);
+    // A page named after the shop itself carries the brand once («NSP Center»), not «NSP-Center | NSP Center».
+    assert.ok(/^nsp[\s-]*center$/i.test(route.title.trim()) ? $('title').text() === 'NSP Center' : $('title').text().trim().includes(route.title.trim()), `${page.url}: SEO title differs`);
     assert.equal($('h1').length, 1, `${page.url}: must render exactly one H1`);
     assert.ok($('h1').text().trim(), `${page.url}: H1 is empty`);
     assert.ok($('meta[name="description"]').attr('content')?.trim(), `${page.url}: missing description`);
@@ -106,6 +107,12 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     ]);
     for (const key of Object.keys(original.properties)) if (!curatedOmissions.has(key)) assert.ok($('main').text().includes(key) || (key === 'pv' && $('main').text().includes('PV')) || (key.startsWith('Состав') && $('main').text().includes('Состав')) || (key.startsWith('Противопоказания') && $('main').text().includes('Противопоказания')) || (key === 'Применение' && $('main').text().includes('Как принимать')) || (key === 'Нанесение' && $('main').text().includes('Как наносить')), `${path}: property omitted from SSR: ${key}`);
   }
+});
+
+test('The shop name stands once in a page title', () => {
+  assert.equal(cheerio.load(htmlFor('/'))('title').text(), 'NSP Center');
+  assert.match(cheerio.load(htmlFor('/catalog/'))('title').text(), /^[^|]+ \| NSP Center$/);
+  assert.equal(cheerio.load(htmlFor('/consultation/'))('h1').length, 1, 'the chat page has its (hidden) heading');
 });
 
 test('Rendered category pagination exposes every member once, with no unavailable page link', () => {
