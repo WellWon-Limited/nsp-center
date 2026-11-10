@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { emailError, emailSuggestion, formatPhone, maskPhone, phoneError } from '../src/contact-fields.mjs';
+import { customerEmailError, emailError, emailSuggestion, formatPhone, maskPhone, phoneError } from '../src/contact-fields.mjs';
 import { normalEmail, validateRegistration } from '../scripts/accounts.mjs';
 
 test('the phone field shows +7 and the rest as "(900) 111-22-33", whatever prefix the visitor types or pastes', () => {
@@ -26,7 +26,6 @@ test('any real mailbox is accepted, a malformed address is "Недопустим
 });
 
 test('a known misspelling of the mail service is offered as a fix', () => {
-  assert.equal(emailSuggestion('anna@gmial.com'), 'anna@gmail.com');
   assert.equal(emailSuggestion('anna@yandex.ry'), 'anna@yandex.ru');
   assert.equal(emailSuggestion('anna@Mail.ry'), 'anna@mail.ru');
   assert.equal(emailSuggestion('anna@mail.ru'), '');
@@ -44,4 +43,12 @@ test('a Cyrillic mail domain is one address in either spelling', () => {
   assert.equal(normalEmail('Anna@XN--80A1ACNY.XN--P1AI'), 'anna@почта.рф');
   assert.equal(normalEmail(' Anna@Почта.рф '), 'anna@почта.рф');
   assert.equal(normalEmail('Anna@Mail.ru'), 'anna@mail.ru');
+});
+
+test('customers sign in and register with Russian mail only (406-FZ); foreign services get «мы не поддерживаем»', () => {
+  for (const ok of ['anna@yandex.ru', 'anna@ya.ru', 'anna@yandex.com', 'anna@mail.ru', 'anna@bk.ru', 'anna@inbox.ru', 'anna@list.ru', 'anna@internet.ru', 'anna@rambler.ru', 'anna@lenta.ru', 'анна@почта.рф', 'sales@nsp-center.ru', 'user@company.spb.ru', 'user@xn--80a1acny.xn--p1ai'])
+    assert.equal(customerEmailError(ok), '', ok);
+  for (const foreign of ['anna@gmail.com', 'anna@icloud.com', 'anna@outlook.com', 'anna@hotmail.com', 'anna@yahoo.com', 'anna@proton.me', 'anna@gmail.ru.com'])
+    assert.match(customerEmailError(foreign), /не поддерживаем/, foreign);
+  assert.match(customerEmailError('anna@mail'), /Недопустимый адрес почты/, 'a malformed address is reported as such first');
 });

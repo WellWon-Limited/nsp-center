@@ -1,6 +1,6 @@
 import './contact-inputs.css';
 import { useState } from 'react';
-import { emailError, emailSuggestion, maskPhone, phoneError } from './contact-fields.mjs';
+import { customerEmailError, emailSuggestion, maskPhone, phoneError } from './contact-fields.mjs';
 
 // Email and phone fields of the sign-in, registration and profile forms. Rules live in contact-fields.mjs, shared with
 // the accounts server. Errors appear when the visitor leaves the field (not on every key press) and disappear as soon
@@ -10,7 +10,7 @@ type Common = { id: string; value: string; onChange: (value: string) => void; cl
 
 export function EmailInput({ id, value, onChange, autoComplete = 'email', required = true, className = 'field' }: Common & { autoComplete?: string; required?: boolean }) {
   const [touched, setTouched] = useState(false);
-  const error = touched && value.trim() ? emailError(value) : '';
+  const error = touched && value.trim() ? customerEmailError(value) : '';
   const suggestion = touched ? emailSuggestion(value) : '';
   const describedBy = [error && `${id}-error`, suggestion && `${id}-suggestion`].filter(Boolean).join(' ') || undefined;
   return <>

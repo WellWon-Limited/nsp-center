@@ -5,7 +5,7 @@
   font-size: var(--text-12);
   line-height: 1.45;
 }
-.contact-error { color: #ad6338; }
+.contact-error { color: #c0392b; }
 .contact-suggestion { color: var(--color-muted); }
 .contact-suggestion button {
   padding: 0;

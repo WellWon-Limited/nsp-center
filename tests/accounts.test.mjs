@@ -89,7 +89,9 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = '';
 
   assert.equal((await call('/api/auth/login', 'POST', { login: 'anna@example.ru', password: 'wrong-pass' })).status, 401);
-  assert.equal((await call('/api/auth/login', 'POST', { login: '8 900 111 22 33', password: 'password-1' })).status, 401, 'sign-in is by email only, not by phone');
+  assert.equal((await call('/api/auth/login', 'POST', { login: '8 900 111 22 33', password: 'password-1' })).status, 400, 'sign-in is by email only, not by phone');
+  assert.match((await call('/api/auth/login', 'POST', { login: 'anna@gmail.com', password: 'password-1' })).body.error, /не поддерживаем/, 'foreign mail is refused at sign-in');
+  assert.match((await call('/api/auth/register', 'POST', { firstName: 'А', lastName: 'Б', email: 'anna2@gmail.com', password: 'password-1', consent: true })).body.error, /не поддерживаем/, 'and at registration');
   const byEmail = await call('/api/auth/login', 'POST', { login: 'Anna@Example.ru', password: 'password-1' });
   assert.equal(byEmail.status, 200);
   assert.deepEqual(byEmail.body.data, { cart: { 'bee-pollen': 2 } });

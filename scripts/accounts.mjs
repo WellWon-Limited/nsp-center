@@ -9,7 +9,7 @@ import { createHash, randomBytes, scrypt as scryptCallback, timingSafeEqual } fr
 import { promisify } from 'node:util';
 import { domainToUnicode } from 'node:url';
 import { SITE_SCHEMA, siteRoute } from './site-admin.mjs';
-import { emailError, formatPhone, phoneError } from '../src/contact-fields.mjs';
+import { customerEmailError, formatPhone, phoneError, russianEmail, FOREIGN_EMAIL_ERROR } from '../src/contact-fields.mjs';
 
 const scrypt = promisify(scryptCallback);
 export const SESSION_COOKIE = 'nsp_session';
@@ -92,7 +92,7 @@ export function validateRegistration(body) {
   if (profile.error) return profile;
   const email = normalEmail(body?.email);
   const password = typeof body?.password === 'string' ? body.password : '';
-  if (emailError(email)) return { error: emailError(email) };
+  if (customerEmailError(email)) return { error: customerEmailError(email) };
   if (password.length < 8 || password.length > 200) return { error: 'Пароль должен быть не короче 8 символов.' };
   if (body?.consent !== true) return { error: 'Нужно согласие на обработку персональных данных.' };
   return { value: { ...profile.value, email, password } };
@@ -245,6 +245,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
       const login = normalEmail(body?.login), password = typeof body?.password === 'string' ? body.password.slice(0, 200) : '';
       const key = `${clientIp(req)}|${login}`;
       if (signIns.blocked(key)) return send(res, 429, { error: 'Слишком много попыток входа. Попробуйте через 15 минут.' });
+      if (!russianEmail(login)) return send(res, 400, { error: FOREIGN_EMAIL_ERROR });
       // Sign-in is by email only (owner, 2026-11-10); the phone stays a contact field of the profile.
       const { rows } = await pool.query('select * from users where lower(email) = $1', [login]);
       const user = rows[0];

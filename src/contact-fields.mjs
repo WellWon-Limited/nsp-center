@@ -54,9 +54,18 @@ export const emailError = value => {
   return ok ? '' : 'Недопустимый адрес почты. Пример: name@mail.ru';
 };
 
+// Russian mail only (owner, 2026-11-11, law 406-FZ on signing in to Russian sites): the big Russian services —
+// Yandex, Mail.ru (with bk, inbox, list, internet), Rambler (with lenta, ro, autorambler, myrambler) — and any
+// address in the Russian zones .ru, .рф and .su (company mail such as sales@nsp-center.ru).
+const RUSSIAN_SERVICES = /^(yandex\.[a-z]+|ya\.ru|narod\.ru|mail\.ru|bk\.ru|inbox\.ru|list\.ru|internet\.ru|rambler\.ru|lenta\.ru|ro\.ru|autorambler\.ru|myrambler\.ru)$/;
+const RUSSIAN_ZONE = /\.(ru|su|рф|xn--p1ai)$/;
+export const russianEmail = value => { const email = String(value ?? '').trim().toLowerCase(); const domain = email.slice(email.lastIndexOf('@') + 1); return RUSSIAN_SERVICES.test(domain) || RUSSIAN_ZONE.test(domain); };
+export const FOREIGN_EMAIL_ERROR = 'Такую почту мы не поддерживаем: подойдёт только российская — Яндекс, Mail.ru, Рамблер или адрес на .ru и .рф. Например, name@yandex.ru';
+/** For customers' sign-in and registration: a well-formed address on a Russian mail service. */
+export const customerEmailError = value => emailError(value) || (russianEmail(value) ? '' : FOREIGN_EMAIL_ERROR);
+
 // Frequent misspellings of the mail services people in Russia use most.
 const TYPOS = {
-  'gmail.com': ['gmial.com', 'gmai.com', 'gmal.com', 'gamil.com', 'gnail.com', 'gmail.co', 'gmail.cm', 'gmail.ru', 'gmail.con', 'gmaill.com'],
   'mail.ru': ['mail.ry', 'mai.ru', 'mial.ru', 'maill.ru', 'mail.ri', 'mall.ru', 'mail.r', 'meil.ru'],
   'yandex.ru': ['yandex.ry', 'yandeks.ru', 'yndex.ru', 'yandx.ru', 'yadex.ru', 'yandex.r', 'yanex.ru', 'jandex.ru'],
   'ya.ru': ['ya.ry'],
@@ -64,7 +73,6 @@ const TYPOS = {
   'list.ru': ['list.ry', 'lis.ru'],
   'inbox.ru': ['inbox.ry', 'inbx.ru'],
   'rambler.ru': ['rambler.ry', 'ramblr.ru', 'rambler.r', 'rambeler.ru'],
-  'icloud.com': ['iclod.com', 'icloud.co', 'icoud.com', 'icloud.ru'],
 };
 const FIX = Object.fromEntries(Object.entries(TYPOS).flatMap(([right, wrong]) => wrong.map(w => [w, right])));
 

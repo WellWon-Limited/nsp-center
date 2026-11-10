@@ -509,3 +509,7 @@ html[data-cart-count]:not([data-cart-count="0"]) .site-header .cart-link .cart-c
 @media(max-width:359px){.site-header .header-inner{gap:var(--space-8);padding-inline:var(--space-12)}.site-header .header-actions{gap:var(--space-2)}.site-header .header-actions .icon-btn{width:40px;height:40px}.site-header .brand{font-size:var(--text-18)}}
 .product-meta h3,.product-meta h3 a{overflow-wrap:break-word;hyphens:auto}
 @media(max-width:639px),(pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:max(16px,1em)}}
+/* Not found: one quiet line in the middle of the page, as the empty «Акции» page (owner, 2026-11-11). */
+.site-main:has(>.not-found){display:flex;flex-direction:column}
+.not-found{flex:1;display:flex;align-items:center;justify-content:center;min-height:240px;padding:var(--space-24) 0;text-align:center}
+.not-found h1{font-family:var(--font-sans);font-size:18px;font-weight:var(--weight-400);line-height:1.6;letter-spacing:normal;color:var(--color-muted);margin:0}

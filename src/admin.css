@@ -194,3 +194,9 @@
 /* With its heading moved to the page title, the orders card's «Обновить» sits on the right. */
 .admin-app .admin-orders-heading { justify-content: flex-end; }
 @media (max-width: 639px) { .admin-signin .auth.admin-auth { padding: var(--space-28) var(--space-20); } }
+/* The staff sign-in card sits in the middle of the space under the header on every screen (owner, 2026-11-11). */
+.admin-signin { height: 100svh; min-height: 0; }
+.admin-signin > .site-main.site-main--account-route { flex: 1 1 auto; min-height: 0; height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: var(--space-24) var(--space-20); overflow-y: auto; }
+.admin-signin > .site-main > .auth { margin: auto; width: 100%; }
+/* Site management has no bottom tab bar on phones, so the page keeps no room for it. */
+body:has(.admin-signin, .admin-app) { padding-bottom: 0; }

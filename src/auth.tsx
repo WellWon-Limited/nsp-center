@@ -4,7 +4,7 @@ import { restoreAccountLists, useStore, type Account, type ServerSession } from 
 import { Icon } from './ui';
 import { registrationPasswordError } from './auth-password';
 import { EmailInput, PhoneInput } from './contact-inputs';
-import { emailError, phoneError } from './contact-fields.mjs';
+import { customerEmailError, phoneError } from './contact-fields.mjs';
 
 // Sign-in and registration screens of the profile. With the accounts server (scripts/accounts.mjs; the store learns of it
 // from /api/auth/me) both go to it, and the account with its cart, lists and plan follows the visitor to any device.
@@ -71,7 +71,7 @@ export function AuthScreen() {
   const switchTo = (next: Mode) => { setMode(next); setNotice(false); setError(''); setStaffLogin(''); setPassword(''); setConfirmPassword(''); setConfirmationTouched(false); };
   const signIn = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false);
-    if (emailError(login)) { setError(emailError(login)); return; }
+    if (customerEmailError(login)) { setError(customerEmailError(login)); return; }
     if (accounts === 'server') {
       setBusy(true); const { session, error, staff } = await callAccounts('/api/auth/login', { login, password }); setBusy(false);
       setStaffLogin(staff ? login.trim() : '');
@@ -91,7 +91,7 @@ export function AuthScreen() {
   };
   const register = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false); setError('');
-    const contactError = emailError(form.email) || phoneError(form.phone);
+    const contactError = customerEmailError(form.email) || phoneError(form.phone);
     if (contactError) { setError(contactError); return; }
     if (passwordError) { setConfirmationTouched(true); setError(passwordError); return; }
     if (accounts === 'server') {
