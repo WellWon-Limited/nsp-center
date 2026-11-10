@@ -85,3 +85,23 @@
 .admin-photo img { max-width: 240px; max-height: 240px; object-fit: contain; border-radius: 12px; background: #fff; }
 .admin-file input { font-weight: var(--weight-400); }
 .admin-hint-muted { font-size: var(--text-12); color: var(--color-muted); }
+/* Order processing follows the account's outlined cards on both screen sizes. */
+.admin-orders-heading,.admin-orders-pagination{display:flex;align-items:center;justify-content:space-between;gap:var(--space-12)}
+.admin-order-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
+.admin-order-stats button{display:grid;gap:var(--space-6);text-align:left;padding:var(--space-12);border:1px solid var(--color-ink-line);border-radius:var(--radius-14);background:var(--color-white);color:var(--color-ink);font:inherit;cursor:pointer}
+.admin-order-stats button.active{background:var(--color-ink);color:var(--color-white);border-color:var(--color-ink)}
+.admin-order-stats span{font-size:var(--text-12)}
+.admin-order-stats strong{font-size:var(--text-24)}
+.admin-order-list{display:grid;gap:var(--space-10)}
+.admin-orders-empty{padding:var(--space-24) 0;text-align:center;color:var(--color-muted)}
+.admin-order{border:1.5px solid var(--color-ink-line);border-radius:var(--radius-14);overflow:hidden}
+.admin-order summary{display:flex;align-items:center;justify-content:space-between;gap:var(--space-12);padding:var(--space-14);cursor:pointer}
+.admin-order summary>span{display:grid;gap:var(--space-4)}
+.admin-order summary>span:last-child{text-align:right;flex:none}
+.admin-order small{display:block;font-size:var(--text-12);color:var(--color-muted);font-weight:var(--weight-400)}
+.admin-order-body{display:grid;gap:var(--space-16);padding:var(--space-14);border-top:1px solid var(--color-ink-line)}
+.admin-order-contact{display:grid;gap:var(--space-4);font-size:var(--text-14);overflow-wrap:anywhere}
+.admin-order-items{padding:0;margin:0;list-style:none;display:grid;gap:var(--space-10)}
+.admin-order-items li{display:flex;justify-content:space-between;gap:var(--space-12);font-size:var(--text-14)}
+.admin-order-items li>strong{white-space:nowrap}
+@media(max-width:639px){.admin-order-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-orders .admin-search{flex-wrap:wrap}.admin-orders .admin-search .field{min-width:0;width:100%}.admin-order summary{align-items:start}.admin-order summary small{max-width:190px}}

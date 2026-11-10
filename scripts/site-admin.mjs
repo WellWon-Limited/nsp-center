@@ -1,3 +1,4 @@
+import { ORDER_SCHEMA, orderAdminRoute } from './order-admin.mjs';
 import { randomBytes } from 'node:crypto';
 // Site management (the administrator's part of the profile) and customer reviews, on the accounts database
 // (scripts/accounts.mjs routes /api/site, /api/reviews and /api/admin/* here).
@@ -58,13 +59,26 @@ create table if not exists files (
   data bytea not null,
   created_at timestamptz not null default now()
 );
+create table if not exists ai_log (
+  id bigserial primary key,
+  at timestamptz not null default now(),
+  ip_hash text not null,
+  question text not null,
+  answer text not null,
+  products text not null default '',
+  sources jsonb not null default '[]',
+  flagged boolean not null default false,
+  input_tokens integer not null default 0,
+  output_tokens integer not null default 0
+);
+create index if not exists ai_log_at_idx on ai_log (at);
 create table if not exists admin_log (
   id bigserial primary key,
   user_id bigint references users(id) on delete set null,
   action text not null,
   detail jsonb not null default '{}',
   at timestamptz not null default now()
-);`;
+);` + ORDER_SCHEMA;
 
 const AVAILABILITY = new Set(['InStock', 'OutOfStock']);
 // Uploads: photos and certificate scans only, as images (no SVG — it can carry scripts).
@@ -202,10 +216,21 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (!user) { send(res, 401, { error: 'Вы не вошли в аккаунт.' }); return true; }
   if (user.role !== 'admin') { send(res, 403, { error: 'Этот раздел только для администратора.' }); return true; }
 
+  if (await orderAdminRoute(ctx, req, res, path, url, user)) return true;
+
   // How many reviews wait for approval: the administrator's profile and bell show it.
   if (path === '/api/admin/pending' && method === 'GET') {
     const { rows: [{ count }] } = await pool.query("select count(*)::int as count from reviews where status = 'pending'");
     send(res, 200, { reviews: count });
+    return true;
+  }
+  // The consultation agent's questions of the last 30 days (scripts/ai-agent.mjs), newest first, with the month's tokens.
+  if (path === '/api/admin/ai-log' && method === 'GET') {
+    const [{ rows }, { rows: [m] }] = await Promise.all([
+      pool.query('select at, question, answer, products, sources, flagged from ai_log order by at desc limit 100'),
+      pool.query("select count(*)::int as questions, coalesce(sum(input_tokens + output_tokens), 0)::bigint as tokens from ai_log where at >= date_trunc('month', now())"),
+    ]);
+    send(res, 200, { month: { questions: m.questions, tokens: Number(m.tokens) }, entries: rows });
     return true;
   }
   if (path === '/api/admin/overview' && method === 'GET') {

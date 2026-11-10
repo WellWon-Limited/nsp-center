@@ -102,8 +102,8 @@ export function AccountPage({ account }: { account: Account }) {
       {created && <p className="ds-muted">Аккаунт создан {created}</p>}
     </header>
 
-    {account.admin && <a className="admin-entry" href="/profile/?admin=1" data-ds-id="admin-entry"><span><strong>Управление сайтом</strong><small>{pendingReviews ? `Новых отзывов на проверку: ${pendingReviews}` : 'Курс у.е., цены и наличие, отзывы, администраторы'}</small></span>{pendingReviews > 0 && <span className="admin-count">{pendingReviews}</span>}<Icon name="arrow" size={20} /></a>}
     <DiscountCard account={account} />
+    {account.admin && <a className="admin-entry" href="/profile/?admin=1" data-ds-id="admin-entry"><span><strong>Управление сайтом</strong><small>{pendingReviews ? `Новых отзывов на проверку: ${pendingReviews}` : 'Заказы, курс у.е., цены и наличие, отзывы'}</small></span>{pendingReviews > 0 && <span className="admin-count">{pendingReviews}</span>}<Icon name="arrow" size={20} /></a>}
 
     <div className="account-stack">
       <PersonalData account={account} />

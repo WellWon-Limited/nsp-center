@@ -200,7 +200,7 @@ body .site-main .product-card .product-visual{height:220px}body .site-main .prod
 .recommend-question.panel{background:var(--color-white);border:1px solid var(--color-ink-line);box-shadow:0 14px 32px -24px rgb(29 58 54 / .5);-webkit-backdrop-filter:none;backdrop-filter:none}.recommend-question .answer-list>.panel{background:#f5f7f5;border:1px solid var(--color-ink-line);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}.recommend-question .answer-list>.is-selected{border-color:var(--color-ink);background:#e8f1ec}
 /* Plan: the date under «Приём на сегодня» opens the date picker (the native input lies invisibly over it). */
 .intake-date-pick{position:relative;display:inline-flex;align-items:center;gap:4px;cursor:pointer}.intake-date-pick svg{transform:rotate(90deg);opacity:.6}.intake-date-pick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0}
-.profile-loading{min-height:60vh}
+.account-route-loading{min-height:var(--space-32)}
 
 /* Home pathways use the same dark outline as the install action. */
 .home-paths>a.home-path{border:1px solid var(--color-ink)}
@@ -267,8 +267,8 @@ body .site-main .product-detail .main-product-image{height:clamp(340px,32vw,480p
 .product-card .product-packshot-frame--wide-care{max-width:74%}
 
 .product-meta>.stock-pill{position:static;align-self:flex-start;margin:0 0 8px;max-width:100%}
-/* Computer: larger bell, cart and profile icons in the header (the home page sizes them from --header-icon-size). */
-@media(min-width:960px){.site-header .header-actions .icon-btn{width:46px;height:46px}.site-header .header-actions .icon-btn svg{width:28px;height:28px}body:has(.home-first-screen) .site-header .header-actions{--header-icon-size:max(28px,1.9vw)}}
+/* Desktop header icons share the same scale on every page. */
+@media(min-width:960px){.site-header .header-actions .icon-btn{width:46px;height:46px}.site-header .header-actions .icon-btn svg{width:28px;height:28px}body .site-header .header-actions{--header-icon-size:max(28px,1.9vw)}}
 /* Catalog search: its dark-green border is the only frame; typing adds no second focus ring around it. */
 body:has(.catalog-layout) .site-main .catalog-tools .search-field:focus-within{outline:none}
 .expert-about{display:inline-block;margin-left:var(--space-8);font-size:var(--text-12);font-weight:var(--weight-700);color:var(--color-success)}
@@ -465,3 +465,13 @@ body .site-main .cart-product-image .product-packshot-frame>img{height:auto;aspe
 .site-header .cart-link .cart-count--bag{display:none}
 html[data-cart-count]:not([data-cart-count="0"]) .site-header .cart-link .cart-count--bag{display:grid}
 .site-header .cart-count--bag::before{content:var(--header-cart-count,"0")}
+
+/* The navigation panel stays opaque above page photography. */
+.site-header{background:var(--color-white);backdrop-filter:none;-webkit-backdrop-filter:none}
+
+/* The bell wrapper has no inline baseline gap that could change the header height. */
+.site-header .header-actions .notifications{display:flex;align-items:center}
+
+/* Reserve the account screen before local cart/profile data has loaded. */
+.site-main.site-main--account-route{min-height:calc(100svh - var(--site-header-height,0px))}
+@media(max-width:639px){.site-main.site-main--account-route{min-height:var(--phone-first-screen-height)}}

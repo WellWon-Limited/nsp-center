@@ -491,59 +491,59 @@ body:has(.home-hero--banner) {
 
 /* Every non-phone viewport keeps the approved three-zone composition and three pathway cards. */
 @media (min-width: 640px) {
-  body:has(.home-first-screen) .site-header {
+  body .site-header {
     padding-top: env(safe-area-inset-top);
   }
 
-  body:has(.home-first-screen) .site-header .header-inner {
+  body .site-header .header-inner {
     max-width: none;
     padding: 1.78vw 4.2vw;
     gap: 2.4vw;
   }
 
-  body:has(.home-first-screen) .site-header .brand {
+  body .site-header .brand {
     font-size: max(var(--text-16), 1.78vw);
     gap: max(var(--space-6), .74vw);
   }
 
-  body:has(.home-first-screen) .site-header .brand-mark {
+  body .site-header .brand-mark {
     width: max(var(--space-32), 3.55vw);
     height: max(var(--space-32), 3.55vw);
     background: transparent;
   }
 
-  body:has(.home-first-screen) .site-header .brand-mark img {
+  body .site-header .brand-mark img {
     width: 100%;
     height: 100%;
   }
 
-  body:has(.home-first-screen) .site-header .desktop-nav {
+  body .site-header .desktop-nav {
     display: flex;
     gap: 2.1vw;
     font-size: max(var(--text-12), 1.04vw);
   }
 
-  body:has(.home-first-screen) .site-header .menu-toggle {
+  body .site-header .menu-toggle {
     display: none;
   }
 
-  body:has(.home-first-screen) .site-header .header-actions {
+  body .site-header .header-actions {
     --header-icon-size: max(var(--icon-size), 1.63vw);
     gap: max(var(--space-4), .59vw);
     font-size: max(var(--text-12), 1.04vw);
   }
 
-  body:has(.home-first-screen) .site-header .header-actions .icon-btn {
+  body .site-header .header-actions .icon-btn {
     width: max(var(--control-height-small), 3.4vw);
     height: max(var(--control-height-small), 3.4vw);
   }
 
-  body:has(.home-first-screen) .site-header .header-actions .icon-btn svg {
+  body .site-header .header-actions .icon-btn svg {
     width: var(--header-icon-size);
     height: var(--header-icon-size);
   }
 
-  body:has(.home-first-screen) .site-header .header-actions .cart-count {
+  body .site-header .header-actions .cart-count {
     --cart-badge-size: max(var(--text-14), calc(.65 * var(--header-icon-size)));
     left: calc(50% + .34 * var(--header-icon-size));
     top: calc(50% - .34 * var(--header-icon-size));
@@ -744,17 +744,31 @@ body:has(.home-hero--banner) {
 /* Keep the accepted tablet composition. Desktop fills the window with the banner and cards. */
 @media (min-width: 960px) and (pointer: fine) {
   .home-first-screen {
-    --header-h: calc(3.56vw + max(var(--control-height-small), 3.55vw) + var(--space-1) + env(safe-area-inset-top));
+    --header-h: var(--site-header-height, calc(3.56vw + max(var(--control-height-small), 3.55vw) + var(--space-1) + env(safe-area-inset-top)));
     min-height: calc(100svh - var(--header-h) - var(--main-pad));
+    height: calc(100svh - var(--header-h) - var(--main-pad));
   }
 
+  .home-first-screen{--desktop-unit:min(1vw,1.75svh)}
   .home-first-screen > .home-hero--banner {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    container-type:size;
+    margin-bottom: 0;
+    padding-block:clamp(var(--space-18),3svh,calc(2 * var(--space-20)));
   }
-
-  .home-first-screen > .home-paths {
-    margin-bottom: var(--space-24);
-  }
+  .home-first-screen > .home-paths {margin-block:var(--space-24)}
+  .home-hero--banner .hero-copy h1{font-size:max(var(--text-22),calc(3.1 * var(--desktop-unit)));margin-bottom:calc(1.78 * var(--desktop-unit))}
+  .home-hero--banner .hero-copy>p{font-size:max(var(--text-12),calc(1.18 * var(--desktop-unit)));margin-bottom:calc(2.07 * var(--desktop-unit))}
+  .home-hero--banner .hero-copy .btn--lg{min-height:max(var(--control-height-small),calc(4 * var(--desktop-unit)));padding:calc(1.04 * var(--desktop-unit)) calc(1.48 * var(--desktop-unit));font-size:max(var(--text-12),calc(1.11 * var(--desktop-unit)))}
+  .home-hero--banner .hero-note{font-size:max(var(--text-9),calc(.81 * var(--desktop-unit)));margin-top:calc(1.78 * var(--desktop-unit))}
+  .home-first-screen .home-paths>a.home-path{padding:max(var(--space-10),calc(1.48 * var(--desktop-unit))) max(var(--space-10),calc(1.63 * var(--desktop-unit)))}
+  .home-first-screen .home-paths h2{font-size:max(var(--text-12),calc(1.33 * var(--desktop-unit)))}
+  .home-first-screen .home-paths p{font-size:max(var(--text-10),calc(.89 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb{width:max(96px,calc(7 * var(--desktop-unit)));height:max(100px,calc(7.3 * var(--desktop-unit)));--packshot-target:max(100px,calc(7.3 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb--care{width:max(88px,calc(6.3 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb--set{width:max(140px,calc(10 * var(--desktop-unit)));height:max(108px,calc(7.9 * var(--desktop-unit)));--packshot-target:max(92px,calc(6.8 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb--set .product-packshot-frame:nth-child(2){--packshot-target:max(108px,calc(7.9 * var(--desktop-unit)))}
 
   .home-hero--banner .hero-photo img {
     height: 100%;
@@ -778,4 +792,19 @@ body:has(.home-hero--banner) {
   .home-hero--banner > .hero-daily {
     padding-top: var(--space-8);
   }
+}
+
+/* Shared header dimensions remain the same on every route, including wide, short windows. */
+@media(min-width:960px) and (pointer:fine) and (min-aspect-ratio:1.85){
+ body{--home-control-unit:min(1vw,1.3svh)}
+ .home-first-screen{--desktop-unit:var(--home-control-unit)}
+ body .site-header .header-inner{padding-block:calc(1.78 * var(--home-control-unit))}
+ body .site-header .brand{font-size:max(var(--text-16),calc(1.78 * var(--home-control-unit)))}
+ body .site-header .brand-mark{width:max(var(--space-32),calc(3.55 * var(--home-control-unit)));height:max(var(--space-32),calc(3.55 * var(--home-control-unit)))}
+ body .site-header .desktop-nav,body .site-header .header-actions{font-size:max(var(--text-12),calc(1.04 * var(--home-control-unit)))}
+ body .site-header .header-actions{--header-icon-size:max(var(--icon-size),calc(1.63 * var(--home-control-unit)))}
+ body .site-header .header-actions .icon-btn{width:max(var(--control-height-small),calc(3.4 * var(--home-control-unit)));height:max(var(--control-height-small),calc(3.4 * var(--home-control-unit)))}
+}
+@media(min-width:960px) and (pointer:fine) and (min-aspect-ratio:2.2){
+ body{--home-control-unit:min(1vw,1svh)}
 }

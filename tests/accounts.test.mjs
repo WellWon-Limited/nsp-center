@@ -112,6 +112,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/pending')).body.reviews, 1);
   assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 9 })).status, 400);
   assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 3 })).body.noteStars.alfalfa['Врач|Лекция|Текст'], 3);
+  assert.deepEqual((await call('/api/admin/ai-log')).body, { month: { questions: 0, tokens: 0 }, entries: [] }, 'the chat log of the consultation agent');
   const overview = (await call('/api/admin/overview')).body;
   assert.equal(overview.rateHistory[0].rubPerUnit, 96.5);
   assert.equal(overview.rateHistory[0].by, 'boss@example.ru');
@@ -123,6 +124,36 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.deepEqual((await call('/api/reviews?product=bee-pollen')).body.reviews, []);
   assert.equal((await call('/api/admin/user', 'PUT', { email: 'boss@example.ru', role: 'customer' })).status, 400, 'cannot demote yourself');
   assert.equal((await call('/api/admin/user', 'PUT', { email: 'anna@example.ru', role: 'admin' })).status, 200);
+
+  // Orders use their own records; a customer's saved cart drafts are not sales.
+  const { rows: customerRows } = await accounts.pool.query("select id from users where email = 'anna@example.ru'");
+  await accounts.pool.query('insert into account_data(user_id,data) values ($1,$2) on conflict(user_id) do update set data=excluded.data', [customerRows[0].id, JSON.stringify({orders:[{id:'LOCAL-1',total:100,items:1,date:'01.01.2026'}]})]);
+  assert.equal((await call('/api/admin/orders')).body.total, 0);
+  const { rows: orderRows } = await accounts.pool.query('insert into shop_orders(user_id,customer,items,total) values ($1,$2,$3,$4) returning id', [customerRows[0].id, JSON.stringify({name:'Анна Петрова',phone:'+7 900 111-22-33',email:'anna@example.ru'}), JSON.stringify([{name:'Люцерна',quantity:2,price:500}]), 1000]);
+  const orderId = String(orderRows[0].id);
+  const orders = (await call('/api/admin/orders')).body;
+  assert.equal(orders.total, 1); assert.equal(orders.summary.new, 1);
+  assert.equal(orders.orders[0].items[0].quantity, 2);
+  assert.equal((await call('/api/admin/orders?q=Петрова')).body.total, 1);
+  assert.equal((await call('/api/admin/orders?q=missing')).body.total, 0);
+  assert.equal((await call('/api/admin/orders?status=unknown')).status, 400);
+  assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'unknown',note:'',updatedAt:orders.orders[0].updatedAt})).status, 400);
+  const updated = await call('/api/admin/orders', 'PUT', {id:orderId,status:'completed',note:'Выдан',updatedAt:orders.orders[0].updatedAt});
+  assert.equal(updated.status, 200); assert.equal(updated.body.order.note, 'Выдан');
+  assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'cancelled',note:'',updatedAt:orders.orders[0].updatedAt})).status, 409, 'stale changes cannot overwrite another administrator');
+  const filtered = (await call('/api/admin/orders?status=completed')).body;
+  assert.equal(filtered.total, 1); assert.equal(filtered.summary.completed, 1); assert.equal(filtered.summary.new, 0);
+  assert.equal((await accounts.pool.query("select count(*)::int as count from admin_log where action='order'")).rows[0].count, 1);
+  const adminSession = session;
+  session = '';
+  assert.equal((await call('/api/admin/orders')).status, 401);
+  await call('/api/auth/login', 'POST', {login:'anna@example.ru',password:'password-1'});
+  // Anna was promoted earlier: use a fresh customer to verify order access remains private.
+  session = '';
+  await call('/api/auth/register', 'POST', {firstName:'Иван',lastName:'Покупатель',email:'customer@example.ru',password:'password-4',consent:true});
+  assert.equal((await call('/api/admin/orders')).status, 403);
+  assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'cancelled',note:'',updatedAt:updated.body.order.updatedAt})).status, 403);
+  session = adminSession;
 
   // A card's own content: an uploaded certificate scan is served back; name and photo reach every page via /api/site.
   const png = Buffer.from('89504e470d0a1a0a0000000d4948445200000001000000010806000000', 'hex');

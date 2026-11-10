@@ -15,7 +15,7 @@ type ChatProduct = { id: string; name: string; path: string; price: number; part
 type Index = { themes: ChatTheme[]; products: ChatProduct[] };
 type Link = { label: string; href: string };
 type Section = { title: string; text: string };
-type Message = { source?: string; sections?: Section[]; from: 'bot' | 'user'; text: string; product?: string; altProduct?: string; links?: Link[]; chips?: string[]; ask?: string; warning?: boolean; alts?: string[] };
+type Message = { products?: string[]; source?: string; sections?: Section[]; from: 'bot' | 'user'; text: string; product?: string; altProduct?: string; links?: Link[]; chips?: string[]; ask?: string; warning?: boolean; alts?: string[] };
 
 const greeting: Message = { from: 'bot', text: 'Здравствуйте! Чем могу помочь?', chips: ['Плохо сплю', 'Нет сил днём', 'Тяжесть после еды', 'Часто простываю', 'Как получить скидку?', 'Где вы находитесь?', 'Связаться со специалистом'] };
 const storeKey = 'nsp-center:chat';
@@ -187,6 +187,9 @@ export function AssistantChat() {
   const [messages, setMessages] = useState<Message[]>([greeting]);
   const [draft, setDraft] = useState('');
   const [index, setIndex] = useState<Index | null>(null);
+  // Whether the consultation agent is connected on the server (scripts/ai-agent.mjs); off: prepared answers only.
+  const [ai, setAi] = useState(false);
+  useEffect(() => { fetch('/api/ai/status', { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then(b => setAi(Boolean(b?.enabled))).catch(() => { /* prepared answers */ }); }, []);
   const [typing, setTyping] = useState(false);
   const end = useRef<HTMLDivElement>(null);
   const log = useRef<HTMLDivElement>(null);
@@ -213,7 +216,7 @@ export function AssistantChat() {
     if (/^(начать\s+)?(нов(ый|ую)\s+(чат|переписк\S*|разговор)|сначала|заново|начать\s+сначала|начать\s+заново)[.!]?$/iu.test(value)) { setMessages([greeting]); setDraft(''); return; }
     const asked = [...messages].reverse().find(m => m.from === 'bot')?.ask;
     setMessages(m => [...m, { from: 'user', text: value }]); setDraft(''); setTyping(true);
-    window.setTimeout(() => {
+    const byRules = () => {
       let reply: Message;
       if (!index) reply = { from: 'bot', text: 'Секунду, готовлюсь… Повторите вопрос, пожалуйста.' };
       else if (value === anotherOption) { const lastBot = [...messages].reverse().find(m => m.from === 'bot'); const rest = lastBot?.alts ?? []; reply = rest.length ? adviceFor(rest[0], '', rest.slice(1), index) : { from: 'bot', text: 'К сожалению, больше ничего предложить не могу. Спросите что-то ещё.' }; }
@@ -222,7 +225,18 @@ export function AssistantChat() {
       else if (asked) reply = recommend(/^больше ничего/i.test(value) ? asked : `${asked} ${value}`, index);
       else { const first = answer(value, index); reply = !first.product ? first : asksAboutProduct(value, index) ? { ...first, text: `Расскажу про ${shortName(index.products.find(p => p.id === first.product)?.name ?? '')}.`, sections: productSections(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product), first.text), source: sourceOf(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product)) || undefined, warning: true } : clarify(value); }
       setMessages(m => [...m, reply]); setTyping(false);
-    }, 600);
+    };
+    // With the agent connected (scripts/ai-agent.mjs) a health question goes to it; shop questions, warning signs and
+    // «Предложите что-то ещё» keep their prepared answers, and any failure of the agent falls back to them too.
+    if (ai && index && value !== anotherOption && !emergency.test(value) && !intent(value)) {
+      const history = messages.slice(-6).map(m => ({ role: m.from === 'bot' ? 'assistant' : 'user', text: m.text }));
+      fetch('/api/ai/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: value, history }) })
+        .then(async r => { const b = await r.json().catch(() => null); if (!r.ok || typeof b?.text !== 'string') throw new Error('agent'); return b as { text: string; products: string[]; sources: { speaker: string; lecture: string }[]; chips?: string[] }; })
+        .then(b => { const products = b.products.filter(id => index.products.some(p => p.id === id)); setMessages(m => [...m, { from: 'bot', text: b.text, products, source: b.sources.length ? `Источник: ${b.sources.map(s => `${s.speaker ? `${s.speaker}, ` : ''}лекция «${s.lecture}»`).join('; ')}` : undefined, warning: products.length > 0, chips: b.chips }]); setTyping(false); })
+        .catch(byRules);
+      return;
+    }
+    window.setTimeout(byRules, 600);
   };
   const submit = (e: FormEvent) => { e.preventDefault(); send(draft); };
   const last = messages[messages.length - 1];
@@ -233,6 +247,7 @@ export function AssistantChat() {
         <p>{m.text}</p>
         {m.sections && <dl className="chat-sections">{m.sections.map(x => <div key={x.title}><dt>{x.title}</dt><dd>{x.text}</dd></div>)}</dl>}
         {m.product && index && <ProductMini id={m.product} index={index} />}
+        {m.products?.map(id => index && <ProductMini key={id} id={id} index={index} />)}
         {m.altProduct && index && <ProductMini id={m.altProduct} index={index} />}
         {m.source && <p className="chat-source">{m.source}</p>}
         {m.warning && <p className="chat-warning">БАД не является лекарственным средством. Перед применением проконсультируйтесь со специалистом.</p>}

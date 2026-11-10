@@ -1,0 +1,21 @@
+/* Selected mobile hero; shared desktop composition remains in home-hero-forest.css. */
+@media(max-width:639px){
+.home-first-screen .home-hero.home-hero--forest{--mobile-title-size:clamp(30px,8.46vw,34px);--mobile-scene-height:max(var(--phone-first-screen-height),175vw);padding-top:max(18px,calc((.246 * var(--mobile-scene-height) - 2.1 * var(--mobile-title-size))/2 + 16px))}
+.home-first-screen .home-hero.home-hero--forest .hero-photo img{object-position:center top}
+.home-first-screen .home-hero.home-hero--forest .hero-photo .hero-upper-twig{display:none}
+.home-first-screen .home-hero.home-hero--forest .hero-copy{position:static}
+.home-first-screen .home-hero.home-hero--forest .hero-copy h1[aria-label]{font-size:var(--mobile-title-size);text-align:center;margin:0 0 20px;line-height:1.05;letter-spacing:-.04em}
+.home-first-screen .home-hero.home-hero--forest .hero-copy h1[aria-label] .hero-title-line{padding:0;margin:0;text-align:center;transform:none}
+.home-first-screen .home-hero.home-hero--forest .hero-copy .ds-cluster{position:relative;top:auto;right:auto;left:auto;width:min(226px,calc(50vw - 9px));margin:0 auto;z-index:3;container-type:inline-size}
+.home-first-screen .home-hero.home-hero--forest .hero-copy .btn--primary{width:100%;min-width:0;min-height:0;height:26.014cqw;border-radius:8.849cqw;font-family:var(--font-sans);font-size:7.219cqw;font-weight:var(--weight-800);line-height:1.2;padding:6.764cqw 9.626cqw;gap:3.539cqw;border:.4425cqw solid #f7f5ee;background:#f7f5ee;color:#1d3a36;white-space:nowrap;justify-content:center}
+.home-first-screen .home-hero.home-hero--forest .hero-copy .btn--primary svg{display:block;flex:none;width:8.849cqw;height:8.849cqw}
+.home-first-screen .home-hero.home-hero--forest .hero-copy .btn--primary .hero-cta-wide{display:inline}
+.home-first-screen .home-hero.home-hero--forest .hero-copy .btn--primary .hero-cta-phone{display:none}
+}
+
+/* Quiet the highlights behind the phone title without dimming the products. */
+@media(max-width:639px){
+ .home-first-screen .home-hero.home-hero--forest .hero-photo::before{
+  background:radial-gradient(ellipse 82% 18% at 50% 15%,rgba(3,21,12,.64) 0%,rgba(3,21,12,.48) 42%,rgba(3,21,12,.15) 78%,transparent 100%),rgba(9,24,14,.08);
+ }
+}

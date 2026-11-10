@@ -1,0 +1,19 @@
+/* Selected heading option: a lighter sans-serif paired with the Manrope wordmark. */
+@font-face{
+ font-family:'Golos Text';
+ font-style:normal;
+ font-weight:500;
+ font-display:swap;
+ src:url('/fonts/hero-options/golos-text-500.ttf') format('truetype');
+}
+.home-hero.home-hero--forest .hero-copy h1[aria-label]{font-family:'Golos Text',var(--font-sans);font-style:normal;font-weight:500;letter-spacing:-.035em;line-height:1.12}
+
+.hero-title-word{display:inline-block;white-space:pre}
+.hero-heading--enter .hero-title-word{animation:hero-word-enter 1.5s cubic-bezier(.2,.65,.2,1) both}
+@keyframes hero-word-enter{
+ from{opacity:0;transform:translateY(12px)}
+ to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-heading--enter .hero-title-word{animation:none}
+}

@@ -1,3 +1,4 @@
+import {installationPlatform,relatedAppInstalled,runningAsApp,type InstallPlatform} from './install-state.mjs';
 import './pwa.css';
 import { useEffect, useState } from 'react';
 import { data, shortName, today, useStore } from './store';
@@ -31,39 +32,56 @@ export function finishSplash() {
 }
 
 type InstallPrompt = Event & { prompt: () => Promise<void>; userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }> };
-const standalone = () => matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
-const isIos = () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const standalone=()=>runningAsApp(window);
 
 // The browser's install offer arrives once per page, possibly before React mounts, so it is caught here at load and shared
 // by the install card at the top and the one in the profile. Chrome stops offering it once the app is installed.
 let deferred: InstallPrompt | null = null;
 let installed = false;
+let installationChecked = false;
+let installationCheck:Promise<void>|null=null;
+const checkInstallation=()=>installationCheck??=relatedAppInstalled(window).then(found=>{installed=installed||found;installationChecked=true;changed();});
 const installListeners = new Set<() => void>();
 const changed = () => installListeners.forEach(fn => fn());
 if (typeof window !== 'undefined') {
   addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e as InstallPrompt; changed(); });
-  addEventListener('appinstalled', () => { deferred = null; installed = true; changed(); });
+  addEventListener('appinstalled', () => { deferred = null; installed = true; installationChecked=true; changed(); });
 }
 
-/** Install state for a component: whether this browser can install the app now (Chrome/Edge offer, or iPhone Safari with
- *  its manual steps) and the action; nothing is offered inside the installed app. */
+/** One installation state drives both the entry offer and the account card. */
 export function useInstall() {
   const [, rerender] = useState(0);
   const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); const fn = () => rerender(n => n + 1); installListeners.add(fn); return () => { installListeners.delete(fn); }; }, []);
-  const ios = mounted && isIos();
-  const available = mounted && !installed && !standalone() && (Boolean(deferred) || ios);
-  /** Starts the browser's install; on iPhone returns false — the caller shows the steps instead. */
-  const install = async () => {
-    if (!deferred) return false;
-    const offer = deferred; deferred = null;
-    await offer.prompt(); await offer.userChoice; changed();
-    return true;
+  useEffect(() => {
+    setMounted(true);const update=()=>rerender(n=>n+1);installListeners.add(update);
+    const modes=['standalone','minimal-ui'].map(mode=>matchMedia(`(display-mode: ${mode})`));
+    modes.forEach(mode=>mode.addEventListener('change',update));
+    addEventListener('pageshow',update);void checkInstallation();
+    return()=>{installListeners.delete(update);modes.forEach(mode=>mode.removeEventListener('change',update));removeEventListener('pageshow',update);};
+  }, []);
+  const platform:InstallPlatform=mounted?installationPlatform(navigator):'other';
+  const phone=platform==='ios'||platform==='android';
+  const available=mounted&&installationChecked&&!installed&&!standalone();
+  const install=async()=>{
+    if(!available||!deferred)return false;
+    const offer=deferred;deferred=null;
+    try{await offer.prompt();const choice=await offer.userChoice;if(choice.outcome==='accepted')installed=true;return true;}
+    catch{return false;}finally{changed();}
   };
-  return { available, ios, install };
+  return {available,platform,phone,install};
 }
 
-const InstallSteps = () => <p className="install-banner-help">Нажмите <strong>«Поделиться»</strong> внизу экрана Safari, затем <strong>«На экран „Домой“»</strong> и <strong>«Добавить»</strong>.</p>;
+function InstallSteps({platform}:{platform:InstallPlatform}){
+ const steps:Record<InstallPlatform,React.ReactNode>={
+  ios:<>В Safari нажмите <strong>«Поделиться»</strong>, затем <strong>«На экран „Домой“»</strong> и <strong>«Добавить»</strong>.</>,
+  android:<>В меню браузера нажмите <strong>«Установить приложение»</strong> или <strong>«Добавить на главный экран»</strong> и подтвердите установку.</>,
+  'mac-safari':<>В меню Safari выберите <strong>«Файл» → «Добавить в Dock»</strong>, затем <strong>«Добавить»</strong>.</>,
+  chromium:<>В меню браузера <strong>⋮</strong> выберите <strong>«Трансляция, сохранение и отправка» → «Установить страницу как приложение»</strong>. Если рядом с адресом есть значок установки, можно нажать его.</>,
+  edge:<>Нажмите значок установки приложения справа в адресной строке Edge и подтвердите установку.</>,
+  other:<>Для установки откройте этот сайт в Chrome, Edge или Safari на Mac. В меню браузера выберите установку приложения.</>
+ };
+ return <p className="install-banner-help">{steps[platform]}</p>;
+}
 
 // «Больше не спрашивать» turns the card at the top off for good in this browser (the profile card still offers the install).
 const neverAskKey = 'nsp-center:install-never';
@@ -82,46 +100,56 @@ const enteredOrReloaded = () => {
  *  Shown again on every visit and reload until the app is installed or the visitor taps «Больше не спрашивать»; never inside
  *  the installed app. */
 export function InstallBanner() {
-  const { available, ios, install } = useInstall();
+  const { available, platform, phone, install } = useInstall();
   const [help, setHelp] = useState(false);
   const [open, setOpen] = useState(false);
   const [closed, setClosed] = useState(false);
   useEffect(() => {
     if (!available || closed || open || !enteredOrReloaded() || neverAsk()) return;
     let timer = 0;
-    whenReady(() => { timer = window.setTimeout(() => setOpen(true), 400); });
-    return () => clearTimeout(timer);
+    let cancelled = false;
+    whenReady(() => {
+      if (cancelled) return;
+      // Let the visitor read the complete home heading before dimming the page.
+      // Finished or reduced-motion entrances resolve immediately; other pages keep the short delay.
+      const heading = document.querySelector('.hero-copy h1');
+      const entrance = heading?.getAnimations({ subtree: true }) ?? [];
+      void Promise.allSettled(entrance.map(animation => animation.finished)).then(() => {
+        if (!cancelled) timer = window.setTimeout(() => setOpen(true), 400);
+      });
+    });
+    return () => { cancelled = true; clearTimeout(timer); };
   }, [available, closed, open]);
   if (!open || closed || !available) return null;
   const close = () => setClosed(true);
   const stopAsking = () => { try { localStorage.setItem(neverAskKey, '1'); } catch { /* ignore */ } close(); };
-  const start = async () => { if (await install()) close(); else if (ios) setHelp(v => !v); };
+  const start = async () => { if (await install()) close(); else setHelp(v => !v); };
   return <><div className="install-backdrop" aria-hidden="true" />
   <div className="install-banner" role="dialog" aria-modal="true" aria-label="Установка приложения" data-ds-id="install-banner">
     <div className="install-banner-row">
       <img src="/icons/icon-192.png" alt="" width="52" height="52" />
-      <div className="install-banner-text"><strong>Установите приложение NSP Center</strong><span>Иконка появится на экране телефона</span></div>
+      <div className="install-banner-text"><strong>Установите приложение NSP Center</strong><span>{phone?'Иконка появится на экране телефона':'Открывайте сайт отдельным приложением'}</span></div>
       <button type="button" className="install-banner-close" onClick={close} aria-label="Скрыть"><Icon name="close" size={18} /></button>
     </div>
     <button type="button" className="btn btn--primary install-banner-action" onClick={start}>Установить</button>
     <button type="button" className="install-banner-never" onClick={stopAsking}>Больше не спрашивать</button>
-    {help && <InstallSteps />}
+    {help && <InstallSteps platform={platform}/>}
   </div></>;
 }
 
 /** Profile card "Приложение NSP Center" with the same install action; hidden once the app is installed. */
 export function InstallAppCard() {
-  const { available, ios, install } = useInstall();
+  const { available, platform, phone, install } = useInstall();
   const [help, setHelp] = useState(false);
   if (!available) return null;
-  const start = async () => { if (!(await install()) && ios) setHelp(v => !v); };
+  const start = async () => { if (!(await install())) setHelp(v => !v); };
   return <section className="account-card install-card" data-ds-id="account-install">
     <div className="install-banner-row">
       <img src="/icons/icon-192.png" alt="" width="52" height="52" />
-      <div className="install-banner-text"><strong>Приложение NSP Center</strong><span>Установите его — иконка появится на экране телефона</span></div>
+      <div className="install-banner-text"><strong>Приложение NSP Center</strong><span>{phone?'Установите его — иконка появится на экране телефона':'Установите его и открывайте сайт отдельным приложением'}</span></div>
     </div>
     <button type="button" className="btn btn--primary install-banner-action" onClick={start}>Установить приложение</button>
-    {help && <InstallSteps />}
+    {help && <InstallSteps platform={platform}/>}
   </section>;
 }
 

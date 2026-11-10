@@ -273,7 +273,7 @@
   font: inherit;
   font-weight: var(--weight-700);
   color: rgb(255 255 255 / .9);
-  text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -357,4 +357,9 @@
 /* Keep a deep forest tone behind the text on the narrow discount card. */
 @media(max-width:639px){
  .discount-card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,27,22,.65),rgba(9,27,22,.2) 55%,transparent)}
+}
+
+/* Keep the discount card compact in the wider profile column. */
+@media(min-width:640px){
+ .discount-card{width:100%;max-width:440px;margin-inline:auto;background-size:cover}
 }

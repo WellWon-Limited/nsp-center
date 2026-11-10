@@ -1,3 +1,4 @@
+import { OrdersSection } from './admin-orders';
 import './admin.css';
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { ProductPicker } from './personal';
@@ -6,7 +7,7 @@ import { data, money, shortName, useStore } from './store';
 import { pricesUnder, readSite, type ProductContent, type ProductOverride, type SiteSettings } from './site';
 import { factOrder } from './catalog';
 import { productCover } from './product-media.mjs';
-import { BackLink, Icon } from './ui';
+import { Icon } from './ui';
 
 // «Управление сайтом» (/profile/?admin=1), only for administrator accounts; the server checks the role on every
 // request (scripts/site-admin.mjs). Sections: the warehouse rate, a product's prices and stock, customer reviews,
@@ -18,8 +19,8 @@ type Overview = SiteSettings & {
   reviews: { id: number; productId: string; rating: number; text: string; status: 'pending' | 'published' | 'hidden'; date: string; author: string; email: string }[];
   users: { email: string; name: string; role: string; createdAt: string }[];
 };
-type Tab = 'rate' | 'products' | 'reviews' | 'users';
-const tabs: [Tab, string][] = [['rate', 'Курс у.е.'], ['products', 'Цены и наличие'], ['reviews', 'Отзывы'], ['users', 'Администраторы']];
+type Tab = 'orders' | 'rate' | 'products' | 'reviews' | 'chat' | 'users';
+const tabs: [Tab, string][] = [['orders', 'Заказы'], ['rate', 'Курс у.е.'], ['products', 'Цены и наличие'], ['reviews', 'Отзывы'], ['chat', 'Чат'], ['users', 'Администраторы']];
 const when = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const number = (v: number | null | undefined) => v === null || v === undefined ? '' : String(v).replace('.', ',');
 const productName = (id: string) => { const p = data.products.find(x => x.id === id); return p ? shortName(p.name) : id; };
@@ -33,7 +34,7 @@ async function adminCall(path: string, body: unknown): Promise<{ ok: boolean; bo
 
 export function AdminPanel() {
   const { setSite, notify } = useStore();
-  const [tab, setTab] = useState<Tab>('rate');
+  const [tab, setTab] = useState<Tab>('orders');
   // ?tab=reviews (from the bell notice) opens that section.
   useEffect(() => { const t = new URLSearchParams(location.search).get('tab'); if (tabs.some(([id]) => id === t)) setTab(t as Tab); }, []);
   const [overview, setOverview] = useState<Overview | null>(null);
@@ -53,14 +54,16 @@ export function AdminPanel() {
   };
   const pending = overview?.reviews.filter(r => r.status === 'pending').length ?? 0;
   return <div className="admin" data-ds-id="admin-panel">
-    <BackLink fallback="/profile/" label="Профиль" />
+    <a className="back-link" href="/profile/"><span aria-hidden="true">←</span>Профиль</a>
     <header className="admin-head"><span className="ds-kicker">Администратор</span><h1>Управление сайтом</h1></header>
     <nav className="admin-tabs" role="tablist">{tabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}{id === 'reviews' && pending > 0 && <span className="admin-count">{pending}</span>}</button>)}</nav>
     {error && <p className="admin-error" role="alert">{error}</p>}
     {!overview && !error && <p className="ds-muted">Загружаем…</p>}
+    {tab === 'orders' && <OrdersSection />}
     {overview && tab === 'rate' && <RateSection overview={overview} run={run} />}
     {overview && tab === 'products' && <ProductsSection overview={overview} run={run} />}
     {overview && tab === 'reviews' && <ReviewsSection overview={overview} run={run} />}
+    {tab === 'chat' && <ChatLogSection />}
     {overview && tab === 'users' && <UsersSection overview={overview} run={run} />}
   </div>;
 }
@@ -270,5 +273,28 @@ function UsersSection({ overview, run }: { overview: Overview; run: Run }) {
     <label className="admin-search"><Icon name="search" size={18} /><input className="field" placeholder="Почта или имя" value={q} onChange={e => setQ(e.target.value)} /></label>
     <ul className="admin-users">{others.map(u => <li key={u.email}><span><strong>{u.name}</strong><small>{u.email}</small></span><button type="button" className="btn btn--primary" onClick={() => void run('/api/admin/user', { email: u.email, role: 'admin' }, `${u.email} теперь администратор`)}>Сделать администратором</button></li>)}</ul>
     {q.trim() && !others.length && <p className="ds-muted">Такого покупателя нет.</p>}
+  </section>;
+}
+
+/** «Чат»: what visitors asked the consultation agent in the last 30 days and what it answered (scripts/ai-agent.mjs).
+ *  Questions are kept without the account, so a visitor is not named. */
+function ChatLogSection() {
+  const [log, setLog] = useState<{ month: { questions: number; tokens: number }; entries: { at: string; question: string; answer: string; products: string; sources: { speaker: string; lecture: string }[]; flagged: boolean }[] } | null>(null);
+  const [state, setState] = useState<'loading' | 'off' | 'ready'>('loading');
+  useEffect(() => {
+    fetch('/api/ai/status').then(r => r.ok ? r.json() : null).then(s => { if (!s?.enabled) setState('off'); }).catch(() => setState('off'));
+    fetch('/api/admin/ai-log', { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then(b => { if (b) { setLog(b); setState(s => s === 'off' ? 'off' : 'ready'); } }).catch(() => { /* none */ });
+  }, []);
+  return <section className="admin-card" data-ds-id="admin-chat">
+    <h2>Чат с ИИ-консультантом</h2>
+    {state === 'off' && <p className="admin-lead">Нейросеть пока не подключена: чат отвечает готовыми материалами из лекций. Когда на сервере появится ключ YandexGPT, здесь будут вопросы посетителей и ответы агента.</p>}
+    {log && <p className="admin-lead">В этом месяце: {log.month.questions} вопросов, {log.month.tokens.toLocaleString('ru-RU')} токенов. Вопросы хранятся 30 дней, без имени и почты посетителя.</p>}
+    {log && !log.entries.length && <p className="ds-muted">Вопросов пока не было.</p>}
+    <ul className="admin-reviews">{log?.entries.map((e, i) => <li key={i} className={`admin-review${e.flagged ? ' admin-review--pending' : ''}`}>
+      <p className="admin-review-meta">{when(e.at)}{e.flagged ? ' · ответ заменён: в нём было обещание лечения' : ''}</p>
+      <p><strong>Вопрос:</strong> {e.question}</p>
+      <p><strong>Ответ:</strong> {e.answer}</p>
+      {(e.products || e.sources.length > 0) && <p className="admin-review-meta">{e.products && `Товары: ${e.products.split(',').map(productName).join(', ')}`}{e.sources.length > 0 && ` · Источник: ${e.sources.map(s => `${s.speaker}, «${s.lecture}»`).join('; ')}`}</p>}
+    </li>)}</ul>
   </section>;
 }

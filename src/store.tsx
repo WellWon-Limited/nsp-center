@@ -81,7 +81,7 @@ export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load
 }
 /** Sign-out of a server account: the device keeps nothing of it (the server has it all). */
 export const closeSession=(s:LocalState):LocalState=>({...s,...pickSynced(initial),intakeDate:today(),account:null,signedIn:false,card:false,saved:null,name:''});
-type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number)=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>};
+type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number)=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>};
 const Context = createContext<Store|null>(null);
 export function StoreProvider({children}:{children:ReactNode}) {
   const [state,setState]=useState(initial); const [toast,setToast]=useState(''); const [ready,setReady]=useState(false);
@@ -101,6 +101,8 @@ export function StoreProvider({children}:{children:ReactNode}) {
     const wake=()=>{if(document.visibilityState==='visible')roll();};schedule();document.addEventListener('visibilitychange',wake);return()=>{clearTimeout(timer);document.removeEventListener('visibilitychange',wake);};},[ready]);
   useEffect(()=>{if(toast){const t=setTimeout(()=>setToast(''),3200);return()=>clearTimeout(t);}},[toast]);
   const [accounts,setAccounts]=useState<'server'|'local'|null>(null);
+  // A cached signed-in account is usable immediately; otherwise wait for the session check before showing guest UI.
+  const sessionReady=ready&&(accounts!==null||Boolean(state.signedIn&&state.account));
   const synced=useRef<string|null>(null);const pending=useRef<string|null>(null);
   useEffect(()=>{if(!ready)return;let off=false;
     fetch('/api/auth/me',{headers:{Accept:'application/json'}}).then(async r=>{
@@ -164,6 +166,6 @@ export function StoreProvider({children}:{children:ReactNode}) {
   const add=(p:Product,q=1)=>{if(p.availability==='OutOfStock')return;setState(s=>({...s,cart:{...s.cart,[p.id]:Math.min(99,(s.cart[p.id]||0)+q)}}));setToast(`${shortName(p.name)} — в корзине`);};
   const qty=(id:string,q:number)=>setState(s=>{const cart={...s.cart};if(q<=0)delete cart[id];else cart[id]=Math.min(99,q);return {...s,cart};});
   const favorite=(id:string)=>setState(s=>({...s,favorites:s.favorites.includes(id)?s.favorites.filter(x=>x!==id):[...s.favorites,id]}));
-  return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify:setToast,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,pendingReviews,site,setSite,accounts,startSession,logout}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
+  return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify:setToast,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
 }
 export function useStore(){const v=useContext(Context);if(!v)throw new Error('Missing StoreProvider');return v;}

@@ -15,7 +15,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/src/generated/content.json ./src/generated/content.json
-COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs /app/scripts/accounts.mjs /app/scripts/site-admin.mjs ./scripts/
+COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs /app/scripts/accounts.mjs /app/scripts/site-admin.mjs /app/scripts/order-admin.mjs /app/scripts/ai-agent.mjs ./scripts/
 COPY --from=build ["/app/assets/NSP App Prototype.html", "./assets/"]
 USER node
 EXPOSE 4173

@@ -23,3 +23,35 @@ test('Every prerendered header reserves the badge and scroll restoration never h
   const css=doc('style').text();assert.ok(!/nsp-restoring\s+body\s*\{/.test(css));assert.ok(!/nsp-route-pending\s+#root\s*\{/.test(css));
  }
 });
+
+test('Navigation destinations share header markup and header dimensions do not depend on the home route',()=>{
+ let reference;
+ for(const path of ['','catalog/','health/','profile/','company/','blog/']){
+  const doc=cheerio.load(readFileSync(`dist/${path}index.html`,'utf8'));
+  doc('.site-header .desktop-nav a').removeAttr('class').removeAttr('aria-current');
+  const header=doc('.site-header').html();
+  if(reference===undefined)reference=header;
+  else assert.equal(header,reference,`${path}: header content or structure changed`);
+ }
+ const css=['src/home-hero.css','src/app.css'].map(path=>readFileSync(path,'utf8')).join('\n');
+ assert.doesNotMatch(css,/:has\([^)]*home[^)]*\)[^{]*\.site-header/);
+ assert.doesNotMatch(css,/:has\([^)]*home[^)]*\)\s*\{\s*--home-control-unit/);
+});
+
+test('Cart and profile reserve the screen while saved account data is loading',()=>{
+ for(const path of ['cart/','profile/']){
+  const doc=cheerio.load(readFileSync(`dist/${path}index.html`,'utf8'));
+  assert.equal(doc('main.site-main--account-route').length,1,path);
+  assert.equal(doc('main .account-route-loading[aria-busy="true"]').length,1,path);
+  assert.equal(doc('main .cart-empty,main form').length,0,`${path}: transient empty/auth content must not flash`);
+ }
+});
+
+test('The home plan does not prerender a guest invitation before the account is known',()=>{
+ const doc=cheerio.load(readFileSync('dist/index.html','utf8'));
+ const plan=doc('[data-ds-id="home-daily-plan"]');
+ assert.equal(plan.attr('aria-busy'),'true');
+ assert.equal(plan.find('.hero-daily-pending[role="status"]').length,1);
+ assert.equal(plan.find('.hero-daily-signup,.hero-daily-action,h2').length,0,'unknown account must not be shown as a guest');
+ assert.match(plan.text(),/Загружаем ваш план/);
+});
