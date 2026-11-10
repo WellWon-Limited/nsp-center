@@ -744,7 +744,7 @@ body:has(.home-hero--banner) {
 /* Keep the accepted tablet composition. Desktop fills the window with the banner and cards. */
 @media (min-width: 960px) and (pointer: fine) {
   .home-first-screen {
-    --header-h: var(--site-header-height, calc(3.56vw + max(var(--control-height-small), 3.55vw) + var(--space-1) + env(safe-area-inset-top)));
+    --header-h: var(--site-header-height, calc(1.78vw + max(var(--control-height-small), 3.55vw) + var(--space-1) + env(safe-area-inset-top)));
     min-height: calc(100svh - var(--header-h) - var(--main-pad));
     height: calc(100svh - var(--header-h) - var(--main-pad));
   }
@@ -807,4 +807,9 @@ body:has(.home-hero--banner) {
 }
 @media(min-width:960px) and (pointer:fine) and (min-aspect-ratio:2.2){
  body{--home-control-unit:min(1vw,1svh)}
+}
+
+/* Reduce desktop header height by about a quarter without scaling its content. */
+@media(min-width:960px) and (pointer:fine){
+ body .site-header .header-inner{padding-block:calc(.89 * var(--home-control-unit,1vw))}
 }

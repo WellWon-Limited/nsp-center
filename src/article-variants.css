@@ -22,3 +22,5 @@ body:has(.immune-article-page) .site-main{max-width:none;padding:0}.immune-artic
 @media(max-width:639px){.immune-article-page~.article-related-products>h2{margin-bottom:var(--space-20)}}
 /* The article's back link keeps the hero's light text (it is the shared BackLink, named after the page left). */
 .av-journal-link .back-link{margin:0;color:inherit;font-size:inherit;font-weight:500}
+
+.av-end a{display:inline-flex;align-items:center;gap:var(--space-8)}

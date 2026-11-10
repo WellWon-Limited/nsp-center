@@ -22,7 +22,7 @@ test('registration input is checked with messages for the visitor', () => {
   assert.deepEqual([value.firstName, value.email, value.phoneKey, value.partnerId], ['Анна', 'anna@example.ru', '9001112233', '7204']);
   assert.match(validateRegistration({ ...ok, consent: false }).error, /согласие/);
   assert.match(validateRegistration({ ...ok, password: 'short' }).error, /8 символов/);
-  assert.match(validateRegistration({ ...ok, email: 'anna' }).error, /email/);
+  assert.match(validateRegistration({ ...ok, email: 'anna' }).error, /Недопустимый адрес почты/);
   assert.match(validateRegistration({ ...ok, phone: '12345' }).error, /телефон/);
   assert.equal(phoneKey('+7 900 111-22-33'), phoneKey('89001112233'));
   assert.deepEqual(pickData({ cart: { a: 1 }, account: { email: 'x' }, signedIn: true }), { cart: { a: 1 } });
@@ -46,7 +46,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   const port = 20000 + Math.floor(Math.random() * 20000);
   const pg = new EmbeddedPostgres({ databaseDir: join(dir, 'db'), port, user: 'test', password: 'test', persistent: false, autoRehydrateSymlinks: true, onLog: () => {}, onError: () => {} });
   await pg.initialise(); await pg.start(); await pg.createDatabase('accounts');
-  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, productIds: new Set(['bee-pollen', 'alfalfa']), adminEmails: ['boss@example.ru'], cbr: false });
+  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
   const server = createServer((req, res) => accounts.handle(req, res, new URL(req.url, 'http://x')));
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   t.after(async () => { server.close(); await accounts.close(); await pg.stop(); rmSync(dir, { recursive: true, force: true }); });
@@ -59,14 +59,21 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   };
 
   assert.equal((await call('/api/auth/me')).status, 401);
+  assert.equal((await call('/api/card-prices')).status, 401, 'a guest gets no card prices');
   const registered = await call('/api/auth/register', 'POST', { firstName: 'Анна', lastName: 'Иванова', email: 'anna@example.ru', phone: '+7 900 111-22-33', partnerId: '', password: 'password-1', consent: true });
   assert.equal(registered.status, 201);
   assert.match(registered.cookie, /^nsp_session=[\w-]{20,}; Path=\/; HttpOnly; SameSite=Lax/);
   assert.equal(registered.body.account.email, 'anna@example.ru');
+  assert.equal((await call('/api/card-prices')).status, 403, 'no card number, no card prices');
 
   assert.equal((await call('/api/account', 'PUT', { profile: { firstName: 'Анна', lastName: 'Петрова', phone: '+7 900 111-22-33', partnerId: '446621' }, data: { cart: { 'bee-pollen': 2 }, signedIn: true } })).status, 200);
   const me = await call('/api/auth/me');
   assert.equal(me.body.account.lastName, 'Петрова');
+  const cardPrices = await call('/api/card-prices');
+  assert.equal(cardPrices.status, 200, 'an account with a card number gets the card prices');
+  assert.deepEqual(cardPrices.body, { prices: { 'bee-pollen': 714 } }, 'card prices by the price list units and rate; no units for a customer');
+  const publicSite = await call('/api/site');
+  assert.ok(Object.values(publicSite.body.products).every(o => !('partnerRub' in o) && !('partnerUnits' in o)), '/api/site has no card price fields for a customer');
   assert.equal(me.body.account.partnerId, '446621');
   assert.deepEqual(me.body.data, { cart: { 'bee-pollen': 2 } });
 
@@ -82,9 +89,10 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = '';
 
   assert.equal((await call('/api/auth/login', 'POST', { login: 'anna@example.ru', password: 'wrong-pass' })).status, 401);
-  const byPhone = await call('/api/auth/login', 'POST', { login: '8 900 111 22 33', password: 'password-1' });
-  assert.equal(byPhone.status, 200);
-  assert.deepEqual(byPhone.body.data, { cart: { 'bee-pollen': 2 } });
+  assert.equal((await call('/api/auth/login', 'POST', { login: '8 900 111 22 33', password: 'password-1' })).status, 401, 'sign-in is by email only, not by phone');
+  const byEmail = await call('/api/auth/login', 'POST', { login: 'Anna@Example.ru', password: 'password-1' });
+  assert.equal(byEmail.status, 200);
+  assert.deepEqual(byEmail.body.data, { cart: { 'bee-pollen': 2 } });
 
   const { rows } = await accounts.pool.query('select password_hash from users');
   assert.match(rows[0].password_hash, /^scrypt\$/, 'no plain passwords in the database');
@@ -95,13 +103,24 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/reviews', 'POST', { productId: 'unknown', rating: 5, text: 'Хороший продукт, пью месяц.' })).status, 400);
   assert.equal((await call('/api/reviews', 'POST', { productId: 'bee-pollen', rating: 5, text: 'Хороший продукт, пью месяц.' })).status, 201);
   assert.deepEqual((await call('/api/reviews?product=bee-pollen')).body.reviews, []);
-  assert.equal((await call('/api/admin/overview')).status, 403, 'a customer is not an administrator');
-  assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: 1 })).status, 403);
+  assert.equal((await call('/api/admin/overview')).status, 401, 'a customer session does not open site management');
+  assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: 1 })).status, 401);
 
-  // ADMIN_EMAILS makes this account an administrator at registration.
+  // Staff are separate accounts (npm run admin:create): their own sign-in, session and cookie; registration never makes one.
   session = '';
-  const boss = await call('/api/auth/register', 'POST', { firstName: 'Марина', lastName: 'Админ', email: 'boss@example.ru', password: 'password-3', consent: true });
-  assert.equal(boss.body.account.admin, true);
+  const listed = await call('/api/auth/register', 'POST', { firstName: 'Кто-то', lastName: 'Чужой', email: 'boss-copy@example.ru', password: 'password-9', consent: true });
+  assert.equal(listed.body.account.admin, undefined, 'registration gives no staff rights');
+  session = '';
+  await accounts.pool.query("insert into users (email, first_name, last_name, password_hash, consent_at, role) values ('boss@example.ru', 'Марина', 'Админ', $1, now(), 'admin')", [await hashPassword('password-3-staff')]);
+  const asCustomer = await call('/api/auth/login', 'POST', { login: 'boss@example.ru', password: 'password-3-staff' });
+  assert.deepEqual([asCustomer.status, asCustomer.body.staff], [403, true], 'a staff account does not sign in as a customer');
+  assert.equal((await call('/api/admin/me')).status, 401);
+  assert.equal((await call('/api/admin/login', 'POST', { login: 'anna@example.ru', password: 'password-1' })).status, 401, 'a customer does not sign in to site management');
+  const boss = await call('/api/admin/login', 'POST', { login: 'boss@example.ru', password: 'password-3-staff' });
+  assert.equal(boss.status, 200);
+  assert.match(boss.cookie, /^nsp_staff=[\w-]{20,}; Path=\/; HttpOnly; SameSite=Strict; Max-Age=43200/, 'a 12-hour staff session');
+  assert.equal((await call('/api/admin/me')).body.staff.email, 'boss@example.ru');
+  assert.equal((await call('/api/auth/me')).status, 401, 'the staff cookie is not a customer session');
   assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: 'abc' })).status, 400);
   assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: '96,5' })).body.rate.rubPerUnit, 96.5);
   assert.equal((await call('/api/admin/product', 'PUT', { productId: 'alfalfa', retailUnits: '15', availability: 'OutOfStock' })).status, 200);
@@ -122,8 +141,17 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/reviews?product=bee-pollen')).body.reviews[0].author, 'Анна П.');
   assert.equal((await call('/api/admin/review', 'PUT', { id: review.id, status: 'deleted' })).status, 200);
   assert.deepEqual((await call('/api/reviews?product=bee-pollen')).body.reviews, []);
-  assert.equal((await call('/api/admin/user', 'PUT', { email: 'boss@example.ru', role: 'customer' })).status, 400, 'cannot demote yourself');
-  assert.equal((await call('/api/admin/user', 'PUT', { email: 'anna@example.ru', role: 'admin' })).status, 200);
+  // «Сотрудники»: a new member of staff gets their own email and a one-time password; a customer's email is refused.
+  assert.equal((await call('/api/admin/staff', 'PUT', { email: 'anna@example.ru' })).status, 409, 'a customer is not promoted');
+  const helper = await call('/api/admin/staff', 'PUT', { email: 'helper@example.ru', firstName: 'Вера' });
+  assert.equal(helper.status, 201);
+  assert.match(helper.body.password, /^[a-zA-Z2-9]{16}$/);
+  assert.equal((await call('/api/admin/staff', 'PUT', { email: 'boss@example.ru', remove: true })).status, 400, 'cannot remove yourself');
+  assert.deepEqual((await call('/api/admin/overview')).body.staff.map(u => u.email).sort(), ['boss@example.ru', 'helper@example.ru']);
+  assert.equal((await call('/api/admin/staff', 'PUT', { email: 'helper@example.ru', remove: true })).status, 200);
+  const bossSession = session; session = '';
+  assert.equal((await call('/api/admin/login', 'POST', { login: 'helper@example.ru', password: helper.body.password })).status, 401, 'a removed member of staff cannot sign in');
+  session = bossSession;
 
   // Orders use their own records; a customer's saved cart drafts are not sales.
   const { rows: customerRows } = await accounts.pool.query("select id from users where email = 'anna@example.ru'");
@@ -148,11 +176,8 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = '';
   assert.equal((await call('/api/admin/orders')).status, 401);
   await call('/api/auth/login', 'POST', {login:'anna@example.ru',password:'password-1'});
-  // Anna was promoted earlier: use a fresh customer to verify order access remains private.
-  session = '';
-  await call('/api/auth/register', 'POST', {firstName:'Иван',lastName:'Покупатель',email:'customer@example.ru',password:'password-4',consent:true});
-  assert.equal((await call('/api/admin/orders')).status, 403);
-  assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'cancelled',note:'',updatedAt:updated.body.order.updatedAt})).status, 403);
+  assert.equal((await call('/api/admin/orders')).status, 401, 'orders stay private to staff');
+  assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'cancelled',note:'',updatedAt:updated.body.order.updatedAt})).status, 401);
   session = adminSession;
 
   // A card's own content: an uploaded certificate scan is served back; name and photo reach every page via /api/site.
@@ -182,14 +207,16 @@ test('site settings recompute rubles from у.е. and never compound', () => {
   const p = product(), q = { ...product(), id: 'b', prices: { retail: 500, partner: null, source: 'snapshot' } };
   const site = { rate: { rubPerUnit: 96 }, products: { b: { retailUnits: null, partnerUnits: null, retailRub: 450, partnerRub: null, availability: 'OutOfStock' } }, hiddenNotes: { a: ['Врач|Лекция|Текст'] } };
   applySite([p, q], site, 94);
-  assert.deepEqual([p.prices.retail, p.prices.partner], [960, 720]);
+  assert.deepEqual([p.prices.retail, p.prices.partner], [960, null], 'without the server card prices nobody sees a card price');
+  applySite([p, q], site, 94, { prices: { a: 720 } });
+  assert.deepEqual([p.prices.retail, p.prices.partner, q.prices.partner], [960, 720, null], 'a card holder gets the server card prices');
   assert.deepEqual([q.prices.retail, q.availability, q.availability_text], [450, 'OutOfStock', 'Нет в наличии']);
   applySite([p, q], site, 94);
   assert.equal(p.prices.retail, 960, 'applying twice gives the same price');
   applySite([p, q], { ...site, products: { a: { retailUnits: 12, partnerUnits: null, retailRub: null, partnerRub: null, availability: null } } }, 94);
   assert.deepEqual([p.prices.retail, q.prices.retail, q.availability], [1152, 500, 'InStock']);
   applySite([p, q], null, 94);
-  assert.deepEqual([p.prices.retail, p.prices.partner], [940, 705], 'no settings: the built prices');
+  assert.deepEqual([p.prices.retail, p.prices.partner], [940, null], 'no settings: the built retail price, no card price');
   const notes = [{ speaker: 'Врач', lecture: 'Лекция', text: 'Текст', role: '', course: '' }, { speaker: 'Другой', lecture: 'Лекция', text: 'Текст', role: '', course: '' }];
   assert.equal(noteKey(notes[0]), 'Врач|Лекция|Текст');
   assert.deepEqual(visibleNotes('a', notes, site).map(n => n.speaker), ['Другой']);

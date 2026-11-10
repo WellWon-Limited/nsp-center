@@ -7,11 +7,16 @@
 // database keeps only its SHA-256. Requests that change data must be JSON from the site's own origin (CSRF guard).
 import { createHash, randomBytes, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
+import { domainToUnicode } from 'node:url';
 import { SITE_SCHEMA, siteRoute } from './site-admin.mjs';
+import { emailError, formatPhone, phoneError } from '../src/contact-fields.mjs';
 
 const scrypt = promisify(scryptCallback);
 export const SESSION_COOKIE = 'nsp_session';
 const SESSION_DAYS = 30;
+/** Site management (/admin/) has its own sign-in and session, separate from a customer's: a staff account is not a
+ *  customer account, and its session lasts one working day (research 2026-11-10, OWASP session management). */
+const STAFF_COOKIE = 'nsp_staff', STAFF_HOURS = 12;
 const MAX_BODY = 256 * 1024;
 const MAX_DATA = 200 * 1024;
 /** The parts of the visitor's state that belong to the account (src/store.tsx SYNC_KEYS mirrors this list). */
@@ -62,24 +67,32 @@ export async function verifyPassword(password, stored) {
 const decoyHash = await hashPassword(randomBytes(12).toString('hex'));
 
 const clean = (v, max) => typeof v === 'string' ? v.trim().slice(0, max) : '';
+/** One spelling per mailbox: lower case, and a Cyrillic domain as letters, whether the browser sent "почта.рф" or its
+ *  Latin form "xn--80a1acny.xn--p1ai" (Chrome does the latter), so the same person never gets two accounts. */
+export const normalEmail = value => {
+  const email = clean(value, 120).toLowerCase(), at = email.lastIndexOf('@');
+  if (at < 1 || !email.includes('xn--')) return email;
+  const domain = domainToUnicode(email.slice(at + 1));
+  return domain ? `${email.slice(0, at)}@${domain}` : email;
+};
 const digits = v => v.replace(/\D/g, '');
 /** Last 10 digits of a Russian phone: «+7 900 111-22-33», «8 900 1112233» and «9001112233» are the same number. */
 export const phoneKey = phone => { const d = digits(phone); return d.length >= 10 ? d.slice(-10) : null; };
-const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /** Name, phone and discount card number as the visitor may edit them; `error` is a sentence for the visitor. */
 export function validateProfile(body) {
   const firstName = clean(body?.firstName, 60), lastName = clean(body?.lastName, 60), phone = clean(body?.phone, 30), partnerId = digits(clean(body?.partnerId, 20));
   if (!firstName || !lastName) return { error: 'Укажите имя и фамилию.' };
-  if (phone && !phoneKey(phone)) return { error: 'Проверьте телефон: нужно 10 цифр после +7.' };
-  return { value: { firstName, lastName, phone, phoneKey: phone ? phoneKey(phone) : null, partnerId } };
+  if (phoneError(phone)) return { error: phoneError(phone) };
+  const shown = formatPhone(phone);
+  return { value: { firstName, lastName, phone: shown, phoneKey: shown ? phoneKey(shown) : null, partnerId } };
 }
 export function validateRegistration(body) {
   const profile = validateProfile(body);
   if (profile.error) return profile;
-  const email = clean(body?.email, 120).toLowerCase();
+  const email = normalEmail(body?.email);
   const password = typeof body?.password === 'string' ? body.password : '';
-  if (!EMAIL.test(email)) return { error: 'Проверьте email.' };
+  if (emailError(email)) return { error: emailError(email) };
   if (password.length < 8 || password.length > 200) return { error: 'Пароль должен быть не короче 8 символов.' };
   if (body?.consent !== true) return { error: 'Нужно согласие на обработку персональных данных.' };
   return { value: { ...profile.value, email, password } };
@@ -95,7 +108,7 @@ export function parseCookies(header = '') {
 }
 const tokenHash = token => createHash('sha256').update(token).digest('hex');
 const isHttps = req => req.socket.encrypted || String(req.headers['x-forwarded-proto'] || '').split(',')[0].trim() === 'https';
-const cookie = (req, value, maxAge) => `${SESSION_COOKIE}=${value}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${maxAge}${isHttps(req) ? '; Secure' : ''}`;
+const cookie = (req, value, maxAge, name = SESSION_COOKIE) => `${name}=${value}; Path=/; HttpOnly; SameSite=${name === STAFF_COOKIE ? 'Strict' : 'Lax'}; Max-Age=${maxAge}${isHttps(req) ? '; Secure' : ''}`;
 const clientIp = req => String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress || '';
 
 function send(res, status, body, headers = {}) {
@@ -127,48 +140,90 @@ function limiter(max, windowMs) {
   };
 }
 
-const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, email: row.email, phone: row.phone, partnerId: row.partner_id, createdAt: new Date(row.created_at).toISOString().slice(0, 10), ...(row.role === 'admin' ? { admin: true } : {}) });
+/** A member of staff as site management shows them. */
+const staffOf = row => ({ firstName: row.first_name, lastName: row.last_name, email: row.email });
+const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, email: row.email, phone: row.phone, partnerId: row.partner_id, createdAt: new Date(row.created_at).toISOString().slice(0, 10) });
 
 /**
  * Returns `handle(req, res, url)` for every /api/ request. With no `databaseUrl` (or `pool`) it answers 503.
- * `productIds` (a Set) limits reviews and product settings to the site's products. `adminEmails`: accounts with these
- * emails are administrators (on the server: ADMIN_EMAILS, comma-separated); more can be appointed in the admin section.
+ * `productIds` (a Set) limits reviews and product settings to the site's products. Staff accounts
+ * (site management, /admin/) are created by `npm run admin:create` or in «Сотрудники», never by registration.
+ * `cardProducts`, `buildRate`: the built products with their card prices and the build's ruble rate, for GET
+ * /api/card-prices (scripts/card-prices.mjs).
  * `cbr: false` skips asking cbr.ru for the reference rate (tests). `productBase(id)`: a product's built card content
  * (name, description, properties, certificates, photo), shown in the administrator's editor next to the changes.
  * The schema is created on the first request; a database that is down gives 503 and is retried on the next request.
  */
-export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, adminEmails = [], cbr = true } = {}) {
-  const admins = adminEmails.map(e => e.trim().toLowerCase()).filter(Boolean);
+export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, cbr = true } = {}) {
   if (!databaseUrl && !givenPool) return { enabled: false, handle: (req, res) => send(res, 503, { error: 'Сервер аккаунтов не подключён.' }), close: async () => {} };
   const pool = givenPool ?? new (await import('pg')).default.Pool({ connectionString: databaseUrl, max: 5 });
   // An idle connection dropped by the database (restart, shutdown) must not take the whole site server down.
   pool.on('error', error => console.error('Accounts database connection lost:', error.message));
   let ready = null;
-  const migrate = () => (ready ??= pool.query(SCHEMA + SITE_SCHEMA).then(() => admins.length && pool.query("update users set role = 'admin' where lower(email) = any($1)", [admins])).catch(error => { ready = null; throw error; }));
+  // Staff accounts are created only by `npm run admin:create` or by an administrator in «Сотрудники» — never by
+  // registering with a listed email (anyone could register it first). ADMIN_EMAILS is no longer read.
+  const migrate = () => (ready ??= pool.query(SCHEMA + SITE_SCHEMA).catch(error => { ready = null; throw error; }));
   const signIns = limiter(10, 15 * 60 * 1000), registrations = limiter(20, 60 * 60 * 1000);
 
-  async function startSession(req, userId) {
+  async function startSession(req, userId, staff = false) {
     const token = randomBytes(32).toString('base64url');
     await pool.query('delete from sessions where user_id = $1 and expires_at < now()', [userId]);
-    await pool.query(`insert into sessions (token_hash, user_id, expires_at) values ($1, $2, now() + interval '${SESSION_DAYS} days')`, [tokenHash(token), userId]);
-    return cookie(req, token, SESSION_DAYS * 86400);
+    const seconds = staff ? STAFF_HOURS * 3600 : SESSION_DAYS * 86400;
+    await pool.query(`insert into sessions (token_hash, user_id, expires_at) values ($1, $2, now() + interval '${seconds} seconds')`, [tokenHash(token), userId]);
+    return cookie(req, token, seconds, staff ? STAFF_COOKIE : SESSION_COOKIE);
   }
-  async function sessionUser(req) {
-    const token = parseCookies(req.headers.cookie)[SESSION_COOKIE];
+  async function userOf(req, name, role) {
+    const token = parseCookies(req.headers.cookie)[name];
     if (!token) return null;
-    const { rows } = await pool.query('select u.* from sessions s join users u on u.id = s.user_id where s.token_hash = $1 and s.expires_at > now()', [tokenHash(token)]);
+    const { rows } = await pool.query('select u.* from sessions s join users u on u.id = s.user_id where s.token_hash = $1 and s.expires_at > now() and u.role = $2', [tokenHash(token), role]);
     return rows[0] ?? null;
   }
+  /** The signed-in customer (the shop's cookie); a staff account is never a customer here. */
+  const sessionUser = req => userOf(req, SESSION_COOKIE, 'customer');
+  /** The signed-in member of staff (site management's own cookie). */
+  const staffUser = req => userOf(req, STAFF_COOKIE, 'admin');
   async function accountWithData(user) {
     const { rows } = await pool.query('select data, updated_at from account_data where user_id = $1', [user.id]);
     return { account: accountOf(user), data: rows[0]?.data ?? {}, updatedAt: rows[0]?.updated_at ?? null };
   }
   const taken = error => error?.code === '23505' ? (String(error.constraint).includes('phone') ? 'Этот телефон уже указан в другом аккаунте.' : 'Аккаунт с таким email уже есть. Войдите в него или укажите другой email.') : null;
 
+  /** Site management's sign-in (/admin/): /api/admin/login, /logout, /me. Only staff accounts; returns false for other
+   *  /api/admin/ paths (they are checked in scripts/site-admin.mjs with staffUser). */
+  async function staffAuth(req, res, path) {
+    const method = req.method;
+    if (path === '/api/admin/login' && method === 'POST') {
+      const body = await readJson(req);
+      const login = normalEmail(body?.login), password = typeof body?.password === 'string' ? body.password.slice(0, 200) : '';
+      const key = `staff|${login}`;
+      if (signIns.blocked(key)) { send(res, 429, { error: 'Слишком много попыток входа. Попробуйте через 15 минут.' }); return true; }
+      const { rows: [user] } = await pool.query("select * from users where lower(email) = $1 and role = 'admin'", [login]);
+      const ok = await verifyPassword(password, user?.password_hash ?? decoyHash) && Boolean(user);
+      if (!ok) { signIns.hit(key); send(res, 401, { error: 'Неверная почта или пароль сотрудника.' }); return true; }
+      signIns.reset(key);
+      await pool.query("insert into admin_log (user_id, action, detail) values ($1, 'login', '{}')", [user.id]);
+      send(res, 200, { staff: staffOf(user) }, { 'Set-Cookie': await startSession(req, user.id, true) });
+      return true;
+    }
+    if (path === '/api/admin/logout' && method === 'POST') {
+      const token = parseCookies(req.headers.cookie)[STAFF_COOKIE];
+      if (token) await pool.query('delete from sessions where token_hash = $1', [tokenHash(token)]);
+      send(res, 204, undefined, { 'Set-Cookie': cookie(req, '', 0, STAFF_COOKIE) });
+      return true;
+    }
+    if (path === '/api/admin/me' && method === 'GET') {
+      const user = await staffUser(req);
+      send(res, user ? 200 : 401, user ? { staff: staffOf(user) } : { error: 'Войдите в управление сайтом.' }, { 'Cache-Control': 'no-store' });
+      return true;
+    }
+    return false;
+  }
+
   async function route(req, res, path, url) {
     const method = req.method;
     if (method !== 'GET' && !sameOrigin(req, path === '/api/admin/upload')) return send(res, 403, { error: 'Запрос отклонён.' });
-    if (await siteRoute({ pool, send, readJson, sessionUser, productIds, productBase, cbr }, req, res, path, url)) return;
+    if (path.startsWith('/api/admin/') && await staffAuth(req, res, path)) return;
+    if (await siteRoute({ pool, send, readJson, sessionUser, staffUser, hashPassword, productIds, productBase, cardProducts, buildRate, cbr }, req, res, path, url)) return;
     if (path === '/api/auth/me' && method === 'GET') {
       const user = await sessionUser(req);
       return user ? send(res, 200, await accountWithData(user)) : send(res, 401, { error: 'Вы не вошли в аккаунт.' });
@@ -181,22 +236,22 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
       const v = checked.value;
       registrations.hit(ip);
       try {
-        const { rows } = await pool.query('insert into users (email, phone, phone_key, first_name, last_name, partner_id, password_hash, consent_at, role) values ($1, $2, $3, $4, $5, $6, $7, now(), $8) returning *', [v.email, v.phone, v.phoneKey, v.firstName, v.lastName, v.partnerId, await hashPassword(v.password), admins.includes(v.email) ? 'admin' : 'customer']);
+        const { rows } = await pool.query('insert into users (email, phone, phone_key, first_name, last_name, partner_id, password_hash, consent_at, role) values ($1, $2, $3, $4, $5, $6, $7, now(), $8) returning *', [v.email, v.phone, v.phoneKey, v.firstName, v.lastName, v.partnerId, await hashPassword(v.password), 'customer']);
         return send(res, 201, await accountWithData(rows[0]), { 'Set-Cookie': await startSession(req, rows[0].id) });
       } catch (error) { const message = taken(error); if (message) return send(res, 409, { error: message }); throw error; }
     }
     if (path === '/api/auth/login' && method === 'POST') {
       const body = await readJson(req);
-      const login = clean(body?.login, 120).toLowerCase(), password = typeof body?.password === 'string' ? body.password.slice(0, 200) : '';
+      const login = normalEmail(body?.login), password = typeof body?.password === 'string' ? body.password.slice(0, 200) : '';
       const key = `${clientIp(req)}|${login}`;
       if (signIns.blocked(key)) return send(res, 429, { error: 'Слишком много попыток входа. Попробуйте через 15 минут.' });
-      const { rows } = login.includes('@')
-        ? await pool.query('select * from users where lower(email) = $1', [login])
-        : await pool.query('select * from users where phone_key = $1', [phoneKey(login) ?? '']);
+      // Sign-in is by email only (owner, 2026-11-10); the phone stays a contact field of the profile.
+      const { rows } = await pool.query('select * from users where lower(email) = $1', [login]);
       const user = rows[0];
       const ok = await verifyPassword(password, user?.password_hash ?? decoyHash) && Boolean(user);
-      if (!ok) { signIns.hit(key); return send(res, 401, { error: 'Неверный телефон, email или пароль.' }); }
+      if (!ok || user.role === 'removed') { signIns.hit(key); return send(res, 401, { error: 'Неверный email или пароль.' }); }
       signIns.reset(key);
+      if (user.role === 'admin') return send(res, 403, { error: 'Это служебный аккаунт. Войдите в управление сайтом: nsp-center.ru/admin/', staff: true });
       return send(res, 200, await accountWithData(user), { 'Set-Cookie': await startSession(req, user.id) });
     }
     if (path === '/api/auth/logout' && method === 'POST') {

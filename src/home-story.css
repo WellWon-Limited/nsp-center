@@ -54,3 +54,118 @@
 
 /* Article titles are links: a quiet arrow makes the next step visible without underlining. */
 .home-story-chapter--reading .rich-content a[href*="/blog/"]::after{content:'\00a0\2192';white-space:nowrap;font-weight:400;color:var(--story-green)}
+
+/* Approved home details: panoramic introduction (6) and white review cards (7). */
+.home-story--selected.panel{border:0}
+.home-story--selected .home-story-layout{padding:0 var(--space-32) var(--space-32);border-top:0}
+.home-story--selected .story-introduction{padding-top:var(--space-32)}
+.home-story--selected .story-panorama{display:block;width:100%;height:360px;object-fit:cover;object-position:center 58%;border-radius:var(--radius-28)}
+.story-intro-card{position:relative;max-width:820px;margin:-100px auto 0;padding:var(--space-32) calc(var(--space-20) * 2);display:grid;grid-template-columns:1.15fr 1fr;gap:0 calc(var(--space-20) * 2);align-items:center;background:#fffdf7;border:1px solid var(--color-ink);border-radius:var(--radius-24);box-shadow:0 16px 48px -30px rgb(11 59 52 / .35)}
+.story-eyebrow{grid-column:1/-1;font-size:var(--text-10);letter-spacing:var(--tracking-kicker);font-weight:var(--weight-700);color:var(--color-muted)}
+.home-story--selected h2{font-weight:var(--weight-600);font-size:var(--text-28);line-height:1.2;letter-spacing:var(--tracking-heading);color:var(--color-ink)}
+.home-story--selected .story-intro-card h2{grid-column:1;grid-row:2/4;font-size:34px;line-height:1.15;margin-top:var(--space-16)}
+.story-intro-card>p{grid-column:2;grid-row:2;font-size:var(--text-14);line-height:1.85;color:var(--color-body)}
+.story-company-link{grid-column:2;grid-row:3;justify-self:start;margin-top:var(--space-16);gap:var(--space-20)}
+.story-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-16);padding:var(--space-28) 0}
+.story-benefit{display:flex;align-items:center;gap:var(--space-16);padding:var(--space-24);min-width:0}
+.story-benefit>svg{flex:none;color:var(--color-ink)}
+.home-story--selected .rich-content{font-size:var(--text-14);line-height:1.85;color:var(--color-body);min-width:0;max-width:none}
+.home-story--selected .rich-content p{margin:0;font-size:inherit;line-height:inherit}
+.home-story--selected .rich-content p+p{margin-top:var(--space-12)}
+.story-benefit .rich-content{font-size:var(--text-13)}
+.story-section{padding:var(--space-32) 0;border-top:1px solid var(--color-ink-line)}
+.story-section>h2{margin-bottom:var(--space-24)}
+.story-faq details{padding:var(--space-18) 0;border-top:1px solid var(--color-ink-line)}
+.story-faq details>summary{display:flex;align-items:center;justify-content:space-between;gap:var(--space-24);cursor:pointer;list-style:none;font-size:var(--text-14);font-weight:var(--weight-600);line-height:1.6}
+.story-faq details>summary::-webkit-details-marker{display:none}
+.story-faq-plus{position:relative;width:16px;height:16px;flex:none}
+.story-faq-plus::before,.story-faq-plus::after{content:'';position:absolute;top:7px;left:1px;width:14px;height:1px;background:currentColor}
+.story-faq-plus::after{transform:rotate(90deg)}
+.story-faq details[open] .story-faq-plus::after{display:none}
+.story-faq details>.rich-content{padding-top:var(--space-16);max-width:760px;font-size:var(--text-13)}
+.story-review-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-28)}
+.story-review{display:flex;gap:var(--space-16);padding:var(--space-28);min-width:0;border:1px solid var(--color-ink);border-radius:var(--radius-24);box-shadow:0 10px 28px -24px rgb(29 58 54 / .3)}
+.story-quote{flex:none;font:64px/.9 Georgia,serif;color:var(--color-ink);opacity:.25}
+.story-review h3{font-size:var(--text-13);font-weight:var(--weight-700);margin-top:var(--space-24)}
+.story-reviews-link{display:inline-flex;align-items:center;gap:var(--space-12);padding:var(--space-12) 0;margin-top:var(--space-12);min-height:44px;font-size:var(--text-14);font-weight:var(--weight-700);color:var(--color-ink);text-decoration:none}
+.story-journal-link{display:flex;align-items:center;justify-content:space-between;gap:var(--space-24);color:var(--color-ink);text-decoration:none}
+.story-journal-link p{margin-top:var(--space-8);font-size:var(--text-13);color:var(--color-muted)}
+.story-journal-link>svg{flex:none}
+.story-pickup{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-32);align-items:center;margin-top:0;padding:var(--space-32) 0;border-radius:0;background:var(--color-white)}
+.story-pickup h2{margin-bottom:var(--space-16)}
+.story-pickup p{font-size:var(--text-14);line-height:1.8}
+.story-pickup-info{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-12)}
+.story-pickup-info>a:not(.btn){font-size:var(--text-18);font-weight:var(--weight-600)}
+.story-pickup-info .btn{gap:var(--space-20);margin-top:var(--space-8)}
+.home-story--selected :is(a,a:hover,a:focus-visible,a:active,a:visited){text-decoration:none}
+.home-story--selected :is([id^=about-]){scroll-margin-top:calc(100px + env(safe-area-inset-top))}
+@media(max-width:959px){.story-intro-card{margin-inline:var(--space-24);padding:var(--space-28);gap:0 var(--space-24)}.story-benefit{padding:var(--space-16);gap:var(--space-12)}.home-story--selected .story-intro-card h2{font-size:var(--text-28)}}
+@media(max-width:639px){
+ .home-story--selected .home-story-layout{padding:0 var(--space-20) var(--space-24)}
+ .home-story--selected .story-introduction{padding-top:var(--space-24)}
+ .home-story--selected .story-panorama{height:260px;border-radius:var(--radius-24);object-position:64% center}
+ .story-intro-card{display:block;padding:var(--space-24) var(--space-20);margin:-52px var(--space-16) 0;border-radius:var(--radius-20);box-shadow:0 12px 32px -20px rgb(11 59 52 / .35)}
+ .home-story--selected .story-intro-card h2{font-size:29px;line-height:1.14;margin:var(--space-12) 0 var(--space-16)}
+ .story-intro-card>p{font-size:var(--text-13);line-height:1.8}
+ .story-company-link{margin-top:var(--space-20);font-size:var(--text-12)}
+ .story-benefits{grid-template-columns:1fr;gap:var(--space-10);padding:var(--space-20) 0 var(--space-28)}
+ .story-benefit{padding:var(--space-20);gap:var(--space-14)}
+ .story-section{padding:var(--space-28) 0}
+ .home-story--selected h2{font-size:var(--text-24)}
+ .story-section>h2{margin-bottom:var(--space-20)}
+ .story-faq details>summary{font-size:var(--text-13)}
+ .story-review-grid{grid-template-columns:1fr;gap:var(--space-16)}
+ .story-review{padding:var(--space-24) var(--space-20);gap:var(--space-12)}
+ .home-story--selected .story-review .rich-content{font-size:var(--text-13)}
+ .story-quote{font-size:52px}
+ .story-review h3{margin-top:var(--space-18)}
+ .story-journal-link{padding:var(--space-24) 0}
+ .home-story--selected .story-journal-link h2{font-size:var(--text-22)}
+ .story-journal-link p{font-size:var(--text-12)}
+ .story-pickup{grid-template-columns:1fr;padding:var(--space-24) 0;gap:var(--space-24)}
+ .home-story--selected .story-pickup h2{font-size:var(--text-22)}
+ .story-pickup p{font-size:var(--text-13)}
+ .story-pickup-info>a:not(.btn){font-size:var(--text-16)}
+}
+
+/* Selected pickup option 3: forest background and a light contact action. */
+.home-story--selected .story-pickup--forest{grid-template-columns:1.3fr 1fr;gap:calc(var(--space-20) * 2);padding:calc(var(--space-20) * 2);margin-top:var(--space-24);border:0;border-radius:var(--radius-28);background:var(--color-ink);color:var(--color-white)}
+.story-pickup-heading{display:flex;align-items:center;gap:var(--space-16);margin-bottom:var(--space-32)}
+.story-pickup-heading>svg{flex:none}
+.home-story--selected .story-pickup--forest h2{margin:0;font-size:var(--text-22);color:var(--color-white)}
+.story-pickup--forest .story-pickup-city{font-size:var(--text-13);color:var(--color-on-dark-muted);margin-bottom:var(--space-12)}
+.story-pickup--forest .story-pickup-street{font-size:38px;line-height:1.25;font-weight:var(--weight-600);letter-spacing:var(--tracking-heading)}
+.story-pickup--forest .story-pickup-details{margin-top:var(--space-16);font-size:var(--text-14);line-height:1.8;color:var(--color-on-dark-muted)}
+.story-pickup--forest .story-pickup-info{border-left:1px solid rgb(255 255 255 / .25);padding-left:calc(var(--space-20) * 2)}
+.story-pickup--forest .story-pickup-info>a:not(.btn){font-size:var(--text-18);color:var(--color-white)}
+.story-pickup--forest .story-pickup-info .btn{background:var(--color-white);border-color:var(--color-white);color:var(--color-ink);margin-top:var(--space-12)}
+.story-pickup--forest .story-pickup-info .btn:hover{background:#e4e9de;border-color:#e4e9de;color:var(--color-ink)}
+@media(max-width:639px){
+ .home-story--selected .story-pickup--forest{grid-template-columns:1fr;padding:var(--space-28) var(--space-24);gap:var(--space-28);border-radius:var(--radius-24)}
+ .story-pickup-heading{align-items:flex-start;gap:var(--space-12);margin-bottom:var(--space-28)}
+ .story-pickup-heading>svg{width:28px;height:28px}
+ .home-story--selected .story-pickup--forest h2{font-size:23px}
+ .story-pickup--forest .story-pickup-street{font-size:30px}
+ .story-pickup--forest .story-pickup-details{font-size:var(--text-13);margin-top:var(--space-14)}
+ .story-pickup--forest .story-pickup-info{border-left:0;border-top:1px solid rgb(255 255 255 / .25);padding:var(--space-24) 0 0}
+ .story-pickup--forest .story-pickup-info>a:not(.btn){font-size:17px;overflow-wrap:anywhere}
+}
+
+@media(min-width:640px){
+ .story-reviews{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-24)}
+ .story-reviews>h2{grid-column:1;grid-row:1;align-self:center;margin:0}
+ .story-reviews>.story-reviews-link{grid-column:2;grid-row:1;justify-self:end;align-self:center;margin:0}
+ .story-reviews>.story-review-grid{grid-column:1/-1;grid-row:2}
+}
+
+/* Always open (owner, 2026-11-10, variant 01 of about-open variants): an ordinary home section with a heading like
+   "Журнал о заботе", on the page background; the review cards are white. */
+.home-story--open{margin-top:var(--web-section)}
+.home-story--open .home-story-heading{margin-bottom:var(--space-24)}
+.home-story--selected.home-story--open .home-story-layout{padding:0}
+.home-story--selected.home-story--open .story-introduction{padding-top:0}
+.home-story--open .story-review{background:var(--color-white)}
+.home-story--selected.home-story--open .home-story-heading h2{font-size:var(--text-26);font-weight:var(--weight-800);letter-spacing:var(--tracking-heading);line-height:var(--leading-heading)}
+@media(max-width:639px){.home-story--selected.home-story--open .home-story-heading h2{font-size:var(--text-22)}}
+
+.story-reviews{border-bottom:1px solid var(--color-ink-line)}

@@ -1,5 +1,10 @@
 import { ORDER_SCHEMA, orderAdminRoute } from './order-admin.mjs';
 import { randomBytes } from 'node:crypto';
+import { cardPricesFor, cardUnitsOf, publicSiteSettings } from './card-prices.mjs';
+import { emailError } from '../src/contact-fields.mjs';
+import { randomInt } from 'node:crypto';
+/** 16 characters without look-alikes (no 0/O, 1/l/I): a staff member's first password, shown once. */
+export const oneTimePassword = () => Array.from({ length: 16 }, () => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(56)]).join('');
 // Site management (the administrator's part of the profile) and customer reviews, on the accounts database
 // (scripts/accounts.mjs routes /api/site, /api/reviews and /api/admin/* here).
 //
@@ -166,12 +171,29 @@ export async function siteSettings(pool) {
  * `ctx`: pool, send, readJson, sessionUser(req), productIds (Set of known product ids, or null to accept any).
  */
 export async function siteRoute(ctx, req, res, path, url) {
-  const { pool, send, readJson, sessionUser, productIds } = ctx;
+  const { pool, send, readJson, sessionUser, staffUser, productIds } = ctx;
   const method = req.method;
   const knownProduct = id => typeof id === 'string' && (!productIds || productIds.has(id));
   const log = (user, action, detail) => pool.query('insert into admin_log (user_id, action, detail) values ($1, $2, $3)', [user.id, action, JSON.stringify(detail)]);
 
-  if (path === '/api/site' && method === 'GET') { send(res, 200, await siteSettings(pool)); return true; }
+  // Card prices are not public: /api/site gives them (the administrator's card price fields) to administrators only,
+  // and /api/card-prices gives the card prices to a signed-in account with a discount card number (scripts/card-prices.mjs).
+  if (path === '/api/site' && method === 'GET') {
+    const [settings, staff] = await Promise.all([siteSettings(pool), staffUser(req)]);
+    send(res, 200, staff ? settings : publicSiteSettings(settings), { 'Cache-Control': 'no-store' });
+    return true;
+  }
+  if (path === '/api/card-prices' && method === 'GET') {
+    const [customer, staff] = await Promise.all([sessionUser(req), staffUser(req)]);
+    const user = staff ?? customer;
+    const headers = { 'Cache-Control': 'private, no-store' };
+    if (!user) { send(res, 401, { error: 'Войдите в аккаунт, чтобы видеть цены по дисконтной карте.' }, headers); return true; }
+    const admin = Boolean(staff);
+    if (!admin && !String(user.partner_id ?? '').trim()) { send(res, 403, { error: 'Укажите номер дисконтной карты в профиле.' }, headers); return true; }
+    const products = ctx.cardProducts ?? [];
+    send(res, 200, { prices: cardPricesFor(products, await siteSettings(pool), ctx.buildRate), ...(admin ? { units: cardUnitsOf(products) } : {}) }, headers);
+    return true;
+  }
 
   if (path === '/api/product-content' && method === 'GET') {
     const id = url.searchParams.get('id');
@@ -212,9 +234,9 @@ export async function siteRoute(ctx, req, res, path, url) {
   }
 
   if (!path.startsWith('/api/admin/')) return false;
-  const user = await sessionUser(req);
-  if (!user) { send(res, 401, { error: 'Вы не вошли в аккаунт.' }); return true; }
-  if (user.role !== 'admin') { send(res, 403, { error: 'Этот раздел только для администратора.' }); return true; }
+  // Site management: only a signed-in member of staff (its own cookie, scripts/accounts.mjs staffUser).
+  const user = await staffUser(req);
+  if (!user) { send(res, 401, { error: 'Войдите в управление сайтом.' }); return true; }
 
   if (await orderAdminRoute(ctx, req, res, path, url, user)) return true;
 
@@ -238,7 +260,7 @@ export async function siteRoute(ctx, req, res, path, url) {
       siteSettings(pool),
       pool.query("select l.detail, l.at, u.email from admin_log l left join users u on u.id = l.user_id where l.action = 'rate' order by l.at desc limit 30"),
       pool.query('select r.*, u.email, u.first_name, u.last_name from reviews r join users u on u.id = r.user_id order by (r.status = \'pending\') desc, r.created_at desc limit 500'),
-      pool.query('select email, first_name, last_name, role, created_at from users order by created_at desc limit 1000'),
+      pool.query("select email, first_name, last_name, role, created_at, (select max(at) from admin_log l where l.user_id = users.id and l.action = 'login') as last_login from users where role = 'admin' order by created_at"),
       ctx.cbr === false ? null : cbrUsd(),
     ]);
     send(res, 200, {
@@ -246,7 +268,8 @@ export async function siteRoute(ctx, req, res, path, url) {
       cbr,
       rateHistory: history.map(h => ({ rubPerUnit: Number(h.detail.rubPerUnit), from: h.detail.from === null || h.detail.from === undefined ? null : Number(h.detail.from), at: h.at, by: h.email })),
       reviews: reviews.map(r => ({ id: Number(r.id), productId: r.product_id, rating: r.rating, text: r.text, status: r.status, date: r.created_at, author: authorName(r), email: r.email })),
-      users: users.map(u => ({ email: u.email, name: `${u.first_name} ${u.last_name}`.trim(), role: u.role, createdAt: u.created_at })),
+      staff: users.map(u => ({ email: u.email, name: `${u.first_name} ${u.last_name}`.trim(), createdAt: u.created_at, lastLogin: u.last_login })),
+      customers: Number((await pool.query("select count(*)::int as n from users where role = 'customer'")).rows[0].n),
     });
     return true;
   }
@@ -336,15 +359,30 @@ export async function siteRoute(ctx, req, res, path, url) {
     send(res, 200, { ok: true });
     return true;
   }
-  if (path === '/api/admin/user') {
+  // «Сотрудники»: a staff account is created here with its own email (not by promoting a customer) and a one-time
+  // password shown to the administrator once; removing takes away the sign-in and closes its sessions.
+  if (path === '/api/admin/staff') {
     const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
-    const role = body?.role === 'admin' ? 'admin' : body?.role === 'customer' ? 'customer' : null;
-    if (!email || !role) { send(res, 400, { error: 'Укажите почту и роль.' }); return true; }
-    if (email === user.email.toLowerCase() && role !== 'admin') { send(res, 400, { error: 'Нельзя снять права администратора с самого себя.' }); return true; }
-    const { rowCount } = await pool.query('update users set role = $2 where lower(email) = $1', [email, role]);
-    if (!rowCount) { send(res, 404, { error: 'Нет аккаунта с такой почтой.' }); return true; }
-    await log(user, 'role', { email, role });
-    send(res, 200, { ok: true });
+    if (emailError(email)) { send(res, 400, { error: emailError(email) }); return true; }
+    if (body?.remove === true) {
+      if (email === user.email.toLowerCase()) { send(res, 400, { error: 'Нельзя удалить самого себя.' }); return true; }
+      const { rows: [gone] } = await pool.query("update users set role = 'removed' where lower(email) = $1 and role = 'admin' returning id", [email]);
+      if (!gone) { send(res, 404, { error: 'Нет сотрудника с такой почтой.' }); return true; }
+      await pool.query('delete from sessions where user_id = $1', [gone.id]);
+      await log(user, 'staff-removed', { email });
+      send(res, 200, { ok: true });
+      return true;
+    }
+    const { rows: [existing] } = await pool.query('select role from users where lower(email) = $1', [email]);
+    if (existing?.role === 'admin') { send(res, 409, { error: 'Этот сотрудник уже есть.' }); return true; }
+    if (existing?.role === 'customer') { send(res, 409, { error: 'Эта почта уже у покупателя. Для сотрудника нужна отдельная почта.' }); return true; }
+    const clean = (v, max) => typeof v === 'string' ? v.trim().slice(0, max) : '';
+    const password = oneTimePassword();
+    const firstName = clean(body?.firstName, 60) || 'Сотрудник', lastName = clean(body?.lastName, 60);
+    if (existing) await pool.query("update users set role = 'admin', password_hash = $2, first_name = $3, last_name = $4 where lower(email) = $1", [email, await ctx.hashPassword(password), firstName, lastName]);
+    else await pool.query("insert into users (email, phone, phone_key, first_name, last_name, partner_id, password_hash, consent_at, role) values ($1, '', null, $2, $3, '', $4, now(), 'admin')", [email, firstName, lastName, await ctx.hashPassword(password)]);
+    await log(user, 'staff-added', { email });
+    send(res, 201, { email, password });
     return true;
   }
   send(res, 404, { error: 'Нет такого адреса.' });

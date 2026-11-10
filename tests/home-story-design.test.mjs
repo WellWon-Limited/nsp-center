@@ -1,0 +1,42 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import * as cheerio from 'cheerio';
+test('Selected home story keeps source answers and review destinations in the rendered page',()=>{
+ const $=cheerio.load(readFileSync('dist/index.html','utf8'));
+ const story=$('#home-about');
+ assert.equal(story.prop('tagName'),'SECTION','the block is always open, not a collapsible details');
+ assert.equal(story.find('> .home-story-heading h2').text(),'О NSP Center');
+ assert.equal(story.find('> summary').length,0);
+ assert.equal(story.find('.story-intro-card').length,1);
+ assert.equal(story.find('.story-benefit').length,3);
+ assert.equal(story.find('.story-benefit circle').length,0);
+ const questions=story.find('.story-faq details');
+ assert.equal(questions.length,13);
+ assert.equal(questions.filter('[open]').length,0);
+ assert.ok(questions.first().text().includes('Спаниш-Форк'));
+ assert.equal(story.find('.story-review').length,2);
+ const reviews=story.find('.story-reviews');
+ const link=reviews.find('.story-reviews-link');
+ assert.equal(link.attr('href'),'/company/reviews/?from=home-about&section=reviews');
+ assert.equal(link.hasClass('btn'),false);
+ assert.equal(reviews.children().last().attr('class'),'story-reviews-link');
+ assert.equal(link.find('svg path').attr('d'),'m9 5 7 7-7 7');
+ assert.equal(story.find('.story-company-link').attr('href'),'/company/?from=home-about&section=company');
+ assert.equal(story.find('.story-journal-link').length,0);
+ assert.equal($('[data-ds-id=home-blog]').length,1);
+ assert.equal(story.find('.story-pickup .btn').attr('href'),'/contacts/?from=home-about&section=contacts');
+ assert.equal(story.find('.story-pickup--forest').length,1);
+ assert.ok(story.find('.story-pickup-street').text().includes('Обводного канала, 64'));
+ for(const id of ['service','company','answers','reviews','contacts'])assert.equal(story.find(`#about-${id}`).length,1);
+ assert.equal(story.find('.home-story-kicker,.home-story-reviews-toggle').length,0);
+});
+
+test('Reviews use the same quotation mark as the home preview instead of avatars',()=>{
+ const $=cheerio.load(readFileSync('dist/company/reviews/index.html','utf8'));
+ const reviews=$('.information-review');
+ assert.ok(reviews.length>0);
+ assert.equal($('.information-initial').length,0);
+ assert.equal($('.information-review-quote').length,reviews.length);
+ assert.equal($('.information-review-quote').first().text(),'“');
+});

@@ -1,4 +1,4 @@
-import {BackLink} from './ui';
+import {BackLink,Icon} from './ui';
 import './company-variants.css';
 
 export const concepts=[
@@ -8,7 +8,7 @@ export const concepts=[
 ];
 type Concept=typeof concepts[number];
 const picture=(name:string)=>`/images/company-concepts/${name}-v1.png`;
-export function Arrow(){return <span aria-hidden="true">↗</span>;}
+export function Arrow(){return <Icon name="chevron" size={20}/>;}
 function Story({concept}:{concept:Concept}){return <section className="co-story co-section" id="history" data-ds-id="company-history"><div><span className="co-kicker">НАШИ КОРНИ · 1972</span><h2>Всё началось<br/>с простой идеи.</h2><p>В семье Хьюзов травы впервые поместили в капсулы — так принимать их стало удобнее. Это небольшое семейное начинание стало отправной точкой Nature’s Sunshine.</p><p>С тех пор интерес к природным ингредиентам и поиск новых решений остаются частью подхода компании.</p></div><figure><img src={picture(concept.id==='story'?'botanical':'origins')} alt={concept.id==='story'?'Цветы эхинацеи в солнечном саду':'Руки садовода держат растение с корнями'} loading="lazy" width="1536" height="1024"/><figcaption>От интереса к растениям — к ежедневной заботе.</figcaption></figure></section>;}
 const principles=[['01','Чистота','Внимание к происхождению и характеристикам растительного сырья.'],['02','Состав','Продуманное сочетание ингредиентов в каждой формуле.'],['03','Исследования','Научный подход к изучению свойств растений и готовых продуктов.'],['04','Люди и планета','Ответственное отношение к людям и природным ресурсам.'],['05','Производство','Последовательная работа с качеством на этапах производства.'],['06','Опыт','Знания о травах, которые компания развивает с 1972 года.']];
 function Principles(){return <section className="co-principles co-section" id="quality" data-ds-id="company-principles"><div className="co-section-heading"><span className="co-kicker">В ОСНОВЕ КАЖДОГО РЕШЕНИЯ</span><h2>Шесть принципов.<br/>Один подход к качеству.</h2><p>Природа задаёт направление. Исследования помогают двигаться дальше.</p></div><div className="co-principle-grid">{principles.map(([n,title,copy])=><article key={n}><span>{n}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>;}

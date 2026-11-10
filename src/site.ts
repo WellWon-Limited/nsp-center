@@ -24,9 +24,16 @@ export function pricesUnder(p: Product, original: Pick<Original, 'retail' | 'par
   return { retail: o?.retailRub ?? fromUnits(units.retail, original.retail) ?? original.retail, partner: o?.partnerRub ?? fromUnits(units.partner, original.partner) };
 }
 
+/** Discount-card prices from GET /api/card-prices (scripts/card-prices.mjs): only for a signed-in account with a card
+ *  number, or an administrator (who also gets the price list's card units for the price editor). */
+export type CardPrices = { prices: Record<string, number>; units?: Record<string, number> };
+/** The settings without the administrator's card price fields: what may be kept in this browser's cache. */
+export const withoutCardFields = (site: SiteSettings): SiteSettings => ({ ...site, products: Object.fromEntries(Object.entries(site.products).map(([id, o]) => [id, { ...o, partnerUnits: null, partnerRub: null }])) });
+
 /** Puts the settings into the product objects the pages read (prices and stock); calling it again with other settings
- *  starts from the built values, so it never compounds. */
-export function applySite(products: Iterable<Product>, site: SiteSettings | null, buildRate: number) {
+ *  starts from the built values, so it never compounds. The card price is set only from `cardPrices` (the built pages and
+ *  bundle carry none), so without it every visitor sees retail prices. */
+export function applySite(products: Iterable<Product>, site: SiteSettings | null, buildRate: number, cardPrices: CardPrices | null = null) {
   for (const p of products) {
     let original = originals.get(p);
     if (!original) { original = { retail: p.prices.retail, partner: p.prices.partner, availability: p.availability, availability_text: p.availability_text, name: p.name }; originals.set(p, original); }
@@ -37,9 +44,11 @@ export function applySite(products: Iterable<Product>, site: SiteSettings | null
     const card = site?.cards?.[p.id];
     p.name = card?.name ?? original.name ?? p.name;
     if (card?.image) p.adminImage = card.image; else delete p.adminImage;
-    const { retail, partner } = pricesUnder(p, original, site, buildRate);
+    const { retail } = pricesUnder(p, original, site, buildRate);
     p.prices.retail = retail;
-    p.prices.partner = partner;
+    p.prices.partner = cardPrices?.prices[p.id] ?? null;
+    const units = cardPrices?.units?.[p.id];
+    if (units !== undefined && p.prices.units) p.prices.units = { ...p.prices.units, partner: units };
     const availability = site?.products[p.id]?.availability ?? original.availability;
     p.availability = availability;
     p.availability_text = availability === original.availability ? original.availability_text : AVAILABILITY_TEXT[availability ?? ''] ?? original.availability_text;

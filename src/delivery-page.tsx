@@ -1,3 +1,4 @@
+import {Icon} from './ui';
 import {InformationHeader,InformationClosing} from './information-layout';
 import './delivery-page.css';
 
@@ -22,6 +23,6 @@ export function DeliveryPage(){return <div className="delivery-page information-
  </section>
  <section className="delivery-section">
   <h2>CDEK по России</h2>
-  <div className="delivery-copy"><p>Отправляем заказы в регионы России до пункта выдачи (ПВЗ) или по указанному вами адресу. Этот способ доставки доступен только по полной предоплате.</p><p>Обработка заказа занимает до 1 рабочего дня, с понедельника по пятницу. Отгрузка в курьерскую службу CDEK занимает 2 рабочих дня.</p><p>Стоимость и сроки доставки рассчитываются индивидуально при оформлении заказа. Они зависят от веса и габаритов посылки, стоимости товаров и адреса получения. Доставка оплачивается по тарифам перевозчика.</p><p>После передачи посылки на отправку вы получите SMS с номером экспресс-накладной. По нему можно следить за заказом на сайте CDEK.</p><a className="delivery-tracking" href="https://www.cdek.ru/ru/tracking" target="_blank" rel="noopener noreferrer">Отследить посылку в CDEK <span aria-hidden="true">↗</span></a></div>
+  <div className="delivery-copy"><p>Отправляем заказы в регионы России до пункта выдачи (ПВЗ) или по указанному вами адресу. Этот способ доставки доступен только по полной предоплате.</p><p>Обработка заказа занимает до 1 рабочего дня, с понедельника по пятницу. Отгрузка в курьерскую службу CDEK занимает 2 рабочих дня.</p><p>Стоимость и сроки доставки рассчитываются индивидуально при оформлении заказа. Они зависят от веса и габаритов посылки, стоимости товаров и адреса получения. Доставка оплачивается по тарифам перевозчика.</p><p>После передачи посылки на отправку вы получите SMS с номером экспресс-накладной. По нему можно следить за заказом на сайте CDEK.</p><a className="delivery-tracking" href="https://www.cdek.ru/ru/tracking" target="_blank" rel="noopener noreferrer">Отследить посылку в CDEK <Icon name="chevron" size={20}/></a></div>
  </section>
 </div><InformationClosing>Поможем уточнить условия получения вашего заказа.</InformationClosing></div>;}

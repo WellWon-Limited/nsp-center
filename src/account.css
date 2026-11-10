@@ -83,6 +83,9 @@
   gap: var(--space-12);
 }
 
+.account-form-field { display: grid; gap: var(--space-6); align-content: start; }
+.account-form-field label { display: block; }
+
 .account-form label {
   display: grid;
   gap: var(--space-6);
@@ -100,26 +103,6 @@
   display: flex;
   align-items: center;
   gap: var(--space-16);
-}
-
-.account-orders {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-8);
-}
-
-.account-orders li {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-16);
-}
-
-.account-orders small {
-  display: block;
-  font-size: var(--text-12);
-  color: var(--color-muted);
 }
 
 .account-link {
@@ -351,7 +334,7 @@
 
 /* Favourites and waiting list: cards as wide as in the catalog (about 310px), not squeezed four to a row. */
 @media (min-width: 640px) {
-  .account-favorites .product-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 310px)); justify-content: center; gap: var(--space-18); }
+  .account-favorites .product-grid { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 310px)); justify-content: center; gap: var(--space-18); }
 }
 
 /* Keep a deep forest tone behind the text on the narrow discount card. */

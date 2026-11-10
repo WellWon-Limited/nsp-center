@@ -16,7 +16,8 @@
     "check": "npm run build && npm test && node scripts/check-content.mjs",
     "check:canvas": "node scripts/check-canvas.mjs",
     "db:local": "node scripts/local-db.mjs",
-    "db:seed": "node scripts/seed-test-accounts.mjs"
+    "db:seed": "node scripts/seed-test-accounts.mjs",
+    "admin:create": "node scripts/create-admin.mjs"
   },
   "dependencies": {
     "pg": "^8.23.1",

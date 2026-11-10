@@ -3,6 +3,7 @@ import './pwa.css';
 import { useEffect, useState } from 'react';
 import { data, shortName, today, useStore } from './store';
 import { Icon } from './ui';
+import { addNotice, namesLine } from './notices.mjs';
 
 // Installable app (PWA, docs/DEVELOPMENT.md): the service worker (dist/sw.js, scripts/pwa.mjs) keeps the app working
 // offline; this module registers it, offers the install at the top of the screen and turns plan times into reminders.
@@ -169,7 +170,14 @@ export function useIntakeReminders() {
       const items = due.map(it => ({ it, name: shortName(data.products.find(p => p.id === it.id)?.name || '') })).filter(x => x.name);
       setState(s => ({ ...s,
         reminded: [...s.reminded, ...due.map(it => `${today()}:${it.id}:${it.time}`)].slice(-100),
-        notices: [...items.map(({ it, name }) => ({ id: `${today()}-${it.id}-${it.time}`, title: 'Время приёма', text: `${it.time} — ${name}`, date: now.toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }), url: '/health/', read: false })), ...s.notices].slice(0, 50) }));
+        // One line per intake time with all its products ("Коэнзим Q10, Хлорофилл, +1"), not a line per product.
+        notices: [...new Set(items.map(({ it }) => it.time))].reduce((list, t) => {
+          const id = `${today()}-intake-${t}`;
+          // Everything of this time reminded today, so a product due a minute later joins the same line.
+          const keys = new Set([...s.reminded, ...due.map(it => `${today()}:${it.id}:${it.time}`)]);
+          const names = [...new Set(s.intake.filter(it => it.time === t && keys.has(`${today()}:${it.id}:${it.time}`)).map(it => shortName(data.products.find(p => p.id === it.id)?.name || '')).filter(Boolean))];
+          return addNotice(list, { id, kind: 'intake', title: `Время приёма ${t}`, text: namesLine(names), at: now.toISOString(), date: '', url: '/health/', read: false });
+        }, s.notices) }));
       if ('Notification' in window && Notification.permission === 'granted') navigator.serviceWorker?.ready.then(reg => {
         for (const { it, name } of items) reg.showNotification('Время приёма', { body: `${it.time} — ${name}\nПерейти к плану`, icon: '/icons/icon-192.png', badge: '/icons/icon-192.png', tag: `intake-${it.id}`, data: { url: '/health/' } });
       }).catch(() => { /* no service worker: the bell still has it */ });

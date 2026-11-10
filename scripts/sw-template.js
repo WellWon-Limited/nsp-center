@@ -23,6 +23,8 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  // Site management is never kept offline on a device (staff screens, research 2026-11-10).
+  if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) return;
   // Pages: network first, then the cached copy, then the cached home page (the app renders the route itself).
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request).then(response => put(request, response))
@@ -34,7 +36,7 @@ self.addEventListener('fetch', event => {
     event.respondWith(caches.match(request).then(hit => hit || fetch(request).then(response => put(request, response))));
     return;
   }
-  if (/^\/(media|images|icons)\//.test(url.pathname) || url.pathname === '/manifest.webmanifest') {
+  if (/^\/(media|images|icons|fonts|prototype\/fonts)\//.test(url.pathname) || url.pathname === '/manifest.webmanifest') {
     event.respondWith(caches.match(request).then(hit => {
       const fresh = fetch(request).then(response => put(request, response)).catch(() => hit);
       return hit || fresh;

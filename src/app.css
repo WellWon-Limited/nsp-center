@@ -475,3 +475,37 @@ html[data-cart-count]:not([data-cart-count="0"]) .site-header .cart-link .cart-c
 /* Reserve the account screen before local cart/profile data has loaded. */
 .site-main.site-main--account-route{min-height:calc(100svh - var(--site-header-height,0px))}
 @media(max-width:639px){.site-main.site-main--account-route{min-height:var(--phone-first-screen-height)}}
+
+/* Desktop categories keep the type size while reducing each row's vertical padding. */
+@media(min-width:960px){
+ body:has(.catalog-layout) .site-main .catalog-sidebar.panel{gap:0}
+ body:has(.catalog-layout) .catalog-sidebar>a{padding:var(--space-8) var(--space-10);line-height:var(--leading-compact)}
+}
+
+/* One full-width row per phone menu destination, with its chevron on the right. */
+@media(max-width:639px){
+ .site-header .mobile-menu{grid-template-columns:minmax(0,1fr);gap:var(--space-2)}
+ .site-header .mobile-menu a{min-height:44px;padding:var(--space-12) var(--space-14);font-size:var(--text-14);line-height:var(--leading-compact);border-radius:var(--radius-12)}
+ .site-header .mobile-menu a>svg{flex:none;margin-left:var(--space-16)}
+}
+
+/* Align the full-catalog action with the title below the small section label. */
+:is([data-ds-id="home-products"],[data-ds-id="home-blog"]) .section-heading{align-items:flex-end}
+:is([data-ds-id="home-products"],[data-ds-id="home-blog"]) .section-heading>a{display:inline-flex;align-items:center;gap:var(--space-8);align-self:flex-end;padding-bottom:var(--space-4);line-height:var(--leading-compact)}
+
+/* Back navigation uses the same chevron as forward actions, facing left. */
+.information-home>svg{transform:rotate(180deg);flex:none}
+.back-action{display:inline-flex;align-items:center;gap:var(--space-8)}
+.back-action>svg{transform:rotate(180deg);flex:none}
+
+/* Desktop navigation marks its current destination with a quiet dark underline. */
+@media(min-width:960px) and (pointer:fine){
+ .desktop-nav a.active::after{left:0;right:0;width:auto;height:2px;bottom:calc(-1 * var(--space-6));border-radius:0;background:var(--color-ink)}
+}
+/* Responsive sweep 2026-11-10 (16 widths, 320–2560 px):
+   - the narrowest phones (320–359 px): the header's logo and three icons fit without running past the right edge;
+   - a long word in a product card title («Противопаразитарный») breaks with a hyphen instead of being cut off;
+   - form fields are 16 px on phones and touch screens, so iPhone Safari does not zoom the page in on tapping them. */
+@media(max-width:359px){.site-header .header-inner{gap:var(--space-8);padding-inline:var(--space-12)}.site-header .header-actions{gap:var(--space-2)}.site-header .header-actions .icon-btn{width:40px;height:40px}.site-header .brand{font-size:var(--text-18)}}
+.product-meta h3,.product-meta h3 a{overflow-wrap:break-word;hyphens:auto}
+@media(max-width:639px),(pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:max(16px,1em)}}

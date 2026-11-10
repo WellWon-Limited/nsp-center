@@ -1,0 +1,39 @@
+/* Email and phone fields (contact-inputs.tsx). */
+.contact-error,
+.contact-suggestion {
+  margin-top: var(--space-6);
+  font-size: var(--text-12);
+  line-height: 1.45;
+}
+.contact-error { color: #ad6338; }
+.contact-suggestion { color: var(--color-muted); }
+.contact-suggestion button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-link);
+  font: inherit;
+  font-weight: var(--weight-700);
+  cursor: pointer;
+}
+
+.phone-field {
+  position: relative;
+}
+.phone-field-prefix {
+  position: absolute;
+  top: 50%;
+  left: var(--space-18);
+  font-size: var(--text-14);
+  transform: translateY(-50%);
+  color: var(--color-ink);
+  line-height: 1;
+  pointer-events: none;
+}
+.phone-field .field {
+  width: 100%;
+  padding-left: calc(var(--space-18) + 22px);
+}
+
+/* On phones fields are 16 px (no iPhone zoom, app.css), so «+7» follows the digits' size. */
+@media (max-width: 639px), (pointer: coarse) { .phone-field-prefix { font-size: 16px; } .phone-field .field { padding-left: calc(var(--space-18) + 26px); } }

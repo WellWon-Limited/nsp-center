@@ -96,7 +96,7 @@ export function RecommendTest() {
         ? <button type="button" className={`panel panel--interactive ${multi.includes(i) ? 'is-selected' : ''}`} aria-pressed={multi.includes(i)} key={o.label} onClick={() => setMulti(m => o.areas ? (m.includes(i) ? m.filter(x => x !== i) : [...m.filter(x => questions[step].options[x].areas), i]) : [i])}>{o.label}{multi.includes(i) && <Icon name="check" size={18} />}</button>
         : <button type="button" className="panel panel--interactive" key={o.label} onClick={() => answer([i])}>{o.label}<Icon name="chevron" size={18} /></button>)}</div>
       {q.multi && <button type="button" className="btn card-cart-button recommend-next" disabled={!multi.length} onClick={() => answer(multi)}>Показать рекомендации</button>}
-      {step > 0 && <button type="button" className="text-button" onClick={() => { setAnswers(a => a.slice(0, -1)); setMulti([]); }}>← Назад</button>}
+      {step > 0 && <button type="button" className="text-button back-action" onClick={() => { setAnswers(a => a.slice(0, -1)); setMulti([]); }}><Icon name="chevron" size={18}/>Назад</button>}
     </section>
   </div>;
 }

@@ -148,7 +148,7 @@ const SPECIALIST = 'Связаться со специалистом';
 /**
  * env: YANDEX_API_KEY, YANDEX_FOLDER_ID, YANDEX_MODEL (default yandexgpt-5.1), AI_PROVIDER=mock (development),
  * AI_DAILY_LIMIT (questions per address a day, default 30), AI_MONTHLY_LIMIT_RUB (default 3000),
- * AI_PRICE_PER_1K_RUB (price of 1000 tokens — take it from the Yandex AI Studio tariff; default 1.2), AI_CORPUS_FILE.
+ * AI_PRICE_PER_1K_RUB (price of 1000 tokens, rubles with VAT; default 0.8 — YandexGPT Pro 5.1, synchronous, Yandex AI Studio tariff 2026), AI_CORPUS_FILE.
  * `pool`: the accounts database, for the question log and the month's spending (without it both live in memory).
  */
 export function createAi({ content, env = process.env, pool = null, provider: given = null } = {}) {
@@ -159,7 +159,7 @@ export function createAi({ content, env = process.env, pool = null, provider: gi
   if (env.AI_CORPUS_FILE && existsSync(env.AI_CORPUS_FILE)) extra = readFileSync(env.AI_CORPUS_FILE, 'utf8').split('\n').filter(Boolean).map(l => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
   const index = buildIndex(buildCorpus(content, extra));
   const productIds = new Set(content.products.map(p => p.id));
-  const daily = Number(env.AI_DAILY_LIMIT) || 30, monthlyRub = Number(env.AI_MONTHLY_LIMIT_RUB) || 3000, pricePer1k = Number(env.AI_PRICE_PER_1K_RUB) || 1.2;
+  const daily = Number(env.AI_DAILY_LIMIT) || 30, monthlyRub = Number(env.AI_MONTHLY_LIMIT_RUB) || 3000, pricePer1k = Number(env.AI_PRICE_PER_1K_RUB) || 0.8;
   const perIp = new Map(); let memTokens = { month: '', tokens: 0 };
   const month = () => new Date().toISOString().slice(0, 7);
   const spentRub = async () => {

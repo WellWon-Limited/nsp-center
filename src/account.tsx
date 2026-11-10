@@ -1,9 +1,12 @@
 import './account.css';
-import { AdminPanel } from './admin';
+import { ConfirmDialog } from './admin';
 import { useEffect, useState, type FormEvent } from 'react';
-import { data, money, partnerSignupUrl, useStore, type Account } from './store';
+import { data, partnerSignupUrl, useStore, type Account } from './store';
 import { Icon, ProductGrid } from './ui';
 import { InstallAppCard } from './pwa';
+import { PhoneInput } from './contact-inputs';
+import { phoneError } from './contact-fields.mjs';
+import { purchasedIds } from './purchased-ids.mjs';
 
 // Signed-in profile of the demo account (see auth.tsx): the discount card under the greeting, then personal data,
 // order drafts, the intake plan, the app install card (until the app is installed) and favourites, all kept in this browser.
@@ -17,6 +20,7 @@ function PersonalData({ account }: { account: Account }) {
   const [draft, setDraft] = useState({ firstName: account.firstName, lastName: account.lastName, phone: account.phone });
   const save = (e: FormEvent) => {
     e.preventDefault();
+    if (phoneError(draft.phone)) { notify(phoneError(draft.phone)); return; }
     setState(s => s.account ? { ...s, name: draft.firstName.trim(), account: { ...s.account, firstName: draft.firstName.trim(), lastName: draft.lastName.trim(), phone: draft.phone.trim() } } : s);
     setEditing(false); notify('Данные сохранены');
   };
@@ -25,7 +29,7 @@ function PersonalData({ account }: { account: Account }) {
     {editing ? <form className="account-form" onSubmit={save}>
       <label>Имя<input className="field" value={draft.firstName} onChange={e => setDraft(d => ({ ...d, firstName: e.target.value }))} required maxLength={60} autoComplete="given-name" /></label>
       <label>Фамилия<input className="field" value={draft.lastName} onChange={e => setDraft(d => ({ ...d, lastName: e.target.value }))} required maxLength={60} autoComplete="family-name" /></label>
-      <label>Телефон<input className="field" type="tel" value={draft.phone} onChange={e => setDraft(d => ({ ...d, phone: e.target.value }))} maxLength={30} autoComplete="tel" /></label>
+      <div className="account-form-field"><label htmlFor="account-phone">Телефон</label><PhoneInput id="account-phone" value={draft.phone} onChange={phone => setDraft(d => ({ ...d, phone }))} /></div>
       <div className="account-form-actions"><button className="btn btn--primary">Сохранить</button><button type="button" className="text-button" onClick={() => setEditing(false)}>Отмена</button></div>
     </form> : <dl className="account-data">
       <div><dt>Имя</dt><dd>{account.firstName} {account.lastName}</dd></div>
@@ -78,23 +82,21 @@ function DiscountCard({ account }: { account: Account }) {
         <input className="field" inputMode="numeric" placeholder="Номер карты" aria-label="Номер дисконтной карты" value={id} onChange={e => setId(e.target.value)} />
         <button className="btn">Добавить</button>
       </form>
-      <a className="discount-card-link" href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту ↗</a>
+      <a className="discount-card-link" href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту <Icon name="chevron" size={18}/></a>
     </>}
   </section>;
 }
 
 export function AccountPage({ account }: { account: Account }) {
-  const { state, logout, pendingReviews } = useStore();
-  // An administrator's «Управление сайтом» opens in place of the account (/profile/?admin=1). The account renders only in
-  // the browser (the profile waits for the store), so the address is read at once and the account never flashes first.
-  const adminView = Boolean(account.admin) && typeof location !== 'undefined' && new URLSearchParams(location.search).get('admin') === '1';
+  const { state, logout, notify } = useStore();
+  const bought = purchasedIds(state.orders, new Set(data.products.map(p => p.id))).length;
+  const [leaving, setLeaving] = useState(false);
   const favorites = data.products.filter(p => state.favorites.includes(p.id));
   const waiting = data.products.filter(p => state.waitlist.some(x => x.id === p.id));
   const done = state.intake.filter(x => x.done).length;
   const created = russianDate(account.createdAt);
   // Entering the account (after sign-in or registration) starts at the top of the page.
   useEffect(() => { window.scrollTo({ top: 0 }); }, []);
-  if (adminView) return <AdminPanel />;
   return <div className="account" data-ds-id="account">
     <header className="account-head">
       <span className="ds-kicker">Личный кабинет</span>
@@ -103,24 +105,24 @@ export function AccountPage({ account }: { account: Account }) {
     </header>
 
     <DiscountCard account={account} />
-    {account.admin && <a className="admin-entry" href="/profile/?admin=1" data-ds-id="admin-entry"><span><strong>Управление сайтом</strong><small>{pendingReviews ? `Новых отзывов на проверку: ${pendingReviews}` : 'Заказы, курс у.е., цены и наличие, отзывы'}</small></span>{pendingReviews > 0 && <span className="admin-count">{pendingReviews}</span>}<Icon name="arrow" size={20} /></a>}
 
     <div className="account-stack">
       <PersonalData account={account} />
       <section className="account-card account-card--row" data-ds-id="account-orders">
         <div>
           <h2>Мои заказы</h2>
-          {state.orders.length ? <ul className="account-orders">{state.orders.map(o => <li key={o.id}><span><strong>{o.date}</strong><small>{o.items} шт. · черновик</small></span><strong>{money(o.total)}</strong></li>)}</ul>
-            : <p className="ds-muted">Заказов пока нет. Соберите корзину и сохраните заказ.</p>}
+          {/* The same products as "Мои покупки" (src/purchased-ids.mjs), so the two never disagree. */}
+          {bought ? <p className="ds-muted">{bought} {bought % 10 === 1 && bought % 100 !== 11 ? 'товар' : bought % 10 >= 2 && bought % 10 <= 4 && (bought % 100 < 12 || bought % 100 > 14) ? 'товара' : 'товаров'}</p>
+            : <p className="ds-muted">Покупок ещё не было</p>}
         </div>
-        <a className="account-link" href="/cart/">В корзину <Icon name="arrow" size={16} /></a>
+        <a className="account-link" href="/profile/purchases/">Перейти к покупкам <Icon name="chevron" size={16} /></a>
       </section>
       <section className="account-card account-card--row" data-ds-id="account-plan">
         <div>
           <h2>План приёма</h2>
           <p className="ds-muted">{state.intake.length ? `Сегодня отмечено ${done} из ${state.intake.length}` : 'Добавьте продукты и время приёма — сайт будет напоминать о плане.'}</p>
         </div>
-        <a className="account-link" href="/health/">Открыть план <Icon name="arrow" size={16} /></a>
+        <a className="account-link" href="/health/">Открыть план <Icon name="chevron" size={16} /></a>
       </section>
       <InstallAppCard />
     </div>
@@ -134,6 +136,11 @@ export function AccountPage({ account }: { account: Account }) {
       <h2 className="account-section-title">Лист ожидания</h2>
       {waiting.length ? <ProductGrid products={waiting}/> : <p className="account-waitlist-empty">Пока пусто</p>}
     </section>
-    <button className="account-logout" onClick={() => { void logout(); window.scrollTo({ top: 0, behavior: 'instant' }); }}>Выйти из аккаунта</button>
+    {/* Sign-out stays on the profile, which then shows the sign-in form (research 2026-11-10: the app's profile tab keeps
+        its place); a confirmation guards against a stray tap, and a short message says it worked. */}
+    <button className="account-logout" onClick={() => setLeaving(true)}>Выйти из аккаунта</button>
+    {leaving && <ConfirmDialog title="Выйти из аккаунта?" confirm="Выйти" danger={false} onCancel={() => setLeaving(false)} onConfirm={() => { setLeaving(false); void logout().then(() => notify('Вы вышли из аккаунта')); window.scrollTo({ top: 0, behavior: 'instant' }); }}>
+      <p className="ds-muted">Корзина и избранное останутся в аккаунте и вернутся, когда вы снова войдёте. На этом устройстве их видно не будет.</p>
+    </ConfirmDialog>}
   </div>;
 }

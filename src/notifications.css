@@ -8,25 +8,24 @@
   top: calc(100% + var(--space-10));
   right: 0;
   z-index: var(--layer-overlay);
-  width: min(320px, calc(100vw - 32px));
+
   padding: var(--space-18);
   border: 1px solid var(--color-ink-line);
   border-radius: var(--radius-20);
   background: var(--color-white);
   box-shadow: 0 18px 40px -20px rgb(29 58 54 / .55);
+  width: min(360px, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  max-height: min(70vh, 640px);
 }
 
 .notifications-panel h2 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-8);
   font-size: var(--text-16);
   margin-bottom: var(--space-12);
-}
-
-.notifications-panel ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-12);
 }
 
 .notifications-empty {
@@ -56,28 +55,6 @@
   gap: var(--space-12);
 }
 
-.notifications-panel li a {
-  display: grid;
-  gap: var(--space-2);
-  color: var(--color-ink);
-  text-decoration: none;
-}
-
-.notifications-panel li p {
-  margin: 0;
-  font-size: var(--text-14);
-}
-
-.notifications-panel li small {
-  font-size: var(--text-12);
-  color: var(--color-muted);
-}
-
-.notifications-panel li + li {
-  padding-top: var(--space-12);
-  border-top: 1px solid var(--color-ink-line);
-}
-
 .notifications-enable {
   width: 100%;
   margin-top: var(--space-14);
@@ -89,5 +66,29 @@
   color: var(--color-muted);
 }
 
-.notifications-panel .notification-plan-link{margin-top:var(--space-6);font-size:var(--text-13);font-weight:var(--weight-600);color:var(--color-ink);text-decoration:none}
 .notifications-panel li a:is(:hover,:focus-visible,:active){text-decoration:none}
+
+/* The list (research 2026-11-10): day headings, a line between notices, an icon per kind; the ones that were new when
+   the panel opened have an orange stripe on the left and an orange "Новое" (owner: no dark-green highlight). */
+.notifications-new { font-size: var(--text-12); font-weight: var(--weight-600); color: var(--color-muted); }
+.notifications-list { margin: 0 calc(-1 * var(--space-18)); padding: 0 var(--space-18); overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
+.notifications-day { position: sticky; top: 0; z-index: 1; margin: 0; padding: var(--space-10) 0 var(--space-6); background: var(--color-white); font-size: var(--text-11); font-weight: var(--weight-700); letter-spacing: var(--tracking-kicker); text-transform: uppercase; color: var(--color-muted); }
+.notifications-list ul { list-style: none; margin: 0; padding: 0; }
+.notifications-list li { position: relative; display: flex; align-items: flex-start; border-top: 1px solid var(--color-ink-line); }
+.notifications-list li:last-child { border-bottom: 1px solid var(--color-ink-line); }
+.notifications-list li.is-new { box-shadow: inset 3px 0 0 #ad6338; background: #fdf7f2; }
+.notifications-list li a { flex: 1; min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-12); align-items: start; padding: var(--space-12) var(--space-6) var(--space-12) var(--space-10); color: var(--color-ink); text-decoration: none; }
+.notifications-list li a:is(:hover, :focus-visible, :active) { text-decoration: none; }
+.notification-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-circle); background: #f3f7f5; color: var(--color-ink); }
+.notification-icon--stock { color: var(--color-success); }
+.notification-icon--review { color: #ad6338; }
+.notification-body { display: grid; gap: var(--space-2); min-width: 0; }
+.notification-body strong { font-size: var(--text-13); font-weight: var(--weight-600); line-height: 1.35; }
+.notification-text { font-size: var(--text-13); line-height: 1.4; color: var(--color-body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notification-body small { font-size: var(--text-11); color: var(--color-muted); }
+.notification-new-tag { margin-right: var(--space-6); font-weight: var(--weight-700); color: #ad6338; }
+.notification-remove { flex: none; display: grid; place-items: center; width: 28px; height: 28px; margin: var(--space-10) var(--space-2) 0 0; padding: 0; border: 0; border-radius: var(--radius-circle); background: none; color: var(--color-subtle); cursor: pointer; }
+.notification-remove:hover, .notification-remove:focus-visible { color: var(--color-ink); background: var(--color-ink-soft); }
+.notifications-clear { align-self: flex-start; margin-top: var(--space-10); font-size: var(--text-12); color: var(--color-muted); }
+.notifications-undo { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); margin: var(--space-10) 0 0; font-size: var(--text-12); color: var(--color-muted); }
+.notifications-empty p { margin: 0; }

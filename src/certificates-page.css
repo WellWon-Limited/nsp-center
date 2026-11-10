@@ -25,3 +25,8 @@
 }
 .cert-hero .co-hero-copy { padding-top: 96px; }
 @media (max-width: 639px) { .cert-hero .co-hero-copy { padding-top: 72px; } }
+
+/* Keep the same spacing above the heading and above its consultation link. */
+.certificates-page .co-closing { display:flex; flex-direction:column; align-items:center; gap:var(--space-20); }
+.certificates-page .co-closing>h2 { margin:0; }
+@media (max-width:639px) { .certificates-page .co-closing { gap:var(--space-16); } }

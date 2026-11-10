@@ -18,4 +18,4 @@
 | [decisions/](decisions/) | Значимые решения и их причины |
 
 Порядок правок и доступ к репозиторию — [CONTRIBUTING.md](../CONTRIBUTING.md).
-Отчёты аудитов — `drive/reports/`.
+Отчёты — `drive/reports/`: аудит 2026-11-03 и [отчёт о работе 2026-11-10](../drive/reports/2026-11-10%20work-report.md).

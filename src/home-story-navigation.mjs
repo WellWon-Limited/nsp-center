@@ -8,15 +8,9 @@ export function homeStoryReturn(url){
 export function homeStoryLinks(html,section){
  if(!sections.has(section))return html;
  return html.replace(/href="([^"]+)"/g,(attribute,href)=>{
-  if(!/^\/(?:blog\/[^/?#]+\/|company\/)(?:[?#]|$)/.test(href))return attribute;
+  if(!/^\/(?:blog\/(?:[^/?#]+\/)?|company\/(?:[^/?#]+\/)?|contacts\/)(?:[?#]|$)/.test(href))return attribute;
   const u=new URL(href,'http://nsp.local');
   u.searchParams.set('from','home-about');u.searchParams.set('section',section);
   return `href="${u.pathname}${u.search.replace(/&/g,'&amp;')}${u.hash}"`;
  });
-}
-
-export const homeStoryIsOpen=state=>state?.nspHomeStoryOpen===true;
-export function rememberHomeStory(history,open){
- const current=history.state&&typeof history.state==='object'?history.state:{};
- history.replaceState({...current,nspHomeStoryOpen:open},'');
 }

@@ -51,3 +51,7 @@ body .site-main .company-page--nature .company-concept.company-concept--article 
 }
 
 @media(min-width:640px){.company-concept--article .co-hero-copy{transform:translateY(calc(-1 * clamp(var(--space-32),7svh,80px)))}}
+
+@media(min-width:640px){
+ .company-concept--article .co-closing.co-section{max-width:none;width:100%;padding-inline:max(var(--space-24),calc((100% - 760px)/2))}
+}

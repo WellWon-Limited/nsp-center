@@ -3,7 +3,7 @@ import { ImmuneArticle, immuneArticleId } from './immune-article';
 import imageSets from './journal-images.json';
 import { prepareJournalArticle } from './journal-article-media.mjs';
 import './journal-article.css';
-import { BackLink } from './ui';
+import { BackLink, Icon } from './ui';
 
 export type JournalMedia={cover:string;alt:string;inline:{src:string;alt:string}[]};
 export const journalImages=imageSets as Record<string,JournalMedia>;
@@ -17,6 +17,6 @@ export function JournalArticle({article}:{article:Article}){
  const {lead,body}=prepareJournalArticle(article,media);
  return <div className="av-document av-document--ivory journal-article" data-ds-id={`article-${article.id}`}>
   <header className="av-hero"><div className="av-hero-copy"><span className="av-journal-link"><BackLink fallback="/blog/"/></span><h1>{article.title}</h1><span className="av-date">{article.date}</span></div><img className="av-hero-image" src={media.cover} alt={media.alt} width="1536" height="1024" fetchPriority="high"/></header>
-  <div className="av-reading-layout"><div className="av-reading"><div className="av-lead" dangerouslySetInnerHTML={{__html:lead}}/><div className="av-article-copy" dangerouslySetInnerHTML={{__html:body}}/><div className="av-end"><a href="/consultation/">Задать вопрос ↗</a></div></div></div>
+  <div className="av-reading-layout"><div className="av-reading"><div className="av-lead" dangerouslySetInnerHTML={{__html:lead}}/><div className="av-article-copy" dangerouslySetInnerHTML={{__html:body}}/><div className="av-end"><a href="/consultation/">Задать вопрос <Icon name="chevron" size={20}/></a></div></div></div>
  </div>;
 }

@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { RichContent } from './ui';
+import { useEffect, useRef } from 'react';
+import { Icon, RichContent } from './ui';
 import './home-story.css';
-import { homeStoryLinks, homeStoryIsOpen, rememberHomeStory } from './home-story-navigation.mjs';
+import { homeStoryLinks } from './home-story-navigation.mjs';
 
 const chapters = [
  {id:'care', title:'Забота о себе каждый день', marker:'', photo:'botanical', alt:'Свежая мята, мелисса и цитрус на светлом зелёном фоне'},
@@ -15,7 +15,7 @@ const chapters = [
 ];
 const topicTitles = new Set(['Сильный иммунитет','Очистка организма','Бросающим курить','Похудение','Здоровье ваших глаз','Декоративная косметика','Спортивное питание','Натуральная косметика','Наборы','Популярные категории','Рубрики']);
 
-// Only presentation changes: wording comes from the imported, sanitized source.
+// Section bodies come from the imported, sanitized source.
 export function homeStorySections(source:string){
  let html=source.replace(/\s+/g,' ');
  // Keep the category/article link when its old banner is removed.
@@ -45,38 +45,53 @@ export function homeStorySections(source:string){
  return sections.filter((s):s is NonNullable<typeof s>=>s!==null).filter(s=>!['care','catalog'].includes(s.id));
 }
 
-export function HomeStory({html,reviewsHtml=''}:{html:string;reviewsHtml?:string}){
- const [allReviews,setAllReviews]=useState(false);
- const details=useRef<HTMLDetailsElement>(null);
+type StoryItem = {title:string;html:string};
+function storyItems(html:string):StoryItem[]{
+ return [...html.matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>([\s\S]*?)(?=<h3\b|$)/g)].map(match=>({title:match[1].replace(/<[^>]*>/g,''),html:match[2]}));
+}
+
+export function HomeStory({html}:{html:string;reviewsHtml?:string}){
+ const block=useRef<HTMLElement>(null);
+ // The block is always open (owner, 2026-11-10); a return from one of its links (/#about-reviews) lands on that part.
  useEffect(()=>{
   const restore=()=>{
    const id=decodeURIComponent(location.hash.slice(1));
-   if(!/^about-(service|answers|reading|reviews|company|contacts)$/.test(id)&&id!=='home-about'){if(details.current&&homeStoryIsOpen(history.state))details.current.open=true;return;}
-   const target=id==='home-about'?details.current:details.current?.querySelector<HTMLElement>(`#${id}`);
-   if(!target||!details.current)return;
-   details.current.open=true;
-   requestAnimationFrame(()=>target.scrollIntoView({block:'start',behavior:'instant'}));
+   if(!/^about-(service|answers|reading|reviews|company|contacts)$/.test(id)&&id!=='home-about')return;
+   const target=id==='home-about'?block.current:block.current?.querySelector<HTMLElement>(`#${id}`);
+   if(target)requestAnimationFrame(()=>target.scrollIntoView({block:'start',behavior:'instant'}));
   };
   restore();addEventListener('hashchange',restore);addEventListener('pageshow',restore);
   return()=>{removeEventListener('hashchange',restore);removeEventListener('pageshow',restore);};
  },[]);
- const fullReviews=reviewsHtml.replace(/<img\b[^>]*>/g,'').replace(/<p>\s*<\/p>/g,'');
- const order=['service','answers','reading','reviews','company','contacts'];
- const sections=homeStorySections(html).sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
- return <details ref={details} onToggle={e=>rememberHomeStory(history,e.currentTarget.open)} onClickCapture={()=>{if(details.current)rememberHomeStory(history,details.current.open);}} id="home-about" className="panel source-description home-story" data-ds-id="home-source">
-  <summary>Подробнее о NSP Center<span className="home-story-toggle" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m9 5 7 7-7 7"/></svg></span></summary>
+ const sections=homeStorySections(html);
+ const content=(id:string)=>sections.find(section=>section.id===id)?.html||'';
+ const questions=storyItems(content('answers'));
+ const reviews=storyItems(content('reviews'));
+ const benefits=[...content('service').matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(match=>match[1]);
+ return <section ref={block} id="home-about" className="home-story home-story--selected home-story--open" data-ds-id="home-source" aria-labelledby="home-about-title">
+  <div className="section-heading home-story-heading"><div><span className="ds-kicker">Знакомство</span><h2 id="home-about-title">О NSP Center</h2></div></div>
   <article className="home-story-layout">
-   <div className="home-story-body">{sections.map((section,index)=><section className={`home-story-chapter home-story-chapter--${section.id}`} id={`about-${section.id}`} key={section.id} data-ds-id={`home-about-${section.id}`}>
-    <div className="home-story-copy"><header><span className="home-story-kicker">{String(index+1).padStart(2,'0')} · NSP CENTER</span><h2>{section.title}</h2></header>
-    {section.id==='reviews'?<div className="home-story-reviews">
-     <div id="home-story-review-list"><RichContent html={allReviews&&fullReviews?fullReviews:section.html}/></div>
-     {fullReviews&&<button type="button" className="home-story-reviews-toggle" aria-expanded={allReviews} aria-controls="home-story-review-list" onClick={()=>setAllReviews(value=>!value)}>{allReviews?'Свернуть отзывы':'Показать все'}</button>}
-    </div>:<RichContent html={homeStoryLinks(section.html,section.id)}/>}
+   <section id="about-service" className="story-introduction" data-ds-id="home-about-service">
+    <img className="story-panorama" src="/images/home-about/careful-packing-v1.jpg" alt="Руки бережно упаковывают заказ в крафтовую коробку у окна" width="1536" height="1024" loading="lazy" decoding="async"/>
+    <div id="about-company" className="story-intro-card" data-ds-id="home-about-company">
+     <span className="story-eyebrow">NSP CENTER</span>
+     <h2>Забота о себе.<br/>С вниманием к деталям.</h2>
+     <p>Продукты NSP, помощь с выбором и бережная доставка. Здесь — ответы на ваши вопросы и информация о нашем центре.</p>
+     <a className="btn btn--primary story-company-link" href="/company/?from=home-about&section=company">О компании<Icon name="chevron" size={20}/></a>
     </div>
-    {section.photo&&<figure><img src={`/images/journal/about-${section.photo}.jpg`} alt={section.alt} width="1440" height="1080" loading="lazy" decoding="async"/></figure>}
-    {section.id==='service'&&<figure><img src="/images/home-about/careful-packing-v1.jpg" alt="Руки бережно упаковывают заказ в крафтовую коробку у окна" width="1536" height="1024" loading="lazy" decoding="async"/></figure>}
-    {section.id==='company'&&<figure><img src="/images/home-about/botanical-research-v1.jpg" alt="Растительные образцы в стеклянной посуде на светлом лабораторном столе" width="1536" height="1024" loading="lazy" decoding="async"/></figure>}
-   </section>)}</div>
+    <div className="story-benefits">{benefits.map((body,index)=><div className="story-benefit" key={index}><Icon name="check" size={22}/><RichContent html={`<p>${body}</p>`}/></div>)}</div>
+   </section>
+   <section id="about-answers" className="story-section story-faq" data-ds-id="home-about-answers"><h2>Что важно знать</h2>
+    {questions.length?questions.map((question,index)=><details key={index}><summary>{question.title}<span aria-hidden="true" className="story-faq-plus"/></summary><RichContent html={homeStoryLinks(question.html,'answers')}/></details>):<RichContent html={homeStoryLinks(content('answers'),'answers')}/>}
+   </section>
+   <section id="about-reviews" className="story-section story-reviews" data-ds-id="home-about-reviews"><h2>Отзывы покупателей</h2>
+    <div className="story-review-grid">{reviews.length?reviews.map((review,index)=><article className="story-review" key={index}><span className="story-quote" aria-hidden="true">“</span><div><RichContent html={review.html}/><h3>{review.title}</h3></div></article>):<RichContent html={content('reviews')}/>}</div>
+    <a className="story-reviews-link" href="/company/reviews/?from=home-about&section=reviews">Все отзывы<Icon name="chevron" size={20}/></a>
+   </section>
+   <section id="about-contacts" className="story-section story-pickup story-pickup--forest" data-ds-id="home-about-contacts">
+    <div className="story-pickup-address"><div className="story-pickup-heading"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M26 13c0 8-10 16-10 16S6 21 6 13a10 10 0 1 1 20 0Z"/><circle cx="16" cy="13" r="3.5"/></svg><h2>Пункт выдачи заказов</h2></div><p className="story-pickup-city">Санкт-Петербург</p><p className="story-pickup-street">Набережная<br/>Обводного канала, 64</p><p className="story-pickup-details">Корп. 2, лит. А, офис 29/3<br/>2-й этаж</p></div>
+    <div className="story-pickup-info"><a href="tel:+78124673585">+7 (812) 467-35-85</a><a href="mailto:sales@nsp-center.ru">sales@nsp-center.ru</a><a className="btn btn--primary" href="/contacts/?from=home-about&section=contacts">Как нас найти<Icon name="chevron" size={20}/></a></div>
+   </section>
   </article>
- </details>;
+ </section>;
 }

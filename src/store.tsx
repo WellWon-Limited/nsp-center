@@ -1,7 +1,8 @@
 import { rollPlan, restorePlans } from './intake-plan';
 import { restoreWaitlist, reconcileWaitlist, type WaitEntry } from './waitlist';
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { applySite, readSite, type SiteSettings } from './site';
+import { addNotice } from './notices.mjs';
+import { applySite, readSite, withoutCardFields, type CardPrices, type SiteSettings } from './site';
 import content from './generated/summary.json';
 import type { Content, Product } from './content-types';
 import { withProductImages } from './product-images';
@@ -19,7 +20,10 @@ export const partnerSignupUrl = 'https://nsp25.com/signup?sid=446621';
 export type Intake = {id:string; time:string; done:boolean};
 /** The visitor's account. `server`: it lives on the accounts server (scripts/accounts.mjs) and `passwordHash` is empty;
  *  otherwise it is the in-browser demo account (no server connected), with the password kept as a salted SHA-256 hash. */
-export type Account = {firstName:string; lastName:string; email:string; phone:string; partnerId:string; passwordHash:string; createdAt:string; server?:boolean; admin?:boolean};
+export type Account = {firstName:string; lastName:string; email:string; phone:string; partnerId:string; passwordHash:string; createdAt:string; server?:boolean};
+/** A member of staff signed in to site management (/admin/, scripts/accounts.mjs staffAuth). */
+export type Staff = {firstName:string; lastName:string; email:string};
+const STAFF_HINT='nsp-center:staff';
 /** What the account put in the cart, favourites and waiting list: set aside at sign-out (the shared device then shows an
  *  empty cart and lists) and brought back at the next sign-in to the same account. */
 export type Saved = {email:string; cart:Record<string,number>; favorites:string[]; waitlist:WaitEntry[]};
@@ -28,7 +32,7 @@ function restoreSaved(v:unknown):Saved|null{if(!v||typeof v!=='object')return nu
 export const signOut=(s:LocalState):LocalState=>({...s,signedIn:false,card:false,saved:s.account?{email:s.account.email,cart:s.cart,favorites:s.favorites,waitlist:s.waitlist}:s.saved,cart:{},favorites:[],waitlist:[]});
 /** Sign-in: bring back what this account had set aside (adding anything picked as a guest). */
 export const restoreAccountLists=(s:LocalState,email:string):Partial<LocalState>=>{const k=s.saved;if(!k||k.email.toLowerCase()!==email.toLowerCase())return {};const cart={...k.cart};for(const [id,q] of Object.entries(s.cart))cart[id]=Math.min(99,(cart[id]||0)+q);return {cart,favorites:[...new Set([...k.favorites,...s.favorites])],waitlist:[...k.waitlist,...s.waitlist.filter(w=>!k.waitlist.some(x=>x.id===w.id))],saved:null};};
-export type LocalState = {cart:Record<string,number>; favorites:string[]; waitlist:WaitEntry[]; intake:Intake[]; intakeDate:string; intakePlans:Record<string,Intake[]>; intakeLog:Record<string,string[]>; day:number; habits:Habit[]; notices:Notice[]; reminded:string[]; tasks:Record<string,string[]>; name:string; orders:{id:string;total:number;date:string;items:number}[]; card:boolean; account:Account|null; signedIn:boolean; saved:Saved|null};
+export type LocalState = {cart:Record<string,number>; favorites:string[]; waitlist:WaitEntry[]; intake:Intake[]; intakeDate:string; intakePlans:Record<string,Intake[]>; intakeLog:Record<string,string[]>; day:number; habits:Habit[]; notices:Notice[]; reminded:string[]; tasks:Record<string,string[]>; name:string; orders:{id:string;total:number;date:string;items:number;products?:Record<string,number>}[]; card:boolean; account:Account|null; signedIn:boolean; saved:Saved|null};
 // Habit marathon: the visitor's own habits; a day's ticks are the ids of the habits done. Older saves kept a boolean per
 // default habit (by position) and are read into ids.
 export type Habit = {id:string; label:string};
@@ -44,8 +48,11 @@ function restoreAccount(v:unknown):Account|null{if(!v||typeof v!=='object')retur
 const validIds = new Set(data.products.map(p=>p.id));
 // In-app notifications (the bell): plan reminders and similar; the newest 50 are kept. `reminded` holds today's
 // reminder keys (date:product:time) so a reminder fires once.
-export type Notice = {id:string; title:string; text:string; date:string; url:string; read:boolean};
-function restoreNotices(v:unknown):Notice[]{if(!Array.isArray(v))return [];return v.filter((n):n is Notice=>Boolean(n)&&typeof n.id==='string'&&typeof n.title==='string').slice(0,50).map(n=>({id:n.id.slice(0,60),title:n.title.slice(0,120),text:typeof n.text==='string'?n.text.slice(0,300):'',date:typeof n.date==='string'?n.date.slice(0,40):'',url:typeof n.url==='string'&&n.url.startsWith('/')?n.url.slice(0,200):'/',read:n.read===true}));}
+/** A bell notice (src/notices.mjs): `at` is its ISO time, `kind` its type; `date` is the old text date of notices saved
+ *  before 2026-11-10. */
+export type NoticeKind = 'intake'|'stock'|'review';
+export type Notice = {id:string; title:string; text:string; date:string; url:string; read:boolean; at?:string; kind?:NoticeKind};
+function restoreNotices(v:unknown):Notice[]{if(!Array.isArray(v))return [];return v.filter((n):n is Notice=>Boolean(n)&&typeof n.id==='string'&&typeof n.title==='string').slice(0,50).map(n=>({id:n.id.slice(0,60),title:n.title.slice(0,120),text:typeof n.text==='string'?n.text.slice(0,300):'',date:typeof n.date==='string'?n.date.slice(0,40):'',url:typeof n.url==='string'&&n.url.startsWith('/')?n.url.slice(0,200):'/',read:n.read===true,...(typeof n.at==='string'&&Number.isFinite(Date.parse(n.at))?{at:n.at}:{}),...(n.kind==='intake'||n.kind==='stock'||n.kind==='review'?{kind:n.kind}:{})}));}
 // Day log of the intake plan: date (YYYY-MM-DD) -> ids of the products ticked that day.
 function restoreLog(v:unknown):Record<string,string[]>{if(!v||typeof v!=='object')return {};return Object.fromEntries(Object.entries(v as Record<string,unknown>).filter(([date,ids])=>/^\d{4}-\d\d-\d\d$/.test(date)&&Array.isArray(ids)).map(([date,ids])=>[date,[...new Set((ids as unknown[]).filter((id):id is string=>typeof id==='string'&&validIds.has(id)))]]));}
 function restore():LocalState {try{return restoreFrom(JSON.parse(localStorage.getItem('nsp-center:v1')||'null'));}catch{return initial;}}
@@ -71,7 +78,7 @@ const syncPayload=(s:LocalState)=>JSON.stringify({profile:{firstName:s.account?.
  *  ('signin') it is joined with what was picked as a guest (cart summed, lists united, the plan kept if the account has none). */
 export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load'|'signin'):LocalState{
   const acc={...restoreAccount({...account,passwordHash:'',server:true})!};
-  const base:LocalState={...s,account:acc,signedIn:true,name:acc.firstName,card:acc.partnerId?true:s.card,saved:null};
+  const base:LocalState={...s,account:acc,signedIn:true,name:acc.firstName,card:Boolean(acc.partnerId),saved:null};
   if(!data||!SYNC_KEYS.some(k=>k in data))return base;
   const remote=pickSynced(restoreFrom({...s,...data}));
   if(mode==='load')return {...base,...remote};
@@ -81,18 +88,27 @@ export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load
 }
 /** Sign-out of a server account: the device keeps nothing of it (the server has it all). */
 export const closeSession=(s:LocalState):LocalState=>({...s,...pickSynced(initial),intakeDate:today(),account:null,signedIn:false,card:false,saved:null,name:''});
-type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number)=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>};
+type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number)=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>;staff:Staff|null;setStaff:(staff:Staff|null)=>void};
 const Context = createContext<Store|null>(null);
 export function StoreProvider({children}:{children:ReactNode}) {
   const [state,setState]=useState(initial); const [toast,setToast]=useState(''); const [ready,setReady]=useState(false);
   // Site settings from the administrator (src/site.ts): the cached ones before the first paint after start, then the
   // server's. No accounts server (503, offline, a static host) leaves the built prices.
   const [site,setSiteState]=useState<SiteSettings|null>(null);
-  const setSite=(next:SiteSettings|null)=>{applySite([...data.products,...pageProducts],next,data.pricing.rubPerUnit);setSiteState(next);try{if(next)localStorage.setItem(SITE_CACHE,JSON.stringify(next));else localStorage.removeItem(SITE_CACHE);}catch{/* ignore */}};
+  // Card prices (src/site.ts CardPrices) live only in memory: fetched after sign-in with a card number, dropped at
+  // sign-out, never cached in this browser (owner, 2026-11-10: card prices are not public).
+  const [cardPrices,setCardPricesState]=useState<CardPrices|null>(null);
+  const current=useRef<{site:SiteSettings|null;card:CardPrices|null}>({site:null,card:null});
+  const apply=()=>applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);
+  const setSite=(next:SiteSettings|null)=>{current.current.site=next;apply();setSiteState(next);try{if(next)localStorage.setItem(SITE_CACHE,JSON.stringify(withoutCardFields(next)));else localStorage.removeItem(SITE_CACHE);}catch{/* ignore */}};
+  const setCardPrices=(next:CardPrices|null)=>{current.current.card=next;apply();setCardPricesState(next);};
   useLayoutEffect(()=>{let cached:SiteSettings|null=null;try{cached=readSite(JSON.parse(localStorage.getItem(SITE_CACHE)||'null'));}catch{/* none */}if(cached)setSite(cached);
     fetch('/api/site',{headers:{Accept:'application/json'}}).then(async r=>{if(r.status===503)return setSite(null);if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))return;setSite(readSite(await r.json()));}).catch(()=>{/* offline: keep the cached settings */});
   },[]);
   useEffect(()=>{setState(restore());setReady(true);document.getElementById('root')?.setAttribute('data-hydrated','true');},[]);
+  // A discount card belongs to the account: card prices are on only for a signed-in account with a card number.
+  const cardHolder=state.signedIn&&Boolean(state.account?.partnerId);
+  useEffect(()=>{if(ready&&state.card!==cardHolder)setState(s=>({...s,card:cardHolder}));},[ready,cardHolder,state.card]);
   useEffect(()=>{if(ready)try{localStorage.setItem('nsp-center:v1',JSON.stringify(state));}catch{/* in-memory remains usable */}},[state,ready]);
   // The intake plan belongs to one calendar day in the visitor's own time zone: at local midnight (and whenever the tab
   // comes back after the date changed) the scheduled day becomes active and the previous plan is archived.
@@ -134,14 +150,32 @@ export function StoreProvider({children}:{children:ReactNode}) {
   },[state,accounts]);
   useEffect(()=>{const flush=()=>{if(pending.current)void push(pending.current,true);};addEventListener('pagehide',flush);return()=>removeEventListener('pagehide',flush);
   },[]);
-  // An administrator learns of new customer reviews: the count shows on «Управление сайтом» in the profile, and a
-  // review that arrived since the last look adds a notice to the bell.
+  // A member of staff (site management, /admin/): its own sign-in and session, apart from a customer's account. This
+  // browser remembers only that someone signed in to /admin/ here, so other visitors do not ask the server.
+  const [staff,setStaffState]=useState<Staff|null>(null);
+  const setStaff=(next:Staff|null)=>{setStaffState(next);try{if(next)localStorage.setItem(STAFF_HINT,'1');else localStorage.removeItem(STAFF_HINT);}catch{/* ignore */}};
+  useEffect(()=>{let hint=false;try{hint=localStorage.getItem(STAFF_HINT)==='1';}catch{/* none */}if(!hint)return;let off=false;
+    fetch('/api/admin/me',{headers:{Accept:'application/json'}}).then(async r=>{if(off)return;const b=r.ok?await r.json().catch(()=>null):null;setStaff(b?.staff??null);}).catch(()=>{/* offline */});
+    return()=>{off=true;};},[]);
+  // Staff learn of new customer reviews: the count shows in site management, and a review that arrived since the last
+  // look adds a notice to the bell.
   const [pendingReviews,setPendingReviews]=useState(0);
-  const isAdmin=accounts==='server'&&state.signedIn&&Boolean(state.account?.admin);
+  const isAdmin=Boolean(staff);
+  // Card prices from the server for a card holder (or an administrator); again when the administrator changes prices.
+  // A card number just added in the profile reaches the server with the next sync, so a refusal is retried once.
+  const cardAllowed=isAdmin||(accounts==='server'&&state.signedIn&&Boolean(state.account?.server)&&Boolean(state.account?.partnerId));
+  useEffect(()=>{if(!cardAllowed){if(current.current.card)setCardPrices(null);return;}let off=false;let timer=0;
+    const load=(retry:boolean)=>fetch('/api/card-prices',{headers:{Accept:'application/json'}}).then(async r=>{if(off)return;
+      if(r.status===403&&retry){timer=window.setTimeout(()=>load(false),2000);return;}
+      const b=r.ok?await r.json().catch(()=>null):null;if(off)return;
+      setCardPrices(b&&b.prices&&typeof b.prices==='object'?{prices:b.prices,...(b.units?{units:b.units}:{})}:null);}).catch(()=>{/* offline: retail prices */});
+    load(true);return()=>{off=true;clearTimeout(timer);};
+  },[cardAllowed,state.account?.partnerId,isAdmin?site:null]);
   useEffect(()=>{if(!isAdmin){setPendingReviews(0);return;}let off=false;
     fetch('/api/admin/pending',{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null).then(b=>{if(off||typeof b?.reviews!=='number')return;const count=b.reviews as number;setPendingReviews(count);
       let seen=0;try{seen=Number(localStorage.getItem('nsp-center:admin-pending'))||0;localStorage.setItem('nsp-center:admin-pending',String(count));}catch{/* ignore */}
-      if(count>seen)setState(s=>({...s,notices:[{id:`reviews-${Date.now()}`,title:'Новый отзыв на проверку',text:`Ждут проверки: ${count}`,date:new Date().toLocaleString('ru-RU'),url:'/profile/?admin=1&tab=reviews',read:false},...s.notices].slice(0,50)}));
+      // One line for reviews waiting, updated with the count (src/notices.mjs).
+      if(count>seen)setState(s=>({...s,notices:addNotice(s.notices,{id:'reviews-pending',kind:'review',title:'Новый отзыв на проверку',text:`Ждут проверки: ${count}`,at:new Date().toISOString(),date:'',url:'/admin/?section=reviews',read:false})}));
     }).catch(()=>{/* none */});return()=>{off=true;};},[isAdmin]);
   const startSession=(session:ServerSession)=>{synced.current=null;setState(s=>openSession(s,session,'signin'));};
   const logout=async()=>{
@@ -154,9 +188,9 @@ export function StoreProvider({children}:{children:ReactNode}) {
   useEffect(()=>{if(!ready)return;setState(s=>{
     const result=reconcileWaitlist(s.waitlist,data.products);
     if(result.entries===s.waitlist)return s;
-    const date=new Date().toLocaleString('ru-RU');
-    const arrivals=result.arrivals.map(p=>({id:`stock-${p.id}-${Date.now()}`,title:'Товар снова в наличии',text:shortName(p.name),date,url:p.path,read:false}));
-    return {...s,waitlist:result.entries,notices:[...arrivals,...s.notices].slice(0,50)};
+    const at=new Date().toISOString();
+    const notices=result.arrivals.reduce((list,p)=>addNotice(list,{id:`stock-${p.id}`,kind:'stock',title:'Товар снова в наличии',text:shortName(p.name),at,date:'',url:p.path,read:false}),s.notices);
+    return {...s,waitlist:result.entries,notices};
   });},[ready,state.waitlist,site]);
   const waitFor=(p:Product)=>{setState(s=>{
     const included=s.waitlist.some(x=>x.id===p.id);
@@ -166,6 +200,6 @@ export function StoreProvider({children}:{children:ReactNode}) {
   const add=(p:Product,q=1)=>{if(p.availability==='OutOfStock')return;setState(s=>({...s,cart:{...s.cart,[p.id]:Math.min(99,(s.cart[p.id]||0)+q)}}));setToast(`${shortName(p.name)} — в корзине`);};
   const qty=(id:string,q:number)=>setState(s=>{const cart={...s.cart};if(q<=0)delete cart[id];else cart[id]=Math.min(99,q);return {...s,cart};});
   const favorite=(id:string)=>setState(s=>({...s,favorites:s.favorites.includes(id)?s.favorites.filter(x=>x!==id):[...s.favorites,id]}));
-  return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify:setToast,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
+  return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify:setToast,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout,staff,setStaff}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
 }
 export function useStore(){const v=useContext(Context);if(!v)throw new Error('Missing StoreProvider');return v;}

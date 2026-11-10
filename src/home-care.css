@@ -55,8 +55,6 @@
 .care-card-action svg { transition: transform var(--motion-fast) var(--motion-ease); }
 .care-card:hover .care-card-action svg { transform: translateX(4px); }
 .care-card:focus-visible { outline: 3px solid var(--color-action); outline-offset: 4px; }
-.care-question-dots { display: flex; gap: var(--space-5); }
-.care-question-dots i { width: 5px; height: 5px; border-radius: var(--radius-circle); background: var(--color-on-dark-muted); }
 .care-calendar {
   position: absolute;
   right: var(--space-24);
@@ -91,7 +89,6 @@
   .care-calendar { position: relative; top: auto; right: auto; width: 180px; margin: var(--space-24) auto var(--space-8); padding: var(--space-18); transform: rotate(3deg); }
   .care-calendar-heading strong { font-size: var(--text-40); }
   .care-calendar-heading > span { font-size: var(--text-10); }
-  .care-question-dots { display: none; }
   .home-care--editorial .care-card p { font-size: var(--text-13); }
 }
 @media (prefers-reduced-motion: reduce) {

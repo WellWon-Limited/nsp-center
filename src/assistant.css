@@ -30,10 +30,12 @@
 .chat-links { display: flex; flex-wrap: wrap; gap: var(--space-6); margin-top: var(--space-10); }
 .chat-links a { padding: var(--space-6) var(--space-12); border: 1.5px solid rgb(29 58 54 / .25); border-radius: 999px; color: var(--color-ink); font-size: var(--text-13); font-weight: var(--weight-700); text-decoration: none; }
 
-/* Suggested questions: on the visitor's (right) side, outlined like a reply waiting to be sent. */
-.chat-suggest { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-6); }
+/* Suggested questions (research 2026-11-10): compact pills under the latest answer, wrapping onto new lines. */
+.chat-suggest { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: var(--space-8); margin-top: var(--space-4); }
 .chat-suggest button { max-width: 86%; padding: var(--space-8) var(--space-14); border: 1.5px solid var(--color-ink); border-radius: 18px; border-bottom-right-radius: 6px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-14); font-weight: var(--weight-700); text-align: right; cursor: pointer; }
 .chat-suggest button:active { background: #e8f1ec; }
+.chat-suggest button { max-width: 100%; min-height: 36px; padding: var(--space-6) var(--space-14); border: 1.5px solid rgb(29 58 54 / .25); border-radius: 999px; font-size: var(--text-14); font-weight: var(--weight-600); text-align: left; cursor: pointer; }
+.chat-suggest button:hover { border-color: var(--color-ink); }
 
 .chat-product { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: var(--space-8) var(--space-10); align-items: center; margin-top: var(--space-10); padding: var(--space-10); border: 1px solid var(--color-ink-line); border-radius: 14px; }
 .chat-product img { width: 56px; height: 56px; object-fit: contain; }
@@ -85,9 +87,9 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 /* Out of stock in a chat card: the waiting-list button, styled like on catalog cards. */
 .chat-product .btn.waitlist-button { grid-column: 1 / -1; width: 100%; min-height: 40px; border: 1.5px solid rgb(29 58 54 / .25); background: var(--color-white); color: var(--color-ink); font-size: var(--text-13); font-weight: var(--weight-800); }
 
-/* The input row is pinned to the bottom of the screen (above the phone's bottom bar), whatever the page or the log does;
-   the log keeps room for it underneath. */
-.chat-input {
+/* The input row (with the one-time doctor note under it) is pinned to the bottom of the screen (above the phone's bottom
+   bar), whatever the page or the log does; the log keeps room for it underneath. */
+.chat-composer {
   position: fixed;
   z-index: calc(var(--layer-navigation) - 1);
   left: 50%;
@@ -96,10 +98,12 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
   margin: 0;
   transform: translateX(-50%);
 }
-.chat-log { padding-bottom: 84px; }
-@media (max-width: 959px) { .chat-input { width: calc(100vw - 2 * var(--space-22)); } }
+.chat-composer .chat-input { position: static; width: 100%; margin: 0; transform: none; }
+.chat-note { margin: var(--space-6) 0 0; text-align: center; font-size: 11px; line-height: 1.3; color: var(--color-muted); }
+.chat-log { padding-bottom: 104px; }
+@media (max-width: 959px) { .chat-composer { width: calc(100vw - 2 * var(--space-22)); } }
 @media (max-width: 639px) {
-  .chat-input { width: calc(100vw - 2 * var(--space-18)); bottom: calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10)); }
+  .chat-composer { width: calc(100vw - 2 * var(--space-18)); bottom: calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-8)); }
 }
 
 /* Advice details: why, what it does, how to take it (the label), by age, contraindications. */
@@ -110,7 +114,7 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 /* The bottom bar always stays; the input row sits above it, and when the phone keyboard is open (it covers the bar) the
    row rides just above the keyboard (--chat-kb, set from visualViewport in assistant.tsx). */
 @media (max-width: 639px) {
-  .chat-input { bottom: max(calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10)), calc(var(--chat-kb, 0px) + var(--space-8))); }
+  .chat-composer { bottom: max(calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-8)), calc(var(--chat-kb, 0px) + var(--space-8))); }
 }
 
 /* «↓» to the latest messages, floating at the right above the input row while the visitor reads older messages. */
@@ -118,7 +122,7 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
   position: fixed;
   z-index: calc(var(--layer-navigation) - 1);
   right: max(var(--space-18), calc((100vw - 760px) / 2));
-  bottom: calc(var(--space-16) + 70px);
+  bottom: calc(var(--space-16) + 92px);
   display: grid;
   place-items: center;
   width: 44px;
@@ -133,8 +137,79 @@ body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 }
 .chat-down svg { transform: rotate(90deg); }
 @media (max-width: 639px) {
-  .chat-down { bottom: max(calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10) + 70px), calc(var(--chat-kb, 0px) + var(--space-8) + 70px)); }
+  .chat-down { bottom: max(calc(var(--phone-nav-height) + env(safe-area-inset-bottom) + var(--space-10) + 92px), calc(var(--chat-kb, 0px) + var(--space-8) + 92px)); }
 }
 
 /* The lecture an answer comes from: a quiet line under the advice. */
 .chat-source { margin: var(--space-10) 0 0; font-size: var(--text-12); line-height: 1.4; color: var(--color-muted); }
+
+/* Messages of one side in a row sit closer; only the last of a series has the tail and the time. */
+.chat-messages { display: flex; flex-direction: column; gap: var(--space-14); }
+.chat-msg { max-width: 80%; }
+.chat-msg.is-cont { margin-top: calc(var(--space-10) * -1); }
+.chat-msg--bot:not(.is-last) { border-bottom-left-radius: 18px; }
+.chat-msg--user:not(.is-last) { border-bottom-right-radius: 18px; }
+.chat-msg--bot.is-cont { border-top-left-radius: 8px; }
+.chat-msg--user.is-cont { border-top-right-radius: 8px; }
+.chat-time { display: block; margin-top: var(--space-4); font-size: 11px; line-height: 1.2; text-align: right; opacity: .6; }
+.chat-log > .chat-typing { margin-top: var(--space-14); align-self: flex-start; }
+
+/* Warning signs: a calm card set apart by colour, with the numbers to call. */
+.chat-msg--urgent { border-left: 4px solid #e2664f; background: #fdf0ec; }
+.chat-urgent-title { display: block; margin-bottom: var(--space-6); font-size: var(--text-15); font-weight: var(--weight-800); color: #8a3a2a; }
+.chat-urgent-calls { display: flex; flex-wrap: wrap; gap: var(--space-8); margin-top: var(--space-12); }
+.chat-urgent-calls .btn { min-height: 40px; padding-inline: var(--space-16); }
+
+@media (max-width: 639px) {
+  .chat-msg { max-width: 85%; }
+}
+
+/* Nothing in the chat runs past its edges on any phone (owner, 2026-11-10): suggestion pills and links wrap their text,
+   long words break, every bubble shrinks to the column. */
+.chat-msg { min-width: 0; overflow-wrap: anywhere; }
+.chat-suggest, .chat-links { max-width: 100%; min-width: 0; }
+.chat-suggest button, .chat-links a { max-width: 100%; white-space: normal; overflow-wrap: anywhere; text-align: left; line-height: 1.3; }
+.chat-product a { min-width: 0; overflow-wrap: anywhere; }
+
+/* The input row and the doctor note stay put at the bottom: the page itself never scrolls or bounces under the chat
+   (only the messages scroll), so nothing drags them up. */
+html:has(.chat), body:has(.chat) { overscroll-behavior: none; height: 100%; }
+
+/* Layout (owner, 2026-11-10): the chat is one screen-tall column — messages scroll inside, and the input row with the
+   doctor note is the column's bottom part, not a strip floating over the page, so nothing but the messages ever moves.
+   Phone: the column ends above the bottom bar; with the keyboard open it ends above the keyboard (--chat-vh from
+   visualViewport in assistant.tsx). */
+.chat { position: fixed; top: var(--site-header-height, 97px); bottom: var(--chat-bottom, 0px); left: 50%; z-index: 1; width: min(760px, calc(100vw - 2 * var(--space-28))); height: auto; margin: 0; transform: translateX(-50%); }
+.chat-log { padding-bottom: var(--space-12); }
+.chat-composer { position: static; left: auto; bottom: auto; z-index: auto; width: auto; transform: none; flex-shrink: 0; padding: var(--space-8) 0 var(--space-12); }
+.chat-down { position: absolute; right: var(--space-4); bottom: 104px; }
+@media (max-width: 959px) { .chat-composer { width: auto; } }
+@media (max-width: 959px) { .chat { width: calc(100vw - 2 * var(--space-22)); } }
+@media (max-width: 639px) {
+  .chat { width: calc(100vw - 2 * var(--space-18)); height: auto; }
+  .chat-composer { width: auto; bottom: auto; padding-bottom: var(--space-8); }
+  .chat-down { bottom: 96px; }
+}
+
+/* Suggested answers under the assistant's message: one under another, in a column (owner, 2026-11-10). */
+.chat-suggest { flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: var(--space-8); }
+
+/* The lecture source and the BAD notice: air between them and comfortable line spacing. */
+.chat-source { margin-top: var(--space-14); line-height: 1.55; }
+.chat-warning { margin-top: var(--space-14); padding: var(--space-10) var(--space-12); line-height: 1.55; }
+.chat-sections div + div { margin-top: var(--space-4); }
+.chat-sections dd { line-height: 1.55; }
+
+/* Links inside the assistant's message («Подробнее о продукте», WhatsApp, call): plain bold text with the arrow, no
+   outline or fill, close to the text around it — so they do not look like the suggestion pills (owner, 2026-11-10). */
+.chat-links { gap: var(--space-4) var(--space-16); margin-top: var(--space-8); }
+.chat-links a { display: inline-flex; align-items: center; gap: var(--space-4); padding: var(--space-2) 0; border: 0; border-radius: 0; background: none; color: var(--color-ink); font-size: var(--text-14); font-weight: var(--weight-700); text-decoration: none; }
+.chat-links a:hover { text-decoration: underline; }
+.chat-links a svg { flex: none; }
+
+/* The input row and the doctor note are the end of the scrolling conversation, not a fixed strip: when the conversation is
+   short they sit at the bottom of the screen (margin-top: auto), when it is long they are at its end. */
+.chat-log { padding-bottom: 0; }
+.chat-log > .chat-composer { margin-top: auto; padding: var(--space-14) 0 var(--space-12); }
+.chat-down { bottom: var(--space-16); }
+@media (max-width: 639px) { .chat-down { bottom: var(--space-12); } .chat-log > .chat-composer { padding-bottom: var(--space-8); } }

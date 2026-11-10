@@ -8,19 +8,24 @@ import { pricesUnder, readSite, type ProductContent, type ProductOverride, type 
 import { factOrder } from './catalog';
 import { productCover } from './product-media.mjs';
 import { Icon } from './ui';
+import { Field, PasswordInput } from './auth';
 
-// «Управление сайтом» (/profile/?admin=1), only for administrator accounts; the server checks the role on every
-// request (scripts/site-admin.mjs). Sections: the warehouse rate, a product's prices and stock, customer reviews,
-// administrators. An expert comment's stars are set right on the product page (clickable stars an administrator sees).
+// Site management (/admin/, research 2026-11-10): a separate staff account with its own sign-in and session, and only
+// management here — no customer cabinet. The server checks the staff session on every request (scripts/site-admin.mjs).
+// Left menu: Сводка, Заказы, Товары, Курс у.е., Отзывы, Чат-консультант, Сотрудники; on a phone the menu is a row of tabs.
+// An expert comment's stars are set right on the product page (clickable stars a signed-in member of staff sees).
 
 type Overview = SiteSettings & {
   cbr: { rubPerUsd: number; date: string } | null;
   rateHistory: { rubPerUnit: number; from: number | null; at: string; by: string | null }[];
   reviews: { id: number; productId: string; rating: number; text: string; status: 'pending' | 'published' | 'hidden'; date: string; author: string; email: string }[];
-  users: { email: string; name: string; role: string; createdAt: string }[];
+  staff: { email: string; name: string; createdAt: string; lastLogin: string | null }[];
+  customers: number;
 };
-type Tab = 'orders' | 'rate' | 'products' | 'reviews' | 'chat' | 'users';
-const tabs: [Tab, string][] = [['orders', 'Заказы'], ['rate', 'Курс у.е.'], ['products', 'Цены и наличие'], ['reviews', 'Отзывы'], ['chat', 'Чат'], ['users', 'Администраторы']];
+type Tab = 'summary' | 'orders' | 'products' | 'rate' | 'reviews' | 'chat' | 'staff';
+// Icons as in the site's phone tab bar (home, catalog grid, chat, profile) and header (bag); groups with a heading.
+const tabs: [Tab, string, string, string][] = [['summary', 'Сводка', 'home', 'Сводка'], ['orders', 'Заказы', 'bag', 'Заказы'], ['products', 'Товары', 'grid', 'Товары'], ['rate', 'Курс у.е.', 'sliders', 'Курс'], ['reviews', 'Отзывы', 'star', 'Отзывы'], ['chat', 'Чат-консультант', 'message', 'Чат'], ['staff', 'Сотрудники', 'user-separated', 'Команда']];
+const groups: [string, Tab[]][] = [['', ['summary']], ['Магазин', ['orders', 'products', 'rate']], ['Покупатели', ['reviews', 'chat']], ['Команда', ['staff']]];
 const when = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const number = (v: number | null | undefined) => v === null || v === undefined ? '' : String(v).replace('.', ',');
 const productName = (id: string) => { const p = data.products.find(x => x.id === id); return p ? shortName(p.name) : id; };
@@ -32,15 +37,67 @@ async function adminCall(path: string, body: unknown): Promise<{ ok: boolean; bo
   } catch { return { ok: false, body: { error: 'Нет связи с сервером. Попробуйте ещё раз.' } }; }
 }
 
+/** /admin/: the staff sign-in, or site management for a signed-in member of staff. */
+export function AdminApp() {
+  const { staff, setStaff } = useStore();
+  const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    fetch('/api/admin/me', { headers: { Accept: 'application/json' } }).then(async r => { const b = r.ok ? await r.json().catch(() => null) : null; setStaff(b?.staff ?? null); }).catch(() => setStaff(null)).finally(() => setChecked(true));
+  }, []);
+  if (!checked) return <div className="admin-app admin-app--loading" aria-busy="true" />;
+  return staff ? <AdminPanel /> : <StaffSignIn />;
+}
+
+function StaffSignIn() {
+  const { setStaff } = useStore();
+  // ?email= (from the customer sign-in that recognised a staff account) fills the email in.
+  const [login, setLogin] = useState(() => typeof location === 'undefined' ? '' : new URLSearchParams(location.search).get('email') ?? '');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const submit = async (e: FormEvent) => {
+    e.preventDefault(); setBusy(true); setError('');
+    try {
+      const r = await fetch('/api/admin/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ login, password }) });
+      const b = await r.json().catch(() => null);
+      if (r.ok && b?.staff) { setPassword(''); setStaff(b.staff); return; }
+      setError(b?.error || 'Не удалось войти.');
+    } catch { setError('Нет связи с сервером.'); } finally { setBusy(false); }
+  };
+  // The same card as the customers' sign-in (auth.tsx, auth.css): white card with the dark outline, the same fields,
+  // the eye on the password, no green ring on the field being typed in (owner, 2026-11-10).
+  return <div className="admin-signin" data-ds-id="admin-signin">
+    <header className="site-header admin-header"><div className="header-inner">
+      <a className="brand" href="/" aria-label="NSP Center — на сайт"><span className="brand-mark"><img src="/icons/icon.svg" alt="" width="48" height="48" /></span><span>NSP<span className="brand-light"> Center</span></span></a>
+      <span className="admin-header-label">Управление сайтом</span>
+      <div className="admin-header-actions"><a className="admin-header-link" href="/">На сайт</a></div>
+    </div></header>
+    <main className="site-main site-main--account-route" id="main">
+      <section className="auth admin-auth">
+        <h1>Вход для сотрудников</h1>
+        <p className="auth-switch">Управление сайтом NSP Center. Покупатели входят на сайте, в <a className="auth-link" href="/profile/">профиле</a>.</p>
+        <form className="auth-form" onSubmit={submit}>
+          <Field label="Email">{id => <input id={id} className="field" type="email" inputMode="email" autoComplete="username" autoCapitalize="none" spellCheck={false} placeholder="name@nsp-center.ru" value={login} onChange={e => setLogin(e.target.value.replace(/\s/g, ''))} required />}</Field>
+          <Field label="Пароль">{id => <PasswordInput id={id} autoComplete="current-password" value={password} onChange={setPassword} />}</Field>
+          <button className="btn btn--primary auth-submit" disabled={busy || !login.trim() || !password}>{busy ? 'Входим…' : 'Войти'}</button>
+        </form>
+        {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
+      </section>
+    </main>
+  </div>;
+}
+
 export function AdminPanel() {
-  const { setSite, notify } = useStore();
-  const [tab, setTab] = useState<Tab>('orders');
-  // ?tab=reviews (from the bell notice) opens that section.
-  useEffect(() => { const t = new URLSearchParams(location.search).get('tab'); if (tabs.some(([id]) => id === t)) setTab(t as Tab); }, []);
+  const { setSite, notify, staff, setStaff } = useStore();
+  const [tab, setTabState] = useState<Tab>('summary');
+  // ?section=reviews (from the bell notice, or a reload) opens that section; switching keeps it in the address.
+  useEffect(() => { const t = new URLSearchParams(location.search).get('section'); if (tabs.some(([id]) => id === t)) setTabState(t as Tab); }, []);
+  const setTab = (t: Tab) => { setTabState(t); history.replaceState(history.state, '', t === 'summary' ? '/admin/' : `/admin/?section=${t}`); window.scrollTo({ top: 0 }); };
   const [overview, setOverview] = useState<Overview | null>(null);
   const [error, setError] = useState('');
   const load = () => fetch('/api/admin/overview', { headers: { Accept: 'application/json' } }).then(async r => {
     const body = await r.json().catch(() => null);
+    if (r.status === 401) { setStaff(null); return; }
     if (!r.ok) { setError(body?.error || 'Не удалось открыть раздел.'); return; }
     setOverview(body); setSite(readSite(body));
   }).catch(() => setError('Нет связи с сервером.'));
@@ -52,20 +109,63 @@ export function AdminPanel() {
     if (r.body && 'products' in r.body) setSite(readSite(r.body));
     notify(done); await load(); return true;
   };
+  const signOut = async () => { await fetch('/api/admin/logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }).catch(() => null); setStaff(null); };
   const pending = overview?.reviews.filter(r => r.status === 'pending').length ?? 0;
-  return <div className="admin" data-ds-id="admin-panel">
-    <a className="back-link" href="/profile/"><span aria-hidden="true">←</span>Профиль</a>
-    <header className="admin-head"><span className="ds-kicker">Администратор</span><h1>Управление сайтом</h1></header>
-    <nav className="admin-tabs" role="tablist">{tabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}{id === 'reviews' && pending > 0 && <span className="admin-count">{pending}</span>}</button>)}</nav>
-    {error && <p className="admin-error" role="alert">{error}</p>}
-    {!overview && !error && <p className="ds-muted">Загружаем…</p>}
-    {tab === 'orders' && <OrdersSection />}
-    {overview && tab === 'rate' && <RateSection overview={overview} run={run} />}
-    {overview && tab === 'products' && <ProductsSection overview={overview} run={run} />}
-    {overview && tab === 'reviews' && <ReviewsSection overview={overview} run={run} />}
-    {tab === 'chat' && <ChatLogSection />}
-    {overview && tab === 'users' && <UsersSection overview={overview} run={run} />}
+  const title = tabs.find(([id]) => id === tab)?.[1] ?? '';
+  return <div className="admin-app" data-ds-id="admin-panel">
+    {/* The site's own header (logo and white bar), with management's actions instead of the shop's. */}
+    <header className="site-header admin-header" data-ds-id="admin-header"><div className="header-inner">
+      <a className="brand" href="/admin/" aria-label="NSP Center — управление сайтом"><span className="brand-mark"><img src="/icons/icon.svg" alt="" width="48" height="48" /></span><span>NSP<span className="brand-light"> Center</span></span></a>
+      <span className="admin-header-label">Управление сайтом</span>
+      <div className="admin-header-actions">
+        <span className="admin-staff-name" title={staff?.email}><Icon name="user-separated" size={20} />{staff ? `${staff.firstName} ${staff.lastName}`.trim() : ''}</span>
+        <a className="admin-header-link" href="/" target="_blank" rel="noopener">Открыть сайт</a>
+        <button type="button" className="admin-header-link" onClick={() => void signOut()}>Выйти</button>
+      </div>
+    </div></header>
+    <div className="admin-shell">
+      <nav className="admin-sidebar" aria-label="Разделы управления">{groups.map(([heading, ids]) => <div className="admin-sidebar-group" key={heading || 'top'}>
+        {heading && <span className="admin-sidebar-heading">{heading}</span>}
+        {tabs.filter(([id]) => ids.includes(id)).map(([id, label, icon, short]) => <button key={id} type="button" aria-label={label} aria-current={tab === id ? 'page' : undefined} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}><Icon name={icon} size={22} /><span className="admin-nav-label">{label}</span><span className="admin-nav-short" aria-hidden="true">{short}</span>{id === 'reviews' && pending > 0 && <span className="admin-count">{pending}</span>}</button>)}
+      </div>)}</nav>
+      <main className="admin" id="main">
+        <h1 className="admin-title">{title}</h1>
+        {error && <p className="admin-error" role="alert">{error}</p>}
+        {!overview && !error && tab !== 'orders' && tab !== 'chat' && <p className="ds-muted">Загружаем…</p>}
+        {overview && tab === 'summary' && <SummarySection overview={overview} pending={pending} open={setTab} />}
+        {tab === 'orders' && <OrdersSection />}
+        {overview && tab === 'rate' && <RateSection overview={overview} run={run} />}
+        {overview && tab === 'products' && <ProductsSection overview={overview} run={run} />}
+        {overview && tab === 'reviews' && <ReviewsSection overview={overview} run={run} />}
+        {tab === 'chat' && <ChatLogSection />}
+        {overview && tab === 'staff' && <StaffSection overview={overview} run={run} reload={() => void load()} />}
+      </main>
+    </div>
   </div>;
+}
+
+/** «Сводка»: what needs attention today, each card opens its section. */
+function SummarySection({ overview, pending, open }: { overview: Overview; pending: number; open: (t: Tab) => void }) {
+  const [orders, setOrders] = useState<Record<string, number> | null>(null);
+  useEffect(() => { fetch('/api/admin/orders?status=all&page=1', { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then(b => setOrders(b?.summary ?? null)).catch(() => setOrders(null)); }, []);
+  const out = data.products.filter(p => p.availability === 'OutOfStock').length;
+  const rate = overview.rate?.rubPerUnit ?? data.pricing.rubPerUnit;
+  const cards: [Tab, string, string, string][] = [
+    ['orders', 'Новые заказы', orders ? String(orders.new ?? 0) : '—', orders ? `В обработке: ${orders.processing ?? 0}` : 'Заказы с сайта пока не приходят'],
+    ['reviews', 'Отзывы на проверке', String(pending), pending ? 'Ждут публикации' : 'Все отзывы проверены'],
+    ['products', 'Нет в наличии', String(out), `из ${data.products.length} товаров`],
+    ['rate', 'Курс у.е.', `${number(rate)} ₽`, overview.rate?.updatedAt ? `обновлён ${when(overview.rate.updatedAt)}` : 'по прайсу'],
+    ['staff', 'Покупателей', String(overview.customers), `Сотрудников: ${overview.staff.length}`],
+  ];
+  const waiting = overview.reviews.filter(r => r.status === 'pending').slice(0, 3);
+  return <>
+    <div className="admin-summary" data-ds-id="admin-summary">{cards.map(([id, label, value, note]) => <button key={label} type="button" className="admin-summary-card" onClick={() => open(id)}><span>{label}</span><strong>{value}</strong><small>{note}</small></button>)}</div>
+    <section className="admin-card admin-attention" data-ds-id="admin-attention">
+      <h2>Требует внимания</h2>
+      {waiting.length ? <ul className="admin-attention-list">{waiting.map(r => <li key={r.id}><span><strong>{productName(r.productId)}</strong><small>{r.author} · {'★'.repeat(r.rating)} · {when(r.date)}</small></span><button type="button" className="text-button" onClick={() => open('reviews')}>Проверить</button></li>)}</ul>
+        : <p className="ds-muted">Новых отзывов нет. Заказы с сайта появятся в «Заказах», когда подключим оформление заказа.</p>}
+    </section>
+  </>;
 }
 type Run = (path: string, body: unknown, done: string) => Promise<boolean>;
 
@@ -247,32 +347,46 @@ function ReviewsSection({ overview, run }: { overview: Overview; run: Run }) {
   </section>;
 }
 
-/** A confirmation in its own window over the page: Escape or a click outside cancels. */
-function ConfirmDialog({ title, confirm, children, onConfirm, onCancel }: { title: string; confirm: string; children: ReactNode; onConfirm: () => void; onCancel: () => void }) {
+/** A confirmation in its own window over the page: Escape or a click outside cancels. Also used by the profile's sign-out. */
+export function ConfirmDialog({ title, confirm, children, onConfirm, onCancel, danger = true }: { title: string; confirm: string; children?: ReactNode; onConfirm: () => void; onCancel: () => void; danger?: boolean }) {
   useEffect(() => { const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel(); }; addEventListener('keydown', esc); return () => removeEventListener('keydown', esc); }, [onCancel]);
   return <div className="admin-dialog-backdrop" onClick={onCancel}>
     <div className="admin-dialog" role="alertdialog" aria-modal="true" aria-labelledby="admin-dialog-title" onClick={e => e.stopPropagation()}>
       <h2 id="admin-dialog-title">{title}</h2>
       {children}
-      <div className="admin-editor-actions"><button type="button" className="btn btn--danger" autoFocus onClick={onConfirm}>{confirm}</button><button type="button" className="btn btn--secondary" onClick={onCancel}>Отмена</button></div>
+      <div className="admin-editor-actions"><button type="button" className={`btn ${danger ? 'btn--danger' : 'btn--primary'}`} autoFocus onClick={onConfirm}>{confirm}</button><button type="button" className="btn btn--secondary" onClick={onCancel}>Отмена</button></div>
     </div>
   </div>;
 }
 
-function UsersSection({ overview, run }: { overview: Overview; run: Run }) {
-  const { state } = useStore();
-  const me = state.account?.email.toLowerCase();
-  const admins = overview.users.filter(u => u.role === 'admin');
-  const [q, setQ] = useState('');
-  const others = overview.users.filter(u => u.role !== 'admin' && q.trim() && (u.email.toLowerCase().includes(q.trim().toLowerCase()) || u.name.toLowerCase().includes(q.trim().toLowerCase()))).slice(0, 20);
-  return <section className="admin-card" data-ds-id="admin-users">
-    <h2>Администраторы</h2>
-    <p className="admin-lead">Администратор видит этот раздел и может менять курс, цены, наличие и отзывы. Сначала человек регистрируется на сайте, потом вы находите его здесь по почте. Всего аккаунтов: {overview.users.length}.</p>
-    <ul className="admin-users">{admins.map(u => <li key={u.email}><span><strong>{u.name}</strong><small>{u.email}</small></span>{u.email.toLowerCase() !== me && <button type="button" className="btn btn--secondary" onClick={() => void run('/api/admin/user', { email: u.email, role: 'customer' }, `${u.email} больше не администратор`)}>Убрать права</button>}</li>)}</ul>
-    <h3>Назначить администратора</h3>
-    <label className="admin-search"><Icon name="search" size={18} /><input className="field" placeholder="Почта или имя" value={q} onChange={e => setQ(e.target.value)} /></label>
-    <ul className="admin-users">{others.map(u => <li key={u.email}><span><strong>{u.name}</strong><small>{u.email}</small></span><button type="button" className="btn btn--primary" onClick={() => void run('/api/admin/user', { email: u.email, role: 'admin' }, `${u.email} теперь администратор`)}>Сделать администратором</button></li>)}</ul>
-    {q.trim() && !others.length && <p className="ds-muted">Такого покупателя нет.</p>}
+/** «Сотрудники»: staff accounts are separate from customers — added here with their own email and a one-time password
+ *  shown once (pass it on and ask to keep it), removed when they no longer work with the site. */
+function StaffSection({ overview, run, reload }: { overview: Overview; run: Run; reload: () => void }) {
+  const { staff: me, notify } = useStore();
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [issued, setIssued] = useState<{ email: string; password: string } | null>(null);
+  const [removing, setRemoving] = useState('');
+  const add = async (e: FormEvent) => {
+    e.preventDefault();
+    const [firstName = '', ...rest] = name.trim().split(/\s+/);
+    const r = await adminCall('/api/admin/staff', { email, firstName, lastName: rest.join(' ') });
+    if (!r.ok) { notify(String(r.body?.error || 'Не удалось добавить.')); return; }
+    setIssued({ email: String(r.body?.email), password: String(r.body?.password) }); setEmail(''); setName(''); reload();
+  };
+  return <section className="admin-card" data-ds-id="admin-staff">
+    <p className="admin-lead">Сотрудник входит на странице управления сайтом (nsp-center.ru/admin/) по своей почте. Это отдельный аккаунт: покупки на сайте он делает обычным аккаунтом покупателя. Покупателей на сайте: {overview.customers}.</p>
+    <ul className="admin-users">{overview.staff.map(u => <li key={u.email}><span><strong>{u.name || u.email}</strong><small>{u.email}{u.lastLogin ? ` · входил ${when(u.lastLogin)}` : ' · ещё не входил'}</small></span>{u.email.toLowerCase() !== me?.email.toLowerCase() && <button type="button" className="btn btn--secondary" onClick={() => setRemoving(u.email)}>Удалить</button>}</li>)}</ul>
+    <h3>Добавить сотрудника</h3>
+    <form className="admin-staff-form" onSubmit={add}>
+      <label>Имя и фамилия<input className="field" value={name} onChange={e => setName(e.target.value)} placeholder="Вера Лесничая" maxLength={120} /></label>
+      <label>Почта сотрудника<input className="field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@nsp-center.ru" required /></label>
+      <button className="btn btn--primary" disabled={!email.trim()}>Добавить</button>
+    </form>
+    {issued && <div className="admin-confirm" role="status"><p>Сотрудник {issued.email} добавлен. Пароль для первого входа: <code>{issued.password}</code></p><span>Пароль показан один раз. Передайте его лично или по телефону, не в переписке.</span><button type="button" className="btn btn--secondary" onClick={() => setIssued(null)}>Готово</button></div>}
+    {removing && <ConfirmDialog title="Удалить сотрудника?" confirm="Удалить" onCancel={() => setRemoving('')} onConfirm={() => { const e = removing; setRemoving(''); void run('/api/admin/staff', { email: e, remove: true }, `${e} больше не сотрудник`); }}>
+      <p className="ds-muted">{removing} больше не сможет входить в управление сайтом.</p>
+    </ConfirmDialog>}
   </section>;
 }
 
