@@ -17,3 +17,19 @@ test('only the iPhone home-screen app gets the gesture (browsers and Android hav
   assert.equal(standaloneIos(win(false, 'Mozilla/5.0 (iPhone)')), false, 'Safari tab');
   assert.equal(standaloneIos(win(undefined, 'Mozilla/5.0 (Linux; Android 14)', true)), false, 'Android');
 });
+
+test('the swipe works only on a screen with a back button, and does what that button does', async () => {
+  const { backButton, BACK_BUTTONS } = await import('../src/swipe-back.mjs');
+  const shown = { getBoundingClientRect: () => ({ width: 80, height: 32 }) };
+  const hidden = { getBoundingClientRect: () => ({ width: 0, height: 0 }) };
+  assert.equal(backButton({ querySelector: () => null, querySelectorAll: () => [hidden, shown] }), shown);
+  assert.equal(backButton({ querySelector: () => ({}), querySelectorAll: () => [shown] }), null, 'chat and plan: no swipe even with a back button');
+  assert.equal(backButton({ querySelectorAll: () => [] }), null, 'home, tabs, chat, plan: no swipe');
+  assert.equal(backButton({ querySelectorAll: () => [hidden] }), null);
+  assert.match(BACK_BUTTONS, /\.back-link/);
+  assert.match(BACK_BUTTONS, /\.catalog-mobile-back/);
+  const { readFileSync } = await import('node:fs');
+  const code = readFileSync(new URL('../src/swipe-back.mjs', import.meta.url), 'utf8');
+  assert.match(code, /if \(button\) button\.click\(\);/);
+  assert.doesNotMatch(code, /history\.back\(\)/);
+});

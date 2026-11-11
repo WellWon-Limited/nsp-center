@@ -35,7 +35,7 @@ export function CertificatesPage() {
     <div className="company-concept company-concept--nature">
       <div className="cert-back"><BackLink fallback="/company/" label="О компании" /></div>
       <section className="co-hero cert-hero" data-ds-id="certificates-hero">
-        <img className="co-hero-image" src="/images/company-concepts/research-v1.png" alt="Ботанические образцы и лабораторная посуда" />
+        <img className="co-hero-image" src="/images/company-concepts/research-v1.jpg" alt="Ботанические образцы и лабораторная посуда" />
         <div className="co-hero-copy"><span className="co-kicker">КАЧЕСТВО · СЕРТИФИКАТЫ</span><h1>Качество,<br />подтверждённое проверками.</h1><p>Продукция Nature’s Sunshine производится по международным стандартам и регулярно проходит независимые проверки.</p></div>
       </section>
 

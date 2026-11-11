@@ -2,6 +2,7 @@ import './notifications.css';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useStore } from './store';
 import { enableSystemNotifications } from './pwa';
+import { runningAsApp } from './install-state.mjs';
 import { Icon } from './ui';
 import { badge, byDay, newCount, shortTime } from './notices.mjs';
 import type { Notice } from './store';
@@ -9,14 +10,17 @@ import type { Notice } from './store';
 // Header bell with the notifications popover (research 2026-11-10): the bell shows how many are new ("9+" above nine);
 // the panel says "3 новых", groups the list by day with a line between notices, an icon per kind and a short time.
 // Opening the panel reads them all; the ones that were new keep an orange mark and "Новое" while it is open. One notice
-// can be deleted, "Очистить всё" can be undone. The button at the bottom also sends reminders to the phone's notification shade.
+// can be deleted, "Очистить всё" can be undone. «Присылать уведомления» at the bottom turns on system notifications, and
+// only in the installed app (research 2026-11-11): on an iPhone a site in Safari cannot send them at all (iOS 16.4+ allows
+// them only to apps added to the Home Screen), and asking a visitor of the site in a computer's browser for permission
+// out of the blue is what browsers now quietly block. In the browser the bell keeps its list, without the button.
 export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChange:(open:boolean)=>void}) {
   const { state, setState, notify } = useStore();
   const [permission, setPermission] = useState<NotificationPermission | 'unsupported' | ''>('');
   const panelId = useId();
   const root = useRef<HTMLDivElement>(null);
   const unread = state.notices.filter(n => !n.read).length;
-  useEffect(() => { setPermission('Notification' in window ? Notification.permission : 'unsupported'); }, [open]);
+  useEffect(() => { setPermission('Notification' in window && runningAsApp(window) ? Notification.permission : 'unsupported'); }, [open]);
   const [cleared, setCleared] = useState<Notice[] | null>(null);
   useEffect(() => { if (!cleared) return; const t = setTimeout(() => setCleared(null), 5000); return () => clearTimeout(t); }, [cleared]);
   const readAll = () => setState(s => ({ ...s, notices: s.notices.map(n => ({ ...n, read: true })) }));
@@ -40,7 +44,7 @@ export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChan
   const enable = async () => {
     const result = await enableSystemNotifications();
     setPermission(result);
-    notify(result === 'granted' ? 'Напоминания будут приходить на телефон' : result === 'denied' ? 'Уведомления запрещены в настройках браузера' : 'Этот браузер не показывает уведомления');
+    notify(result === 'granted' ? 'Напоминания будут приходить уведомлениями' : result === 'denied' ? 'Уведомления запрещены в настройках браузера' : 'Этот браузер не показывает уведомления');
   };
   return <div className="notifications" ref={root}>
     <button className="icon-btn" aria-label={unread ? `Уведомления: ${unread} новых` : 'Уведомления'} aria-expanded={open} aria-controls={panelId} onClick={() => onOpenChange(!open)}><Icon name="bell" />{unread > 0 && <span className="cart-count">{badge(unread)}</span>}</button>
@@ -63,9 +67,9 @@ export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChan
         : <div className="notifications-empty"><Icon name="bell" size={28} /><p><strong>Уведомлений пока нет</strong></p><p>Здесь появятся напоминания о приёме и товары, которых вы ждали.</p></div>}
       {state.notices.length > 0 && <button type="button" className="text-button notifications-clear" onClick={clearAll}>Очистить всё</button>}
       {cleared && <p className="notifications-undo" role="status">Уведомления удалены <button type="button" className="text-button" onClick={undoClear}>Вернуть</button></p>}
-      {permission === 'default' && <button type="button" className="btn btn--primary notifications-enable" onClick={enable}>Присылать на телефон</button>}
-      {permission === 'granted' && <p className="notifications-note">Напоминания приходят и на телефон, пока приложение открыто или свёрнуто.</p>}
-      {permission === 'denied' && <p className="notifications-note">Уведомления на телефон выключены в настройках браузера.</p>}
+      {permission === 'default' && <button type="button" className="btn btn--primary notifications-enable" onClick={enable}>Присылать уведомления</button>}
+      {permission === 'granted' && <p className="notifications-note">Напоминания приходят уведомлениями, пока приложение открыто или свёрнуто.</p>}
+      {permission === 'denied' && <p className="notifications-note">Уведомления выключены в настройках устройства.</p>}
     </div>}
   </div>;
 }
