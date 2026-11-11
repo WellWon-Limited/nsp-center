@@ -20,7 +20,7 @@ function MobileCatalogPreview(){
    <clipPath id={`${id}-omega`} clipPathUnits="userSpaceOnUse"><path d={catalogPhotoClips.omega}/></clipPath>
    <filter id={`${id}-shadow`} x="-15%" y="-10%" width="130%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="5" floodColor="#1d3a36" floodOpacity=".17"/></filter>
   </defs>
-  <image href="/images/ribbon-only/satin-mobile-backdrop-v3.png" width="878" height="1814" preserveAspectRatio="none"/>
+  <image href="/images/ribbon-only/satin-mobile-backdrop-v3.jpg" width="878" height="1814" preserveAspectRatio="none"/>
   <svg x="195" y="700" width="303.6" height="607.2" viewBox="0 0 600 1200" overflow="visible" filter={`url(#${id}-shadow)`}><image href="/media/upload/iblock/9f8/9f886ee00e11b06b89aafdd9e86dfc3c.png" width="600" height="1200" clipPath={`url(#${id}-chlorophyll)`}/></svg>
   <svg x="342" y="873" width="364" height="432.25" viewBox="0 0 800 950" overflow="visible" filter={`url(#${id}-shadow)`}><image href="/media/upload/iblock/159/15991bfebc3b9f99c360e466c6f0f1a8.jpg" width="800" height="950" clipPath={`url(#${id}-omega)`}/></svg>
   <svg width="878" height="302" viewBox="0 0 878 302" overflow="hidden"><image href="/images/ribbon-only/mobile-original.png" width="878" height="1814"/></svg>

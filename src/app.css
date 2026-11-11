@@ -557,11 +557,12 @@ img.product-image-missing{object-fit:contain;opacity:.25;padding:18%}
  /* Under the three paths of the home page the next section follows at the usual section distance. */
  body .site-main .home-first-screen>.home-paths{margin-bottom:0}
 }
-/* Pulling the page past its ends on a phone: above the top the header's white goes on, below the bottom the tab bar's
-   dark green (the strip under the footer, behind the tab bar, is painted dark too, so no second colour shows). */
+/* Pulling the page past its ends on a phone: white above and below, as on a computer (the strip under the footer, behind
+   the tab bar, is white too, so no second colour shows). The page's surroundings are white as well, so a page that is
+   still on its way shows white for that moment, never a dark-green screen. */
 @media(max-width:639px){
  .site-header::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--color-white);pointer-events:none}
- body{background:linear-gradient(to top,#091b16 calc(var(--phone-nav-height,52px) + env(safe-area-inset-bottom)),var(--color-bg) 0)}
+ body{background:linear-gradient(to top,#fff calc(var(--phone-nav-height,52px) + env(safe-area-inset-bottom)),var(--color-bg) 0)}
 }
 /* An empty screen on a phone («Акций пока нет», «Покупок ещё не было», empty cart, not found): at first only the light
    background with the line in the middle of what is visible between the header and the tab bar; the footer (with its
@@ -610,3 +611,4 @@ html.nsp-signed-in .hero-daily-signup{display:none}
 /* The header's shadow falls only downward: nothing of it shows above the header when the page is pulled past its top
    (the white there runs straight into the white header, with no dividing line). */
 body .site-header{box-shadow:0 16px 28px -16px rgb(30 80 70 / .35)}
+@media(max-width:639px){html:root{background:#fff}}

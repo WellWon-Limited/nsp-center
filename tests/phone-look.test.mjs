@@ -9,7 +9,7 @@ const css = read('src/app.css');
 test('the status bar and the area above the page are white like the header; below the page dark like the tab bar', () => {
   assert.match(read('index.html'), /<meta name="theme-color" content="#ffffff"\/>/);
   assert.match(css, /\.site-header::before\{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var\(--color-white\)/);
-  assert.match(css, /body\{background:linear-gradient\(to top,#091b16 calc\(var\(--phone-nav-height,52px\) \+ env\(safe-area-inset-bottom\)\),var\(--color-bg\) 0\)\}/);
+  assert.match(css, /body\{background:linear-gradient\(to top,#fff calc\(var\(--phone-nav-height,52px\) \+ env\(safe-area-inset-bottom\)\),var\(--color-bg\) 0\)\}/);
 });
 
 test('the loading screen block stands exactly in the middle of the screen', () => {
