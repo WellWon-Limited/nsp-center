@@ -22,9 +22,10 @@ test('the swipe works only on a screen with a back button, and does what that bu
   const { backButton, BACK_BUTTONS } = await import('../src/swipe-back.mjs');
   const shown = { getBoundingClientRect: () => ({ width: 80, height: 32 }) };
   const hidden = { getBoundingClientRect: () => ({ width: 0, height: 0 }) };
-  assert.equal(backButton({ querySelector: () => null, querySelectorAll: () => [hidden, shown] }), shown);
-  assert.equal(backButton({ querySelector: () => ({}), querySelectorAll: () => [shown] }), null, 'chat and plan: no swipe even with a back button');
-  assert.equal(backButton({ querySelectorAll: () => [] }), null, 'home, tabs, chat, plan: no swipe');
+  assert.equal(backButton({ querySelectorAll: sel => (sel === '.back-action' ? [] : [hidden, shown]) }), shown);
+  const step = { getBoundingClientRect: () => ({ width: 60, height: 30 }) };
+  assert.equal(backButton({ querySelectorAll: sel => (sel === '.back-action' ? [step] : [shown]) }), step, 'the test\'s «Назад» goes to the previous question first');
+  assert.equal(backButton({ querySelectorAll: () => [] }), null, 'home and tabs without a back button: no swipe');
   assert.equal(backButton({ querySelectorAll: () => [hidden] }), null);
   assert.match(BACK_BUTTONS, /\.back-link/);
   assert.match(BACK_BUTTONS, /\.catalog-mobile-back/);

@@ -529,8 +529,6 @@ body:has(.empty-screen) .site-main{position:relative}
 body:has(.empty-screen) .site-main :has(>.empty-screen),body:has(.empty-screen) .site-main>:has(.empty-screen){position:static}
 .site-main .empty-screen.empty-screen{position:absolute;inset:0;min-height:0;padding:0 var(--space-20);pointer-events:none}
 .site-main .empty-screen>*{pointer-events:auto}
-/* The back-swipe arrow at the left edge (src/swipe-back.mjs, iPhone home-screen app only). */
-.swipe-back-hint{position:fixed;left:6px;top:50%;z-index:calc(var(--layer-navigation) + 1);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--color-white);color:var(--color-ink);box-shadow:0 8px 20px -10px rgb(29 58 54 / .5);opacity:0;transform:translate(0,-50%);pointer-events:none;transition:opacity .12s}
 /* A tapped bottom-bar tab lights up at once, before the next page arrives (src/instant-tap.mjs). */
 @media(max-width:639px){
  .bottom-nav a.is-going,.bottom-nav a.is-going>span{color:var(--color-white)}

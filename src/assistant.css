@@ -233,4 +233,12 @@ body:has(.chat) .site-main { flex: 1 1 auto; min-height: 0; width: 100%; max-wid
   html.chat-kb-open body:has(.chat) #root { position: fixed; left: 0; right: 0; top: var(--chat-top, 0px); height: var(--chat-vh, 100svh); }
   html.chat-kb-open body:has(.chat) .site-main { padding-bottom: 0; }
   html.chat-kb-open body:has(.chat) .bottom-nav { display: none; }
+  /* Under the input row only the chat's own light background: no white strip (kept below the footer on other pages)
+     and no dark edge line (it sits under the tab bar) right above the keyboard. */
+  html.chat-kb-open body:has(.chat) { background: var(--color-bg); }
+  html.chat-kb-open body:has(.chat)::after { display: none; }
+}
+@media (max-width: 639px) {
+  /* The chat page never scrolls past a footer: its whole background is the chat's light green. */
+  body:has(.chat) { background: var(--color-bg); }
 }
