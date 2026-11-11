@@ -7,7 +7,7 @@
 Задачи этого этапа:
 
 - [#3](https://github.com/WellWon-Limited/nsp-center/issues/3) — тестовый
-  сервер закрыт от индексации.
+  сервер закрыт от индексации. Сделано (`scripts/indexing.mjs`), задача закрыта.
 - [#4](https://github.com/WellWon-Limited/nsp-center/issues/4) — Яндекс Метрика
   с целями.
 - [#5](https://github.com/WellWon-Limited/nsp-center/issues/5) — Яндекс
@@ -19,7 +19,8 @@
 
 - `https://nsp-center.dev.codimax.ru/robots.txt` запрещает индексацию, ответы
   тестового сервера несут `X-Robots-Tag: noindex`; правила боевого домена
-  разрешают индексацию.
+  разрешают индексацию. Выполнено: `tests/indexing.test.mjs` проходит на запущенном
+  сервере (`NSP_TEST_URL`).
 - Счётчик Метрики есть на всех страницах боевого домена и не срабатывает на
   тестовом; цели видны в отчёте Метрики (проверяет владелец).
 - Вебмастер подтвердил права и принял `sitemap.xml` (проверяет владелец).
@@ -29,4 +30,5 @@
 
 Предыдущий результат — полный сайт из снимка nsp-center.ru, дизайн-система и
 прототип приложения — выполнен; проверки в [VERIFICATION.md](VERIFICATION.md)
-и [CONTENT-AUDIT.md](CONTENT-AUDIT.md).
+и [CONTENT-AUDIT.md](CONTENT-AUDIT.md). Вне этого плана с тех пор сделаны страницы-темы,
+аккаунты, корзина, управление сайтом, чат-помощник и PWA ([PASSPORT.md](PASSPORT.md)).

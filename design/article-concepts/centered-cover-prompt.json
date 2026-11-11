@@ -1,0 +1,5 @@
+{
+  "mode": "built-in image_gen edit",
+  "asset": "public/images/article-concepts/virus-centered-v1.jpg",
+  "prompt": "Edit this image without changing its visual identity. Recompose the SAME large virus particle so that its exact centre is at the horizontal and vertical centre of the final landscape 3:2 image. Keep its organic textured membrane, pale mauve protein projections, deep forest and sage green environment, soft warm backlight and realistic microscopic depth. Reduce its diameter slightly if necessary so the entire particle and its projections fit inside the central 75 percent of image width and central 85 percent of height, with balanced background space on both sides. Extend the blurred microscopic background naturally where needed. The particle must be centred, not on the right. No other changes in colour style or texture; no text, lettering, labels, arrows, logos or graphic symbols. This is the centred thumbnail/cover version of the same editorial illustration."
+}

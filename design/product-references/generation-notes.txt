@@ -1,0 +1,7 @@
+Product images generated with the built-in imagegen tool on 2026-11-06.
+Reference sources: https://nsp.com.ru/catalog/body/3345 and https://nsp.com.ru/catalog/body/23065
+Reference downloads are for design reference, not public assets. Generated derivatives do not establish a license or eliminate third-party rights.
+Prompt: Create a newly lit photorealistic e-commerce product photograph using the attached real packaging as strict identity reference. One bottle only, straight upright frontal view, entire bottle and cap visible, centered with 10 percent margin above and below, square canvas. Transparent background, minimal soft contact shadow, premium soft studio light from upper left and subtle fill, naturally realistic material. Preserve EXACT shape, proportions, brand logo, all packaging colors and all legible label lettering from reference. Do not invent packaging, claims or contents. No added props, plants, fruits or decorative graphics outside label. Not a design mockup. 
+Enzimozavriki: retain white ribbed cap, fruit label, turquoise band and all visible lettering. A second background-extraction edit removed the white halo outside the bottle.
+L-carnitine: retain amber bottle, black cap and beige/teal label; omit floating promotional badge.
+Outputs: public/images/products/enzimozavriki-studio.png and public/images/products/l-carnitine-studio.png

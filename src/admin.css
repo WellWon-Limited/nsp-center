@@ -1,0 +1,202 @@
+/* «Управление сайтом»: the account column's width, white cards per section, tabs on top. */
+.admin { max-width: 860px; margin: 0 auto; }
+.admin-head h1 { font-size: clamp(28px, 4vw, 40px); margin: var(--space-6) 0 var(--space-16); }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: var(--space-6); margin-bottom: var(--space-16); }
+.admin-tabs button { display: inline-flex; align-items: center; gap: var(--space-6); min-height: 40px; padding: 0 var(--space-16); border: 1.5px solid var(--color-ink-line); border-radius: 999px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-14); font-weight: var(--weight-700); cursor: pointer; }
+.admin-tabs button.active { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-white); }
+.admin-count { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: #ad6338; color: var(--color-white); font-size: var(--text-11); line-height: 20px; text-align: center; }
+.admin-card { display: grid; gap: var(--space-14); padding: var(--space-22); border-radius: var(--radius-20); background: var(--color-white); }
+.admin-card h2 { font-size: var(--text-24); }
+.admin-card h3 { font-size: var(--text-17); margin-top: var(--space-8); }
+.admin-lead { color: var(--color-muted); font-size: var(--text-14); line-height: 1.55; }
+.admin-error { color: var(--color-danger); font-weight: var(--weight-700); }
+.admin-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: var(--space-10); margin: 0; }
+.admin-facts div { padding: var(--space-12) var(--space-14); border-radius: var(--radius-14); background: #eef4f0; }
+.admin-facts dt { font-size: var(--text-12); color: var(--color-muted); }
+.admin-facts dd { margin: 2px 0 0; font-size: var(--text-18); font-weight: var(--weight-800); }
+.admin-rate-form { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-10); }
+.admin-rate-form label, .admin-editor label { display: grid; gap: var(--space-4); font-size: var(--text-13); font-weight: var(--weight-700); }
+.admin-rate-form .field { max-width: 200px; }
+.admin-hint { font-size: var(--text-14); color: var(--color-success); font-weight: var(--weight-700); }
+.admin-confirm { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-10); padding: var(--space-12) var(--space-14); border-radius: var(--radius-14); background: #fbf1e9; color: #7a4423; }
+.admin-confirm p { flex-basis: 100%; font-weight: var(--weight-700); }
+.admin-table { width: 100%; border-collapse: collapse; font-size: var(--text-14); }
+.admin-table th, .admin-table td { padding: var(--space-8) var(--space-6); border-bottom: 1px solid var(--color-ink-line); text-align: left; }
+.admin-table th { font-size: var(--text-12); color: var(--color-muted); font-weight: var(--weight-700); }
+.admin-search { display: flex; align-items: center; gap: var(--space-8); }
+.admin-search .field { flex: 1; }
+.admin-products, .admin-reviews, .admin-users { display: grid; gap: var(--space-8); margin: 0; padding: 0; list-style: none; }
+.admin-product-row { display: flex; width: 100%; justify-content: space-between; gap: var(--space-12); padding: var(--space-12) var(--space-14); border: 1px solid var(--color-ink-line); border-radius: var(--radius-14); background: var(--color-white); color: var(--color-ink); font: inherit; text-align: left; cursor: pointer; }
+.admin-product-row[aria-expanded="true"] { border-color: var(--color-ink); }
+.admin-product-row > span { display: grid; gap: 2px; }
+.admin-product-row small { font-size: var(--text-12); color: var(--color-muted); }
+.admin-product-prices { justify-items: end; font-weight: var(--weight-800); }
+.admin-product-prices small.out { color: #ad6338; }
+.admin-product-prices small.in { color: var(--color-success); }
+.admin-editor { display: grid; gap: var(--space-12); padding: var(--space-14); border-radius: 0 0 var(--radius-14) var(--radius-14); background: #f4f7f5; }
+.admin-editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-10); }
+.admin-editor-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); }
+.admin-link { color: var(--color-link); font-weight: var(--weight-700); font-size: var(--text-14); }
+.admin-review { display: grid; gap: var(--space-6); padding: var(--space-14); border: 1px solid var(--color-ink-line); border-radius: var(--radius-14); }
+.admin-review--pending { border-color: #ad6338; background: #fdf7f2; }
+.admin-review--hidden { opacity: .7; }
+.admin-review header { display: flex; justify-content: space-between; gap: var(--space-10); }
+.admin-status { font-size: var(--text-12); font-weight: var(--weight-700); color: var(--color-muted); }
+.admin-review-meta { font-size: var(--text-13); color: var(--color-muted); }
+.admin-users li { display: flex; align-items: center; justify-content: space-between; gap: var(--space-10); padding: var(--space-10) var(--space-14); border: 1px solid var(--color-ink-line); border-radius: var(--radius-14); }
+.admin-users li > span { display: grid; }
+.admin-users small { color: var(--color-muted); font-size: var(--text-12); }
+.admin-entry { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); margin: var(--space-16) 0; padding: var(--space-16) var(--space-18); border-radius: var(--radius-16); background: var(--color-ink); color: var(--color-white); text-decoration: none; }
+.admin-entry:hover { color: var(--color-white); }
+.admin-entry strong { font-size: var(--text-16); }
+.admin-entry small { display: block; color: var(--color-on-dark-muted); font-size: var(--text-13); }
+@media (max-width: 639px) { .admin-card { padding: var(--space-16); } .admin-product-row { flex-direction: column; } .admin-product-prices { justify-items: start; } .admin-users li { flex-direction: column; align-items: start; } }
+.admin-card .field { border: 1px solid var(--color-ink-line); background: var(--color-white); }
+.admin-choice { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+.admin-choice button { min-height: 38px; padding: 0 var(--space-14); border: 1.5px solid var(--color-ink-line); border-radius: 999px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-13); font-weight: var(--weight-700); cursor: pointer; }
+.admin-choice button.active { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-white); }
+.admin-entry > span:first-child { flex: 1; }
+/* «Управление сайтом» in the profile: white with a dark-green outline, so it stands apart from the dark discount card. */
+.admin-entry { border: 2px solid var(--color-ink); background: var(--color-white); color: var(--color-ink); }
+.admin-entry:hover { color: var(--color-ink); background: #f4f8f6; }
+.admin-entry small { color: var(--color-muted); }
+/* Review actions are white buttons, readable on the orange tint of a review waiting for approval. */
+.admin-review .btn--secondary, .admin-review .btn--danger { border: 1.5px solid var(--color-ink-line); background: var(--color-white); color: var(--color-ink); }
+.admin-review .btn--danger { border-color: var(--color-danger); color: var(--color-danger); }
+.admin-picker .product-picker .field { border: 1px solid var(--color-ink-line); background-color: var(--color-white); box-shadow: none; }
+/* Confirmation window (deleting a review): centred over a dimmed page. */
+.admin-dialog-backdrop { position: fixed; inset: 0; z-index: calc(var(--layer-overlay) + 30); display: grid; place-items: center; padding: var(--space-18); background: rgb(8 24 19 / .55); }
+.admin-dialog { display: grid; gap: var(--space-12); width: min(460px, 100%); padding: var(--space-22); border-radius: var(--radius-20); background: var(--color-white); box-shadow: 0 24px 60px -20px rgb(8 24 19 / .5); }
+.admin-dialog h2 { font-size: var(--text-22); }
+.admin-dialog blockquote { margin: 0; padding: var(--space-10) var(--space-14); border-left: 3px solid var(--color-ink-line); color: var(--color-ink); font-size: var(--text-14); max-height: 160px; overflow: auto; }
+.admin-dialog .btn--danger { border: 0; background: var(--color-danger); color: var(--color-white); }
+.admin-dialog .btn--secondary { border: 1.5px solid var(--color-ink-line); background: var(--color-white); }
+/* Product editor: sub-tabs for prices and the card's content. */
+.admin-subtabs { display: flex; flex-wrap: wrap; gap: var(--space-6); }
+.admin-subtabs button { min-height: 34px; padding: 0 var(--space-12); border: 1.5px solid var(--color-ink-line); border-radius: 999px; background: var(--color-white); color: var(--color-ink); font: inherit; font-size: var(--text-13); font-weight: var(--weight-700); cursor: pointer; }
+.admin-subtabs button.active { border-color: var(--color-ink); background: var(--color-ink); color: var(--color-white); }
+.admin-price, .admin-content { display: grid; gap: var(--space-12); }
+.admin-content label { display: grid; gap: var(--space-4); font-size: var(--text-13); font-weight: var(--weight-700); }
+.admin-content textarea { font: inherit; font-size: var(--text-14); font-weight: var(--weight-400); line-height: 1.5; resize: vertical; }
+.admin-content .field { border: 1px solid var(--color-ink-line); background: var(--color-white); }
+.admin-docs { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-10); }
+.admin-docs figure { display: grid; gap: var(--space-6); margin: 0; }
+.admin-docs img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top; border: 1px solid var(--color-ink-line); border-radius: 8px; background: #fff; }
+.admin-photo img { max-width: 240px; max-height: 240px; object-fit: contain; border-radius: 12px; background: #fff; }
+.admin-file input { font-weight: var(--weight-400); }
+.admin-hint-muted { font-size: var(--text-12); color: var(--color-muted); }
+/* Order processing follows the account's outlined cards on both screen sizes. */
+.admin-orders-heading,.admin-orders-pagination{display:flex;align-items:center;justify-content:space-between;gap:var(--space-12)}
+.admin-order-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-8)}
+.admin-order-stats button{display:grid;gap:var(--space-6);text-align:left;padding:var(--space-12);border:1px solid var(--color-ink-line);border-radius:var(--radius-14);background:var(--color-white);color:var(--color-ink);font:inherit;cursor:pointer}
+.admin-order-stats button.active{background:var(--color-ink);color:var(--color-white);border-color:var(--color-ink)}
+.admin-order-stats span{font-size:var(--text-12)}
+.admin-order-stats strong{font-size:var(--text-24)}
+.admin-order-list{display:grid;gap:var(--space-10)}
+.admin-orders-empty{padding:var(--space-24) 0;text-align:center;color:var(--color-muted)}
+.admin-order{border:1.5px solid var(--color-ink-line);border-radius:var(--radius-14);overflow:hidden}
+.admin-order summary{display:flex;align-items:center;justify-content:space-between;gap:var(--space-12);padding:var(--space-14);cursor:pointer}
+.admin-order summary>span{display:grid;gap:var(--space-4)}
+.admin-order summary>span:last-child{text-align:right;flex:none}
+.admin-order small{display:block;font-size:var(--text-12);color:var(--color-muted);font-weight:var(--weight-400)}
+.admin-order-body{display:grid;gap:var(--space-16);padding:var(--space-14);border-top:1px solid var(--color-ink-line)}
+.admin-order-contact{display:grid;gap:var(--space-4);font-size:var(--text-14);overflow-wrap:anywhere}
+.admin-order-items{padding:0;margin:0;list-style:none;display:grid;gap:var(--space-10)}
+.admin-order-items li{display:flex;justify-content:space-between;gap:var(--space-12);font-size:var(--text-14)}
+.admin-order-items li>strong{white-space:nowrap}
+@media(max-width:639px){.admin-order-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-orders .admin-search{flex-wrap:wrap}.admin-orders .admin-search .field{min-width:0;width:100%}.admin-order summary{align-items:start}.admin-order summary small{max-width:190px}}
+
+/* Site management as its own screen (/admin/, research 2026-11-10): the site's own white header with the logo, then the
+   menu on the left — a white column divided from the work area by a line, items grouped under small headings (Shopify
+   Polaris: group related items into sections with a heading) — and the work area on a light background. On a phone
+   the menu is a row of tabs under the header. No site footer or tab bar. */
+.admin-app { min-height: 100svh; display: flex; flex-direction: column; color: var(--color-ink); }
+.admin-header { position: sticky; top: 0; z-index: var(--layer-navigation); background: var(--color-white); }
+.admin-header .header-inner { max-width: none; gap: var(--space-20); }
+/* «Управление сайтом» right next to the brand name. */
+.admin-header .brand + .admin-header-label { margin-left: calc(-1 * var(--space-8)); }
+.admin-header-label { margin-right: auto; padding-left: var(--space-16); border-left: 1px solid var(--color-ink-line); font-size: var(--text-15); font-weight: var(--weight-600); color: var(--color-muted); white-space: nowrap; }
+.admin-header-actions { display: flex; align-items: center; gap: var(--space-24); font-size: var(--text-14); }
+.admin-header-link { display: inline-flex; align-items: center; gap: var(--space-6); padding: var(--space-8) 0; border: 0; background: none; color: var(--color-link); font: inherit; font-weight: var(--weight-700); cursor: pointer; text-decoration: none; white-space: nowrap; }
+.admin-header-link:is(:hover, :focus-visible) { color: var(--color-ink); }
+.admin-staff-name { display: inline-flex; align-items: center; gap: var(--space-8); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--color-ink); font-weight: var(--weight-600); }
+.admin-staff-name svg { flex: none; }
+.admin-shell { flex: 1; display: grid; grid-template-columns: 238px minmax(0, 1fr); align-items: start; gap: var(--space-24); width: 100%; max-width: var(--web-max); margin: 0 auto; padding: var(--space-28) var(--space-28) 0; }
+/* The menu looks exactly like the catalog's categories (app.css .catalog-sidebar): on the page's light-green
+   background, a thin line on the right, small grey items, the chosen one dark green with white text. */
+.admin-sidebar { position: sticky; top: calc(var(--site-header-height, 96px) + var(--space-16)); display: flex; flex-direction: column; gap: var(--space-14); padding: 0 var(--space-16) 0 0; background: transparent; border-right: 1px solid var(--color-ink-line); }
+.admin-sidebar-group { display: grid; gap: 0; }
+.admin-sidebar-heading { padding: 0 var(--space-10) var(--space-6); font-size: var(--text-11); font-weight: var(--weight-700); letter-spacing: var(--tracking-kicker); text-transform: uppercase; color: var(--color-subtle); }
+.admin-sidebar button { display: flex; align-items: center; gap: var(--space-10); min-height: 31px; padding: var(--space-8) var(--space-10); border: 0; border-radius: 8px; background: none; color: var(--color-muted); font: inherit; font-size: var(--text-12); font-weight: var(--weight-400); line-height: 15px; text-align: left; cursor: pointer; }
+.admin-sidebar button:hover:not(.active) { background: var(--color-glass-hover); }
+.admin-sidebar button.active { background: var(--color-ink); color: var(--color-white); font-weight: var(--weight-700); }
+.admin-sidebar button svg { flex: none; color: inherit; }
+.admin-sidebar .admin-count { margin-left: auto; }
+.admin-sidebar button.active .admin-count { background: var(--color-white); color: var(--color-ink); }
+.admin-app .admin { max-width: 1040px; width: 100%; margin: 0; padding: 0 0 calc(var(--space-24) * 2); display: grid; gap: var(--space-20); align-content: start; }
+/* One heading per section, the size of the catalog's page heading; the section's own heading inside its card
+   repeated it in other words («Обработка заказов» under «Заказы»), so it is hidden here. */
+.admin-title { font-size: var(--text-40); letter-spacing: var(--tracking-heading); line-height: var(--leading-heading); margin: 0 0 var(--space-4); }
+.admin-app .admin > section.admin-card:not([data-ds-id="admin-attention"]) > h2:first-child,
+.admin-app .admin-orders-heading > h2 { display: none; }
+.admin-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); gap: var(--space-14); }
+.admin-summary-card { display: grid; gap: var(--space-6); padding: var(--space-20); border: 1px solid var(--color-ink-line); border-radius: var(--radius-20); background: var(--color-white); color: var(--color-ink); font: inherit; text-align: left; cursor: pointer; box-shadow: 0 10px 24px -22px rgb(29 58 54 / .6); }
+.admin-summary-card:hover { border-color: var(--color-ink); }
+.admin-summary-card span { font-size: var(--text-13); font-weight: var(--weight-700); color: var(--color-muted); }
+.admin-summary-card strong { font-size: 32px; font-weight: var(--weight-800); line-height: 1.1; }
+.admin-summary-card small { font-size: var(--text-12); color: var(--color-muted); }
+.admin-attention h2 { font-size: var(--text-18); }
+.admin-attention-list { display: grid; margin: 0; padding: 0; list-style: none; }
+.admin-attention-list li { display: flex; align-items: center; justify-content: space-between; gap: var(--space-16); padding: var(--space-12) 0; border-top: 1px solid var(--color-ink-line); }
+.admin-attention-list span { display: grid; gap: var(--space-2); min-width: 0; }
+.admin-attention-list small { font-size: var(--text-12); color: var(--color-muted); }
+.admin-staff-form { display: grid; grid-template-columns: 1fr 1fr auto; align-items: end; gap: var(--space-10); }
+.admin-staff-form label { display: grid; gap: var(--space-6); font-size: var(--text-13); font-weight: var(--weight-700); }
+.admin-confirm code { padding: 2px 6px; border-radius: 6px; background: var(--color-white); font-family: var(--font-mono); font-size: var(--text-14); user-select: all; }
+
+/* Staff sign-in: the customers' sign-in card (auth.css) under the site's header, a little wider. */
+.admin-signin { min-height: 100svh; display: flex; flex-direction: column; }
+.admin-signin .site-main { flex: 1; width: 100%; }
+.admin-signin .auth.admin-auth { max-width: 560px; padding: calc(var(--space-20) * 2); }
+.admin-signin .auth-switch { text-align: center; }
+
+@media (max-width: 1100px) {
+  .admin-header-label { display: none; }
+}
+/* The menu stays at the side on every screen: a narrower column on a tablet, and on a phone a rail of icons with short
+   labels under them (owner, 2026-11-10). */
+.admin-nav-short { display: none; }
+@media (max-width: 1100px) {
+  .admin-header-label { display: none; }
+}
+@media (max-width: 959px) {
+  .admin-shell { grid-template-columns: 196px minmax(0, 1fr); gap: var(--space-18); padding: var(--space-24) var(--space-22) 0; }
+  .admin-title { font-size: var(--text-32); }
+}
+@media (max-width: 639px) {
+  .admin-shell { grid-template-columns: 64px minmax(0, 1fr); gap: var(--space-12); padding: var(--space-20) var(--space-14) 0 var(--space-8); }
+  .admin-sidebar { top: calc(var(--phone-header-height, 61px) + var(--space-12)); gap: var(--space-10); padding: 0 var(--space-6) 0 0; }
+  .admin-sidebar-heading { display: none; }
+  .admin-sidebar-group + .admin-sidebar-group { padding-top: var(--space-10); border-top: 1px solid var(--color-ink-line); }
+  .admin-sidebar button { position: relative; flex-direction: column; gap: var(--space-4); min-height: 54px; padding: var(--space-8) var(--space-2); font-size: 10px; line-height: 1.2; text-align: center; }
+  .admin-nav-label { display: none; }
+  .admin-nav-short { display: block; }
+  .admin-sidebar .admin-count { position: absolute; top: 3px; right: 4px; min-width: 16px; height: 16px; padding: 0 4px; line-height: 16px; font-size: 9px; }
+  .admin-header-actions { gap: var(--space-16); font-size: var(--text-13); }
+  .admin-staff-name { display: none; }
+  .admin-summary { grid-template-columns: 1fr 1fr; gap: var(--space-10); }
+  .admin-summary-card { padding: var(--space-12); }
+  .admin-summary-card strong { font-size: 24px; }
+  .admin-staff-form { grid-template-columns: 1fr; }
+  .admin-app .admin { padding-bottom: var(--space-32); }
+  .admin-title { font-size: 30px; }
+}
+/* With its heading moved to the page title, the orders card's «Обновить» sits on the right. */
+.admin-app .admin-orders-heading { justify-content: flex-end; }
+@media (max-width: 639px) { .admin-signin .auth.admin-auth { padding: var(--space-28) var(--space-20); } }
+/* The staff sign-in card sits in the middle of the space under the header on every screen (owner, 2026-11-11). */
+.admin-signin { height: 100svh; min-height: 0; }
+.admin-signin > .site-main.site-main--account-route { flex: 1 1 auto; min-height: 0; height: auto; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: var(--space-24) var(--space-20); overflow-y: auto; }
+.admin-signin > .site-main > .auth { margin: auto; width: 100%; }
+/* Site management has no bottom tab bar on phones, so the page keeps no room for it. */
+body:has(.admin-signin, .admin-app) { padding-bottom: 0; }

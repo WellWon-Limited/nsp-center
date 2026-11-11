@@ -1,0 +1,815 @@
+/* Home first screen: a full-bleed hero banner (botanical photo in the centre, copy on
+   the left, the daily-plan card in the photo's bottom-right corner) followed by the
+   three pathway cards. Selectors carry .home-hero--banner to win over the older grid
+   rules in app.css, which load later in the bundle. */
+
+/* The hero and pathway cards share one group. Tablets follow content height;
+   desktop pointers fill the first viewport by growing the hero, not a blank gap.
+   --header-h is the site header height at each breakpoint (logo tile + paddings + border). */
+.home-first-screen {
+  --header-h: 97px;
+  --main-pad: var(--space-28);
+  --paths-gap: var(--space-32);
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - var(--header-h) - var(--main-pad));
+}
+
+.home-first-screen > .home-hero--banner {
+  flex: 0 0 auto;
+}
+
+.home-first-screen > .home-paths {
+  margin-bottom: var(--paths-gap);
+}
+
+/* Three side-by-side zones that never overlap: copy on the left, the photo centred,
+   the daily card in the bottom-right corner. --zone is the width reserved on each side
+   of the photo (page padding + copy + gap), so the centred photo gets what is left. */
+.home-hero.home-hero--banner {
+  --pad-x: max(var(--space-28), calc((100vw - var(--web-max)) / 2 + var(--space-28)));
+  --copy-w: min(28vw, 360px);
+  --zone: calc(var(--pad-x) + var(--copy-w) + var(--space-24));
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: var(--copy-w) minmax(0, 1fr);
+  align-content: center;
+  gap: var(--space-28);
+  width: 100vw;
+  min-height: max(460px, 33.35vw);
+  margin: calc(-1 * var(--space-28)) calc(50% - 50vw) var(--paths-gap);
+  padding: var(--web-section) var(--pad-x);
+  overflow: hidden;
+}
+
+/* 100vw includes the scrollbar; clip (not hidden) keeps sticky elements working. */
+body:has(.home-hero--banner) {
+  overflow-x: clip;
+}
+
+/* Sage tones sampled from the photo's backdrop, with its top-left sunlight, so the faded photo edges have no seam. */
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(120% 90% at 0% 0%, #e4e6d0 0%, rgb(228 230 208 / 0) 60%),
+    linear-gradient(180deg, #bcc5ab 0%, #aab69e 100%);
+}
+
+.hero-motion-defs {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* A continuous panoramic photograph fills the banner, with the products at its centre. */
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  transform: none;
+}
+
+.hero-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-photo img {
+    filter: none;
+  }
+}
+
+/* Click areas over the two bottles open their product cards. */
+.hero-photo-link {
+  position: absolute;
+  inset: 5% 50% 10% 40%;
+}
+
+.hero-photo-link--1 {
+  inset: 25% 39% 10% 50%;
+}
+
+.hero-photo-link:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: -6px;
+  border-radius: var(--radius-16);
+}
+
+/* Bottom-right corner of the banner, right of the photo. */
+.home-hero--banner > .daily-panel {
+  position: absolute;
+  right: var(--space-24);
+  bottom: var(--space-24);
+  width: min(340px, calc(var(--zone) - 2 * var(--space-24)));
+  margin: 0;
+}
+
+.home-hero--banner > .hero-copy {
+  position: relative;
+  grid-column: 1;
+  max-width: none;
+}
+
+.home-hero--banner .hero-copy h1 {
+  font-size: clamp(30px, 3.3vw, 46px);
+  line-height: 1.12;
+  margin-top: 0;
+}
+
+/* The sage photo is darker than the site background: body text goes to ink for contrast. */
+.home-hero--banner .hero-copy > p,
+.home-hero--banner .hero-note {
+  color: var(--color-ink);
+}
+
+.home-hero--banner .hero-copy > p {
+  font-size: var(--text-16);
+  text-wrap: pretty;
+}
+
+.home-hero--banner .hero-note {
+  align-items: flex-start;
+  font-size: var(--text-11);
+}
+
+/* Both hero actions on one line. */
+.home-hero--banner .hero-copy .ds-cluster {
+  flex-wrap: nowrap;
+  gap: var(--space-16);
+}
+
+/* Darker green than the site link colour, for contrast on the sage photo. */
+.home-hero--banner .hero-secondary {
+  color: var(--color-success);
+}
+
+@media (max-width: 959px) {
+  .home-first-screen {
+    --header-h: 89px;
+    --main-pad: var(--space-24);
+    --paths-gap: var(--space-24);
+  }
+
+  .home-hero.home-hero--banner {
+    gap: var(--space-16);
+    --pad-x: var(--space-22);
+    --copy-w: 280px;
+    min-height: 400px;
+    margin-top: calc(-1 * var(--space-24));
+    padding: var(--space-32) var(--pad-x);
+  }
+
+  .home-hero--banner .hero-copy .ds-cluster {
+    flex-wrap: wrap;
+  }
+
+  .home-hero--banner .hero-copy h1 {
+    font-size: var(--text-28);
+  }
+
+  .home-hero--banner .hero-copy > p {
+    font-size: var(--text-14);
+  }
+
+  .home-hero--banner > .daily-panel {
+    right: var(--space-14);
+    bottom: var(--space-14);
+    width: min(260px, 30vw);
+  }
+
+  .home-hero--banner > .daily-panel .daily-icon {
+    display: none;
+  }
+}
+
+/* Phone: centred copy on top, the photo across the full width below it, the daily card under the photo. */
+@media (max-width: 959px) {
+  .home-first-screen {
+    --header-h: calc(69px + env(safe-area-inset-top));
+    --main-pad: var(--space-18);
+    --paths-gap: var(--space-20);
+  }
+
+  .home-hero.home-hero--banner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 75vw auto;
+    gap: 0;
+    min-height: 0;
+    margin-top: calc(-1 * var(--space-18));
+    padding: var(--space-28) var(--space-18) var(--space-14);
+  }
+
+  .home-hero--banner > .hero-copy {
+    grid-row: 1;
+    text-align: center;
+  }
+
+  .home-hero--banner .hero-copy h1 {
+    font-size: var(--text-40);
+    margin-bottom: var(--space-18);
+  }
+
+  .home-hero--banner .hero-copy > p {
+    max-width: 360px;
+    margin-inline: auto;
+  }
+
+  .home-hero--banner .hero-copy .ds-cluster {
+    justify-content: center;
+  }
+
+  .hero-photo {
+    position: relative;
+    grid-row: 2;
+    inset: auto;
+    width: 100vw;
+    height: 75vw;
+    max-width: none;
+    margin-left: calc(-1 * var(--space-18));
+    transform: none;
+  }
+
+  .hero-photo img {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  /* The phone shows the whole 4:3 photo, so the bottles sit where they are in the image. */
+  .hero-photo-link {
+    inset: 0 51% 0 29%;
+  }
+
+  .hero-photo-link--1 {
+    inset: 0 31% 0 49%;
+  }
+
+  /* Phone: under the photo, in the flow. */
+  .home-hero--banner > .daily-panel {
+    position: relative;
+    grid-row: 3;
+    right: auto;
+    bottom: auto;
+    width: auto;
+    margin-top: var(--space-10);
+  }
+
+  .home-hero--banner > .daily-panel .daily-icon {
+    display: grid;
+  }
+}
+
+@media (max-width: 359px) {
+  .home-hero.home-hero--banner {
+    padding-inline: var(--space-14);
+  }
+
+  .hero-photo {
+    margin-left: calc(-1 * var(--space-14));
+  }
+}
+
+.hero-photo > picture { display: block; width: 100%; height: 100%; }
+.home-hero--banner > .hero-daily {
+  position: absolute;
+  right: var(--pad-x);
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(260px, 23vw);
+  color: var(--color-ink);
+}
+.hero-daily-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--text-10);
+  font-weight: var(--weight-700);
+  letter-spacing: var(--tracking-kicker);
+  margin-bottom: var(--space-16);
+}
+.hero-daily h2 { font-size: var(--text-26); line-height: var(--leading-tight); }
+.hero-daily p { font-size: var(--text-14); margin-top: var(--space-14); text-wrap: pretty; }
+.hero-daily-progress { display: block; font-size: var(--text-12); margin-top: var(--space-12); }
+.hero-daily-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-14);
+  margin-top: var(--space-8);
+  padding: var(--space-10) 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: var(--text-14);
+  font-weight: var(--weight-700);
+  color: var(--color-link);
+}
+.hero-daily-action:hover { background: transparent; color: var(--color-success); }
+
+/* Give every product breathing room, including the wider multi-product set. */
+.home-paths .home-path-thumb {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  padding: var(--space-2);
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+.home-paths .home-path-thumb img {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+@media (min-width: 640px) and (max-width: 1100px) {
+  .home-paths .home-path-thumb { width: 64px; height: 72px; }
+}
+.home-paths .home-path-thumb--set {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0 0 var(--space-6);
+  width: 108px;
+  height: 88px;
+}
+.home-paths .home-path-thumb--set img {
+  position: static;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 100%;
+  object-position: center bottom;
+}
+.home-paths .home-path-thumb--set img + img { margin-left: -6px; }
+.home-paths .home-path-thumb--care { width: 92px; height: 88px; padding: 0; }
+@media (max-width: 959px) {
+  .home-hero--banner > .hero-daily {
+    position: relative;
+    grid-row: 3;
+    top: auto;
+    right: auto;
+    transform: none;
+    width: 100%;
+    max-width: 360px;
+    justify-self: center;
+    padding: var(--space-18) 0;
+  }
+  .home-hero--banner .hero-photo img { object-fit: cover; }
+}
+.home-hero--banner .hero-note .tiny-leaf { border: 0; border-radius: 0; padding: 0; background: none; }
+@media (min-width: 960px) {
+  .home-hero--banner > .hero-copy { align-self: center; }
+}
+@media (min-width: 640px) and (max-width: 959px) {
+  .home-first-screen { --header-h: 89px; --main-pad: var(--space-24); }
+  .home-hero.home-hero--banner { margin-top: calc(-1 * var(--space-24)); grid-template-rows: auto min(75vw, 540px) auto; }
+  .hero-photo { height: min(75vw, 540px); }
+  .hero-photo img { object-fit: contain; }
+  .home-hero--banner > .hero-copy { max-width: 540px; justify-self: center; }
+}
+
+/* Phone: centred introduction and catalog action, photo, personal plan. */
+.hero-cta-phone { display: none; }
+@media (max-width: 639px) {
+  .home-first-screen { min-height: 0; }
+  .home-hero.home-hero--banner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    padding: var(--space-20) var(--space-18) var(--space-14);
+  }
+  .hero-backdrop { background: #afbca1; }
+  .home-hero--banner > .hero-copy { grid-row: 1; text-align: center; }
+  .home-hero--banner .hero-copy h1 {
+    font-size: clamp(30px, 8.2vw, 38px);
+    line-height: 1.12;
+    margin: 0 0 var(--space-10);
+    text-wrap: balance;
+  }
+  .home-hero--banner .hero-copy > p {
+    font-size: var(--text-14);
+    line-height: 1.45;
+    max-width: 360px;
+    margin: 0 auto var(--space-14);
+    text-wrap: balance;
+  }
+  .home-hero--banner .hero-copy .ds-cluster { justify-content: center; margin: 0; }
+  .home-hero--banner .hero-copy .btn--lg { min-height: 46px; padding-inline: var(--space-24); }
+  .home-hero--banner .hero-copy .btn--lg > svg { display: none; }
+  .home-hero--banner .hero-copy .hero-note { display: none; }
+  .hero-cta-wide { display: none; }
+  .hero-cta-phone { display: inline; }
+  .home-hero--banner .hero-photo {
+    grid-row: 2;
+    height: 66vw;
+    margin-block: 0;
+    container-type: size;
+  }
+  .hero-photo-link, .hero-photo-link--1 { inset: 0 auto; width: 28cqh; }
+  .hero-photo-link { left: calc(50% - 28cqh); }
+  .hero-photo-link--1 { left: 50%; }
+  .home-hero--banner > .hero-daily {
+    grid-row: 3;
+    width: 100%;
+    max-width: 360px;
+    padding: var(--space-8) 0 var(--space-14);
+    background: transparent;
+    text-align: center;
+  }
+  .home-hero--banner .hero-daily-eyebrow { justify-content: center; margin-bottom: var(--space-8); }
+  .home-hero--banner .hero-daily h2 { font-size: var(--text-22); margin: 0; }
+  .home-hero--banner .hero-daily p { font-size: var(--text-14); line-height: 1.5; margin: var(--space-8) 0 0; }
+  .home-hero--banner .hero-daily-action { justify-content: center; min-height: 44px; margin-top: var(--space-6); }
+}
+
+/* The heading's two lines (they replace the old <br/>). On a phone they are staggered across the full width:
+   "Забота о себе" from the left edge, "в вашем ритме" lower and to the right; the "ВАШ ЕЖЕДНЕВНЫЙ РИТМ"
+   label above the plan is hidden there, and the banner keeps filling the first screen. */
+.hero-title-line {
+  display: block;
+}
+
+@media (max-width: 639px) {
+  .home-hero--banner .hero-copy h1 {
+    width: 100%;
+    max-width: none;
+    text-align: left;
+  }
+
+  /* Both lines step in a little from the edges: the first from the left, the second from the right. */
+  .home-hero--banner .hero-copy h1 .hero-title-line:first-child {
+    padding-left: 6vw;
+  }
+
+  .home-hero--banner .hero-copy h1 .hero-title-line--end {
+    padding-right: 6vw;
+    text-align: right;
+  }
+
+  /* The photo sits lower, so its faded top edge stays clear of the button; the plan keeps its place near the bottom bar. */
+  .home-hero--banner .hero-photo {
+    margin-top: var(--space-30, 30px);
+  }
+
+  .home-hero--banner > .hero-daily {
+    margin-top: 0;
+  }
+
+  .home-hero--banner .hero-daily-eyebrow {
+    display: none;
+  }
+
+  /* The sage banner still reaches the bottom bar, so its end only shows on scrolling. */
+  .home-hero.home-hero--banner {
+    min-height: calc(100svh - var(--header-h) - var(--phone-nav-height) - env(safe-area-inset-bottom));
+  }
+}
+
+/* Guest invitation under the plan action: a small muted link to the profile. */
+.hero-daily-signup {
+  display: block;
+  margin-top: var(--space-2);
+  font-size: var(--text-13);
+  color: var(--color-ink);
+  opacity: .75;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Every non-phone viewport keeps the approved three-zone composition and three pathway cards. */
+@media (min-width: 640px) {
+  body .site-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  body .site-header .header-inner {
+    max-width: none;
+    padding: 1.78vw 4.2vw;
+    gap: 2.4vw;
+  }
+
+  body .site-header .brand {
+    font-size: max(var(--text-16), 1.78vw);
+    gap: max(var(--space-6), .74vw);
+  }
+
+  body .site-header .brand-mark {
+    width: max(var(--space-32), 3.55vw);
+    height: max(var(--space-32), 3.55vw);
+    background: transparent;
+  }
+
+  body .site-header .brand-mark img {
+    width: 100%;
+    height: 100%;
+  }
+
+  body .site-header .desktop-nav {
+    display: flex;
+    gap: 2.1vw;
+    font-size: max(var(--text-12), 1.04vw);
+  }
+
+  body .site-header .menu-toggle {
+    display: none;
+  }
+
+  body .site-header .header-actions {
+    --header-icon-size: max(var(--icon-size), 1.63vw);
+    gap: max(var(--space-4), .59vw);
+    font-size: max(var(--text-12), 1.04vw);
+  }
+
+  body .site-header .header-actions .icon-btn {
+    width: max(var(--control-height-small), 3.4vw);
+    height: max(var(--control-height-small), 3.4vw);
+  }
+
+  body .site-header .header-actions .icon-btn svg {
+    width: var(--header-icon-size);
+    height: var(--header-icon-size);
+  }
+
+  body .site-header .header-actions .cart-count {
+    --cart-badge-size: max(var(--text-14), calc(.65 * var(--header-icon-size)));
+    left: calc(50% + .34 * var(--header-icon-size));
+    top: calc(50% - .34 * var(--header-icon-size));
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    min-width: var(--cart-badge-size);
+    height: var(--cart-badge-size);
+    padding: 0 .15em;
+    font-size: max(var(--text-9), calc(.4 * var(--header-icon-size)));
+    line-height: 1;
+  }
+
+  .home-first-screen {
+    min-height: 0;
+    --paths-gap: clamp(var(--space-24), 3.55vw, calc(2 * var(--space-24)));
+  }
+
+  .home-first-screen > .home-paths {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-self: center;
+    width: 91.6vw;
+    gap: max(var(--space-8), 1.33vw);
+    margin-right: 0;
+    margin-bottom: 0;
+    padding-right: 0;
+    overflow: visible;
+  }
+
+  .home-first-screen .home-paths > a.home-path {
+    min-width: 0;
+    gap: max(var(--space-6), .9vw);
+    padding: max(var(--space-10), 1.48vw) max(var(--space-10), 1.63vw);
+    border-radius: max(var(--radius-12), 1.78vw);
+  }
+
+  .home-first-screen .home-paths h2 {
+    font-size: max(var(--text-12), 1.33vw);
+  }
+
+  .home-first-screen .home-paths p {
+    font-size: max(var(--text-10), .89vw);
+  }
+
+  .home-first-screen .home-paths .home-path-thumb {
+    width: 6vw;
+    height: 6vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--care {
+    width: 6.8vw;
+    height: 6.5vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--set {
+    width: 8vw;
+    height: 6.5vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--set img {
+    flex-basis: 3vw;
+    width: 3vw;
+  }
+
+  .home-first-screen .home-paths .home-path-thumb--set img + img {
+    margin-left: -.45vw;
+  }
+
+  .home-first-screen .home-paths .home-path-arrow {
+    width: max(var(--space-22), 2.96vw);
+    height: max(var(--space-22), 2.96vw);
+  }
+
+  .home-first-screen + .section {
+    margin-top: var(--space-32);
+  }
+
+  .home-hero.home-hero--banner {
+    --pad-x: 4.2vw;
+    --copy-w: 26.5vw;
+    grid-template-columns: var(--copy-w) minmax(0, 1fr);
+    grid-template-rows: auto;
+    gap: 2vw;
+    min-height: max(33.35vw, calc(10 * var(--space-30)));
+    margin-top: calc(-1 * var(--main-pad));
+    padding: 4.3vw var(--pad-x);
+    overflow: visible;
+  }
+
+  .home-hero--banner > .hero-copy {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: none;
+    align-self: center;
+    justify-self: stretch;
+    text-align: left;
+  }
+
+  .home-hero--banner .hero-copy h1 {
+    font-size: max(var(--text-22), 3.3vw);
+    margin: 0 0 1.78vw;
+  }
+
+  .home-hero--banner .hero-copy > p {
+    max-width: none;
+    font-size: max(var(--text-12), 1.18vw);
+    line-height: var(--leading-relaxed);
+    margin: 0 0 2.07vw;
+  }
+
+  .home-hero--banner .hero-copy .ds-cluster {
+    justify-content: flex-start;
+  }
+
+  .home-hero--banner .hero-copy .btn--lg {
+    min-height: max(var(--control-height-small), 4vw);
+    padding: 1.04vw 1.48vw;
+    font-size: max(var(--text-12), 1.11vw);
+  }
+
+  .home-hero--banner .hero-note {
+    font-size: max(var(--text-9), .81vw);
+    margin-top: 1.78vw;
+  }
+
+  .home-hero--banner .hero-photo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-row: auto;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    transform: none;
+  }
+
+  .home-hero--banner .hero-backdrop {
+    background: #afbca1;
+  }
+
+  .home-hero--banner .hero-photo img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .home-hero--banner > .hero-daily {
+    position: absolute;
+    grid-row: auto;
+    right: var(--pad-x);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 19.23vw;
+    max-width: none;
+    padding: 0;
+  }
+
+  .home-hero--banner .hero-daily-eyebrow {
+    font-size: max(var(--text-9), .74vw);
+    margin-bottom: max(var(--space-8), 1.18vw);
+  }
+
+  .home-hero--banner .hero-daily h2 {
+    font-size: max(var(--text-18), 1.92vw);
+  }
+
+  .home-hero--banner .hero-daily p {
+    font-size: max(var(--text-12), 1.04vw);
+    margin-top: max(var(--space-8), 1.04vw);
+  }
+
+  .home-hero--banner .hero-daily-action {
+    font-size: max(var(--text-12), 1.04vw);
+    gap: max(var(--space-6), 1.04vw);
+  }
+
+  .home-hero--banner .hero-daily-signup {
+    font-size: max(var(--text-10), .96vw);
+  }
+
+  .home-hero.home-hero--banner::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: clamp(var(--space-32), 4vw, calc(2 * var(--space-28)));
+    transform: translateY(50%);
+    background: url('/images/ribbon-only/satin-desktop-strip.svg') center / 100% 100% no-repeat;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+/* Keep the accepted tablet composition. Desktop fills the window with the banner and cards. */
+@media (min-width: 960px) and (pointer: fine) {
+  .home-first-screen {
+    --header-h: var(--site-header-height, calc(1.78vw + max(var(--control-height-small), 3.55vw) + var(--space-1) + env(safe-area-inset-top)));
+    min-height: calc(100svh - var(--header-h) - var(--main-pad));
+    height: calc(100svh - var(--header-h) - var(--main-pad));
+  }
+
+  .home-first-screen{--desktop-unit:min(1vw,1.75svh)}
+  .home-first-screen > .home-hero--banner {
+    flex: 1 1 auto;
+    min-height: 0;
+    container-type:size;
+    margin-bottom: 0;
+    padding-block:clamp(var(--space-18),3svh,calc(2 * var(--space-20)));
+  }
+  .home-first-screen > .home-paths {margin-block:var(--space-24)}
+  .home-hero--banner .hero-copy h1{font-size:max(var(--text-22),calc(3.1 * var(--desktop-unit)));margin-bottom:calc(1.78 * var(--desktop-unit))}
+  .home-hero--banner .hero-copy>p{font-size:max(var(--text-12),calc(1.18 * var(--desktop-unit)));margin-bottom:calc(2.07 * var(--desktop-unit))}
+  .home-hero--banner .hero-copy .btn--lg{min-height:max(var(--control-height-small),calc(4 * var(--desktop-unit)));padding:calc(1.04 * var(--desktop-unit)) calc(1.48 * var(--desktop-unit));font-size:max(var(--text-12),calc(1.11 * var(--desktop-unit)))}
+  .home-hero--banner .hero-note{font-size:max(var(--text-9),calc(.81 * var(--desktop-unit)));margin-top:calc(1.78 * var(--desktop-unit))}
+  .home-first-screen .home-paths>a.home-path{padding:max(var(--space-10),calc(1.48 * var(--desktop-unit))) max(var(--space-10),calc(1.63 * var(--desktop-unit)))}
+  .home-first-screen .home-paths h2{font-size:max(var(--text-12),calc(1.33 * var(--desktop-unit)))}
+  .home-first-screen .home-paths p{font-size:max(var(--text-10),calc(.89 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb{width:max(96px,calc(7 * var(--desktop-unit)));height:max(100px,calc(7.3 * var(--desktop-unit)));--packshot-target:max(100px,calc(7.3 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb--care{width:max(88px,calc(6.3 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb--set{width:max(140px,calc(10 * var(--desktop-unit)));height:max(108px,calc(7.9 * var(--desktop-unit)));--packshot-target:max(92px,calc(6.8 * var(--desktop-unit)))}
+  .home-first-screen .home-paths .home-path-thumb--set .product-packshot-frame:nth-child(2){--packshot-target:max(108px,calc(7.9 * var(--desktop-unit)))}
+
+  .home-hero--banner .hero-photo img {
+    height: 100%;
+    object-fit: cover;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* The owner removed the ribbon from the phone composition. Desktop stays unchanged. */
+@media (max-width: 639px) {
+  .home-hero.home-hero--banner::before,
+  .home-hero--banner .hero-photo::after {
+    content: none;
+  }
+
+  .home-hero--banner .hero-photo {
+    margin-top: var(--space-30);
+  }
+
+  .home-hero--banner > .hero-daily {
+    padding-top: var(--space-8);
+  }
+}
+
+/* Shared header dimensions remain the same on every route, including wide, short windows. */
+@media(min-width:960px) and (pointer:fine) and (min-aspect-ratio:1.85){
+ body{--home-control-unit:min(1vw,1.3svh)}
+ .home-first-screen{--desktop-unit:var(--home-control-unit)}
+ body .site-header .header-inner{padding-block:calc(1.78 * var(--home-control-unit))}
+ body .site-header .brand{font-size:max(var(--text-16),calc(1.78 * var(--home-control-unit)))}
+ body .site-header .brand-mark{width:max(var(--space-32),calc(3.55 * var(--home-control-unit)));height:max(var(--space-32),calc(3.55 * var(--home-control-unit)))}
+ body .site-header .desktop-nav,body .site-header .header-actions{font-size:max(var(--text-12),calc(1.04 * var(--home-control-unit)))}
+ body .site-header .header-actions{--header-icon-size:max(var(--icon-size),calc(1.63 * var(--home-control-unit)))}
+ body .site-header .header-actions .icon-btn{width:max(var(--control-height-small),calc(3.4 * var(--home-control-unit)));height:max(var(--control-height-small),calc(3.4 * var(--home-control-unit)))}
+}
+@media(min-width:960px) and (pointer:fine) and (min-aspect-ratio:2.2){
+ body{--home-control-unit:min(1vw,1svh)}
+}
+
+/* Reduce desktop header height by about a quarter without scaling its content. */
+@media(min-width:960px) and (pointer:fine){
+ body .site-header .header-inner{padding-block:calc(.89 * var(--home-control-unit,1vw))}
+}

@@ -1,0 +1,57 @@
+/* The approved article fills the page; all shared navigation and footer stay in App. */
+body:has(.company-page--nature) .ambient{display:none}
+body:has(.company-page--nature) .site-main{max-width:none;padding:0}
+.company-page--nature{padding:0;color:var(--color-ink)}
+.company-page--nature .co-hero{scroll-margin-top:var(--space-24)}
+.company-page--nature .co-text-link{color:var(--co-green)}
+.company-page--nature .co-closing .co-text-link{color:var(--color-white)}
+
+.co-home-return{display:flex;align-items:center;width:fit-content;min-height:44px;margin:0 0 12px;color:inherit;font-family:var(--font-sans);font-size:12px;font-weight:400;text-decoration:none}
+.company-page--nature .co-home-return:is(:hover,:focus-visible,:active){color:var(--color-white);text-decoration:none}
+.company-page--nature .co-home-return:focus-visible{outline-color:var(--color-white)}
+
+.company-page--nature .co-home-return .back-link{margin:0;color:inherit}
+.company-page--nature .co-home-return .back-link:focus-visible{outline-color:var(--color-white)}
+
+/* The company page follows the journal's full-photo cover and single reading column. */
+.company-concept--article{--co-ink:var(--color-ink);color:var(--color-ink)}
+body .site-main .company-page--nature .company-concept.company-concept--article .co-hero{min-height:calc(100svh - var(--site-header-height,106px) - var(--space-48));margin-bottom:0}
+.company-concept--article .co-hero-copy{max-width:850px;padding:76px 6vw 76px 7vw}
+.company-concept--article .co-hero h1{max-width:680px;font-size:clamp(42px,4vw,64px);font-weight:600;line-height:1.12;letter-spacing:-.045em}
+.company-concept--article .co-home-return{margin-bottom:var(--space-24)}
+.company-concept--article .co-hero-copy>.co-kicker{margin-bottom:var(--space-18)}
+.company-concept--article .co-article-lead{max-width:808px;margin:auto;padding:var(--space-48,48px) var(--space-24) 0;color:var(--color-ink);font-size:18px;line-height:1.9}
+.company-concept--article .co-article-lead p{margin:0}
+.company-concept--article .co-intro-strip{max-width:808px;margin:auto;display:flex;flex-wrap:wrap;align-items:baseline;gap:var(--space-16) var(--space-24);padding:var(--space-32) var(--space-24);background:var(--color-white);border:0}
+.company-concept--article .co-intro-strip>span{border:0;padding:0;font-size:13px}
+.company-concept--article .co-intro-strip>strong{font-size:24px}
+.company-concept--article :is(.co-section,.co-research){max-width:808px;margin-inline:auto;padding:48px var(--space-24)}
+.company-concept--article .co-story{display:block}
+.company-concept--article :is(.co-story h2,.co-section-heading h2,.co-research h2,.co-timeline>h2){font-size:30px;font-weight:600;line-height:1.2}
+.company-concept--article :is(.co-story p,.co-research p,.co-principle-grid p,.co-timeline p){font-size:15px;line-height:1.9}
+.company-concept--article .co-story figure{margin:var(--space-32) 0 0}
+.company-concept--article .co-story figure img{width:100%;height:370px;object-fit:cover}
+.company-concept--article .co-principle-grid{grid-template-columns:1fr;gap:var(--space-24)}
+.company-concept--article .co-principle-grid h3{font-size:22px}
+.company-concept--article .co-research{display:flex;flex-direction:column;background:var(--color-white)}
+.company-concept--article .co-research>img{width:100%;height:370px;min-height:0;object-fit:cover}
+.company-concept--article .co-research>div{padding:var(--space-32) 0 0}
+.company-concept--article .co-timeline>div{grid-template-columns:1fr;gap:var(--space-32)}
+.company-concept--article .co-timeline strong{font-size:28px}
+.company-concept--article .co-closing{margin-bottom:0}
+@media(max-width:639px){
+ body .site-main .company-page--nature .company-concept.company-concept--article .co-hero{min-height:calc(var(--phone-first-screen-height) - var(--space-48))}
+ .company-concept--article .co-hero-copy{padding:30px var(--space-24) 270px;max-width:none}
+ .company-concept--article .co-hero h1{font-size:36px}
+ .company-concept--article .co-article-lead{padding-top:var(--space-32);font-size:16px}
+ .company-concept--article :is(.co-section,.co-research){padding-block:var(--space-32)}
+ .company-concept--article :is(.co-story h2,.co-section-heading h2,.co-research h2,.co-timeline>h2){font-size:27px}
+ .company-concept--article :is(.co-story p,.co-research p,.co-principle-grid p,.co-timeline p){font-size:14px}
+ .company-concept--article :is(.co-story figure img,.co-research>img){height:275px}
+}
+
+@media(min-width:640px){.company-concept--article .co-hero-copy{transform:translateY(calc(-1 * clamp(var(--space-32),7svh,80px)))}}
+
+@media(min-width:640px){
+ .company-concept--article .co-closing.co-section{max-width:none;width:100%;padding-inline:max(var(--space-24),calc((100% - 760px)/2))}
+}

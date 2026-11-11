@@ -1,12 +1,15 @@
+import {productCover} from '../src/product-media.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 import { root, readContent, readSource } from '../scripts/check-content.mjs';
+import { pricesFor, readPriceList } from '../scripts/pricing.mjs';
 
 const content = readContent();
 const source = readSource();
+const priceList = readPriceList();
 const dist = resolve(root, 'dist');
 const manifest = JSON.parse(readFileSync(resolve(dist, 'prerender-manifest.json'), 'utf8'));
 const base = 'https://nsp-center.ru';
@@ -40,7 +43,8 @@ test('All 227 SSR documents expose content before JavaScript: title, exactly one
     const route = routeMap.get(pathOf(page.url));
     const $ = cheerio.load(htmlFor(page.url));
     assert.ok(route, `No route contract: ${page.url}`);
-    assert.ok($('title').text().trim().includes(route.title.trim()), `${page.url}: SEO title differs`);
+    // A page named after the shop itself carries the brand once («NSP Center»), not «NSP-Center | NSP Center».
+    assert.ok(/^nsp[\s-]*center$/i.test(route.title.trim()) ? $('title').text() === 'NSP Center' : $('title').text().trim().includes(route.title.trim()), `${page.url}: SEO title differs`);
     assert.equal($('h1').length, 1, `${page.url}: must render exactly one H1`);
     assert.ok($('h1').text().trim(), `${page.url}: H1 is empty`);
     assert.ok($('meta[name="description"]').attr('content')?.trim(), `${page.url}: missing description`);
@@ -54,7 +58,25 @@ test('All 227 SSR documents expose content before JavaScript: title, exactly one
   }
 });
 
-test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with preserved prices', () => {
+test('Every product carries the retail and partner prices of the NSP price list, or its snapshot price when unlisted', () => {
+  let listed = 0;
+  for (const original of source.products) {
+    const product = productMap.get(pathOf(original.url));
+    const expected = pricesFor(original, priceList);
+    assert.deepEqual(product.prices, expected, `${product.path}: prices differ from the price list`);
+    if (expected.source === 'price-list') {
+      listed += 1;
+      assert.ok(expected.partner > 0 && expected.partner < expected.retail, `${product.path}: partner price must be below retail`);
+    } else assert.equal(expected.retail, original.price, `${product.path}: unlisted product must keep the snapshot price`);
+    const $ = cheerio.load(htmlFor(product.path));
+    // Before JavaScript everyone sees the retail price; a listed product also offers the discount card with its card price.
+    assert.ok($('[data-ds-id="purchase-prices"] .price-row.current').text().includes(String(expected.retail).replace(/\B(?=(\d{3})+$)/g, '\u00a0')), `${product.path}: retail price before JavaScript`);
+    assert.equal($('.card-offer').length, expected.partner === null ? 0 : 1, `${product.path}: discount-card offer before JavaScript`);
+  }
+  assert.equal(listed, 118, 'Products matched to the November 2026 price list');
+});
+
+test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with retail prices', () => {
   for (const original of source.products) {
     const path = pathOf(original.url);
     const product = productMap.get(path);
@@ -68,17 +90,29 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     assert.equal(structured.name, original.name, `${path}: Product name differs`);
     const offer = Array.isArray(structured.offers) ? structured.offers[0] : structured.offers;
     assert.ok(offer && offer['@type'] === 'Offer', `${path}: price must be nested under Product.offers`);
-    assert.equal(Number(offer.price), original.price, `${path}: structured price differs`);
+    assert.equal(Number(offer.price), pricesFor(original, priceList).retail, `${path}: structured price must be the retail price`);
     assert.equal(offer.priceCurrency, 'RUB', `${path}: currency differs`);
     assert.equal(offer.availability?.split('/').at(-1), original.availability, `${path}: stock status differs`);
-    assert.ok(String(structured.image).includes(product.image), `${path}: structured image differs`);
+    assert.ok(String(structured.image).includes(productCover(product)), `${path}: structured image differs`);
     if (structured.aggregateRating) {
       assert.equal(structured.aggregateRating['@type'], 'AggregateRating', `${path}: invalid aggregate rating type`);
       assert.equal(Number(structured.aggregateRating.ratingValue), original.rating, `${path}: rating differs`);
     }
     assert.ok($('main').text().includes(original.name.split('(')[0].trim()), `${path}: product title absent from SSR`);
-    for (const key of Object.keys(original.properties)) assert.ok($('main').text().includes(key), `${path}: property omitted from SSR: ${key}`);
+    // The product card shows a curated facts list; these snapshot fields are left out on purpose.
+    const curatedOmissions = new Set([
+      'Назначение', // a list of diseases: supplements may not be advertised as treatment (docs/SEO.md principle 4)
+      'Здоровье всей семьи', // audience tags that can contradict the label (e.g. "Кормящим мамам" vs breastfeeding contraindication)
+      'Тип', // the product type is already the breadcrumb and the card kicker
+    ]);
+    for (const key of Object.keys(original.properties)) if (!curatedOmissions.has(key)) assert.ok($('main').text().includes(key) || (key === 'pv' && $('main').text().includes('PV')) || (key.startsWith('Состав') && $('main').text().includes('Состав')) || (key.startsWith('Противопоказания') && $('main').text().includes('Противопоказания')) || (key === 'Применение' && $('main').text().includes('Как принимать')) || (key === 'Нанесение' && $('main').text().includes('Как наносить')), `${path}: property omitted from SSR: ${key}`);
   }
+});
+
+test('The shop name stands once in a page title', () => {
+  assert.equal(cheerio.load(htmlFor('/'))('title').text(), 'NSP Center');
+  assert.match(cheerio.load(htmlFor('/catalog/'))('title').text(), /^[^|]+ \| NSP Center$/);
+  assert.equal(cheerio.load(htmlFor('/consultation/'))('h1').length, 1, 'the chat page has its (hidden) heading');
 });
 
 test('Rendered category pagination exposes every member once, with no unavailable page link', () => {
@@ -154,4 +188,39 @@ test('The isolated running app serves all 227 source URLs without a 404', { skip
     if ($('#root').attr('data-route') !== path) failures.push(`${path}: HTTP server returned the wrong pagination document`);
   }
   assert.deepEqual(failures, []);
+});
+
+test('The site is installable and works offline: manifest, icons and a service worker that precaches the app shell', () => {
+  const app = JSON.parse(readFileSync(resolve(dist, 'manifest.webmanifest'), 'utf8'));
+  assert.equal(app.name, 'NSP Center');
+  assert.equal(app.display, 'standalone');
+  assert.equal(app.start_url, '/');
+  assert.equal(app.background_color, '#faf7ee');
+  for (const size of ['192x192', '512x512']) assert.ok(app.icons.some((icon) => icon.sizes === size && existsSync(resolve(dist, icon.src.slice(1)))), `manifest icon ${size} is missing`);
+  assert.ok(app.icons.some((icon) => icon.purpose === 'maskable'), 'manifest needs a maskable icon');
+  const sw = readFileSync(resolve(dist, 'sw.js'), 'utf8');
+  const precache = JSON.parse(sw.match(/const PRECACHE = (\[.*\]);/)[1]);
+  for (const page of ['/', '/health/', '/profile/']) assert.ok(precache.includes(page), `${page} must work offline`);
+  const built = readFileSync(resolve(dist, 'index.html'), 'utf8').match(/\/assets\/[^"]+/g);
+  for (const file of built) assert.ok(precache.includes(file), `${file} must be precached`);
+  for (const file of precache) if (!file.endsWith('/')) assert.ok(existsSync(resolve(dist, file.slice(1))), `precached ${file} does not exist`);
+  const $ = cheerio.load(htmlFor('/'));
+  assert.equal($('link[rel="manifest"]').attr('href'), '/manifest.webmanifest');
+  assert.equal($('link[rel="apple-touch-icon"]').attr('href'), '/icons/apple-touch-icon.png');
+  assert.equal($('.nsp-launch').length,1);assert.equal($('.nsp-launch img').attr('src'),'/icons/splash.svg');assert.equal($('.nsp-launch-tagline').text(),'Забота о себе в вашем ритме.');assert.equal($('.nsp-launch-tagline br,.nsp-launch .loading').length,0);assert.equal($('.nsp-launch').attr('aria-hidden'),'true');
+});
+
+test('Products added after the snapshot have a page, price-list prices, a local image and a place on the first category page', () => {
+  const added = content.products.filter((product) => product.added);
+  assert.ok(added.length >= 2, 'expected the added products (src/product-new)');
+  for (const product of added) {
+    assert.ok(manifestMap.has(product.path), `${product.path}: no prerendered page`);
+    assert.deepEqual(product.prices, pricesFor(product, priceList), `${product.path}: prices differ from the price list`);
+    assert.ok(existsSync(resolve(root, 'public', product.image.slice(1))), `${product.path}: image file missing`);
+    const $ = cheerio.load(htmlFor(product.path));
+    assert.ok($('h1').text().includes(product.name.split('(')[0].trim()), `${product.path}: title absent`);
+    assert.equal($('.card-offer').length, 1, `${product.path}: discount-card offer missing`);
+    const category = cheerio.load(htmlFor(product.categoryPath));
+    assert.ok(category(`[data-ds-id="product-card"] h3 a[href="${product.path}"]`).length === 1, `${product.path}: not on the first page of its category`);
+  }
 });

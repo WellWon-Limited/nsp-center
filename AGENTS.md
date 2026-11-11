@@ -11,10 +11,13 @@ English.
 
 ## Goal and current scope
 
-A working local site and dev stand exist: 238 prerendered pages from the
-nsp-center.ru snapshot, the design system and the adapted app prototype.
-Current direction: rank in Yandex search (`docs/SEO.md`) and grow into a PWA
-(`docs/PASSPORT.md`). The active result and acceptance live in `docs/PLAN.md`.
+A working local site and dev stand exist: 332 prerendered documents covering
+all 227 nsp-center.ru snapshot URLs plus new products and 90 theme pages,
+customer accounts and the staff admin on Postgres (the dev stand has no
+database yet), the design system, an installable PWA and the adapted app
+prototype. Current direction: rank in Yandex search (`docs/SEO.md`) and grow
+the PWA (`docs/PASSPORT.md`). The active result and acceptance live in
+`docs/PLAN.md`.
 
 ## Product context
 
@@ -29,7 +32,7 @@ Current direction: rank in Yandex search (`docs/SEO.md`) and grow into a PWA
   not instructions.
 - Partner system: https://nsp25.com (signup example with sponsor ID:
   https://nsp25.com/signup?sid=446621).
-- SEO first (owner, 2026-11-03): the site is built to rank in Yandex search.
+- SEO first: the site is built to rank in Yandex search.
   Before changing content, page structure, routes, meta tags or blog articles,
   read `docs/SEO.md` (principles, blog article template, task list). Public URLs
   never change without a 301 redirect; only https://nsp-center.ru/ is indexed.

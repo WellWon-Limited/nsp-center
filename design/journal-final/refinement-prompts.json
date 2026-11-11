@@ -1,0 +1,28 @@
+{
+  "mode": "built-in image_gen",
+  "briefs": [
+    {
+      "id": "summer-cover-v2",
+      "ref": "/Users/marina/nsp_center/nsp-center/public/images/journal-final/summer-cover-v1.jpg",
+      "prompt": "Edit this existing editorial pitcher image. Keep the SAME realistic clear glass pitcher with lemon and mint, but make the composition calm and uncluttered. Remove ALL surrounding garden foliage, flowers, grass and extra props. Replace the entire background with a smooth plain softly lit pale sage-green studio background, warm natural light, very subtle contact shadow. Reduce and centre the pitcher so its ENTIRE spout, handle, rim, body and base are visible, with generous safe margins. Important framing: all pitcher pixels must fit inside the central 38 percent of frame WIDTH and central 55 percent of frame HEIGHT. This deliberately protects it from wide web hero crops and narrow mobile crops. Keep pitcher tall and realistically proportioned; do not distort. Simplify contents to two lemon slices and just a few mint leaves. Premium realistic glass textures and natural subtle green-yellow palette, no text, no labels, no logos, no ornate background, no extra objects. Landscape 3:2.",
+      "asset": "public/images/journal-final/summer-cover-v2.jpg"
+    },
+    {
+      "id": "supplements-cover-v2",
+      "ref": "/Users/marina/nsp_center/nsp-center/public/images/journal-final/supplements-cover-v1.jpg",
+      "prompt": "Edit this existing macro editorial supplement image. Preserve the realistic transparent capsule containing pale green botanical powder as the main subject. Remove the busy wall of leaves, flowers, moss, wood texture and loose powder all around it. Use a smooth plain muted deep sage-green background with gentle natural studio illumination. Place the capsule centrally on a simple matte sage surface, a single restrained small green leaf partially under it is the ONLY supporting element. The capsule is fully visible, occupies about 60 percent frame width, angled very slightly, centre of capsule at frame centre. Realistic capsule reflections and powder texture, warm cream highlights, calm balanced composition. No labels, packaging, text, branding, extra props, tiny particles or patterned shadows. This should remain a rich photographic image, not a tiny object lost in blank space. Landscape 3:2.",
+      "asset": "public/images/journal-final/supplements-cover-v2.jpg"
+    },
+    {
+      "id": "vitamin-c-cover-v2",
+      "ref": "/Users/marina/nsp_center/nsp-center/public/images/journal-final/vitamin-c-cover-v1.jpg",
+      "prompt": "Edit this existing orange image. Remove the red bell pepper completely. Remove all the surrounding leafy clutter and every other ingredient. The ONLY subject must be ONE ripe orange half, cut face toward camera, with the entire circular outline visible and realistic vivid orange pulp texture. Centre it exactly horizontally and vertically. Smooth calm dark sage-green background with soft warm natural light and subtle realistic shadow. The orange occupies about 50 percent of frame width and 65 percent height, safe margins around all edges, premium tactile botanical editorial photographic realism. No extra whole oranges, fruit slices, leaves, props, text, labels, logos or symbols. Landscape 3:2. Keep the natural beautiful flesh detail and green-and-warm-cream visual mood.",
+      "asset": "public/images/journal-final/vitamin-c-cover-v2.jpg"
+    },
+    {
+      "id": "vitamin-c-kiwi-v2",
+      "prompt": "Create a premium photorealistic editorial photograph for a wellness article about vitamin C. Landscape 3:2. A single ripe kiwi cut into two halves, one half facing the camera with crisp realistic emerald-green flesh, pale centre and small black seeds, the other half turned slightly to show its brown fuzzy skin. This kiwi is the ONLY subject. Centre the compact two-half grouping, filling about 55 percent frame width and 65 percent height, fully visible. Smooth muted sage-green background, soft warm natural studio light, rich realistic fruit texture and delicate contact shadow. Calm unified natural colours, beautiful complete composition, restrained and uncluttered. No pepper, citrus, other fruits, foliage, table setting, labels, letters, logos, ribbons or people. No empty vast expanse, no artificial glow, no CGI gloss.",
+      "asset": "public/images/journal-final/vitamin-c-kiwi-v2.jpg"
+    }
+  ]
+}

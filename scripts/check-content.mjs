@@ -70,6 +70,8 @@ export function auditContent(data = readContent(), source = readSource()) {
   const routes = data.routes ?? [];
   const routePaths = new Set(routes.map(keyOf));
   const productMap = new Map((data.products ?? []).map((item) => [keyOf(item), item]));
+  // Products added after the snapshot (scripts/new-products.mjs) are checked by their own test, not against the snapshot.
+  const snapshotOnly = (paths) => paths.filter((item) => !productMap.get(item)?.added);
   const categoryMap = new Map((data.categories ?? []).map((item) => [keyOf(item), item]));
   const articleMap = new Map((data.articles ?? []).map((item) => [keyOf(item), item]));
   const pageMap = new Map((data.pages ?? []).map((item) => [keyOf(item), item]));
@@ -94,7 +96,8 @@ export function auditContent(data = readContent(), source = readSource()) {
   });
 
   check('All 166 products preserve prices, article, availability, properties and sections', (expect) => {
-    expect(productMap.size === 166, `Expected 166 unique products; got ${productMap.size}`);
+    const snapshotProducts = [...productMap.values()].filter((item) => !item.added).length;
+    expect(snapshotProducts === 166, `Expected 166 unique snapshot products; got ${snapshotProducts}`);
     const scalars = ['name', 'article', 'price', 'price_base', 'discount', 'currency', 'availability', 'availability_text', 'brand', 'category', 'rating', 'review_count'];
     for (const original of source.products) {
       const path = pathOf(original.url);
@@ -157,7 +160,7 @@ export function auditContent(data = readContent(), source = readSource()) {
       expect(Boolean(category), `Missing category: ${path}`);
       if (!category) continue;
       expect(category.name === original.name, `${path}: category name differs`);
-      expect(equal(set(category.products ?? []), set(original.products.map(pathOf))), `${path}: category membership differs`);
+      expect(equal(set(snapshotOnly(category.products ?? [])), set(original.products.map(pathOf))), `${path}: category membership differs`);
       expect(equal(set(category.pagination ?? []), set(original.pagination.map(pathOf))), `${path}: pagination differs`);
       expect((category.products ?? []).every((item) => productMap.has(item)), `${path}: category references missing products`);
       expect(category.parent === (original.parent ? pathOf(original.parent) : null), `${path}: category parent differs`);
@@ -165,7 +168,7 @@ export function auditContent(data = readContent(), source = readSource()) {
       for (const pagination of original.pagination) expect(routePaths.has(pathOf(pagination)), `Missing pagination route: ${pagination}`);
       const pageRoutes = routes.filter((route) => keyOf(route).split('?')[0] === path);
       if (pageRoutes.some((route) => route.products)) {
-        expect(equal(set(pageRoutes.flatMap((route) => route.products ?? [])), set(original.products.map(pathOf))), `${path}: paginated route union loses products`);
+        expect(equal(set(snapshotOnly(pageRoutes.flatMap((route) => route.products ?? []))), set(original.products.map(pathOf))), `${path}: paginated route union loses products`);
         const paginatedProducts = pageRoutes.flatMap((route) => route.products ?? []);
         expect(paginatedProducts.length === new Set(paginatedProducts).size, `${path}: product duplicated between pagination pages`);
       }

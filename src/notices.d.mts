@@ -1,0 +1,10 @@
+import type { Notice } from './store';
+export const MAX_NOTICES: number;
+export const KEEP_DAYS: number;
+export function addNotice(list: Notice[], notice: Notice, now?: number): Notice[];
+export function dayLabel(at: string | undefined, now?: number): string;
+export function shortTime(at: string | undefined, now?: number): string;
+export function byDay(list: Notice[], now?: number): { label: string; items: Notice[] }[];
+export function badge(n: number): string;
+export function newCount(n: number): string;
+export function namesLine(names: string[]): string;

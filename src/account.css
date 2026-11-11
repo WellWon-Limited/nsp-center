@@ -1,0 +1,348 @@
+/* Signed-in profile: one centred column — greeting, white cards stacked one under another
+   (each only as tall as its content, so editing one card never stretches the others),
+   favourites, and the sign-out button at the very bottom. */
+
+.account {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.account-head h1 {
+  font-size: clamp(30px, 4vw, 44px);
+  margin: var(--space-8) 0 var(--space-6);
+}
+
+.account-stack {
+  display: grid;
+  gap: var(--space-14);
+  margin-top: var(--space-24);
+}
+
+.account-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  padding: var(--space-20) var(--space-24);
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-24);
+  background: var(--color-white);
+  box-shadow: 0 10px 24px -18px rgb(29 58 54 / .45);
+}
+
+.account-card h2 {
+  font-size: var(--text-18);
+}
+
+/* Short cards: text on the left, the action on the right. */
+.account-card--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-20);
+}
+
+.account-card--row > div {
+  display: grid;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.account-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-data {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+}
+
+.account-data div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+  font-size: var(--text-14);
+}
+
+.account-data dt {
+  color: var(--color-muted);
+}
+
+.account-data dd {
+  margin: 0;
+  font-weight: var(--weight-700);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.account-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-12);
+}
+
+.account-form-field { display: grid; gap: var(--space-6); align-content: start; }
+.account-form-field label { display: block; }
+
+.account-form label {
+  display: grid;
+  gap: var(--space-6);
+  font-size: var(--text-13);
+  font-weight: var(--weight-700);
+}
+
+.account-form .field {
+  background: #f3f7f5;
+  border-color: var(--color-ink-line);
+}
+
+.account-form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.account-link {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--text-13);
+  font-weight: var(--weight-700);
+  color: var(--color-link);
+  white-space: nowrap;
+}
+
+.account-favorites {
+  margin-top: var(--space-32);
+}
+
+.account-section-title {
+  font-size: var(--text-24);
+  margin-bottom: var(--space-16);
+}
+
+/* Sign-out: at the bottom, centred; a plain dark-green button like the primary buttons, no outline or shadow. */
+.account-logout {
+  display: block;
+  width: min(100%, 360px);
+  min-height: 52px;
+  margin: var(--space-32) auto 0;
+  border: 0;
+  border-radius: var(--radius-20);
+  background: var(--color-ink);
+  font: inherit;
+  font-size: var(--text-15);
+  font-weight: var(--weight-700);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.account-logout:hover {
+  background: var(--color-success);
+}
+
+@media (max-width: 639px) {
+  .account-card {
+    padding: var(--space-18);
+  }
+
+  .account-card--row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-logout {
+    width: 100%;
+  }
+}
+
+/* Discount card under the greeting, drawn as a card: dark green with a dark-orange ring, the discount, a white barcode strip with
+   the number, and a footer line. Without a number the same card holds the field and the link to get one. */
+.discount-card {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: var(--space-16);
+  margin-top: var(--space-20);
+  padding: var(--space-22) var(--space-24);
+  border-radius: var(--radius-24);
+  isolation: isolate;
+  background: #103e32 url('/images/discount-card-background.jpg') center / 100% 100% no-repeat;
+  border: 1px solid rgb(255 255 255 / .18);
+  color: var(--color-white);
+  box-shadow: inset 0 1px 1px rgb(255 255 255 / .24), 0 18px 36px -22px rgb(29 58 54 / .8);
+}
+
+.discount-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-12);
+  font-size: var(--text-13);
+  color: #e5eee6;
+  line-height: 1.5;
+}
+
+.discount-card-top > span:last-child { text-align: right; }
+
+.discount-card-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-12);
+}
+
+.discount-card-main strong {
+  font-size: var(--text-26);
+  line-height: 1.15;
+  color: #fff;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.discount-card-rate {
+  font-size: var(--text-28);
+  font-weight: var(--weight-800);
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: -.04em;
+}
+
+.discount-card-code {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-12) var(--space-16) var(--space-8);
+  border-radius: var(--radius-14);
+  background: var(--color-white);
+  color: var(--color-ink);
+}
+
+.discount-barcode {
+  width: 82%;
+  height: 54px;
+  fill: #111;
+}
+
+.discount-card-code span {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: var(--text-13);
+  letter-spacing: .2em;
+  font-weight: 700;
+}
+
+.discount-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  font-size: var(--text-13);
+  color: #e5eee6;
+  line-height: 1.5;
+}
+
+.discount-card-foot button {
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: var(--weight-700);
+  color: rgb(255 255 255 / .9);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.discount-card-text {
+  margin: 0;
+  font-size: var(--text-14);
+  color: #e5eee6;
+}
+
+.discount-card-form {
+  display: flex;
+  gap: var(--space-10);
+}
+
+.discount-card-form .field {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-white);
+  border-color: transparent;
+}
+
+.discount-card-form .btn {
+  background: var(--color-white);
+  color: var(--color-ink);
+  border-color: var(--color-white);
+}
+
+.discount-card-link {
+  font-size: var(--text-14);
+  font-weight: var(--weight-700);
+  color: var(--color-mint-light, #bfe7d6);
+}
+
+@media (max-width: 639px) {
+  .discount-card {
+    padding: var(--space-18) var(--space-18);
+  }
+
+  .discount-card-main strong {
+    font-size: var(--text-20);
+  }
+
+  .discount-card-rate {
+    font-size: var(--text-24);
+  }
+}
+
+.discount-card > * {
+  position: relative;
+  z-index: 1;
+}
+.waitlist-button{background:#e5f0eb;color:var(--color-ink);border:1px solid #bfd3c9;white-space:normal;line-height:1.35;min-height:44px}
+.waitlist-button.is-waiting{background:#fff;border-color:#789f8d}
+.product-meta>.waitlist-button{width:100%;margin-top:12px;font-size:12px;padding:10px 8px}
+.account-favorites>.ds-muted{max-width:680px;line-height:1.6;margin-bottom:20px}
+.loyalty-status{padding:16px;background:#eaf2ee;border-radius:14px;color:var(--color-ink);margin:12px 0}
+.loyalty-status>div{display:flex;justify-content:space-between;align-items:baseline;gap:16px}
+.loyalty-status strong{font-size:26px}
+.loyalty-status p{font-size:13px;line-height:1.5;margin:6px 0}
+.loyalty-status small{display:block;font-size:12px;line-height:1.5}
+.loyalty-status--card{margin:0;background:rgb(0 0 0 / .22);border:1px solid rgb(255 255 255 / .2);color:#fff}
+
+
+/* Points balance in place of the owner's name: a large number with a small "баллов". */
+.discount-card-points span {
+  font-size: var(--text-16);
+  font-weight: var(--weight-600);
+  opacity: .8;
+}
+
+/* Favourites and waiting list in the profile: just the heart on the photo, with no circle behind it. */
+.account-favorites .favorite,
+.account-favorites .favorite.selected,
+.account-favorites .favorite:hover { background: none; box-shadow: none; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+
+/* Favourites and waiting list: cards as wide as in the catalog (about 310px), not squeezed four to a row. */
+@media (min-width: 640px) {
+  .account-favorites .product-grid { grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 310px)); justify-content: center; gap: var(--space-18); }
+}
+
+/* Keep a deep forest tone behind the text on the narrow discount card. */
+@media(max-width:639px){
+ .discount-card::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(90deg,rgba(9,27,22,.65),rgba(9,27,22,.2) 55%,transparent)}
+}
+
+/* Keep the discount card compact in the wider profile column. */
+@media(min-width:640px){
+ .discount-card{width:100%;max-width:440px;margin-inline:auto;background-size:cover}
+}

@@ -3,8 +3,14 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { load } from 'cheerio';
+import { pricesFor, readPriceList } from './pricing.mjs';
+import { readThemes } from './themes.mjs';
+import { readProductCopy } from './product-copy.mjs';
+import { readNewProducts } from './new-products.mjs';
+import { readProductExperts, readSetContents } from './product-experts.mjs';
 
-// Offline import: the snapshot is the only source and is never written to.
+// Offline import: the snapshot is the content source and is never written to;
+// the NSP price list (references/prices/) adds retail and partner prices.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const snapshot = resolve(root, 'references/nsp-center.ru');
 const generated = resolve(root, 'src/generated/content.json');
@@ -18,6 +24,9 @@ const sourceSite = readData('site');
 const crawl = readData('crawl');
 const assets = readData('assets');
 const sourceAudit = readData('audit');
+const priceList = readPriceList();
+const productCopy = readProductCopy();
+const productExperts = readProductExperts();
 const sourcePages = readFileSync(resolve(snapshot, 'data/pages.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
 const sourceByUrl = new Map(sourcePages.map(page => [page.url, page]));
 const successfulPages = crawl.filter(page => page.kind === 'page' && page.status === 200);
@@ -215,6 +224,8 @@ function semanticHtml(input, base, title = '') {
   $('span').each((_, node) => $(node).replaceWith($(node).html() || ''));
   $('p').filter((_, node) => !$(node).text().trim() && !$(node).find('img').length).remove();
   $.root().contents().add($('*').contents()).each((_, node) => { if (node.type === 'comment') $(node).remove(); });
+  // The source call-back button opened a popup form that does not exist here; only its dead label survived.
+  $('p, div, span, a').filter((_, node) => $(node).text().trim() === 'Заказать звонок').remove();
   return $.html().trim();
 }
 
@@ -249,6 +260,8 @@ const products = sourceProducts.map(product => {
     description: product.sections['Описание'] || '',
     descriptionHtml: sectionsHtml['Описание'] || '',
     sectionsHtml,
+    prices: pricesFor(product, priceList),
+    ...(productCopy.has(id) ? { copy: productCopy.get(id) } : {}),
   };
   fragmentStats(path, output.descriptionHtml);
   return output;
@@ -340,6 +353,9 @@ const routes = successfulPages.map(record => {
 
 const content = {
   products, categories, articles, pages, site, routes, redirects,
+  // The warehouse rate the rubles were computed with; the administrator may set another one at runtime (src/site.ts).
+  pricing: { rubPerUnit: priceList.rubPerUnit },
+  themes: readThemes(),
   audit: {
     source: sourceAudit,
     sourcePages: successfulPages.length, routeCount: routes.length, copiedMedia: copied.size,
@@ -352,6 +368,27 @@ const content = {
 };
 if (products.length !== 166 || categories.length !== 17 || articles.length !== 8 || routes.length !== 227 || pages.length !== 16) {
   throw new Error('Snapshot completeness invariants failed');
+}
+// Products added after the snapshot: their own routes, first in their category (its first page) and in the catalog.
+for (const product of readNewProducts(priceList, categories)) {
+  if (products.some(p => p.path === product.path || p.article === product.article)) throw new Error(`New product ${product.id} duplicates a catalog product`);
+  products.push(product);
+  routes.push({ url: product.path, path: product.path, type: 'product', id: product.id, title: product.name, sourceUrl: null, canonicalPath: product.path });
+  const category = categories.find(c => c.path === product.categoryPath);
+  category.products.unshift(product.path);
+  const firstPage = routes.find(r => r.type === 'category' && r.path === category.path && r.page === 1);
+  if (firstPage?.products) firstPage.products.unshift(product.path);
+}
+for (const product of products) if (productExperts.has(product.id)) product.experts = productExperts.get(product.id);
+for (const id of productExperts.keys()) if (!products.some(product => product.id === id)) throw new Error(`Product experts: unknown product ${id}`);
+for (const [setId, ids] of readSetContents()) {
+  const set = products.find(product => product.id === setId);
+  if (!set) throw new Error(`Set contents: unknown set ${setId}`);
+  const parts = ids.map(id => products.find(product => product.id === id) ?? (() => { throw new Error(`Set contents ${setId}: unknown product ${id}`); })());
+  set.setProducts = parts.map(part => part.id);
+  // One comment per product keeps the tab readable (a set may hold a dozen products).
+  const notes = parts.flatMap(part => (part.experts ?? []).slice(0, 1).map(note => ({ ...note, about: part.name.replace(/\s*\([^)]*\)/g, '').trim() })));
+  if (!set.experts?.length && notes.length) set.experts = notes;
 }
 if (new Set(routes.map(route => route.url)).size !== routes.length) throw new Error('Duplicate imported routes');
 for (const html of [...products.flatMap(product => Object.values(product.sectionsHtml)), ...articles.map(article => article.html), ...pages.map(page => page.html), homeHtml]) {

@@ -1,0 +1,26 @@
+{
+  "mode": "built-in image_gen",
+  "articleId": "immunitet-tozhe-nuzhdaetsya-v-zashchite",
+  "briefs": [
+    {
+      "id": "olive-ivory",
+      "prompt": "A STRICTLY MINIMALIST premium botanical studio photograph for an editorial article about everyday immune support. Landscape 3:2. EXACTLY ONE small natural olive branch with six to eight slender matte green olive leaves, no fruit, fully visible in the centre-right of the frame. Perfectly smooth warm ivory background, even diffuse studio light and one very faint natural contact shadow. More than 65 percent uninterrupted empty background. The branch occupies only 35 percent of frame width and 55 percent of height, a simple airy diagonal line. Accurate real olive leaves, subtle organic imperfections, refined understated photographic realism. No other plants, flowers, fruit, ginger, plates, food arrangements, bottles, labels, patterns, sunbeams, tabletop scenery, decorative shadows, text, letters, logos, ribbons, hands or people. Quiet, sparse and sophisticated, not a busy commercial still life.",
+      "asset": "public/images/article-concepts/olive-ivory-v1.jpg"
+    },
+    {
+      "id": "olive-sage",
+      "prompt": "A STRICTLY MINIMALIST premium botanical studio photograph. Landscape 3:2. EXACTLY ONE small natural olive branch with six to eight slender matte olive leaves, no fruit, fully visible centred in the right half. Perfectly smooth seamless very pale muted sage green background #e4e9de. Even diffuse soft light, subtle natural contact shadow, fine believable leaf texture. More than 65 percent completely empty background. The slender branch is a simple diagonal gesture, occupies only about 35 percent of frame width and 55 percent height. Photorealistic, restrained, elegant botanical editorial. No additional objects, fruit, flower, ginger, glassware, plates, table setting, bottles, sun patches, pattern, lettering, logo, ribbon or people. Extreme compositional restraint.",
+      "asset": "public/images/article-concepts/olive-sage-v1.jpg"
+    },
+    {
+      "id": "olive-forest",
+      "prompt": "A STRICTLY MINIMALIST luxury botanical editorial photograph. Landscape 3:2. EXACTLY ONE slender real olive branch with six to eight grey-green olive leaves and no fruit, fully visible in the right third, against a perfectly smooth seamless deep forest green background #123c33. The left two-thirds must remain completely empty dark green for separately typeset webpage title. Soft studio edge light gently reveals natural olive leaves without dramatic reflections. Subject occupies about 30 percent of frame width and 55 percent height. Understated photorealism, very sparse refined composition. No flowers, lemon, ginger, food, glassware, stones, tabletop, extra vegetation, background foliage, pattern, sunlight streaks, text, labels, brands, bottles, ribbons or people.",
+      "asset": "public/images/article-concepts/olive-forest-v1.jpg"
+    },
+    {
+      "id": "green-tea",
+      "prompt": "A STRICTLY MINIMALIST photorealistic editorial studio photograph for an article mentioning green tea as a source of plant compounds. Landscape 3:2. EXACTLY ONE small clear cylindrical handleless glass cup containing pale green tea, placed slightly right of centre on an entirely smooth warm ivory seamless surface. No saucer. No teapot. No additional leaves, plants, powder, spoon or props. The cup is small, occupies 30 percent frame width, with at least 70 percent uninterrupted empty warm ivory background. Soft even diffuse studio light, one very faint natural contact shadow, believable transparent glass and pale tea. Quiet, restrained, clean premium photographic style, no steam clouds or dramatic highlights. No pattern, lettering, logos, labels, bottles, ribbons or people.",
+      "asset": "public/images/article-concepts/green-tea-v1.jpg"
+    }
+  ]
+}

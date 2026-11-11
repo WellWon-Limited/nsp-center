@@ -1,0 +1,1013 @@
+{
+  "mode": "built-in imagegen",
+  "reviewedProducts": 168,
+  "replacedImages": 139,
+  "unchangedImages": 29,
+  "images": [
+    {
+      "id": "almond-apricot-anti-stress-moisturizing-lotion",
+      "source": "/media/upload/iblock/93c/93c1aa1d9e45ebb6bd8b295315e384df.png",
+      "output": "/images/products/white-v2/almond-apricot-anti-stress-moisturizing-lotion.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "aloe-vera-juice",
+      "source": "/media/upload/iblock/d4d/d4d4b5ca6018e7d49633e9abb9bc101e.png",
+      "output": "/images/products/white-v2/aloe-vera-juice.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "antivozrastnaya-wow-syvorotka-s-ekstraktom-kashtana-wow-serum-anti-age-lifting",
+      "source": "/media/upload/iblock/074/0741744d4d6acc509200988cfb499fd6.jpg",
+      "output": "/images/products/white-v2/antivozrastnaya-wow-syvorotka-s-ekstraktom-kashtana-wow-serum-anti-age-lifting.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "antivozrastnoy-krem-dlya-kozhi-vokrug-glaz-spf15-anti-age-eye-contour-cream-spf-15",
+      "source": "/media/upload/iblock/0d2/0d224de05fd60db0e9d1721d573a07ad.jpg",
+      "output": "/images/products/white-v2/antivozrastnoy-krem-dlya-kozhi-vokrug-glaz-spf15-anti-age-eye-contour-cream-spf-15.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "balzam-dlya-gub-spf15-prirodnaya-zabota-lip-balm-spf-15-natural-care",
+      "source": "/media/upload/iblock/3c8/3c819689679648eb611ebd0475ba4680.jpg",
+      "output": "/images/products/white-v2/balzam-dlya-gub-spf15-prirodnaya-zabota-lip-balm-spf-15-natural-care.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "balzam-rasslablyayushchiy-s-maslom-chaynogo-dereva-tropical-mists-relaxing-tt-oil",
+      "source": "/media/upload/iblock/0ac/0acd57fd9757068511a651935edf0060.png",
+      "output": "/images/products/white-v2/balzam-rasslablyayushchiy-s-maslom-chaynogo-dereva-tropical-mists-relaxing-tt-oil.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "bee-pollen",
+      "source": "/media/upload/iblock/826/826438f0dba7ef9d67deb91a4f807c70.jpg",
+      "output": "/images/products/white-v2/bee-pollen.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "blesk-dlya-gub-mango-s-plastikovym-applikatorom-lip-gloss-mango",
+      "source": "/media/upload/iblock/2dd/2dde1664de8e3e5716eccdf4e4187f7f.png",
+      "output": "/images/products/white-v2/blesk-dlya-gub-mango-s-plastikovym-applikatorom-lip-gloss-mango.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "bp-c",
+      "source": "/media/upload/iblock/836/8369a3f4235f52f189428df468968731.jpg",
+      "output": "/images/products/white-v2/bp-c.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "buplerum-plus",
+      "source": "/media/upload/iblock/e2c/e2c644fe3a8bb65b19869c0a31560819.jpg",
+      "output": "/images/products/white-v2/buplerum-plus.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "burdock",
+      "source": "/media/upload/iblock/9a8/9a8103cfa00b9d5555b3b3fbaa17304f.jpg",
+      "output": "/images/products/white-v2/burdock.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "c-x",
+      "source": "/media/upload/iblock/ba5/ba5fdab466efe0982a57c11454488fb1.jpg",
+      "output": "/images/products/white-v2/c-x.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "calcium-magnesium-chelate",
+      "source": "/media/upload/iblock/8d1/8d1ec280cd5d4c551e76925e6b8772c8.jpg",
+      "output": "/images/products/white-v2/calcium-magnesium-chelate.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "carbo-grabbers",
+      "source": "/media/upload/iblock/5a5/5a5f9ef64d03f02b83746775fef64394.jpg",
+      "output": "/images/products/white-v2/carbo-grabbers.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "chondroitin",
+      "source": "/media/upload/iblock/241/2412d9425bd89a422a31e08b5b4fc36a.jpg",
+      "output": "/images/products/white-v2/chondroitin.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "chromium-chelate",
+      "source": "/media/upload/iblock/1c8/1c8b00656f88ef6ba287fadbb557e14c.jpg",
+      "output": "/images/products/white-v2/chromium-chelate.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "cleansing-micellar-gel-blooming-skin",
+      "source": "/media/upload/iblock/a3c/a3ce99c868175d7d2d63e57f7c08a681.jpg",
+      "output": "/images/products/white-v2/cleansing-micellar-gel-blooming-skin.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "colloidal-minerals-with-acai-juice",
+      "source": "/media/upload/iblock/eb3/eb3c2776250d485b2601a78cb63fcf42.jpg",
+      "output": "/images/products/white-v2/colloidal-minerals-with-acai-juice.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "colloidal-silver-forte",
+      "source": "/media/upload/iblock/199/199376542b70beab55fbd29c5f20257b.jpg",
+      "output": "/images/products/white-v2/colloidal-silver-forte.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "colostrum",
+      "source": "/media/upload/iblock/211/211d75acfb8f5129c0828ea2b15317ed.jpg",
+      "output": "/images/products/white-v2/colostrum.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "compact-blusher-rosy-musk",
+      "source": "/media/upload/iblock/6e7/6e7d20ab44f880592a557bd2b7e5dfd1.png",
+      "output": "/images/products/white-v2/compact-blusher-rosy-musk.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "compact-powder-almond-cake",
+      "source": "/media/upload/iblock/686/6860a6e3978d2f331f540f7d6c01cda7.png",
+      "output": "/images/products/white-v2/compact-powder-almond-cake.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "compact-powder-powdered-sugar",
+      "source": "/media/upload/iblock/cf4/cf451fdd1393cf6f87725928dcad0e0d.png",
+      "output": "/images/products/white-v2/compact-powder-powdered-sugar.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "concealer-ivory",
+      "source": "/media/upload/iblock/79f/79f8a7540874b3f303ea1c0c4cf4cd35.png",
+      "output": "/images/products/white-v2/concealer-ivory.jpg",
+      "prompt": "Edit this exact existing catalog product photograph. Remove ONLY any cast shadow, contact shadow, reflection or gray floor outside the physical product. Background must be uniform pure white RGB 255 255 255, without gradient, texture or scenery. Preserve the identical physical package, its cap, original shapes, proportions, viewpoint, highlights on the object, logo, colors and ALL Russian/English label lettering and numbers. Do not change packaging or invent text. Keep the full product visible and the original composition. Preserve separate cap/applicator and any printed color swatch when present, but remove their reflected mirror images. Do not crop. This is only background cleanup.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "coral-calcium",
+      "source": "/media/upload/iblock/9af/9af3eecac93c1d59e24ac931e838fb95.jpg",
+      "output": "/images/products/white-v2/coral-calcium.jpg",
+      "prompt": "Create a clean isolated cutout of the EXACT physical product(s) in this reference. Outside the physical packaging silhouette must be fully transparent (alpha zero), INCLUDING all pixels immediately beneath the bottom edge. Remove EVERY external gray cast shadow, contact shadow, reflected mirror image, floor strip, gray halo and haze. Preserve natural shading INSIDE the product only. Preserve exact existing geometry, cap, proportions, viewpoint, material, brand logo, label design, all Russian/English lettering and numbers. Do not redesign packaging, invent text, change quantities or change product colors. Keep the complete product visible and centered with the existing framing. Preserve separate real cap/applicator and printed color swatch if present, while removing their floor reflections. No crops. Clean antialiased silhouette. Actual transparent background, not a white-background rendering and not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "e-tea",
+      "source": "/media/upload/iblock/b1d/b1d3c55ea3be8bf7312ac76bfdb2d212.jpg",
+      "output": "/images/products/white-v2/e-tea.jpg",
+      "prompt": "Create a clean isolated cutout of the EXACT physical product(s) in this reference. Outside the physical packaging silhouette must be fully transparent (alpha zero), INCLUDING all pixels immediately beneath the bottom edge. Remove EVERY external gray cast shadow, contact shadow, reflected mirror image, floor strip, gray halo and haze. Preserve natural shading INSIDE the product only. Preserve exact existing geometry, cap, proportions, viewpoint, material, brand logo, label design, all Russian/English lettering and numbers. Do not redesign packaging, invent text, change quantities or change product colors. Keep the complete product visible and centered with the existing framing. Preserve separate real cap/applicator and printed color swatch if present, while removing their floor reflections. No crops. Clean antialiased silhouette. Actual transparent background, not a white-background rendering and not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "eye-pencil-cocoa",
+      "source": "/media/upload/iblock/f2e/f2e014ad6bf8f2448b21e6d806a691ee.png",
+      "output": "/images/products/white-v2/eye-pencil-cocoa.jpg",
+      "prompt": "Create a clean isolated cutout of the EXACT physical product(s) in this reference. Outside the physical packaging silhouette must be fully transparent (alpha zero), INCLUDING all pixels immediately beneath the bottom edge. Remove EVERY external gray cast shadow, contact shadow, reflected mirror image, floor strip, gray halo and haze. Preserve natural shading INSIDE the product only. Preserve exact existing geometry, cap, proportions, viewpoint, material, brand logo, label design, all Russian/English lettering and numbers. Do not redesign packaging, invent text, change quantities or change product colors. Keep the complete product visible and centered with the existing framing. Preserve separate real cap/applicator and printed color swatch if present, while removing their floor reflections. No crops. Clean antialiased silhouette. Actual transparent background, not a white-background rendering and not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "energy-shampoo",
+      "source": "/media/upload/iblock/b8a/b8a0d2a36c3b2544cedb314ddd9596c6.jpg",
+      "output": "/images/products/white-v2/energy-shampoo.jpg",
+      "prompt": "Create a clean isolated cutout of the EXACT physical product(s) in this reference. Outside the physical packaging silhouette must be fully transparent (alpha zero), INCLUDING all pixels immediately beneath the bottom edge. Remove EVERY external gray cast shadow, contact shadow, reflected mirror image, floor strip, gray halo and haze. Preserve natural shading INSIDE the product only. Preserve exact existing geometry, cap, proportions, viewpoint, material, brand logo, label design, all Russian/English lettering and numbers. Do not redesign packaging, invent text, change quantities or change product colors. Keep the complete product visible and centered with the existing framing. Preserve separate real cap/applicator and printed color swatch if present, while removing their floor reflections. No crops. Clean antialiased silhouette. Actual transparent background, not a white-background rendering and not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "eye-shadow-deep-grey",
+      "source": "/media/upload/iblock/268/2682cbdda27ff41b22dd87155124c0f8.jpg",
+      "output": "/images/products/white-v2/eye-shadow-deep-grey.jpg",
+      "prompt": "Create a clean isolated cutout of the EXACT physical product(s) in this reference. Outside the physical packaging silhouette must be fully transparent (alpha zero), INCLUDING all pixels immediately beneath the bottom edge. Remove EVERY external gray cast shadow, contact shadow, reflected mirror image, floor strip, gray halo and haze. Preserve natural shading INSIDE the product only. Preserve exact existing geometry, cap, proportions, viewpoint, material, brand logo, label design, all Russian/English lettering and numbers. Do not redesign packaging, invent text, change quantities or change product colors. Keep the complete product visible and centered with the existing framing. Preserve separate real cap/applicator and printed color swatch if present, while removing their floor reflections. No crops. Clean antialiased silhouette. Actual transparent background, not a white-background rendering and not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "everflex-sream",
+      "source": "/media/upload/iblock/ce9/ce905b2cd120da2ff2c709bcd351ecb0.jpg",
+      "output": "/images/products/white-v2/everflex-sream.jpg",
+      "prompt": "Create a clean isolated cutout of the EXACT physical product(s) in this reference. Outside the physical packaging silhouette must be fully transparent (alpha zero), INCLUDING all pixels immediately beneath the bottom edge. Remove EVERY external gray cast shadow, contact shadow, reflected mirror image, floor strip, gray halo and haze. Preserve natural shading INSIDE the product only. Preserve exact existing geometry, cap, proportions, viewpoint, material, brand logo, label design, all Russian/English lettering and numbers. Do not redesign packaging, invent text, change quantities or change product colors. Keep the complete product visible and centered with the existing framing. Preserve separate real cap/applicator and printed color swatch if present, while removing their floor reflections. No crops. Clean antialiased silhouette. Actual transparent background, not a white-background rendering and not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "breast-assured",
+      "source": "/media/upload/iblock/ff1/ff1d5d403d7d7c084879cd7fd23263f0.jpg",
+      "output": "/images/products/white-v2/breast-assured.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "antistress-kit",
+      "source": "/media/upload/iblock/0ed/0eda2d6494c4045b6569be8fe9bafcc5.jpg",
+      "output": "/images/products/white-v2/antistress-kit.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-yasnaya-golova",
+      "source": "/media/upload/iblock/ca9/ca9afdcae40a9d4668bc93b825418c26.jpg",
+      "output": "/images/products/white-v2/nabor-yasnaya-golova.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zashchita-sosudov",
+      "source": "/media/upload/iblock/b47/b4741e3e074f45f636b3b1a9e4b7709e.jpg",
+      "output": "/images/products/white-v2/nabor-zashchita-sosudov.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "breath-ease",
+      "source": "/media/upload/iblock/890/89042fcd092dea6ef1c868855a395b60.jpg",
+      "output": "/images/products/white-v2/breath-ease.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "fat-grabbers",
+      "source": "/media/upload/iblock/d12/d120e5f713870a11750b4ddd51ac1ee4.jpg",
+      "output": "/images/products/white-v2/fat-grabbers.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "cascara-sagrada",
+      "source": "/media/upload/iblock/d68/d68dddce2a9d6ba20d6c8853b62e33be.jpg",
+      "output": "/images/products/white-v2/cascara-sagrada.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "fc-with-dong-quai",
+      "source": "/media/upload/iblock/26e/26e3aebea981456cc268f2ad4e7d4baf.jpg",
+      "output": "/images/products/white-v2/fc-with-dong-quai.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "eight",
+      "source": "/media/upload/iblock/b54/b54ef7d9ce93323521425958100aa15a.jpg",
+      "output": "/images/products/white-v2/eight.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "food-enzymes",
+      "source": "/media/upload/iblock/10b/10bf30b37a45528d02fc04a0195cf707.jpg",
+      "output": "/images/products/white-v2/food-enzymes.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "eye-shadow-white-pearl",
+      "source": "/media/upload/iblock/87d/87d3e205d472b5ac57b48166e20f0bef.png",
+      "output": "/images/products/white-v2/eye-shadow-white-pearl.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "foundation-ivory",
+      "source": "/media/upload/iblock/80b/80bbb54ed80bec770c6203a5d223c0f2.png",
+      "output": "/images/products/white-v2/foundation-ivory.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "garcinia-combination",
+      "source": "/media/upload/iblock/264/264bc8a3afea4be372ee42eb9fbeadfc.jpg",
+      "output": "/images/products/white-v2/garcinia-combination.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "gel-dlya-dusha-ocharovanie-magnolii-magnolia-charm-shower-gel",
+      "source": "/media/upload/iblock/5e9/5e9462d7467c30357da9785698f3bde7.jpg",
+      "output": "/images/products/white-v2/gel-dlya-dusha-ocharovanie-magnolii-magnolia-charm-shower-gel.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "gel-posle-britya-riptide-cool-comfort-aftershave-gel",
+      "source": "/media/upload/iblock/6a2/6a218847cc4a0cef07922da79a28e773.jpg",
+      "output": "/images/products/white-v2/gel-posle-britya-riptide-cool-comfort-aftershave-gel.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "gel-uvlazhnyayushchiy-s-aloe-vera-tropical-mists-witch-vera-gel",
+      "source": "/media/upload/iblock/94f/94f069300e4f391d26a0c1e81b81c650.jpg",
+      "output": "/images/products/white-v2/gel-uvlazhnyayushchiy-s-aloe-vera-tropical-mists-witch-vera-gel.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "gentle-make-up-remover-bremani-care",
+      "source": "/media/upload/iblock/3b4/3b42f854a099fc698fa1cb0fc8c0aabf.jpg",
+      "output": "/images/products/white-v2/gentle-make-up-remover-bremani-care.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "ginkgo-gotu-kola",
+      "source": "/media/upload/iblock/e9f/e9fad32e9a98f426a78d4576b5a35915.jpg",
+      "output": "/images/products/white-v2/ginkgo-gotu-kola.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "glucosamine",
+      "source": "/media/upload/iblock/533/5337ece604e1916071edce361ebc22cc.jpg",
+      "output": "/images/products/white-v2/glucosamine.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "gotu-kola",
+      "source": "/media/upload/iblock/426/426b246d055de41070a0e689446f5d9a.jpg",
+      "output": "/images/products/white-v2/gotu-kola.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "grapine-w-protectors",
+      "source": "/media/upload/iblock/030/0307553c151c7efb5140368d44dc3cab.jpg",
+      "output": "/images/products/white-v2/grapine-w-protectors.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "hair-body-baby-wash-oh-my-baby",
+      "source": "/media/upload/iblock/7c6/7c6c5ddc1a55d0074e34e7dd39a0a1e6.jpg",
+      "output": "/images/products/white-v2/hair-body-baby-wash-oh-my-baby.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "hand-cream-deep-hydration-bremani-care",
+      "source": "/media/upload/iblock/203/20331b7c600fcdada068a225a6290bcd.jpg",
+      "output": "/images/products/white-v2/hand-cream-deep-hydration-bremani-care.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "hawthorn-plus",
+      "source": "/media/upload/iblock/f17/f1744db7fabe10b4fb7d8ab578c27d39.jpg",
+      "output": "/images/products/white-v2/hawthorn-plus.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "herbal-h-p-fighter",
+      "source": "/media/upload/iblock/998/998215672289ee3d6a0919f609c01d71.jpg",
+      "output": "/images/products/white-v2/herbal-h-p-fighter.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "hista-block",
+      "source": "/media/upload/iblock/cd9/cd993a6bc1c20dc231b35d1b1e14c338.jpg",
+      "output": "/images/products/white-v2/hista-block.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "hp-garlic",
+      "source": "/media/upload/iblock/ef0/ef064013c90c5b103ffa8a6f6cab8b02.jpg",
+      "output": "/images/products/white-v2/hp-garlic.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "hvp",
+      "source": "/media/upload/iblock/6ce/6ce6c1a15f6f6c8982108e9e7cf9c902.png",
+      "output": "/images/products/white-v2/hvp.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "indole-3-carbinol",
+      "source": "/media/upload/iblock/68f/68fd1ff2b624cfe47eaeb6fb4c8fe93d.jpg",
+      "output": "/images/products/white-v2/indole-3-carbinol.jpg",
+      "prompt": "Isolate EXACTLY the physical product packaging shown in the reference on a genuinely transparent background. Remove ALL gray floor, cast shadows, contact shadows, reflections, gray halos and rectangular patches beneath and beside the packages. Keep the existing exact number of bottles/boxes, their original relative positions, perspective, sizes, caps, shapes, label designs, logos, Russian/English text and quantities. No redesign, no new products, no changes to the product arrangement. No part of the physical packaging may be cut away. Preserve separate real caps/applicators and printed color swatches when present, removing only their mirror reflections. Below and outside every package silhouette must be alpha zero, including the narrow strip under the base. Preserve natural material shading only inside each object. Entire original composition visible, same framing and aspect ratio. No additional text or scenery. This is a clean catalog cutout, not a newly staged photograph.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "sc-formula",
+      "source": "/media/upload/iblock/a7f/a7f0816bbed99362286664eb0fbadd6b.jpg",
+      "output": "/images/products/white-v2/sc-formula.jpg",
+      "prompt": "Create an exact isolated cutout of the single Shark Rei Formula / Шарк Рей Формула bottle in this photograph. Preserve its exact cap, brown bottle, shape, proportions, original label, all names, logo, text and 100 капсул / по 685 мг. Delete ALL gray shadows and gray rectangular background, including the entire large shadow on the right and any thin gray contact shadow under the base. Outside the physical bottle silhouette must be completely transparent alpha zero. Natural shading inside the bottle stays. Keep full cap and curved base intact. Center the full bottle with comfortable equal white-space margins on the canvas. No redesign, no new text, no reflections. Transparent background, not checkerboard.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "intense-foot-cream",
+      "source": "/media/upload/iblock/4f0/4f0de8f1c72ad3f08581b2890a3adc40.jpg",
+      "output": "/images/products/white-v2/intense-foot-cream.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "konditsioner-energiya-vosstanovlenie-i-zdorove-balans-kozhi-golovy-energy-conditioner-oily-normal-ha",
+      "source": "/media/upload/iblock/aee/aee44f3ffb45437b9c293530bc5ac289.jpg",
+      "output": "/images/products/white-v2/konditsioner-energiya-vosstanovlenie-i-zdorove-balans-kozhi-golovy-energy-conditioner-oily-normal-ha.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "iron-chelate",
+      "source": "/media/upload/iblock/62b/62be4264d952647f0854c1ab90586e27.png",
+      "output": "/images/products/white-v2/iron-chelate.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "khlorofill-zhidkiy-chlorophyll-liquid",
+      "source": "/media/upload/iblock/9f8/9f886ee00e11b06b89aafdd9e86dfc3c.png",
+      "output": "/images/products/white-v2/khlorofill-zhidkiy-chlorophyll-liquid.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "konditsioner-perevoploshchenie-volos-sila-siyanie-i-gladkost-makeover-conditioner-normal-damaged-hai",
+      "source": "/media/upload/iblock/386/38636900145d3a41e3de372545046cc4.jpg",
+      "output": "/images/products/white-v2/konditsioner-perevoploshchenie-volos-sila-siyanie-i-gladkost-makeover-conditioner-normal-damaged-hai.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "konsiler-kremovyy-concealer-cream",
+      "source": "/media/upload/iblock/c73/c73d5510be718c34f2ed186fb9b0818b.png",
+      "output": "/images/products/white-v2/konsiler-kremovyy-concealer-cream.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "kelp",
+      "source": "/media/upload/iblock/947/947f3d700b4f6fd96cca38a08a202206.jpg",
+      "output": "/images/products/white-v2/kelp.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "krem-dlya-tela-s-maslom-kakao-tropical-mists-conditioning-sream-with-socoa-butter",
+      "source": "/media/upload/iblock/001/001e6fdb808f17fa5a75ec035cfa614e.jpg",
+      "output": "/images/products/white-v2/krem-dlya-tela-s-maslom-kakao-tropical-mists-conditioning-sream-with-socoa-butter.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "kit-health-with-nsp-year-round",
+      "source": "/media/upload/iblock/f98/f988df6a3f175766a77202897dc3c678.jpg",
+      "output": "/images/products/white-v2/kit-health-with-nsp-year-round.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "lip-pencil-magic-stick-color-of-your-lips",
+      "source": "/media/upload/iblock/185/1854e638ff7bd13be9563e0c92930765.jpg",
+      "output": "/images/products/white-v2/lip-pencil-magic-stick-color-of-your-lips.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "kojenzim-q10",
+      "source": "/media/upload/iblock/a5c/a5ca6ccd3ebdd2edb4159c8a4b9abdad.jpg",
+      "output": "/images/products/white-v2/kojenzim-q10.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "lipstick-bremani-milano-merilyn",
+      "source": "/media/upload/iblock/8ce/8ce2ff7e7d56ee572c76debfaddaa558.jpg",
+      "output": "/images/products/white-v2/lipstick-bremani-milano-merilyn.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "liquid-eyeliner-mystical-eye",
+      "source": "/media/upload/iblock/bdc/bdccff0a32428d8b4f33ae957713d1a4.jpg",
+      "output": "/images/products/white-v2/liquid-eyeliner-mystical-eye.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "liv-guard",
+      "source": "/media/upload/iblock/353/353b7cf99722ae69b9f4f0f67605c9e5.jpg",
+      "output": "/images/products/white-v2/liv-guard.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "loclo",
+      "source": "/media/upload/iblock/430/430c86d7e2dfe648074de7442dd278e0.jpg",
+      "output": "/images/products/white-v2/loclo.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "lymphatic-drainage",
+      "source": "/media/upload/iblock/666/666181293a7224cbc180433a16e8b0c9.jpg",
+      "output": "/images/products/white-v2/lymphatic-drainage.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "magnesium-complex",
+      "source": "/media/upload/iblock/b2d/b2d2bd1cf80c4d6b188b9030338bd91a.jpg",
+      "output": "/images/products/white-v2/magnesium-complex.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "makeover-shampoo",
+      "source": "/media/upload/iblock/f78/f78a36fb9030551e2a21d0edbf68473d.jpg",
+      "output": "/images/products/white-v2/makeover-shampoo.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "milk-thistle",
+      "source": "/media/upload/iblock/2c5/2c5e9993f45031d671a3119335fb2b91.jpg",
+      "output": "/images/products/white-v2/milk-thistle.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "molochko-dlya-tela-ocharovanie-magnolii-magnolia-charm-body-lotion",
+      "source": "/media/upload/iblock/f8d/f8d2e9b43bca53914fd9069af1325df1.jpg",
+      "output": "/images/products/white-v2/molochko-dlya-tela-ocharovanie-magnolii-magnolia-charm-body-lotion.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-aktivnoe-dolgoletie",
+      "source": "/media/upload/iblock/7a6/7a61f0142e15c8ad4ae86dba86dd57c2.jpg",
+      "output": "/images/products/white-v2/nabor-aktivnoe-dolgoletie.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-brosayushchim-kurit",
+      "source": "/media/upload/iblock/d3d/d3d259b5f7508749e678cec3558a68d7.jpg",
+      "output": "/images/products/white-v2/nabor-brosayushchim-kurit.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-detoks",
+      "source": "/media/upload/iblock/425/425ebf9d35ff4531e6d4338122adaa2d.jpg",
+      "output": "/images/products/white-v2/nabor-detoks.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-fitnes-1",
+      "source": "/media/upload/iblock/fdd/fdd3ef8bb0dd1d3e1734d388fb36a369.jpg",
+      "output": "/images/products/white-v2/nabor-fitnes-1.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-fitnes-2",
+      "source": "/media/upload/iblock/75e/75e4b51c9ef94da303282a39516fc4ab.jpg",
+      "output": "/images/products/white-v2/nabor-fitnes-2.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-kozha-volosy-nogti",
+      "source": "/media/upload/iblock/73f/73f5f952d48e7039fdba896e526aba79.jpg",
+      "output": "/images/products/white-v2/nabor-kozha-volosy-nogti.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-protivoparazitarnyy",
+      "source": "/media/upload/iblock/809/809bed250bdbc1f86aa90d2487b45b39.jpg",
+      "output": "/images/products/white-v2/nabor-protivoparazitarnyy.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-reabilitatsii-posle-covid-19",
+      "source": "/media/upload/iblock/274/274ad879c6f8bde98aaff68a414a3916.jpg",
+      "output": "/images/products/white-v2/nabor-reabilitatsii-posle-covid-19.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-silnyy-immunitet",
+      "source": "/media/upload/iblock/27a/27ae80da64c157093e6c07fcf1083f00.jpg",
+      "output": "/images/products/white-v2/nabor-silnyy-immunitet.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-stop-otek",
+      "source": "/media/upload/iblock/ec7/ec7372baecf6fdcad6bafe1b751d4d4b.jpg",
+      "output": "/images/products/white-v2/nabor-stop-otek.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-dykhatelnoy-sistemy",
+      "source": "/media/upload/iblock/059/059f2e8c061884efae7ca4db6a54a36f.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-dykhatelnoy-sistemy.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-soedinitelnoy-tkani",
+      "source": "/media/upload/iblock/14a/14a77aa0cbae74ddc16d17a91d74bf76.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-soedinitelnoy-tkani.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-vashey-pecheni",
+      "source": "/media/upload/iblock/00f/00f1844174f8b983c26bdafe44f8170c.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-vashey-pecheni.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-vashikh-glaz",
+      "source": "/media/upload/iblock/b90/b9089c4b364c78ff43b87d859b142a6a.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-vashikh-glaz.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-vashikh-kostey",
+      "source": "/media/upload/iblock/8d4/8d4950b97c63bc2ce4ef72e5769608c4.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-vashikh-kostey.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-vashikh-sustavov",
+      "source": "/media/upload/iblock/3bc/3bcb2adabadd63e12147424ecc4cacf5.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-vashikh-sustavov.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorove-zhkt-kak-osnova",
+      "source": "/media/upload/iblock/822/822a4fcbf2d4737a7762918750a31014.jpg",
+      "output": "/images/products/white-v2/nabor-zdorove-zhkt-kak-osnova.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorovoe-serdtse",
+      "source": "/media/upload/iblock/2d3/2d39fc5106998a73723f769027b4961a.jpg",
+      "output": "/images/products/white-v2/nabor-zdorovoe-serdtse.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nabor-zdorovyy-rebenok",
+      "source": "/media/upload/iblock/3d8/3d8615b74d2b4629075df22004f26cae.jpg",
+      "output": "/images/products/white-v2/nabor-zdorovyy-rebenok.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nature-lax",
+      "source": "/media/upload/iblock/45e/45e6c3f1374dff9a8f2fdb03fba20a62.jpg",
+      "output": "/images/products/white-v2/nature-lax.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "natures-noni-juice",
+      "source": "/media/upload/iblock/e31/e31a27bbd66601a0643c136b44706219.png",
+      "output": "/images/products/white-v2/natures-noni-juice.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "nutri-burn",
+      "source": "/media/upload/iblock/28c/28c963af080518c7a6e2bfb8dda08bb7.png",
+      "output": "/images/products/white-v2/nutri-burn.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "osteo-plus",
+      "source": "/media/upload/iblock/ef5/ef5bbb1457dfad6ec4c3c324a992516b.jpg",
+      "output": "/images/products/white-v2/osteo-plus.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "pau-d-arco",
+      "source": "/media/upload/iblock/8db/8dbd539d300dab0c3f4fb8e1ab1879f4.jpg",
+      "output": "/images/products/white-v2/pau-d-arco.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "perfect-eyes",
+      "source": "/media/upload/iblock/d4d/d4d16acf96e621fc9a2db94005138775.jpg",
+      "output": "/images/products/white-v2/perfect-eyes.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "pomada-kameliya-s-plastikovym-applikatorom-lipstick-camellia",
+      "source": "/media/upload/iblock/7ff/7ff90d3325573631006ff8ed4281e7a7.png",
+      "output": "/images/products/white-v2/pomada-kameliya-s-plastikovym-applikatorom-lipstick-camellia.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "pomada-karamel-s-plastikovym-applikatorom-lipstick-caramel",
+      "source": "/media/upload/iblock/a78/a78c78ab51c79512f30d959104ca1d58.png",
+      "output": "/images/products/white-v2/pomada-karamel-s-plastikovym-applikatorom-lipstick-caramel.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "pomada-pion-s-fibrovym-applikatorom-lipstick-peony",
+      "source": "/media/upload/iblock/916/9167b9bba279bb095b874bd3a4639b87.png",
+      "output": "/images/products/white-v2/pomada-pion-s-fibrovym-applikatorom-lipstick-peony.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "pro-formula",
+      "source": "/media/upload/iblock/487/487dd45c1a97c807a7f4c0c7a5e40f8f.jpg",
+      "output": "/images/products/white-v2/pro-formula.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "protease-plus",
+      "source": "/media/upload/iblock/5ed/5ed31e7037077de25a1cda970676c72d.jpg",
+      "output": "/images/products/white-v2/protease-plus.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "red-clover",
+      "source": "/media/upload/iblock/36b/36b9d5e5fc19a3735f5257c3cd423f60.jpg",
+      "output": "/images/products/white-v2/red-clover.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "saw-palmetto",
+      "source": "/media/upload/iblock/014/0144dcfde908f9fac40b2ec23f60fd10.jpg",
+      "output": "/images/products/white-v2/saw-palmetto.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "sharikovyy-antiperspirant-dezodorant-sea-salt-roll-on-antiperspirant-deodorant",
+      "source": "/media/upload/iblock/919/919558154df7a4db5ba846ea0c1a6208.jpg",
+      "output": "/images/products/white-v2/sharikovyy-antiperspirant-dezodorant-sea-salt-roll-on-antiperspirant-deodorant.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "silver-shield-gel",
+      "source": "/media/upload/iblock/6eb/6eb0a7cea981bca5038da4c6868d9554.jpg",
+      "output": "/images/products/white-v2/silver-shield-gel.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "skrab-abrikosovyy-dlya-litsa-i-tela-tropical-mists-light-apricot-cleanser-apri-cleanse-",
+      "source": "/media/upload/iblock/f7f/f7fd396d64fd7f0e2588a7916badf200.jpg",
+      "output": "/images/products/white-v2/skrab-abrikosovyy-dlya-litsa-i-tela-tropical-mists-light-apricot-cleanser-apri-cleanse-.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "smartmeal-vanila-shake",
+      "source": "/media/upload/iblock/154/154d3563da4a058b1baafc31bdaec119.jpg",
+      "output": "/images/products/white-v2/smartmeal-vanila-shake.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "solstic-energy",
+      "source": "/media/upload/iblock/f4e/f4e98e7d29d04ad7e1450795d210c8ea.png",
+      "output": "/images/products/white-v2/solstic-energy.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "solstic-revive",
+      "source": "/media/upload/iblock/362/362745ff09648fee57bc97d45de66d7e.png",
+      "output": "/images/products/white-v2/solstic-revive.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "solstik-slim",
+      "source": "/media/upload/iblock/31e/31e6a71cc867cef14432e0f1840ea68c.png",
+      "output": "/images/products/white-v2/solstik-slim.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "stevia",
+      "source": "/media/upload/iblock/9f5/9f537306b4968f65c1f3a169237fe329.jpg",
+      "output": "/images/products/white-v2/stevia.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "stomach-comfort",
+      "source": "/media/upload/iblock/1f7/1f7a613e24f36b956933a2217bb39cec.jpg",
+      "output": "/images/products/white-v2/stomach-comfort.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "stop-allergy-kit",
+      "source": "/media/upload/iblock/ad6/ad633b72244d8b4d67a20208cbee8b5a.jpg",
+      "output": "/images/products/white-v2/stop-allergy-kit.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "sunshine-brite-toothpaste",
+      "source": "/media/upload/iblock/d62/d6221e0222b83a7fac7044c1e1102e34.jpg",
+      "output": "/images/products/white-v2/sunshine-brite-toothpaste.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "super-complex",
+      "source": "/media/upload/iblock/0ca/0ca684e2b131f7c41ea36b04dd14dd66.jpg",
+      "output": "/images/products/white-v2/super-complex.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "tea-tree-oil",
+      "source": "/media/upload/iblock/6ca/6ca9b7e2c552868701e257aadbc0f034.jpg",
+      "output": "/images/products/white-v2/tea-tree-oil.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "tei-fu-massage-lotion",
+      "source": "/media/upload/iblock/d5d/d5de42e1dc3beee3b8e18c47762cf7c5.jpg",
+      "output": "/images/products/white-v2/tei-fu-massage-lotion.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "total-nutrition-today",
+      "source": "/media/upload/iblock/a23/a2364d8882293bafc5268d2a09dfd930.png",
+      "output": "/images/products/white-v2/total-nutrition-today.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "una-de-gato",
+      "source": "/media/upload/iblock/bb3/bb374e549821cd7fe1f9839363a29acd.jpg",
+      "output": "/images/products/white-v2/una-de-gato.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "uro-lax",
+      "source": "/media/upload/iblock/584/58485b52c390a82c63e7bb6decaad2be.jpg",
+      "output": "/images/products/white-v2/uro-lax.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "veri-gon-vari-gone",
+      "source": "/media/upload/iblock/e66/e66bb373a4bee6c21dc9a1cc0ff67c95.jpg",
+      "output": "/images/products/white-v2/veri-gon-vari-gone.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "vitamin-c-long",
+      "source": "/media/upload/iblock/48d/48d579024fbbe0a44e90bedd73907641.jpg",
+      "output": "/images/products/white-v2/vitamin-c-long.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "vitamin-d3",
+      "source": "/media/upload/iblock/d9d/d9de3e611ae92f7a603f4bfa28733059.jpg",
+      "output": "/images/products/white-v2/vitamin-d3.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "vitamin-e",
+      "source": "/media/upload/iblock/c61/c614222a94a58af1c683555957fc9eea.jpg",
+      "output": "/images/products/white-v2/vitamin-e.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "zambroza",
+      "source": "/media/upload/iblock/de3/de33ce5774e7680ad78e73ba84f9e6b7.jpg",
+      "output": "/images/products/white-v2/zambroza.jpg",
+      "prompt": "Make an exact clean isolated cutout of the physical product packaging in the reference, on a truly transparent background. Completely remove ALL external gray shadows, floor reflections, faint gray halos, pale contact shadows, rectangular patches and the gray strip under the base. The transparent mask must follow only the actual physical packaging silhouette: all pixels below and outside the object must have alpha ZERO, including very faint shadows. Do not include a floor. Preserve exact original number and arrangement of products, all caps and bases fully visible, identical product proportions, logo, label graphics, colors, Russian/English names, numbers and quantities. Keep physical material shading INSIDE each package only. No redesign, no added text, no cut-off products. Preserve printed color swatches and real separate applicators/caps while removing mirror reflections. Center the complete original composition, leave clear safe margins, retain aspect ratio. Actual transparency, not a checkerboard illustration.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "ag-x",
+      "source": "/media/upload/iblock/8ee/8ee6aa3b6ac62ecbdd2d38acb36d0c80.jpg",
+      "output": "/images/products/white-v2/ag-x.jpg",
+      "prompt": "Create a perfectly clean isolated cutout of the exact bottle in the reference. Preserve the actual bottle, cap, label, logo, colors, proportions, all Russian/English lettering and every quantity. Remove ALL external gray cast shadows, tiny pale contact shadows and halos under and beside the base, and any floating white specks around the cap. Pixels outside the actual physical bottle silhouette must have alpha ZERO, with no transparent gray floor. Keep natural shading inside the bottle only. Full cap and curved base completely visible, centered, with clear safe margins. Actual transparent background. No redesign, no new text, no changed packaging.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "cc-a",
+      "source": "/media/upload/iblock/07e/07ec3d303727408501d6c7c5aaada12e.jpg",
+      "output": "/images/products/white-v2/cc-a.jpg",
+      "prompt": "Create a perfectly clean isolated cutout of the exact bottle in the reference. Preserve the actual bottle, cap, label, logo, colors, proportions, all Russian/English lettering and every quantity. Remove ALL external gray cast shadows, tiny pale contact shadows and halos under and beside the base, and any floating white specks around the cap. Pixels outside the actual physical bottle silhouette must have alpha ZERO, with no transparent gray floor. Keep natural shading inside the bottle only. Full cap and curved base completely visible, centered, with clear safe margins. Actual transparent background. No redesign, no new text, no changed packaging.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "enzimozavriki-whole-food-papayazyme",
+      "source": "/images/products/enzimozavriki-studio.png",
+      "output": "/images/products/white-v2/enzimozavriki-whole-food-papayazyme.jpg",
+      "prompt": "Create a perfectly clean isolated cutout of the exact bottle in the reference. Preserve the actual bottle, cap, label, logo, colors, proportions, all Russian/English lettering and every quantity. Remove ALL external gray cast shadows, tiny pale contact shadows and halos under and beside the base, and any floating white specks around the cap. Pixels outside the actual physical bottle silhouette must have alpha ZERO, with no transparent gray floor. Keep natural shading inside the bottle only. Full cap and curved base completely visible, centered, with clear safe margins. Actual transparent background. No redesign, no new text, no changed packaging.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "l-carnitine",
+      "source": "/images/products/l-carnitine-no-shadow.png",
+      "output": "/images/products/white-v2/l-carnitine.jpg",
+      "prompt": "Create a perfectly clean isolated cutout of the exact bottle in the reference. Preserve the actual bottle, cap, label, logo, colors, proportions, all Russian/English lettering and every quantity. Remove ALL external gray cast shadows, tiny pale contact shadows and halos under and beside the base, and any floating white specks around the cap. Pixels outside the actual physical bottle silhouette must have alpha ZERO, with no transparent gray floor. Keep natural shading inside the bottle only. Full cap and curved base completely visible, centered, with clear safe margins. Actual transparent background. No redesign, no new text, no changed packaging.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "id": "black-walnut",
+      "source": "/media/upload/iblock/c22/c223a5cafb15bff589ca6dcfaa481bd1.jpg",
+      "output": "/images/products/white-v2/black-walnut.jpg",
+      "mode": "built-in imagegen",
+      "prompt_summary": "Exact bottle cutout; fully transparent outside physical silhouette, including the area below the base; preserve all original label lettering and quantities."
+    }
+  ],
+  "retained": [
+    "5-htp-power",
+    "achieve-with-yohimbe",
+    "alfalfa",
+    "antioxidant",
+    "astragalus",
+    "bifidophilus-chewable-for-kids-herbasaurs",
+    "bifidophilus-flora-force",
+    "bon-c",
+    "boswellia-plus",
+    "caprylic-acid-combination",
+    "capsicum-garlic-with-parsley",
+    "children-s-chewable-multiple-vitamins-plus-iron-herbasaurs",
+    "cordyceps",
+    "defense-maintenance",
+    "dikiy-yams-wild-yam",
+    "fizz-active-immune",
+    "hsn-w",
+    "lecithin",
+    "maska-dlya-siyaniya-litsa-effekt-zolushki-radiance-face-mask-cinderella-effect",
+    "mind-max",
+    "morinda",
+    "msm",
+    "olive-leaf",
+    "omega-3-epa",
+    "paw-paw",
+    "peptovit",
+    "uvlazhnyayushchiy-krem-dlya-litsa-spf15-moisturizing-face-cream-intensive-hydration-48-hours-spf15",
+    "vosstanavlivajuschij-krem-dlja-kozhi-vokrug-glaz-s-spf15",
+    "zinc-lozenge"
+  ],
+  "layoutGenerator": "design/product-media/measure-layout.swift"
+}

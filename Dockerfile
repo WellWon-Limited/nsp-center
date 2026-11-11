@@ -10,9 +10,14 @@ RUN npm run build
 FROM node:24-alpine
 WORKDIR /app
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=4173
+# Runtime packages only (pg for the accounts API, scripts/accounts.mjs; it stays off until DATABASE_URL is set).
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/src/generated/content.json ./src/generated/content.json
-COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs ./scripts/
+COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs /app/scripts/accounts.mjs /app/scripts/site-admin.mjs /app/scripts/order-admin.mjs /app/scripts/ai-agent.mjs /app/scripts/card-prices.mjs ./scripts/
+# Rules shared by the browser and the server (email and phone checks); tests/docker-runtime.test.mjs keeps this list complete.
+COPY --from=build /app/src/contact-fields.mjs ./src/
 COPY --from=build ["/app/assets/NSP App Prototype.html", "./assets/"]
 USER node
 EXPOSE 4173

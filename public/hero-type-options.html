@@ -1,0 +1,34 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Три оформления заголовка — NSP Center</title><link rel="stylesheet" href="/fonts/hero-options/fonts.css"><style>
+*{box-sizing:border-box}body{margin:0;background:#f7f5ee;color:#1d3a36;font:14px Manrope,Arial,sans-serif}header{padding:24px 28px 18px;display:flex;justify-content:space-between;align-items:end;gap:20px}h1{font-size:25px;margin:0 0 6px;font-weight:600}header p{margin:0;color:#60756d;font-size:13px}header>a,a{color:#1d3a36;text-underline-offset:4px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:0 24px 24px}.option{padding:16px;background:#fff;border:1px solid #c7d4cc;border-radius:20px;min-width:0}.option-head{display:flex;gap:10px;align-items:start;margin-bottom:14px}.number{display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:50%;background:#1d3a36;color:white}.option h2{font-size:17px;font-weight:600;margin:0 0 5px}.option p{font-size:12px;line-height:1.5;margin:0;color:#60756d}.label{font-size:10px;color:#60756d;margin:14px 0 7px;text-transform:uppercase;letter-spacing:.08em}.screen{position:relative;overflow:hidden;border:1px solid #c7d4cc;border-radius:9px;background:#fff}.screen iframe{display:block;border:0;transform-origin:0 0;pointer-events:none}.phone{width:150px;margin:0 auto;border:4px solid #1d3a36;border-radius:25px}.phone-label{text-align:center}.links{display:flex;justify-content:center;gap:16px;font-size:12px;margin-top:16px}.loading{padding:20px;text-align:center}.single header{padding:8px 16px;align-items:center}.single header h1{font-size:16px;margin:0}.single header p{display:none}.single .grid{display:block;padding:0}.single .option{border:0;background:transparent;border-radius:0;padding:0}.single .option-head,.single .label,.single .links{display:none}.single .screen{margin:auto;border-radius:0}.single .phone{border:0}.single .screen iframe{pointer-events:auto}@media(max-width:1000px){.grid{grid-template-columns:1fr}.option{display:grid;grid-template-columns:minmax(0,1fr) 150px;column-gap:20px}.option-head,.links{grid-column:1/-1}.laptop-label{grid-column:1;grid-row:2}.laptop{grid-column:1;grid-row:3}.phone-label{grid-column:2;grid-row:2}.phone{grid-column:2;grid-row:3}.single .option{display:block}}@media(max-width:550px){header{padding:20px;display:block}header>a{display:block;margin-top:12px}.grid{padding:0 12px 20px}.option{display:block}.phone{margin-top:8px}.phone-label{margin-top:18px}}
+</style></head><body><header><div><h1>Заголовок на главном экране</h1><p>Три оформления · ноутбук и телефон</p></div><a href="/">На сайт →</a></header><main class="grid"><p class="loading">Загружаем варианты…</p></main><script>
+const variants=[
+ {id:1,title:'Легче и спокойнее',description:'Manrope 500 · тот же шрифт, что в верхней панели',font:"'Manrope',sans-serif",weight:500,style:'normal',scale:1,spacing:'-.035em'},
+ {id:2,title:'Мягче и теплее',description:'Golos Text 500 · округлые формы и ровный ритм',font:"'Golos Text',sans-serif",weight:500,style:'normal',scale:1,spacing:'-.035em'},
+ {id:3,title:'Чётко и воздушно',description:'Onest 500 · открытые буквы и свободный интервал',font:"'Onest',sans-serif",weight:500,style:'normal',scale:1,spacing:'-.02em'}
+];
+const params=new URLSearchParams(location.search),chosen=Number(params.get('variant')),device=params.get('device'),single=variants.some(v=>v.id===chosen)&&['phone','laptop'].includes(device);
+if(single){document.body.classList.add('single');document.querySelector('header>a').href='/hero-type-options.html';document.querySelector('header>a').textContent='← Все три варианта';document.querySelector('h1').textContent=variants.find(v=>v.id===chosen).title}
+const grid=document.querySelector('main');
+const fit=box=>{const frame=box.querySelector('iframe'),w=Number(frame.dataset.width),h=Number(frame.dataset.height);let width=box.clientWidth;if(single){width=Math.min(w,innerWidth,((innerHeight-document.querySelector('header').offsetHeight)/h)*w);box.style.width=width+'px'}frame.style.width=w+'px';frame.style.height=h+'px';frame.style.transform='scale('+width/w+')';box.style.height=(width*h/w)+'px'};
+(async()=>{try{
+ const source=await(await fetch('/')).text();
+ const clean=source.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,'').replace(/<html[^>]*>/i,'<html lang="ru">');
+ grid.innerHTML='';
+ for(const v of single?variants.filter(v=>v.id===chosen):variants){
+  const card=document.createElement('section');card.className='option';card.dataset.variant=v.id;
+  card.innerHTML='<div class="option-head"><span class="number">'+v.id+'</span><div><h2>'+v.title+'</h2><p>'+v.description+'</p></div></div>';
+  for(const kind of single?[device]:['laptop','phone']){
+   const phone=kind==='phone',w=phone?402:1470,h=phone?874:919;
+   const label=document.createElement('div');label.className='label '+kind+'-label';label.textContent=phone?'Телефон':'Ноутбук';card.append(label);
+   const box=document.createElement('div');box.className='screen '+kind;
+   const iframe=document.createElement('iframe');iframe.title=v.title+' — '+label.textContent;iframe.dataset.width=w;iframe.dataset.height=h;
+   const css=`@import url('/fonts/hero-options/fonts.css');html:root{--site-header-height:${phone?123:105.5078125}px} .home-hero.home-hero--forest .hero-copy h1[aria-label]{font-family:${v.font};font-weight:${v.weight};font-style:${v.style};letter-spacing:${v.spacing};line-height:1.12;font-size:${phone?26*v.scale+'px':`max(22px,calc(${3.1*v.scale} * var(--desktop-unit)))`}} ${phone?`@media(max-width:639px){body .site-header{padding-top:62px}html:root{--phone-header-height:123px;--phone-first-screen-height:665px}.bottom-nav{padding-bottom:38px}.home-hero.home-hero--forest{min-height:665px}}`:''} .nsp-launch,.install-banner,.install-banner-backdrop{display:none!important}`;
+   iframe.srcdoc=clean.replace('</head>','<style>'+css+'</style></head>');box.append(iframe);card.append(box);
+   iframe.addEventListener('load',async()=>{await iframe.contentDocument.fonts.ready;box.dataset.ready='true';fit(box)});
+   new ResizeObserver(()=>fit(box)).observe(box);
+  }
+  const links=document.createElement('div');links.className='links';links.innerHTML='<a href="?variant='+v.id+'&device=laptop">Крупно: ноутбук</a><a href="?variant='+v.id+'&device=phone">Телефон</a>';card.append(links);grid.append(card);
+ }
+}catch(e){grid.innerHTML='<p class="loading">Не удалось загрузить. Обновите страницу.</p>'}})();
+addEventListener('resize',()=>document.querySelectorAll('.screen').forEach(fit));
+</script></body></html>
