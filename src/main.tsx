@@ -7,6 +7,8 @@ import { installHomeScrollReturn } from './home-scroll-return.mjs';
 import { installSwipeBack } from './swipe-back.mjs';
 import { installInstantTap } from './instant-tap.mjs';
 import { installWarmup } from './page-warmup.mjs';
+import { installAppHistory, openedByBack } from './app-history.mjs';
+import { standaloneIos } from './swipe-back.mjs';
 import { finishSplash, registerServiceWorker } from './pwa';
 const root=document.getElementById('root')!;
 const url=location.pathname+location.search;
@@ -19,11 +21,12 @@ history.scrollRestoration='manual';
 addEventListener('pagehide',()=>{try{sessionStorage.setItem(scrollKey(),String(Math.round(scrollY)));}catch{}});
 if(root.hasChildNodes()&&root.dataset.route===url)hydrateRoot(root,<App url={url} pageData={pageData}/>);else createRoot(root).render(<App url={url} pageData={pageData}/>);
 const homeReturn=installHomeScrollReturn(window,document);
+installAppHistory(window,document,standaloneIos(window));
 installSwipeBack(window,document);
 installInstantTap(window,document);
 installWarmup(window,document);
 const navigation=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;
-const saved=homeReturn??(navigation?.type==='back_forward'||navigation?.type==='reload'?Number(sessionStorage.getItem(scrollKey())):0);
+const saved=homeReturn??(navigation?.type==='back_forward'||navigation?.type==='reload'||openedByBack(window)?Number(sessionStorage.getItem(scrollKey())):0);
 // Coming back with «Назад»: the page stays hidden (class nsp-restoring, set in index.html before the first paint) until it
 // is scrolled to where the visitor left it, so the top of the page never flashes. The page may still be growing (images,
 // client-rendered lists), so the scroll is retried for a moment; after 1.2 s the page is shown regardless.
