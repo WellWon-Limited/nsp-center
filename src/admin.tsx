@@ -379,7 +379,7 @@ function StaffSection({ overview, run, reload }: { overview: Overview; run: Run;
     <ul className="admin-users">{overview.staff.map(u => <li key={u.email}><span><strong>{u.name || u.email}</strong><small>{u.email}{u.lastLogin ? ` · входил ${when(u.lastLogin)}` : ' · ещё не входил'}</small></span>{u.email.toLowerCase() !== me?.email.toLowerCase() && <button type="button" className="btn btn--secondary" onClick={() => setRemoving(u.email)}>Удалить</button>}</li>)}</ul>
     <h3>Добавить сотрудника</h3>
     <form className="admin-staff-form" onSubmit={add}>
-      <label>Имя и фамилия<input className="field" value={name} onChange={e => setName(e.target.value)} placeholder="Вера Лесничая" maxLength={120} /></label>
+      <label>Имя и фамилия<input className="field" value={name} onChange={e => setName(e.target.value)} placeholder="Иван Петров" maxLength={120} /></label>
       <label>Почта сотрудника<input className="field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@nsp-center.ru" required /></label>
       <button className="btn btn--primary" disabled={!email.trim()}>Добавить</button>
     </form>
