@@ -1,8 +1,9 @@
 # Разработка NSP Center
 
 Стек: React 19, TypeScript 5, Vite 8, Node.js 22.12+ и npm с package-lock.json.
-Проверено на Node 25.2.0 / npm 11.6.2. Основа — статические HTML-документы с
-React hydration; никаких backend hooks исходного магазина.
+Проверено на Node 26.13.0 / npm 11.20.0. Основа — статические HTML-документы с
+React hydration; бэкенд исходного магазина не используется. Свой сервер
+`scripts/serve.mjs` отдаёт страницы и API: аккаунты, управление сайтом, цены по карте, чат.
 
 ## Установка и запуск
 
@@ -49,9 +50,10 @@ npm run check
 ```
 
 Последовательно: offline extraction/import, browser summary, TypeScript,
-production build, 238 SSR documents, content + rendered HTML tests, content
-retention audit. Ожидание — exit 0. Без NSP_TEST_URL три HTTP-теста явно SKIP;
-это не свидетельство проверки работающего сервера.
+production build, 332 SSR-документа (229 исходных адресов: 227 снимка и 2 новых
+товара), service worker (`scripts/pwa.mjs`), 113 тестов, content retention audit
+(9 проверок). Ожидание — exit 0, 110 passed, 3 skipped: без NSP_TEST_URL три
+HTTP-теста явно SKIP; это не свидетельство проверки работающего сервера.
 
 Для полного gate, включая все 227 HTTP-адресов, при запущенном изолированном
 preview:
@@ -60,7 +62,7 @@ preview:
 NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
-Ожидание — 25 tests passed, 0 failed, 0 skipped.
+Ожидание — 113 tests passed, 0 failed, 0 skipped (проверено 11 ноября 2026).
 
 ## Источники и импорт
 
@@ -94,7 +96,9 @@ WW_TEST=1 WW_TEST_ID=nsp-acceptance NSP_TEST_URL=http://127.0.0.1:5217 npm run c
 
 ## CI и публикация
 
-`.github/workflows/check.yml` выполняет npm ci / npm run check на Node 24.
+`.github/workflows/check.yml` на каждую отправку запускает две проверки: `check`
+(npm ci / npm run check на Node 24) и `docker-build` (сборка образа dev-стенда и
+запуск: `/`, `/catalog/` отвечают 200, неизвестный адрес — 404).
 CI требует source snapshot в checkout; производные copies и dist игнорируются.
 Build готовит локальный артефакт `dist/`; API аккаунтов — раздел «Аккаунты и база данных», оплата в этот scope не входит.
 
@@ -103,6 +107,10 @@ Build готовит локальный артефакт `dist/`; API аккау
 https://nsp-center.dev.codimax.ru — российский dev-сервер (Coolify WellWon,
 AdminVPS). Каждое слияние в `main` пересобирает стенд сам: `Dockerfile` выполняет
 `npm run build` и запускает `scripts/serve.mjs` с `HOST=0.0.0.0`, `PORT=4173`.
+В образ для запуска копируются по одному файлу модули сервера (`scripts/accounts.mjs`,
+`site-admin.mjs`, `order-admin.mjs`, `ai-agent.mjs`, `card-prices.mjs` и другие) и
+`src/contact-fields.mjs`; `tests/docker-runtime.test.mjs` не пропустит новый импорт сервера,
+которого нет в этом списке.
 Выкладка занимает 5–10 минут: с этого сервера GitHub скачивается медленно.
 Порядок выкладки: своя ветка -> pull request -> зелёные проверки `check` и
 `docker-build` -> слить самому, одобрение не требуется. Красный запрос GitHub
@@ -310,8 +318,7 @@ Coolify и задаст приложению переменную `DATABASE_URL`
 `public/images/products/`. `scripts/new-products.mjs` добавляет их после импорта снимка:
 своя страница `/product/<id>/`, цены по прайсу, первое место на первой странице раздела.
 Проверки снимка (166 товаров) их не считают; у них своя проверка в `tests/build.test.mjs`.
-Сейчас картинки — нарисованные иллюстрации банок; заменить на фото — положить файл и
-поправить поле `image`.
+Заменить картинку — положить файл в `public/images/products/` и поправить поле `image`.
 
 План приёма поддерживает отдельные даты: выбор нажатием на дату под «Приём на сегодня», добавление, изменение времени и удаление относятся только к выбранному дню. Будущие дни нельзя отметить как принятые. При смене дня активируется заранее сохранённый план; если его нет, день пустой. Старый план сохраняется на своей дате. Данные хранятся в localStorage этого браузера.
 
@@ -343,7 +350,7 @@ Coolify и задаст приложению переменную `DATABASE_URL`
 `YANDEX_FOLDER_ID` (каталог), модель — `YANDEX_MODEL` (по умолчанию `yandexgpt-5.1`). Без них чат отвечает
 готовыми материалами, как раньше. Лимиты: `AI_DAILY_LIMIT` вопросов с адреса в день (30),
 `AI_MONTHLY_LIMIT_RUB` в месяц (3000), цена 1000 токенов — `AI_PRICE_PER_1K_RUB` (0,8 ₽ — YandexGPT Pro 5.1 по тарифу AI Studio; для Lite — 0,2).
-Вопросы и ответы 30 дней хранятся в `ai_log` (без аккаунта, хеш адреса) и видны администратору во вкладке «Чат».
+Вопросы и ответы 30 дней хранятся в `ai_log` (без аккаунта, хеш адреса) и видны сотрудникам в разделе «Чат-консультант».
 Полные лекции — по желанию: `node scripts/build-lecture-corpus.mjs` пишет фрагменты вне репозитория, путь к файлу —
 `AI_CORPUS_FILE`. Локальная проверка без ключа — `AI_PROVIDER=mock` (ответ из лучшего фрагмента). Проверка —
 `tests/ai-agent.test.mjs`.
