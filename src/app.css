@@ -598,14 +598,14 @@ html.nsp-signed-in .hero-daily-signup{display:none}
 /* «ВАШ ЕЖЕДНЕВНЫЙ РИТМ» sits a touch to the left of the card's centre line (the pulse icon made it look shifted right). */
 .hero-daily .hero-daily-eyebrow{transform:translateX(-6px)}
 /* Pulling the page past its ends on a computer (or a tablet): white above, like the header, and white below, like the
-   footer. The page's light-green gradient is a fixed layer (body::before) that would fill those areas too, so it is
-   clipped to the page itself; the area around the page is white. On a phone the page has its own background and the
-   layer is not needed (the areas past the ends are set above: white header colour on top, tab-bar green below). */
+   footer. The page's light-green gradient is painted by the page itself (body), standing still while the page scrolls,
+   so it ends exactly where the page ends and the area around it is white. (It was a fixed layer clipped to the page;
+   the clip also cut a white line off the top of the screen-wide dimming behind the install offer.) On a phone the page
+   has its own plain background and needs no layer. */
 @media(min-width:640px){
  html:root{background:#fff}
- /* A pixel off the very top and two off the very bottom: both edges are white (header, footer) anyway, and no hairline of
-    the light-green layer can show between the page and the white around it. */
- body{clip-path:inset(1px 0 2px 0)}
+ body{background:radial-gradient(55% 45% at 88% 12%,rgb(255 255 255 / .75),rgb(255 255 255 / 0) 70%),radial-gradient(50% 45% at 8% 92%,rgb(196 222 206 / .7),rgb(196 222 206 / 0) 70%),linear-gradient(135deg,#d6e8df 0%,#e8f1ec 45%,#f5efe2 100%);background-attachment:fixed}
+ body::before{display:none}
 }
 @media(max-width:639px){body::before{display:none}}
 /* The header's shadow falls only downward: nothing of it shows above the header when the page is pulled past its top

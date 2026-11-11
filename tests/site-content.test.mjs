@@ -49,3 +49,10 @@ test('the chat section of site management shows real questions and says nothing 
   assert.match(admin, /\/api\/admin\/chat-log/);
   assert.match(readFileSync(new URL('../src/assistant.tsx', import.meta.url), 'utf8'), /fetch\('\/api\/chat-log'/);
 });
+
+test('a «back in stock» notice opens that product\'s card, also when it was saved with another link', async () => {
+  const { readFileSync } = await import('node:fs');
+  const code = readFileSync(new URL('../src/notifications.tsx', import.meta.url), 'utf8');
+  assert.match(code, /\/\^stock-\(\.\+\)\$\//);
+  assert.match(code, /<a href=\{noticeHref\(n\)\}>/);
+});

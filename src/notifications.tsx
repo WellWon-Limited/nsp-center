@@ -1,6 +1,6 @@
 import './notifications.css';
 import { useEffect, useId, useRef, useState } from 'react';
-import { useStore } from './store';
+import { data, useStore } from './store';
 import { enableSystemNotifications } from './pwa';
 import { runningAsApp } from './install-state.mjs';
 import { Icon } from './ui';
@@ -14,6 +14,13 @@ import type { Notice } from './store';
 // only in the installed app (research 2026-11-11): on an iPhone a site in Safari cannot send them at all (iOS 16.4+ allows
 // them only to apps added to the Home Screen), and asking a visitor of the site in a computer's browser for permission
 // out of the blue is what browsers now quietly block. In the browser the bell keeps its list, without the button.
+/** Where a notice leads: «Товар снова в наличии» always to that product's card (also for notices saved before the
+ *  link was set, found by the product in the notice's id), the others to their own page. */
+export function noticeHref(n: Notice) {
+  const id = /^stock-(.+)$/.exec(n.id)?.[1];
+  const product = id ? data.products.find(p => p.id === id) : undefined;
+  return product?.path ?? n.url;
+}
 export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChange:(open:boolean)=>void}) {
   const { state, setState, notify } = useStore();
   const [permission, setPermission] = useState<NotificationPermission | 'unsupported' | ''>('');
@@ -56,7 +63,7 @@ export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChan
       {state.notices.length ? <div className="notifications-list">{byDay(state.notices).map(group => <section key={group.label} aria-label={group.label}>
         <h3 className="notifications-day">{group.label}</h3>
         <ul>{group.items.map(n => <li key={n.id} className={fresh.has(n.id) ? 'is-new' : 'is-read'}>
-          <a href={n.url}>
+          <a href={noticeHref(n)}>
             <span className={`notification-icon notification-icon--${n.kind ?? 'other'}`} aria-hidden="true"><Icon name={n.kind === 'intake' ? 'clock' : n.kind === 'stock' ? 'bag' : n.kind === 'review' ? 'star' : 'bell'} size={18} /></span>
             <span className="notification-body"><strong>{n.title}</strong>{n.text && <span className="notification-text">{n.text}</span>}<small>{fresh.has(n.id) && <span className="notification-new-tag">Новое</span>}{n.at ? shortTime(n.at) : n.date}</small></span>
           </a>

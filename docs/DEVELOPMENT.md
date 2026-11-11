@@ -51,8 +51,8 @@ npm run check
 
 Последовательно: offline extraction/import, browser summary, TypeScript,
 production build, 334 SSR-документа (231 исходный адрес: 227 снимка и 4 новых
-товара), service worker (`scripts/pwa.mjs`), 157 тестов, content retention audit
-(9 проверок). Ожидание — exit 0, 154 passed, 3 skipped: без NSP_TEST_URL три
+товара), service worker (`scripts/pwa.mjs`), 159 тестов, content retention audit
+(9 проверок). Ожидание — exit 0, 156 passed, 3 skipped: без NSP_TEST_URL три
 HTTP-теста явно SKIP; это не свидетельство проверки работающего сервера.
 
 Для полного gate, включая все 227 HTTP-адресов, при запущенном изолированном
@@ -62,7 +62,7 @@ preview:
 NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
-Ожидание — 157 tests passed, 0 failed, 0 skipped (проверено 11 ноября 2026).
+Ожидание — 159 tests passed, 0 failed, 0 skipped (проверено 11 ноября 2026).
 
 ## Источники и импорт
 
