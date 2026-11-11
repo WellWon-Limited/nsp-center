@@ -49,3 +49,8 @@ test('every inline script of the page head is valid JavaScript (a broken one sil
   assert.ok(scripts.length >= 4);
   for (const code of scripts) assert.doesNotThrow(() => new Function(code), code.slice(0, 80));
 });
+
+test('no clip on the page: a screen-wide dimming (the install offer) covers the screen to its very top edge', () => {
+  assert.doesNotMatch(css, /body\{clip-path:/);
+  assert.match(css, /background-attachment:fixed\}\n body::before\{display:none\}/);
+});
