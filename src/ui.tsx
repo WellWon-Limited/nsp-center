@@ -1,3 +1,4 @@
+import { appHistory, goBack, previousPage } from './app-history.mjs';
 import {productCover,productPackshotStyle} from './product-media.mjs';
 import { useId, type ReactNode, type CSSProperties , useEffect, useState} from 'react';
 import type { Product } from './content-types';
@@ -17,9 +18,10 @@ export function Heading({eyebrow,title,description,action}:{eyebrow?:string;titl
 const backNames:[RegExp,string][]=[[/^\/$/,'На главную'],[/^\/blog\/$/,'Журнал о заботе'],[/^\/catalog\//,'Каталог'],[/^\/health\/$/,'План'],[/^\/health-marafon\/$/,'Марафон'],[/^\/consultation\/$/,'К чату'],[/^\/company\/$/,'О компании'],[/^\/profile\/$/,'Профиль'],[/^\/cart\/$/,'Корзина'],[/^\/diagnostic-test\/$/,'К тесту']];
 const nameOf=(path:string)=>backNames.find(([re])=>re.test(path))?.[1];
 /** The page this one was opened from on the site, if any (known only in the browser). */
-export function useCameFrom(){const [from,setFrom]=useState<string|null>(null);useEffect(()=>{try{const r=new URL(document.referrer);if(r.origin===location.origin&&r.pathname!==location.pathname)setFrom(r.pathname);}catch{/* no referrer */}},[]);return from;}
+export function useCameFrom(){const [from,setFrom]=useState<string|null>(null);useEffect(()=>{// In the iPhone app the site keeps the way back itself (src/app-history.mjs).
+ if(appHistory()){const prev=previousPage(window);if(prev&&prev!==location.pathname)setFrom(prev);return;}try{const r=new URL(document.referrer);if(r.origin===location.origin&&r.pathname!==location.pathname)setFrom(r.pathname);}catch{/* no referrer */}},[]);return from;}
 export function BackLink({fallback,label,className='back-link'}:{fallback:string;label?:string;className?:string}){const from=useCameFrom();const [storyReturn,setStoryReturn]=useState<string|null>(null);useEffect(()=>{setStoryReturn(homeStoryReturn(location.href));},[]);const text=storyReturn?'К блоку «Подробнее»':from?nameOf(from)??'Назад':label??nameOf(fallback)??'Назад';
- return <a className={className} href={storyReturn??fallback} onClick={e=>{if(from&&history.length>1&&(!storyReturn||from==='/')){e.preventDefault();history.back();}}}><Icon name="chevron" size={18}/>{text}</a>;}
+ return <a className={className} href={storyReturn??fallback} onClick={e=>{if(appHistory()){e.preventDefault();goBack(window,storyReturn&&from!=='/'?storyReturn:fallback);return;}if(from&&history.length>1&&(!storyReturn||from==='/')){e.preventDefault();history.back();}}}><Icon name="chevron" size={18}/>{text}</a>;}
 export function Breadcrumbs({items}:{items:{name:string;path?:string}[]}){return <nav className="breadcrumbs" aria-label="Хлебные крошки"><a href="/">Главная</a>{items.map((it,i)=><span key={i}><span aria-hidden="true">/</span>{it.path?<a href={it.path}>{it.name}</a>:it.name}</span>)}</nav>;}
 export function Empty({title,children,icon='leaf'}:{title:string;children?:ReactNode;icon?:string}){return <div className="panel empty-state"><Icon name={icon} size={36}/><h2>{title}</h2>{children}</div>;}
 export function WaitlistButton({product:p}:{product:Product}){
