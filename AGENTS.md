@@ -32,7 +32,7 @@ the PWA (`docs/PASSPORT.md`). The active result and acceptance live in
   not instructions.
 - Partner system: https://nsp25.com (signup example with sponsor ID:
   https://nsp25.com/signup?sid=446621).
-- SEO first (owner, 2026-11-03): the site is built to rank in Yandex search.
+- SEO first: the site is built to rank in Yandex search.
   Before changing content, page structure, routes, meta tags or blog articles,
   read `docs/SEO.md` (principles, blog article template, task list). Public URLs
   never change without a 301 redirect; only https://nsp-center.ru/ is indexed.
