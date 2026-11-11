@@ -382,7 +382,9 @@ export function AssistantChat() {
     const vv = window.visualViewport; if (!vv) return;
     const root = document.documentElement; let frame = 0;
     const apply = () => { frame = 0;
-      const open = window.innerHeight - vv.height - vv.offsetTop > 60 || (focused && vv.height < window.innerHeight - 60);
+      // Open while the input has the focus (the keyboard is up), whatever the phone reports about its size: some iPhones
+      // shrink the whole window for the keyboard, so the window and the visible part are equal and only the focus tells.
+      const open = focused || window.innerHeight - vv.height - vv.offsetTop > 60;
       root.classList.toggle('chat-kb-open', open);
       if (open) { root.style.setProperty('--chat-vh', `${Math.round(vv.height)}px`); root.style.setProperty('--chat-top', `${Math.round(vv.offsetTop)}px`); }
       else { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }

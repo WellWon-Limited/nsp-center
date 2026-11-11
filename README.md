@@ -105,7 +105,7 @@ WW_TEST=1 WW_TEST_ID=nsp-acceptance npm run preview
 NSP_TEST_URL=http://127.0.0.1:5217 npm test
 ```
 
-`npm run check` — сборка, TypeScript, 152 теста (без `NSP_TEST_URL` 3 из них
+`npm run check` — сборка, TypeScript, 155 тестов (без `NSP_TEST_URL` 3 из них
 пропускаются) и сверка со снимком (9 проверок).
 
 [Разработка](docs/DEVELOPMENT.md) · [Дизайн-система](docs/DESIGN-SYSTEM.md) ·
