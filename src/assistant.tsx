@@ -82,7 +82,10 @@ export function findProducts(text: string, index: Index): ChatProduct[] {
   const owners = new Map<string, ChatProduct[]>(); for (const p of index.products) for (const w of new Set(words(p.name).map(compact))) owners.set(w, [...(owners.get(w) ?? []), p]);
   const plainOwner = (w: string, p: ChatProduct) => { const o = owners.get(w) ?? []; return o.length <= 3 && [...o].sort((a, b) => shortName(a.name).length - shortName(b.name).length)[0] === p; };
   const hits: { p: ChatProduct; at: number; len: number }[] = [];
+  // Products an administrator hid after the build are not offered either (src/site.ts).
+  const hidden = new Set(data.products.filter(p => p.hidden).map(p => p.id));
   for (const p of index.products) {
+    if (hidden.has(p.id)) continue;
     const w = words(p.name); const latin = /\(([^)]+)\)/.exec(p.name)?.[1] ?? '';
     const latinHead = compact(latin.split(/[\s-]+/).slice(0, 2).join(''));
     const unique = w.map(compact).filter(x => x.length >= 4 && !generic.has(x) && plainOwner(x, p));
@@ -379,7 +382,8 @@ export function AssistantChat() {
     const fit = () => { const covered = vv ? Math.max(0, window.innerHeight - vv.height - vv.offsetTop) : 0; const root = document.documentElement; root.style.setProperty('--chat-kb', `${Math.round(covered)}px`); root.style.setProperty('--chat-vh', `${Math.round(vv?.height ?? window.innerHeight)}px`); root.classList.toggle('chat-kb-open', covered > 60);
       // The chat column ends exactly at the top of the bottom bar, or of the keyboard when it is open.
       const nav = document.querySelector<HTMLElement>('.bottom-nav'); const navH = nav && getComputedStyle(nav).display !== 'none' ? Math.max(0, window.innerHeight - nav.getBoundingClientRect().top) : 0;
-      root.style.setProperty('--chat-bottom', `${Math.round(covered > 60 ? covered : navH)}px`); window.scrollTo(0, 0);
+      // Only the open keyboard needs JS; without it the column ends above the tab bar by CSS alone (no jump at first paint).
+      if (covered > 60) root.style.setProperty('--chat-bottom', `${Math.round(covered)}px`); else root.style.removeProperty('--chat-bottom'); void navH; window.scrollTo(0, 0);
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
     fit(); vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit); window.addEventListener('resize', fit);
     return () => { vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit); document.documentElement.style.removeProperty('--chat-kb'); document.documentElement.style.removeProperty('--chat-vh'); document.documentElement.classList.remove('chat-kb-open'); document.documentElement.style.removeProperty('--chat-bottom'); window.removeEventListener('resize', fit); };

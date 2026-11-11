@@ -3,7 +3,7 @@ import { type ReactNode, useEffect, useRef, useState } from 'react';
 import type { Category, ExpertNote, Product, Theme } from './content-types';
 import { withProductImages } from './product-images';
 import { data, money, shortName, useStore } from './store';
-import { applyContent, noteKey, noteStars, readSite, visibleNotes } from './site';
+import { applyContent, listed, noteKey, noteStars, readSite, visibleNotes } from './site';
 import { VideoGallery } from './information-pages';
 import { videoSections } from './information-content.mjs';
 import { CustomerReviews } from './reviews';
@@ -18,12 +18,15 @@ function SortMenu({value,onChange,canReset,onReset}:{value:string;onChange:(v:st
  {open&&<div className="sort-options"><ul role="listbox" aria-label="Сортировка">{sortOptions.map(([v,label])=><li key={v}><button type="button" role="option" aria-selected={v===value} onClick={()=>{onChange(v);setOpen(false);}}>{label}{v===value&&<Icon name="check" size={16}/>}</button></li>)}</ul>{canReset&&<button type="button" className="sort-reset" onClick={()=>{onReset();setOpen(false);}}>Сбросить фильтры</button>}</div>}</div>;}
 /** Cards per page: a multiple of six that fits `total` into `pages` pages without an empty last page. */
 const evenPage=(total:number,pages:number,fallback:number)=>{if(pages<=1)return Math.max(total,1);const even=Math.ceil(Math.ceil(total/pages)/6)*6;return even*(pages-1)<total?even:Math.max(1,Math.ceil(total/pages))||fallback;};
+/** How many products of a section (all when no list is given) customers see: hidden ones are not counted. */
+const listedCount=(paths?:string[])=>paths?paths.filter(path=>{const p=data.products.find(x=>x.path===path);return p&&listed(p);}).length:data.products.filter(listed).length;
 export function Catalog({category,url}:{category:Category;url:string}) {
  const params=new URL(url,'http://nsp.local').searchParams;const [q,setQ]=useState(params.get('q')||'');const [sort,setSort]=useState(params.get('sort')||'default');const [stock,setStock]=useState(params.get('stock')==='1');const [favoriteOnly,setFavoriteOnly]=useState(params.get('favorites')==='1'); const {state}=useStore();
  const page=Math.max(1,Number(params.get('PAGEN_1'))||1); const hasSearch=Boolean(q.trim()||stock||favoriteOnly||sort!=='default');
  const categoryEntry=category.path==='/catalog/'&&params.get('view')!=='products'&&!hasSearch&&page===1&&!params.has('PAGEN_1');
- let products=category.path==='/catalog/'?[...data.products]:category.products.map(path=>data.products.find(p=>p.path===path)!).filter(Boolean);
- products=products.filter(p=>(!stock||p.availability!=='OutOfStock')&&(!favoriteOnly||state.favorites.includes(p.id))&&(`${p.name} ${p.article} ${p.category} ${p.properties['Назначение']||''}`.toLowerCase().includes(q.toLowerCase().trim())));
+ // The section's list from the shared catalog data: it also holds cards created in site management (src/custom-product.mjs).
+ let products=category.path==='/catalog/'?[...data.products]:(data.categories.find(c=>c.path===category.path)??category).products.map(path=>data.products.find(p=>p.path===path)!).filter(Boolean);
+ products=products.filter(p=>listed(p)&&(!stock||p.availability!=='OutOfStock')&&(!favoriteOnly||state.favorites.includes(p.id))&&(`${p.name} ${p.article} ${p.category} ${p.properties['Назначение']||''}`.toLowerCase().includes(q.toLowerCase().trim())));
  if(sort==='price-asc')products.sort((a,b)=>a.prices.retail-b.prices.retail);if(sort==='price-desc')products.sort((a,b)=>b.prices.retail-a.prices.retail);if(sort==='name')products.sort((a,b)=>a.name.localeCompare(b.name,'ru'));if(sort==='popular')products.sort((a,b)=>(b.stars?.count||0)-(a.stars?.count||0)||(b.stars?.value||0)-(a.stars?.value||0));
  // Without a search the number of pages follows the snapshot's page routes (their addresses stay), but the products are
  // spread over them in rows that fill up: a page holds a multiple of six (three cards a row on a computer, two on a phone),
@@ -37,10 +40,10 @@ export function Catalog({category,url}:{category:Category;url:string}) {
  {!categoryEntry&&<a className="catalog-mobile-back" href="/catalog/"><Icon name="chevron" size={18}/><span>Категории</span></a>}
  <Heading title={category.path==='/catalog/'?'Каталог продуктов':category.name}/>
  {categoryEntry&&<nav className="catalog-mobile-entry" aria-label="Категории продуктов" data-ds-id="catalog-mobile-categories">
-  <a className="catalog-entry-link" href="/catalog/?view=products"><span>Все товары</span><span className="catalog-entry-count">{data.products.length}</span><Icon name="chevron" size={20}/></a>
-  {data.categories.filter(c=>c.path!=='/catalog/').map(c=><a className="catalog-entry-link" key={c.path} href={c.path}><span>{c.name}</span><span className="catalog-entry-count">{c.products.length}</span><Icon name="chevron" size={20}/></a>)}
+  <a className="catalog-entry-link" href="/catalog/?view=products"><span>Все товары</span><span className="catalog-entry-count">{listedCount()}</span><Icon name="chevron" size={20}/></a>
+  {data.categories.filter(c=>c.path!=='/catalog/').map(c=><a className="catalog-entry-link" key={c.path} href={c.path}><span>{c.name}</span><span className="catalog-entry-count">{listedCount(c.products)}</span><Icon name="chevron" size={20}/></a>)}
  </nav>}
- <div className="catalog-layout"><aside className="catalog-sidebar panel" data-ds-id="catalog-navigation"><h2 className="catalog-sidebar-title">Категории</h2><a className={category.path==='/catalog/'?'active':''} href="/catalog/">Все продукты <span>{data.products.length}</span></a>{data.categories.filter(c=>c.path!=='/catalog/').map(c=><a className={category.path===c.path?'active':''} key={c.path} href={c.path}>{c.name}<span>{c.products.length}</span></a>)}</aside>
+ <div className="catalog-layout"><aside className="catalog-sidebar panel" data-ds-id="catalog-navigation"><h2 className="catalog-sidebar-title">Категории</h2><a className={category.path==='/catalog/'?'active':''} href="/catalog/">Все продукты <span>{listedCount()}</span></a>{data.categories.filter(c=>c.path!=='/catalog/').map(c=><a className={category.path===c.path?'active':''} key={c.path} href={c.path}>{c.name}<span>{listedCount(c.products)}</span></a>)}</aside>
  <div><div className="panel catalog-tools" data-ds-id="catalog-filters"><label className="search-field"><Icon name="search"/><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Название, артикул, назначение" aria-label="Поиск по каталогу"/>{q&&<button className="icon-btn icon-btn--sm" onClick={()=>setQ('')} aria-label="Очистить поиск"><Icon name="close" size={16}/></button>}</label><div className="filter-row"><SortMenu value={sort} onChange={setSort} canReset={hasSearch} onReset={()=>{setQ('');setStock(false);setFavoriteOnly(false);setSort('default');}}/><label><input type="checkbox" checked={stock} onChange={e=>setStock(e.target.checked)}/> В наличии</label><label><input type="checkbox" checked={favoriteOnly} onChange={e=>setFavoriteOnly(e.target.checked)}/> Избранное</label></div></div>
  {visible.length?<ProductGrid products={visible}/>:<div className="catalog-empty" role="status"><p>Продукты не найдены</p></div>}
  {pages>1&&<nav className="pagination" aria-label="Страницы каталога">{Array.from({length:pages},(_,i)=>i+1).map(n=><a key={n} className={`pill ${n===current?'pill--active':''}`} aria-current={n===current?'page':undefined} href={pageUrl(n)}>{n}</a>)}</nav>}
@@ -78,7 +81,14 @@ export const factOrder:[string,string][]=[['Состав 1 ед. (таблетк
 const productFacts=(p:Product)=>factOrder.filter(([key])=>p.properties[key]).map(([key,label])=>[label,p.properties[key]] as [string,string]);
 // Supplements and supplement sets carry the BAD notice; cosmetics do not.
 const isSupplement=(p:Product)=>/^(Биологические добавки|Наборы продуктов)/.test(p.category||'');
-export function ProductDetail({product,themes=[]}:{product:Product;themes?:Theme[]}) {
+// A product hidden from customers (no longer supplied, or hidden in site management) keeps its address, so an old link or
+// bookmark still opens: the page says it is not on sale and leads to its section. Search engines are told to drop it.
+export function ProductDetail(props:{product:Product;themes?:Theme[]}){useStore();return props.product.hidden?<ProductGone product={props.product}/>:<ProductPage {...props}/>;}
+function ProductGone({product:p}:{product:Product}){
+ useEffect(()=>{if(document.querySelector('meta[name="robots"]'))return;const m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.append(m);return()=>m.remove();},[]);
+ return <section className="not-found empty-screen product-gone" data-ds-id="product-gone"><h1>«{shortName(p.name)}» сейчас нет в продаже</h1><a className="btn btn--primary" href={p.categoryPath||'/catalog/'}>Перейти в каталог</a></section>;
+}
+function ProductPage({product,themes=[]}:{product:Product;themes?:Theme[]}) {
  const p=withProductImages(product);
  const videos=videoSections(p.sectionsHtml['Видеообзоры']||'');
 // «Отзывы · 5»: expert comments shown plus published customer reviews.
@@ -88,7 +98,7 @@ export function ProductDetail({product,themes=[]}:{product:Product;themes?:Theme
  // The administrator's own content of this card (name, description, composition, certificates, photo; src/site.ts).
  const [,setContentVersion]=useState(0);
  useEffect(()=>{if(accounts!=='server')return;let off=false;fetch(`/api/product-content?id=${encodeURIComponent(product.id)}`,{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null).then(b=>{if(off||!b)return;applyContent(product,b.content);setContentVersion(v=>v+1);}).catch(()=>{/* the built card stays */});return()=>{off=true;};},[accounts,product]);const [tab,setTab]=useState(tabs[0][0]); const available=p.availability!=='OutOfStock';
- const related=data.products.filter(x=>x.id!==p.id&&(p.related.includes(x.path)||x.category===p.category)).slice(0,4);
+ const related=data.products.filter(x=>x.id!==p.id&&listed(x)&&(p.related.includes(x.path)||x.category===p.category)).slice(0,4);
  return <><BackLink fallback={p.categoryPath||'/catalog/'}/><div className="product-detail product-detail--v2" data-ds-id="product-detail"><div className="product-gallery panel"><div className="main-product-image"><ProductImage product={p} detail/><button className={`icon-btn favorite ${state.favorites.includes(p.id)?'selected':''}`} aria-label={`${state.favorites.includes(p.id)?'Убрать из':'Добавить в'} избранное: ${shortName(p.name)}`} aria-pressed={state.favorites.includes(p.id)} onClick={()=>favorite(p.id)}><Icon name="heart" size={20}/></button>{!available&&<span className="pill stock-pill">Нет в наличии</span>}</div></div><div className="product-purchase"><div className="product-title-row"><h1>{p.name}</h1><span className="product-article">Арт. {p.article}</span></div>{p.category&&<span className="product-title-category">{p.category}</span>}<div className="rating product-rating"><ReviewLine product={p} notes={p.experts?.length??0}/></div><div className="purchase-box panel"><PurchasePrices product={p}/><div className="purchase-actions"><div className="quantity"><button disabled={quantity===1} onClick={()=>setQuantity(q=>q-1)} aria-label="Уменьшить количество"><Icon name="minus" size={16}/></button><output aria-label="Количество">{quantity}</output><button disabled={quantity===99} onClick={()=>setQuantity(q=>q+1)} aria-label="Увеличить количество"><Icon name="plus" size={16}/></button></div>{available?<button type="button" className="btn card-cart-button" onClick={()=>add(p,quantity)}><Icon name="bag" size={18}/>В корзину</button>:<WaitlistButton product={p}/>}</div></div><button className="text-button" onClick={()=>{setState(s=>({...s,intake:s.intake.some(x=>x.id===p.id)?s.intake:[...s.intake,{id:p.id,time:'08:00',done:false}]}));notify('Добавлено в ваш план приёма');}}>+ Добавить в план приёма</button>{isSupplement(p)&&<p className="fine-print">Схему приёма согласуйте со специалистом. БАД не является лекарственным средством.</p>}</div></div>
  <section className="product-content product-content--plain" data-ds-id="product-information"><div className="tabs" role="tablist" aria-label="Информация о продукте">{tabs.map(([id,label])=><button key={id} role="tab" id={`tab-${id}`} aria-selected={tab===id} aria-controls={`panel-${id}`} tabIndex={tab===id?0:-1} className={tab===id?'active':''} onClick={()=>setTab(id)} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const index=tabs.findIndex(x=>x[0]===id);const next=tabs[(index+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length][0];setTab(next);document.getElementById(`tab-${next}`)?.focus();}}}>{label}</button>)}</div>
  {hasDescription(p)&&<div id="panel-description" role="tabpanel" aria-labelledby="tab-description" hidden={tab!=='description'}><ProductDescription product={p}/></div>}

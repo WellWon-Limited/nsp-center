@@ -200,3 +200,13 @@
 .admin-signin > .site-main > .auth { margin: auto; width: 100%; }
 /* Site management has no bottom tab bar on phones, so the page keeps no room for it. */
 body:has(.admin-signin, .admin-app) { padding-bottom: 0; }
+/* Shown or hidden from customers: a line with the state and one button, above the editor tabs. */
+.admin-visibility { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-10); padding: var(--space-10) var(--space-12); border-radius: var(--radius-14); background: var(--color-white); font-size: var(--text-13); }
+.admin-visibility p { flex: 1 1 240px; margin: 0; }
+.admin-visibility.is-hidden { background: #fbf1e9; color: #7a4423; }
+/* «Новая карточка товара»: the button above the product search, and the short form it opens. */
+.admin-new-product-open { justify-self: start; display: inline-flex; align-items: center; gap: var(--space-6); margin-bottom: var(--space-12); }
+.admin-new-product { margin-bottom: var(--space-16); border-radius: var(--radius-14); }
+.admin-new-product h3 { margin: 0; }
+.admin-new-product select.field { appearance: auto; }
+.admin-delete-confirm { flex-basis: 100%; }

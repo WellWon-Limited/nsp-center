@@ -20,6 +20,13 @@ const pathOf = (value) => {
 const manifestMap = new Map(manifest.routes.map((route) => [pathOf(route.url), route.file]));
 const routeMap = new Map(content.routes.map((route) => [pathOf(route.url ?? route.sourceUrl), route]));
 const productMap = new Map(content.products.map((product) => [product.path, product]));
+// Lines no longer supplied (src/product-stock.json): the page stays at its address, says it is not on sale and leaves search.
+const hiddenPaths = new Set(content.products.filter((product) => product.hidden).map((product) => product.path));
+const assertGone = ($, path) => {
+  assert.equal($('[data-ds-id="product-gone"]').length, 1, `${path}: a hidden product says it is not on sale`);
+  assert.equal($('meta[name="robots"]').attr('content'), 'noindex, nofollow', `${path}: a hidden product leaves search`);
+  assert.equal($('[data-ds-id="purchase-prices"]').length, 0, `${path}: a hidden product offers nothing to buy`);
+};
 const htmlFor = (url) => readFileSync(resolve(dist, manifestMap.get(pathOf(url))), 'utf8');
 const flattenJsonLd = (value) => Array.isArray(value) ? value.flatMap(flattenJsonLd) : value?.['@graph'] ? flattenJsonLd(value['@graph']) : [value];
 
@@ -69,6 +76,7 @@ test('Every product carries the retail and partner prices of the NSP price list,
       assert.ok(expected.partner > 0 && expected.partner < expected.retail, `${product.path}: partner price must be below retail`);
     } else assert.equal(expected.retail, original.price, `${product.path}: unlisted product must keep the snapshot price`);
     const $ = cheerio.load(htmlFor(product.path));
+    if (hiddenPaths.has(product.path)) { assertGone($, product.path); continue; }
     // Before JavaScript everyone sees the retail price; a listed product also offers the discount card with its card price.
     assert.ok($('[data-ds-id="purchase-prices"] .price-row.current').text().includes(String(expected.retail).replace(/\B(?=(\d{3})+$)/g, '\u00a0')), `${product.path}: retail price before JavaScript`);
     assert.equal($('.card-offer').length, expected.partner === null ? 0 : 1, `${product.path}: discount-card offer before JavaScript`);
@@ -81,6 +89,7 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     const path = pathOf(original.url);
     const product = productMap.get(path);
     const $ = cheerio.load(htmlFor(path));
+    if (hiddenPaths.has(path)) { assertGone($, path); assert.equal($('script[type="application/ld+json"]').length, 0, `${path}: no Product data for a product not on sale`); continue; }
     const jsonLd = [];
     $('script[type="application/ld+json"]').each((_, element) => {
       assert.doesNotThrow(() => jsonLd.push(...flattenJsonLd(JSON.parse($(element).text()))), `${path}: invalid JSON-LD`);
@@ -92,7 +101,7 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     assert.ok(offer && offer['@type'] === 'Offer', `${path}: price must be nested under Product.offers`);
     assert.equal(Number(offer.price), pricesFor(original, priceList).retail, `${path}: structured price must be the retail price`);
     assert.equal(offer.priceCurrency, 'RUB', `${path}: currency differs`);
-    assert.equal(offer.availability?.split('/').at(-1), original.availability, `${path}: stock status differs`);
+    assert.equal(offer.availability?.split('/').at(-1), product.availability, `${path}: stock status differs`);
     assert.ok(String(structured.image).includes(productCover(product)), `${path}: structured image differs`);
     if (structured.aggregateRating) {
       assert.equal(structured.aggregateRating['@type'], 'AggregateRating', `${path}: invalid aggregate rating type`);
@@ -123,7 +132,7 @@ test('Rendered category pagination exposes every member once, with no unavailabl
       $('[data-ds-id="product-card"] h3 a[href]').each((_, element) => rendered.push(element.attribs.href));
       $('.pagination a[href]').each((_, element) => assert.ok(manifestMap.has(pathOf(element.attribs.href)), `${route.url}: pagination URL lacks rendered document: ${element.attribs.href}`));
     }
-    const expected = category.path === '/catalog/' ? content.products.map((product) => product.path) : category.products;
+    const expected = (category.path === '/catalog/' ? content.products.map((product) => product.path) : category.products).filter((path) => !hiddenPaths.has(path));
     assert.deepEqual([...new Set(rendered)].sort(), [...new Set(expected)].sort(), `${category.path}: SSR pagination misses/adds products`);
     assert.equal(rendered.length, new Set(rendered).size, `${category.path}: SSR product repeated across pages`);
   }
@@ -159,7 +168,7 @@ test('Sitemap includes every source pathname, including all products and article
   const locations = $('loc').map((_, element) => $(element).text()).get();
   assert.equal(new Set(locations).size, locations.length, 'Sitemap has duplicate URLs');
   const paths = new Set(locations.map((url) => new URL(url).pathname));
-  for (const page of source.pages) assert.ok(paths.has(new URL(page.url).pathname), `Sitemap misses ${page.url}`);
+  for (const page of source.pages) assert.equal(paths.has(new URL(page.url).pathname), !hiddenPaths.has(new URL(page.url).pathname), `Sitemap misses ${page.url}, or lists a product not on sale`);
   for (const url of locations) assert.ok(url.startsWith(`${base}/`), `Sitemap uses wrong origin: ${url}`);
 });
 

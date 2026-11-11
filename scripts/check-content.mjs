@@ -98,15 +98,22 @@ export function auditContent(data = readContent(), source = readSource()) {
   check('All 166 products preserve prices, article, availability, properties and sections', (expect) => {
     const snapshotProducts = [...productMap.values()].filter((item) => !item.added).length;
     expect(snapshotProducts === 166, `Expected 166 unique snapshot products; got ${snapshotProducts}`);
-    const scalars = ['name', 'article', 'price', 'price_base', 'discount', 'currency', 'availability', 'availability_text', 'brand', 'category', 'rating', 'review_count'];
+    const scalars = ['name', 'article', 'price', 'price_base', 'discount', 'currency', 'brand', 'category', 'rating', 'review_count'];
+    // Stock is the snapshot's except what the NSP office confirmed later (src/product-stock.json); Saturday closes at 17:30.
+    const stock = readJson(resolve(root, 'src/product-stock.json'));
+    const stockOf = (original) => stock.inStock.includes(original.article) ? ['InStock', 'В наличии'] : stock.discontinued.includes(original.article) ? ['OutOfStock', 'Нет в наличии'] : [original.availability, original.availability_text];
+    const withHours = (sections) => Object.fromEntries(Object.entries(sections).map(([name, text]) => [name, typeof text === 'string' ? text.replace(/Сб: с 12:00 до 18:00/g, 'Сб: с 12:00 до 17:30') : text]));
     for (const original of source.products) {
       const path = pathOf(original.url);
       const product = productMap.get(path);
       expect(Boolean(product), `Missing product: ${path}`);
       if (!product) continue;
       for (const field of scalars) expect(product[field] === original[field], `${path}: ${field} differs from snapshot`);
+      const [availability, availabilityText] = stockOf(original);
+      expect(product.availability === availability && product.availability_text === availabilityText, `${path}: stock differs from the snapshot and src/product-stock.json`);
+      expect(Boolean(product.hidden) === stock.discontinued.includes(original.article), `${path}: hidden only when the line is no longer supplied`);
       expect(equal(product.properties, original.properties), `${path}: product properties lost or changed`);
-      expect(equal(product.sections, original.sections), `${path}: product sections lost or changed`);
+      expect(equal(product.sections, withHours(original.sections)), `${path}: product sections lost or changed`);
       expect(equal(set(product.related ?? []), set(original.related.map(pathOf).filter((url) => url !== path))), `${path}: related product links lost`);
       expect(Number.isFinite(product.price) && product.price > 0, `${path}: invalid price`);
       expect(product.currency === 'RUB', `${path}: invalid currency`);
@@ -117,7 +124,7 @@ export function auditContent(data = readContent(), source = readSource()) {
         if (name === '(без заголовка)' && cleanText(text) === 'Нужна консультация? Сомневаетесь, подойдет ли вам этот товар? Позвоните мне') continue;
         if (['Сопутствующие товары', 'Рекомендуемые товары'].includes(name)) continue;
         const html = product.sectionsHtml?.[name];
-        const plainSource = text.replace(/!?\[([^\]]*)\]\([^)]*\)/gu, '$1');
+        const plainSource = withHours({ text }).text.replace(/!?\[([^\]]*)\]\([^)]*\)/gu, '$1');
         expect(typeof html === 'string' && retention(plainSource, htmlText(html)) >= 0.98, `${path}: rendered section text lost: ${name}`);
       }
     }

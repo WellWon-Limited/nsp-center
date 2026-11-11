@@ -16,6 +16,7 @@ test('Cleaned covers preserve imported originals and are used on product pages',
   assert.equal(createHash('sha256').update(read('public'+target.image)).digest('hex'),target.sourceSha256);
   const p=products.find(p=>p.id===target.id);
   assert.equal(p.image,target.image,'Import remains unchanged');
+  if(p.hidden)continue; // not on sale: its page shows no photo (src/product-stock.json)
   const html=read('dist'+p.path+'index.html').toString();
   assert.ok(html.includes('src="'+(preferred[p.id]?.image??replacement)+'"'),p.path);
  }

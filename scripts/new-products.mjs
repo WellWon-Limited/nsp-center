@@ -13,16 +13,18 @@ export function readNewProducts(priceList, categories) {
     if (`${entry.id}.json` !== name) throw new Error(`New product ${name}: id must match the file name`);
     for (const key of ['name', 'article', 'category', 'image']) if (!entry[key]) throw new Error(`New product ${name}: "${key}" is required`);
     if (!priceList.items[entry.article]) throw new Error(`New product ${name}: article ${entry.article} is not in the price list`);
-    const category = categories.find(c => c.name === entry.category);
-    if (!category) throw new Error(`New product ${name}: unknown category ${entry.category}`);
+    // «Натуральная косметика/Уход за кожей лица и шеи»: a subcategory under its section, as the snapshot's products have it.
+    const names = entry.category.split('/');
+    const category = categories.find(c => c.name === names.at(-1));
+    if (!category || names.slice(0, -1).some(n => !categories.some(c => c.name === n))) throw new Error(`New product ${name}: unknown category ${entry.category}`);
     const path = `/product/${entry.id}/`;
     const prices = pricesFor(entry, priceList);
     products.push({
       url: path, path, id: entry.id, name: entry.name, article: entry.article,
       price: prices.retail, price_base: prices.retail, discount: '', currency: 'RUB',
       availability: 'InStock', availability_text: 'В наличии', brand: null,
-      category: category.name, categoryPath: category.path,
-      breadcrumbs: [{ name: 'Главная', url: '/' }, { name: category.name, url: category.path }, { name: entry.name, url: null }],
+      category: entry.category, categoryPath: category.path,
+      breadcrumbs: [{ name: 'Главная', url: '/' }, ...names.map(n => { const c = categories.find(x => x.name === n); return { name: c.name, url: c.path }; }), { name: entry.name, url: null }],
       rating: null, review_count: 0,
       properties: { ...entry.properties, pv: String(priceList.items[entry.article].pv).replace('.', ',') },
       documents: [], images: [entry.image], image: entry.image, microdata_outside_product: [], related: [],

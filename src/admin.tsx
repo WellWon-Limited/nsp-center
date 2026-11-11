@@ -4,7 +4,7 @@ import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { ProductPicker } from './personal';
 import type { Product } from './content-types';
 import { data, money, shortName, useStore } from './store';
-import { pricesUnder, readSite, type ProductContent, type ProductOverride, type SiteSettings } from './site';
+import { builtHidden, pricesUnder, readSite, type ProductContent, type ProductOverride, type SiteSettings } from './site';
 import { factOrder } from './catalog';
 import { productCover } from './product-media.mjs';
 import { Icon } from './ui';
@@ -207,11 +207,13 @@ function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
   const [picked, setPicked] = useState('');
   const [open, setOpen] = useState<string | null>(null);
   useEffect(() => { if (picked) setOpen(picked); }, [picked]);
-  const changed = data.products.filter(p => overview.products[p.id] && p.id !== picked);
+  // Changed: own prices or stock, or brought back to the site by hand (it stays open here after «Вернуть на сайт»).
+  const changed = data.products.filter(p => (overview.products[p.id] || overview.visibility?.[p.id] === false) && !p.hidden && p.id !== picked);
+  const hidden = data.products.filter(p => p.hidden && p.id !== picked);
   const product = data.products.find(p => p.id === picked);
   const row = (p: Product) => <li key={p.id}>
     <button type="button" className="admin-product-row" aria-expanded={open === p.id} onClick={() => setOpen(open === p.id ? null : p.id)}>
-      <span><strong>{shortName(p.name)}</strong><small>Арт. {p.article ?? '—'}{overview.products[p.id] ? ' · изменён' : ''}</small></span>
+      <span><strong>{shortName(p.name)}</strong><small>Арт. {p.article ?? '—'}{p.hidden ? ' · скрыт с сайта' : overview.products[p.id] ? ' · изменён' : overview.visibility?.[p.id] === false ? ' · возвращён на сайт' : ''}</small></span>
       <span className="admin-product-prices">{money(p.prices.retail)}{p.prices.partner !== null && <small>по карте {money(p.prices.partner)}</small>}<small className={p.availability === 'OutOfStock' ? 'out' : 'in'}>{p.availability === 'OutOfStock' ? 'Нет в наличии' : 'В наличии'}</small></span>
     </button>
     {open === p.id && <ProductTabs key={p.id} product={p} override={overview.products[p.id]} run={run} />}
@@ -219,10 +221,12 @@ function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
   return <section className="admin-card" data-ds-id="admin-products">
     <h2>Цены и наличие</h2>
     <p className="admin-lead">Выберите товар: впишите название или артикул, или откройте список стрелкой и пролистайте. Пустое поле цены — цена из прайса по текущему курсу. «Нет в наличии» включает кнопку «Сообщить о поступлении»; когда товар снова в наличии, ждущие покупатели получат уведомление.</p>
-    <div className="admin-picker"><ProductPicker exclude={[]} value={picked} onChange={setPicked} placeholder="Название или артикул" label="Товар" /></div>
+    <NewProduct run={run} onCreated={setPicked} />
+    <div className="admin-picker"><ProductPicker exclude={[]} value={picked} onChange={setPicked} placeholder="Название или артикул" label="Товар" withHidden /></div>
     {product && <ul className="admin-products">{row(product)}</ul>}
     <h3>{changed.length ? 'Изменённые товары' : product ? '' : 'Изменённых товаров пока нет'}</h3>
     <ul className="admin-products">{changed.map(row)}</ul>
+    {hidden.length > 0 && <><h3>Скрыты с сайта</h3><p className="admin-hint-muted">Покупатели не видят их в каталоге, поиске и чате; по старой ссылке страница товара говорит, что его нет в продаже. Откройте товар, чтобы вернуть его на сайт.</p><ul className="admin-products">{hidden.map(row)}</ul></>}
   </section>;
 }
 
@@ -232,9 +236,61 @@ const editTabs: [EditTab, string][] = [['price', 'Цены и наличие'], 
 function ProductTabs({ product: p, override, run }: { product: Product; override?: ProductOverride; run: Run }) {
   const [tab, setTab] = useState<EditTab>('price');
   return <div className="admin-editor">
+    <Visibility product={p} run={run} />
     <nav className="admin-subtabs" role="tablist">{editTabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</nav>
     {tab === 'price' ? <ProductEditor product={p} override={override} run={run} /> : <ContentEditor product={p} tab={tab} run={run} />}
   </div>;
+}
+
+/** «Новая карточка»: the essentials only — name, article, section, prices and stock. The card is created hidden and
+ *  opens in the usual editor below, where its description, composition, certificates and photo are filled in; then
+ *  «Показать на сайте» opens it to customers (scripts/site-admin.mjs /api/admin/new-product, src/custom-product.mjs). */
+function NewProduct({ run, onCreated }: { run: Run; onCreated: (id: string) => void }) {
+  const empty = { name: '', article: '', categoryPath: '', retailRub: '', partnerRub: '', availability: 'InStock' };
+  const [open, setOpen] = useState(false);
+  const [f, setF] = useState(empty);
+  const set = (k: keyof typeof f) => (v: string) => setF(x => ({ ...x, [k]: v }));
+  const sections = data.categories.filter(c => c.path !== '/catalog/').map(c => ({ path: c.path, label: c.parent && c.parent !== '/catalog/' ? `${data.categories.find(x => x.path === c.parent)?.name ?? ''} › ${c.name}` : c.name })).sort((a, b) => a.label.localeCompare(b.label, 'ru'));
+  const save = async (e: FormEvent) => {
+    e.preventDefault();
+    const before = new Set(data.products.map(p => p.id));
+    if (!await run('/api/admin/new-product', { product: f }, `Карточка создана: ${f.name.trim()}. Заполните описание и фото, затем покажите её на сайте`)) return;
+    const created = data.products.find(p => !before.has(p.id));
+    setF(empty); setOpen(false);
+    if (created) onCreated(created.id);
+  };
+  if (!open) return <button type="button" className="btn btn--primary admin-new-product-open" onClick={() => setOpen(true)}><Icon name="plus" size={18} />Новая карточка товара</button>;
+  return <form className="admin-editor admin-new-product" onSubmit={save} data-ds-id="admin-new-product">
+    <h3>Новая карточка товара</h3>
+    <div className="admin-editor-grid">
+      <label>Название<input className="field" value={f.name} onChange={e => set('name')(e.target.value)} placeholder="Например: Крем для рук (Hand Cream)" required /></label>
+      <label>Артикул<input className="field" value={f.article} onChange={e => set('article')(e.target.value)} placeholder="Необязательно" /></label>
+      <label>Раздел каталога<select className="field" value={f.categoryPath} onChange={e => set('categoryPath')(e.target.value)} required><option value="">Выберите раздел</option>{sections.map(c => <option key={c.path} value={c.path}>{c.label}</option>)}</select></label>
+      <label>Розничная цена, ₽<input className="field" inputMode="numeric" value={f.retailRub} onChange={e => set('retailRub')(e.target.value)} required /></label>
+      <label>Цена по карте, ₽<input className="field" inputMode="numeric" value={f.partnerRub} onChange={e => set('partnerRub')(e.target.value)} placeholder="Необязательно" /></label>
+    </div>
+    <div className="admin-choice" role="radiogroup" aria-label="Наличие">{([['InStock', 'В наличии'], ['OutOfStock', 'Нет в наличии']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={f.availability === v} className={f.availability === v ? 'active' : ''} onClick={() => set('availability')(v)}>{label}</button>)}</div>
+    <p className="admin-hint-muted">Карточка появится скрытой: покупатели её не увидят, пока вы не добавите описание и фото и не нажмёте «Показать на сайте». Цены в рублях не меняются при смене курса у.е.</p>
+    <div className="admin-editor-actions"><button className="btn btn--primary">Создать карточку</button><button type="button" className="btn btn--secondary" onClick={() => { setF(empty); setOpen(false); }}>Отмена</button></div>
+  </form>;
+}
+
+/** Shown to customers or hidden: a hidden product leaves the catalog, search, home, theme pages and the chat (src/site.ts);
+ *  its page stays at its address and says it is not on sale. The switch works at once, nothing else to save. */
+function Visibility({ product: p, run }: { product: Product; run: Run }) {
+  const hidden = Boolean(p.hidden);
+  return <div className={`admin-visibility${hidden ? ' is-hidden' : ''}`}>
+    <p>{hidden ? <><strong>Скрыт с сайта.</strong> Покупатели не видят товар в каталоге, поиске и чате.{builtHidden(p) ? ' Эта линейка больше не поставляется.' : p.custom ? ' Новая карточка: заполните описание и фото во вкладках ниже, затем покажите её.' : ''}</> : <><strong>Виден покупателям.</strong> Скройте, если товар больше не продаётся, — вернуть можно в любой момент.</>}</p>
+    <button type="button" className={`btn ${hidden ? 'btn--primary' : 'btn--secondary'}`} onClick={() => void run('/api/admin/visibility', { productId: p.id, hidden: !hidden }, hidden ? `${p.custom ? 'Показали' : 'Вернули'} на сайте: ${shortName(p.name)}` : `Скрыли с сайта: ${shortName(p.name)}`)}>{hidden ? p.custom ? 'Показать на сайте' : 'Вернуть на сайт' : 'Скрыть с сайта'}</button>
+    {p.custom && <DeleteCard product={p} run={run} />}
+  </div>;
+}
+
+/** Only a card created here can be deleted (built cards are hidden instead); asks once more before deleting. */
+function DeleteCard({ product: p, run }: { product: Product; run: Run }) {
+  const [sure, setSure] = useState(false);
+  if (!sure) return <button type="button" className="btn btn--secondary" onClick={() => setSure(true)}>Удалить карточку</button>;
+  return <span className="admin-confirm admin-delete-confirm"><span>Удалить «{shortName(p.name)}» со всем описанием и фото?</span><button type="button" className="btn btn--primary" onClick={() => void run('/api/admin/delete-product', { productId: p.id }, `Карточка удалена: ${shortName(p.name)}`)}>Да, удалить</button><button type="button" className="btn btn--secondary" onClick={() => setSure(false)}>Нет</button></span>;
 }
 
 type Base = { name: string; about: string[]; highlights: string[]; description: string; properties: Record<string, string>; documents: { name: string; url: string }[] };

@@ -3,6 +3,7 @@ import { restoreWaitlist, reconcileWaitlist, type WaitEntry } from './waitlist';
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { addNotice } from './notices.mjs';
 import { applySite, readSite, withoutCardFields, type CardPrices, type SiteSettings } from './site';
+import { mergeCustom } from './custom-product.mjs';
 import content from './generated/summary.json';
 import type { Content, Product } from './content-types';
 import { withProductImages } from './product-images';
@@ -99,7 +100,8 @@ export function StoreProvider({children}:{children:ReactNode}) {
   // sign-out, never cached in this browser (owner, 2026-11-10: card prices are not public).
   const [cardPrices,setCardPricesState]=useState<CardPrices|null>(null);
   const current=useRef<{site:SiteSettings|null;card:CardPrices|null}>({site:null,card:null});
-  const apply=()=>applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);
+  // Cards created in site management join the catalog first, then every product gets the settings.
+  const apply=()=>{mergeCustom(data.products,data.categories,current.current.site?.extraProducts??[]);applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);};
   const setSite=(next:SiteSettings|null)=>{current.current.site=next;apply();setSiteState(next);try{if(next)localStorage.setItem(SITE_CACHE,JSON.stringify(withoutCardFields(next)));else localStorage.removeItem(SITE_CACHE);}catch{/* ignore */}};
   const setCardPrices=(next:CardPrices|null)=>{current.current.card=next;apply();setCardPricesState(next);};
   useLayoutEffect(()=>{let cached:SiteSettings|null=null;try{cached=readSite(JSON.parse(localStorage.getItem(SITE_CACHE)||'null'));}catch{/* none */}if(cached)setSite(cached);

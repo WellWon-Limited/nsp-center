@@ -11,7 +11,7 @@ English.
 
 ## Goal and current scope
 
-A working local site and dev stand exist: 332 prerendered documents covering
+A working local site and dev stand exist: 334 prerendered documents covering
 all 227 nsp-center.ru snapshot URLs plus new products and 90 theme pages,
 customer accounts and the staff admin on Postgres (the dev stand has no
 database yet), the design system, an installable PWA and the adapted app

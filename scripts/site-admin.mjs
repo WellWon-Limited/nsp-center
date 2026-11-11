@@ -2,6 +2,7 @@ import { ORDER_SCHEMA, orderAdminRoute } from './order-admin.mjs';
 import { randomBytes } from 'node:crypto';
 import { cardPricesFor, cardUnitsOf, publicSiteSettings } from './card-prices.mjs';
 import { emailError } from '../src/contact-fields.mjs';
+import { customProduct, freeId, validateNewProduct } from '../src/custom-product.mjs';
 import { randomInt } from 'node:crypto';
 /** 16 characters without look-alikes (no 0/O, 1/l/I): a staff member's first password, shown once. */
 export const oneTimePassword = () => Array.from({ length: 16 }, () => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(56)]).join('');
@@ -25,6 +26,16 @@ create table if not exists product_overrides (
   retail_rub integer,
   partner_rub integer,
   availability text,
+  updated_at timestamptz not null default now()
+);
+create table if not exists custom_products (
+  product_id text primary key,
+  data jsonb not null,
+  created_at timestamptz not null default now()
+);
+create table if not exists product_visibility (
+  product_id text primary key,
+  hidden boolean not null,
   updated_at timestamptz not null default now()
 );
 create table if not exists hidden_notes (
@@ -141,15 +152,25 @@ export async function cbrUsd() {
   return cbrCache.value;
 }
 
+/** Cards created in site management, oldest first. */
+export const customRows = async pool => (await pool.query('select product_id, data from custom_products order by created_at')).rows;
+/** One created card as a product (for the server's page shell and sitemap), or null. */
+export async function findCustomProduct(pool, id, categories) {
+  const { rows } = await pool.query('select product_id, data from custom_products where product_id = $1', [id]);
+  return rows[0] ? customProduct(rows[0].product_id, rows[0].data, categories) : null;
+}
+
 /** Public settings every page applies: the rate, product overrides and hidden expert comments. */
-export async function siteSettings(pool) {
-  const [{ rows: rate }, { rows: products }, { rows: notes }, { rows: cards }, { rows: ratings }, { rows: stars }] = await Promise.all([
+export async function siteSettings(pool, categories = []) {
+  const [{ rows: rate }, { rows: products }, { rows: notes }, { rows: cards }, { rows: ratings }, { rows: stars }, { rows: visibility }, custom] = await Promise.all([
     pool.query("select value, updated_at from site_settings where key = 'rate'"),
     pool.query('select * from product_overrides'),
     pool.query('select product_id, note_key from hidden_notes'),
     pool.query("select product_id, data->>'name' as name, data->>'image' as image from product_content"),
     pool.query("select product_id, sum(rating)::int as sum, count(*)::int as count from reviews where status = 'published' group by product_id"),
     pool.query('select product_id, note_key, rating from note_stars'),
+    pool.query('select product_id, hidden from product_visibility'),
+    customRows(pool),
   ]);
   const hiddenNotes = {};
   for (const n of notes) (hiddenNotes[n.product_id] ??= []).push(n.note_key);
@@ -157,6 +178,10 @@ export async function siteSettings(pool) {
     rate: rate[0] ? { rubPerUnit: Number(rate[0].value.rubPerUnit), updatedAt: rate[0].updated_at } : null,
     products: Object.fromEntries(products.map(p => [p.product_id, { retailUnits: num(p.retail_units), partnerUnits: num(p.partner_units), retailRub: p.retail_rub, partnerRub: p.partner_rub, availability: p.availability }])),
     hiddenNotes,
+    // Shown or hidden from customers by an administrator; a product not listed here is as built (src/product-stock.json).
+    visibility: Object.fromEntries(visibility.map(v => [v.product_id, v.hidden])),
+    // Cards created in site management, without their card price (src/custom-product.mjs).
+    extraProducts: custom.map(r => customProduct(r.product_id, r.data, categories)),
     // Stars of published customer reviews, added to the old site's rating on every card and product page.
     ratings: Object.fromEntries(ratings.map(r => [r.product_id, { sum: r.sum, count: r.count }])),
     // Stars of expert comments that differ from the default five (set by the administrator on the product page).
@@ -173,13 +198,15 @@ export async function siteSettings(pool) {
 export async function siteRoute(ctx, req, res, path, url) {
   const { pool, send, readJson, sessionUser, staffUser, productIds } = ctx;
   const method = req.method;
-  const knownProduct = id => typeof id === 'string' && (!productIds || productIds.has(id));
+  const builtProduct = id => typeof id === 'string' && (!productIds || productIds.has(id));
+  // A product of the build, or a card created in site management.
+  const knownProduct = async id => builtProduct(id) || (typeof id === 'string' && (await pool.query('select 1 from custom_products where product_id = $1', [id])).rowCount > 0);
   const log = (user, action, detail) => pool.query('insert into admin_log (user_id, action, detail) values ($1, $2, $3)', [user.id, action, JSON.stringify(detail)]);
 
   // Card prices are not public: /api/site gives them (the administrator's card price fields) to administrators only,
   // and /api/card-prices gives the card prices to a signed-in account with a discount card number (scripts/card-prices.mjs).
   if (path === '/api/site' && method === 'GET') {
-    const [settings, staff] = await Promise.all([siteSettings(pool), staffUser(req)]);
+    const [settings, staff] = await Promise.all([siteSettings(pool, ctx.categories), staffUser(req)]);
     send(res, 200, staff ? settings : publicSiteSettings(settings), { 'Cache-Control': 'no-store' });
     return true;
   }
@@ -190,16 +217,18 @@ export async function siteRoute(ctx, req, res, path, url) {
     if (!user) { send(res, 401, { error: 'Войдите в аккаунт, чтобы видеть цены по дисконтной карте.' }, headers); return true; }
     const admin = Boolean(staff);
     if (!admin && !String(user.partner_id ?? '').trim()) { send(res, 403, { error: 'Укажите номер дисконтной карты в профиле.' }, headers); return true; }
-    const products = ctx.cardProducts ?? [];
-    send(res, 200, { prices: cardPricesFor(products, await siteSettings(pool), ctx.buildRate), ...(admin ? { units: cardUnitsOf(products) } : {}) }, headers);
+    const products = [...(ctx.cardProducts ?? []), ...(await customRows(pool)).map(r => customProduct(r.product_id, r.data, ctx.categories ?? [], true))];
+    send(res, 200, { prices: cardPricesFor(products, await siteSettings(pool, ctx.categories), ctx.buildRate), ...(admin ? { units: cardUnitsOf(products) } : {}) }, headers);
     return true;
   }
 
   if (path === '/api/product-content' && method === 'GET') {
     const id = url.searchParams.get('id');
-    if (!knownProduct(id)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!(await knownProduct(id))) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
     const { rows } = await pool.query('select data from product_content where product_id = $1', [id]);
-    send(res, 200, { content: rows[0]?.data ?? null, base: ctx.productBase?.(id) ?? null });
+    // A created card starts empty: its name is the base, everything else is filled in the editor.
+    const created = ctx.productBase?.(id) ? null : (await pool.query('select data from custom_products where product_id = $1', [id])).rows[0]?.data;
+    send(res, 200, { content: rows[0]?.data ?? null, base: ctx.productBase?.(id) ?? (created ? productBase({ name: created.name }) : null) });
     return true;
   }
   if (path.startsWith('/api/files/') && method === 'GET') {
@@ -212,7 +241,7 @@ export async function siteRoute(ctx, req, res, path, url) {
   }
   if (path === '/api/reviews' && method === 'GET') {
     const product = url.searchParams.get('product');
-    if (!knownProduct(product)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!(await knownProduct(product))) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
     const { rows } = await pool.query("select r.id, r.rating, r.text, r.created_at, u.first_name, u.last_name from reviews r join users u on u.id = r.user_id where r.product_id = $1 and r.status = 'published' order by r.created_at desc limit 200", [product]);
     send(res, 200, { reviews: rows.map(r => ({ id: Number(r.id), rating: r.rating, text: r.text, date: r.created_at, author: authorName(r) })) });
     return true;
@@ -223,7 +252,7 @@ export async function siteRoute(ctx, req, res, path, url) {
     const body = await readJson(req);
     const text = typeof body?.text === 'string' ? body.text.trim() : '';
     const rating = Number(body?.rating);
-    if (!knownProduct(body?.productId)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!(await knownProduct(body?.productId))) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
     if (!Number.isInteger(rating) || rating < 1 || rating > 5) { send(res, 400, { error: 'Поставьте оценку от 1 до 5.' }); return true; }
     if (text.length < 2 || text.length > 2000) { send(res, 400, { error: 'Напишите отзыв: от 2 до 2000 знаков.' }); return true; }
     const { rows: [{ count }] } = await pool.query("select count(*)::int as count from reviews where user_id = $1 and created_at > now() - interval '1 day'", [user.id]);
@@ -257,7 +286,7 @@ export async function siteRoute(ctx, req, res, path, url) {
   }
   if (path === '/api/admin/overview' && method === 'GET') {
     const [settings, { rows: history }, { rows: reviews }, { rows: users }, cbr] = await Promise.all([
-      siteSettings(pool),
+      siteSettings(pool, ctx.categories),
       pool.query("select l.detail, l.at, u.email from admin_log l left join users u on u.id = l.user_id where l.action = 'rate' order by l.at desc limit 30"),
       pool.query('select r.*, u.email, u.first_name, u.last_name from reviews r join users u on u.id = r.user_id order by (r.status = \'pending\') desc, r.created_at desc limit 500'),
       pool.query("select email, first_name, last_name, role, created_at, (select max(at) from admin_log l where l.user_id = users.id and l.action = 'login') as last_login from users where role = 'admin' order by created_at"),
@@ -276,7 +305,7 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (path === '/api/admin/upload' && method === 'POST') {
     const product = url.searchParams.get('product'), kind = url.searchParams.get('kind');
     const mime = String(req.headers['content-type'] || '').split(';')[0].trim();
-    if (!knownProduct(product) || !['image', 'document'].includes(kind)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!(await knownProduct(product)) || !['image', 'document'].includes(kind)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
     if (!UPLOAD_TYPES.has(mime)) { send(res, 415, { error: 'Загрузите картинку: JPG, PNG или WEBP.' }); return true; }
     const chunks = []; let size = 0;
     for await (const chunk of req) { size += chunk.length; if (size > MAX_UPLOAD) { send(res, 413, { error: 'Файл больше 8 МБ.' }); return true; } chunks.push(chunk); }
@@ -291,7 +320,7 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (method !== 'PUT') { send(res, 404, { error: 'Нет такого адреса.' }); return true; }
   const body = await readJson(req);
   if (path === '/api/admin/content') {
-    if (!knownProduct(body?.productId)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!(await knownProduct(body?.productId))) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
     if (body.reset === true) await pool.query('delete from product_content where product_id = $1', [body.productId]);
     else {
       const checked = validateContent(body.content);
@@ -299,7 +328,7 @@ export async function siteRoute(ctx, req, res, path, url) {
       await pool.query('insert into product_content (product_id, data, updated_at) values ($1, $2, now()) on conflict (product_id) do update set data = excluded.data, updated_at = now()', [body.productId, JSON.stringify(checked.value)]);
     }
     await log(user, body.reset === true ? 'content-reset' : 'content', { productId: body.productId });
-    send(res, 200, await siteSettings(pool));
+    send(res, 200, await siteSettings(pool, ctx.categories));
     return true;
   }
 
@@ -309,15 +338,15 @@ export async function siteRoute(ctx, req, res, path, url) {
     const { rows: before } = await pool.query("select value from site_settings where key = 'rate'");
     await pool.query("insert into site_settings (key, value, updated_at) values ('rate', $1, now()) on conflict (key) do update set value = excluded.value, updated_at = now()", [JSON.stringify({ rubPerUnit: rate.value })]);
     await log(user, 'rate', { rubPerUnit: rate.value, from: before[0] ? Number(before[0].value.rubPerUnit) : (Number(body?.previous) || null) });
-    send(res, 200, await siteSettings(pool));
+    send(res, 200, await siteSettings(pool, ctx.categories));
     return true;
   }
   if (path === '/api/admin/product') {
-    if (!knownProduct(body?.productId)) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    if (!(await knownProduct(body?.productId))) { send(res, 400, { error: 'Нет такого товара.' }); return true; }
     if (body.reset === true) {
       await pool.query('delete from product_overrides where product_id = $1', [body.productId]);
       await log(user, 'product-reset', { productId: body.productId });
-      send(res, 200, await siteSettings(pool));
+      send(res, 200, await siteSettings(pool, ctx.categories));
       return true;
     }
     const fields = { retailUnits: amount(body.retailUnits, 100000, false), partnerUnits: amount(body.partnerUnits, 100000, false), retailRub: amount(body.retailRub, 10000000, true), partnerRub: amount(body.partnerRub, 10000000, true) };
@@ -329,24 +358,53 @@ export async function siteRoute(ctx, req, res, path, url) {
       on conflict (product_id) do update set retail_units = excluded.retail_units, partner_units = excluded.partner_units, retail_rub = excluded.retail_rub, partner_rub = excluded.partner_rub, availability = excluded.availability, updated_at = now()`,
       [body.productId, v.retailUnits, v.partnerUnits, v.retailRub, v.partnerRub, availability]);
     await log(user, 'product', { productId: body.productId, ...v, availability });
-    send(res, 200, await siteSettings(pool));
+    send(res, 200, await siteSettings(pool, ctx.categories));
+    return true;
+  }
+  if (path === '/api/admin/new-product') {
+    const checked = validateNewProduct(body?.product, ctx.categories ?? []);
+    if (checked.error) { send(res, 400, { error: checked.error }); return true; }
+    const taken = new Set([...(productIds ?? []), ...(await customRows(pool)).map(r => r.product_id)]);
+    if (checked.value.article && (ctx.cardProducts ?? []).some(p => p.article === checked.value.article)) { send(res, 400, { error: 'Товар с таким артикулом уже есть в каталоге — найдите его в списке выше.' }); return true; }
+    const id = freeId(checked.value.name, taken);
+    await pool.query('insert into custom_products (product_id, data) values ($1, $2)', [id, JSON.stringify(checked.value)]);
+    // A new card waits hidden until its description and photo are in; «Показать на сайте» opens it to customers.
+    await pool.query('insert into product_visibility (product_id, hidden) values ($1, true) on conflict (product_id) do update set hidden = true, updated_at = now()', [id]);
+    await log(user, 'product-create', { productId: id, ...checked.value });
+    send(res, 200, { id, ...(await siteSettings(pool, ctx.categories)) });
+    return true;
+  }
+  if (path === '/api/admin/delete-product') {
+    const { rowCount } = typeof body?.productId === 'string' ? await pool.query('delete from custom_products where product_id = $1', [body.productId]) : { rowCount: 0 };
+    if (!rowCount) { send(res, 400, { error: 'Удалить можно только карточку, созданную в управлении сайтом.' }); return true; }
+    for (const table of ['product_visibility', 'product_overrides', 'product_content', 'hidden_notes', 'note_stars', 'files', 'reviews']) await pool.query(`delete from ${table} where product_id = $1`, [body.productId]);
+    await log(user, 'product-delete', { productId: body.productId });
+    send(res, 200, await siteSettings(pool, ctx.categories));
+    return true;
+  }
+  if (path === '/api/admin/visibility') {
+    if (!(await knownProduct(body?.productId)) || typeof body?.hidden !== 'boolean') { send(res, 400, { error: 'Нет такого товара.' }); return true; }
+    await pool.query(`insert into product_visibility (product_id, hidden, updated_at) values ($1, $2, now())
+      on conflict (product_id) do update set hidden = excluded.hidden, updated_at = now()`, [body.productId, body.hidden]);
+    await log(user, body.hidden ? 'product-hide' : 'product-show', { productId: body.productId });
+    send(res, 200, await siteSettings(pool, ctx.categories));
     return true;
   }
   if (path === '/api/admin/note') {
-    if (!knownProduct(body?.productId) || typeof body?.key !== 'string' || !body.key || body.key.length > 400) { send(res, 400, { error: 'Нет такого комментария.' }); return true; }
+    if (!(await knownProduct(body?.productId)) || typeof body?.key !== 'string' || !body.key || body.key.length > 400) { send(res, 400, { error: 'Нет такого комментария.' }); return true; }
     if (body.hidden === true) await pool.query('insert into hidden_notes (product_id, note_key) values ($1, $2) on conflict do nothing', [body.productId, body.key]);
     else await pool.query('delete from hidden_notes where product_id = $1 and note_key = $2', [body.productId, body.key]);
     await log(user, body.hidden === true ? 'note-hide' : 'note-show', { productId: body.productId, key: body.key });
-    send(res, 200, await siteSettings(pool));
+    send(res, 200, await siteSettings(pool, ctx.categories));
     return true;
   }
   if (path === '/api/admin/note-stars') {
     const rating = Number(body?.rating);
-    if (!knownProduct(body?.productId) || typeof body?.key !== 'string' || !body.key || body.key.length > 400 || !Number.isInteger(rating) || rating < 1 || rating > 5) { send(res, 400, { error: 'Оценка — от 1 до 5 звёзд.' }); return true; }
+    if (!(await knownProduct(body?.productId)) || typeof body?.key !== 'string' || !body.key || body.key.length > 400 || !Number.isInteger(rating) || rating < 1 || rating > 5) { send(res, 400, { error: 'Оценка — от 1 до 5 звёзд.' }); return true; }
     if (rating === 5) await pool.query('delete from note_stars where product_id = $1 and note_key = $2', [body.productId, body.key]);
     else await pool.query('insert into note_stars (product_id, note_key, rating) values ($1, $2, $3) on conflict (product_id, note_key) do update set rating = excluded.rating', [body.productId, body.key, rating]);
     await log(user, 'note-stars', { productId: body.productId, key: body.key, rating });
-    send(res, 200, await siteSettings(pool));
+    send(res, 200, await siteSettings(pool, ctx.categories));
     return true;
   }
   if (path === '/api/admin/review') {

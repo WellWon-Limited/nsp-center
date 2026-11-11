@@ -7,11 +7,11 @@ import type { ExpertNote, Product } from './content-types';
 
 export type ProductOverride = { retailUnits: number | null; partnerUnits: number | null; retailRub: number | null; partnerRub: number | null; availability: string | null };
 export type CardOverride = { name?: string; image?: string };
-export type SiteSettings = { rate: { rubPerUnit: number; updatedAt: string } | null; products: Record<string, ProductOverride>; hiddenNotes: Record<string, string[]>; cards?: Record<string, CardOverride>; ratings?: Record<string, { sum: number; count: number }>; noteStars?: Record<string, Record<string, number>> };
+export type SiteSettings = { rate: { rubPerUnit: number; updatedAt: string } | null; products: Record<string, ProductOverride>; hiddenNotes: Record<string, string[]>; cards?: Record<string, CardOverride>; ratings?: Record<string, { sum: number; count: number }>; visibility?: Record<string, boolean>; extraProducts?: Product[]; noteStars?: Record<string, Record<string, number>> };
 /** The administrator's content of one product card (GET /api/product-content); set fields replace the built ones. */
 export type ProductContent = { name?: string; about?: string[]; highlights?: string[]; properties?: Record<string, string>; documents?: { name: string; url: string }[]; image?: string };
 
-type Original = { retail: number; partner: number | null; availability: string | null; availability_text: string | null; name?: string };
+type Original = { retail: number; partner: number | null; availability: string | null; availability_text: string | null; name?: string; hidden: boolean };
 const originals = new WeakMap<Product, Original>();
 const AVAILABILITY_TEXT: Record<string, string> = { InStock: 'В наличии', OutOfStock: 'Нет в наличии' };
 
@@ -36,7 +36,7 @@ export const withoutCardFields = (site: SiteSettings): SiteSettings => ({ ...sit
 export function applySite(products: Iterable<Product>, site: SiteSettings | null, buildRate: number, cardPrices: CardPrices | null = null) {
   for (const p of products) {
     let original = originals.get(p);
-    if (!original) { original = { retail: p.prices.retail, partner: p.prices.partner, availability: p.availability, availability_text: p.availability_text, name: p.name }; originals.set(p, original); }
+    if (!original) { original = { retail: p.prices.retail, partner: p.prices.partner, availability: p.availability, availability_text: p.availability_text, name: p.name, hidden: Boolean(p.hidden) }; originals.set(p, original); }
     // Stars come only from published customer reviews on this site: the mean of their stars, to one decimal, as
     // marketplaces show it (the old site's numbers had no reviews behind them). A new published review changes it.
     const ours = site?.ratings?.[p.id];
@@ -49,11 +49,18 @@ export function applySite(products: Iterable<Product>, site: SiteSettings | null
     p.prices.partner = cardPrices?.prices[p.id] ?? null;
     const units = cardPrices?.units?.[p.id];
     if (units !== undefined && p.prices.units) p.prices.units = { ...p.prices.units, partner: units };
-    const availability = site?.products[p.id]?.availability ?? original.availability;
+    // Hidden from customers (the administrator's choice, else the build's): nothing to buy, so it is out of stock too.
+    p.hidden = site?.visibility?.[p.id] ?? original.hidden;
+    const availability = p.hidden ? 'OutOfStock' : site?.products[p.id]?.availability ?? original.availability;
     p.availability = availability;
     p.availability_text = availability === original.availability ? original.availability_text : AVAILABILITY_TEXT[availability ?? ''] ?? original.availability_text;
   }
 }
+
+/** Shown to customers: in the catalog, search, home, theme pages, recommendations and the chat. */
+export const listed = (p: Product) => !p.hidden;
+/** Hidden as built (a line no longer supplied), before the administrator's choice. */
+export const builtHidden = (p: Product) => (originals.get(p) ?? { hidden: Boolean(p.hidden) }).hidden;
 
 /** Stock as built from the catalog data, before the administrator's change (for «Без изменений» in site management). */
 export const builtAvailability = (p: Product) => (originals.get(p) ?? p).availability;
@@ -109,5 +116,11 @@ export function readSite(v: unknown): SiteSettings | null {
   for (const [id, r] of Object.entries((x.ratings as Record<string, Record<string, unknown>>) || {})) if (r && Number(r.count) > 0) ratings[id] = { sum: Number(r.sum) || 0, count: Number(r.count) };
   const noteStarsMap: Record<string, Record<string, number>> = {};
   for (const [id, m] of Object.entries((x.noteStars as Record<string, Record<string, unknown>>) || {})) if (m && typeof m === 'object') noteStarsMap[id] = Object.fromEntries(Object.entries(m).filter(([, n]) => Number.isInteger(n) && Number(n) >= 1 && Number(n) <= 5).map(([k, n]) => [k, Number(n)]));
-  return { rate, products, hiddenNotes, cards, ratings, noteStars: noteStarsMap };
+  const visibility: Record<string, boolean> = {};
+  for (const [id, hidden] of Object.entries((x.visibility as Record<string, unknown>) || {})) if (typeof hidden === 'boolean') visibility[id] = hidden;
+  // Cards created in site management (src/custom-product.mjs): only well-formed ones, with their own address.
+  const extraProducts = (Array.isArray(x.extraProducts) ? x.extraProducts : []).filter((p): p is Product => Boolean(p) && typeof p === 'object'
+    && typeof p.id === 'string' && /^[a-z0-9-]+$/.test(p.id) && p.path === `/product/${p.id}/` && typeof p.name === 'string' && p.custom === true
+    && Boolean(p.prices) && typeof p.prices.retail === 'number' && typeof p.categoryPath === 'string' && Array.isArray(p.breadcrumbs));
+  return { rate, products, hiddenNotes, cards, ratings, noteStars: noteStarsMap, visibility, extraProducts };
 }

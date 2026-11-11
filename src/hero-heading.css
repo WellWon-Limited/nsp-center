@@ -17,3 +17,5 @@
 @media(prefers-reduced-motion:reduce){
  .hero-heading--enter .hero-title-word{animation:none}
 }
+/* On phones the loading screen covers the first page: the words wait under it and rise only as it fades (index.html). */
+html.nsp-splash:not(.nsp-splash-out) .hero-heading--enter .hero-title-word{animation-play-state:paused}

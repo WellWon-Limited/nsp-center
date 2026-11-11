@@ -510,6 +510,47 @@ html[data-cart-count]:not([data-cart-count="0"]) .site-header .cart-link .cart-c
 .product-meta h3,.product-meta h3 a{overflow-wrap:break-word;hyphens:auto}
 @media(max-width:639px),(pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:max(16px,1em)}}
 /* Not found: one quiet line in the middle of the page, as the empty «Акции» page (owner, 2026-11-11). */
-.site-main:has(>.not-found){display:flex;flex-direction:column}
-.not-found{flex:1;display:flex;align-items:center;justify-content:center;min-height:240px;padding:var(--space-24) 0;text-align:center}
 .not-found h1{font-family:var(--font-sans);font-size:18px;font-weight:var(--weight-400);line-height:1.6;letter-spacing:normal;color:var(--color-muted);margin:0}
+/* The plan before the saved data is read: its place is kept, nothing wrong is shown (no flash of an empty plan). */
+.plan-page--loading .personal-grid{visibility:hidden}
+/* Page to page (owner, 2026-11-11: no flashing between tabs): cross-document view transitions (Chrome 126+, Safari and
+   iOS 18.2+). The old page stays on screen until the new one is ready, then the content cross-fades quickly; the header
+   and the phone tab bar keep their place. Browsers without support, and reduced motion, switch as before. */
+@media (prefers-reduced-motion:no-preference){@view-transition{navigation:auto}}
+.site-header{view-transition-name:site-header}
+.bottom-nav{view-transition-name:bottom-nav}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.16s;animation-timing-function:ease-out}
+::view-transition-group(site-header),::view-transition-group(bottom-nav){animation:none}
+::view-transition-old(site-header),::view-transition-old(bottom-nav){display:none}
+::view-transition-new(site-header),::view-transition-new(bottom-nav){animation:none}
+
+/* Empty pages (not found, «Акций пока нет», «Покупок ещё не было», empty cart; owner, 2026-11-11): the first screen is
+   the page background with the line in the middle of what is left under the header (and the page title, if any); the
+   footer with its orange line starts below, on scrolling. Phone: the screen ends above the tab bar. */
+body:has(.empty-screen) .site-main{display:flex;flex-direction:column;min-height:calc(100svh - var(--site-header-height,70px));padding-bottom:0}
+body:has(.empty-screen) .site-main>:has(.empty-screen),body:has(.empty-screen) .site-main :has(>.empty-screen){flex:1 1 auto;display:flex;flex-direction:column}
+.site-main .empty-screen{flex:1 1 auto;display:flex;align-items:center;justify-content:center;text-align:center;min-height:200px;margin:0;padding:var(--space-24) 0}
+@media(max-width:639px){body:has(.empty-screen) .site-main{min-height:calc(100svh - var(--site-header-height,var(--phone-header-height,61px)) - var(--phone-nav-height,52px) - env(safe-area-inset-bottom))}}
+/* The line sits in the middle of the screen itself (between the header and the bottom edge or the tab bar), whatever
+   is above it: it is laid over the whole page area, the page title stays where it is. */
+body:has(.empty-screen) .site-main{position:relative}
+body:has(.empty-screen) .site-main :has(>.empty-screen),body:has(.empty-screen) .site-main>:has(.empty-screen){position:static}
+.site-main .empty-screen.empty-screen{position:absolute;inset:0;min-height:0;padding:0 var(--space-20);pointer-events:none}
+.site-main .empty-screen>*{pointer-events:auto}
+/* The back-swipe arrow at the left edge (src/swipe-back.mjs, iPhone home-screen app only). */
+.swipe-back-hint{position:fixed;left:6px;top:50%;z-index:calc(var(--layer-navigation) + 1);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--color-white);color:var(--color-ink);box-shadow:0 8px 20px -10px rgb(29 58 54 / .5);opacity:0;transform:translate(0,-50%);pointer-events:none;transition:opacity .12s}
+/* A tapped bottom-bar tab lights up at once, before the next page arrives (src/instant-tap.mjs). */
+@media(max-width:639px){
+ .bottom-nav a.is-going,.bottom-nav a.is-going>span{color:var(--color-white)}
+ .bottom-nav:has(a.is-going) a[aria-current=page]:not(.is-going),.bottom-nav:has(a.is-going) a[aria-current=page]:not(.is-going)>span{color:rgb(255 255 255 / .5)}
+}
+/* The whole product card opens the product: the name link stretches over the card; the heart and the buttons stay on top. */
+.product-card{position:relative}
+.product-card .card-title h3 a::after{content:"";position:absolute;inset:0;z-index:1}
+.product-card .favorite{z-index:2}
+.product-card .product-meta>.btn{position:relative;z-index:2}
+@media(hover:none){.product-card:hover .product-visual img{transform:none}}
+/* A product that is not on sale (hidden from customers): one line and the way back to the catalog, centred. */
+.product-gone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-16);text-align:center}
+/* No photo yet (a card just created in site management): a pale logo in the middle of the photo area. */
+img.product-image-missing{object-fit:contain;opacity:.25;padding:18%}

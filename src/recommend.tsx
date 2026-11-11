@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Product } from './content-types';
 import { data, today, useStore } from './store';
+import { listed } from './site';
 import { themes } from './themes';
 import { Heading, Icon, ProductCard } from './ui';
 
@@ -40,7 +41,7 @@ const areas: Record<Area, { title: string; products: [string, string][] }> = {
 };
 const basic: Area[] = ['nutrition', 'immunity'];
 
-const productById = (id: string) => data.products.find(p => p.id === id);
+const productById = (id: string) => data.products.find(p => p.id === id && listed(p));
 const themeFor = (id: string) => themes.find(t => t.mainProductId === id);
 
 type Result = { area: Area; why: string[]; items: { product: Product; reason: string }[] };
