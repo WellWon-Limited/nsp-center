@@ -1,4 +1,7 @@
 /* The approved article fills the page; all shared navigation and footer stay in App. */
+@media(max-width:639px){
+ .company-page--nature .company-concept--article .co-hero-image{inset:0;height:100%;object-position:90% center}
+}
 body:has(.company-page--nature) .ambient{display:none}
 body:has(.company-page--nature) .site-main{max-width:none;padding:0}
 .company-page--nature{padding:0;color:var(--color-ink)}

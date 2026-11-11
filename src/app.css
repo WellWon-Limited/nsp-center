@@ -513,16 +513,8 @@ html[data-cart-count]:not([data-cart-count="0"]) .site-header .cart-link .cart-c
 .not-found h1{font-family:var(--font-sans);font-size:18px;font-weight:var(--weight-400);line-height:1.6;letter-spacing:normal;color:var(--color-muted);margin:0}
 /* The plan before the saved data is read: its place is kept, nothing wrong is shown (no flash of an empty plan). */
 .plan-page--loading .personal-grid{visibility:hidden}
-/* Page to page (owner, 2026-11-11: no flashing between tabs): cross-document view transitions (Chrome 126+, Safari and
-   iOS 18.2+). The old page stays on screen until the new one is ready, then the content cross-fades quickly; the header
-   and the phone tab bar keep their place. Browsers without support, and reduced motion, switch as before. */
-@media (prefers-reduced-motion:no-preference){@view-transition{navigation:auto}}
-.site-header{view-transition-name:site-header}
-.bottom-nav{view-transition-name:bottom-nav}
-::view-transition-old(root),::view-transition-new(root){animation-duration:.16s;animation-timing-function:ease-out}
-::view-transition-group(site-header),::view-transition-group(bottom-nav){animation:none}
-::view-transition-old(site-header),::view-transition-old(bottom-nav){display:none}
-::view-transition-new(site-header),::view-transition-new(bottom-nav){animation:none}
+/* Page to page: no animated transition — the new page simply replaces the old one as soon as it is ready (an animated
+   cross-fade made tab switches slower and washed the header in light green on iPhones). */
 
 /* Empty pages (not found, «Акций пока нет», «Покупок ещё не было», empty cart; owner, 2026-11-11): the first screen is
    the page background with the line in the middle of what is left under the header (and the page title, if any); the
@@ -554,3 +546,67 @@ body:has(.empty-screen) .site-main :has(>.empty-screen),body:has(.empty-screen) 
 .product-gone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--space-16);text-align:center}
 /* No photo yet (a card just created in site management): a pale logo in the middle of the photo area. */
 img.product-image-missing{object-fit:contain;opacity:.25;padding:18%}
+/* Phone rhythm under the header, the same on every page: the heading starts 18px below the header; with a back link
+   above it, 4px under the link. */
+@media(max-width:639px){
+ body .site-main .page-heading{margin-top:0;margin-bottom:var(--space-18)}
+ body .site-main :is(.back-link,.catalog-mobile-back)+.page-heading{margin-top:var(--space-4)}
+ body .site-main .back-link{margin-top:0}
+ body .site-main .information-heading:not(.information-heading--photo){padding-top:var(--space-10)}
+ body .site-main .information-heading .information-home{min-height:32px;margin-bottom:var(--space-4)}
+ /* Under the three paths of the home page the next section follows at the usual section distance. */
+ body .site-main .home-first-screen>.home-paths{margin-bottom:0}
+}
+/* Pulling the page past its ends on a phone: above the top the header's white goes on, below the bottom the tab bar's
+   dark green (the strip under the footer, behind the tab bar, is painted dark too, so no second colour shows). */
+@media(max-width:639px){
+ .site-header::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--color-white);pointer-events:none}
+ body{background:linear-gradient(to top,#091b16 calc(var(--phone-nav-height,52px) + env(safe-area-inset-bottom)),var(--color-bg) 0)}
+}
+/* An empty screen on a phone («Акций пока нет», «Покупок ещё не было», empty cart, not found): at first only the light
+   background with the line in the middle of what is visible between the header and the tab bar; the footer (with its
+   orange stripe) starts below the screen's bottom edge even when the browser's bars fold away (lvh), so it shows only
+   when the page is scrolled. */
+@media(max-width:639px){
+ body:has(.empty-screen) .site-main{min-height:calc(100lvh - var(--site-header-height,var(--phone-header-height,61px)))}
+ body .site-main .empty-screen.empty-screen{bottom:auto;height:calc(100svh - var(--site-header-height,var(--phone-header-height,61px)) - var(--phone-nav-height,52px) - env(safe-area-inset-bottom))}
+}
+/* Body text on a phone reads at one line height everywhere (information pages, delivery and payment terms, FAQ answers):
+   1.65, paragraphs 14px apart — the same rhythm as the articles. */
+@media(max-width:639px){
+ body .site-main :is(.information-content,.delivery-page,.information-question) p{line-height:1.65}
+ body .site-main .information-content>.rich-content p,body .site-main .delivery-page p{margin-bottom:14px}
+}
+/* The home plan card before the app starts (index.html fills these from this browser's plan, see pages.tsx). */
+.hero-daily-name::after{content:var(--plan-name,"")}
+/* Inline, like the plain text that replaces it once the app starts: the card keeps its height to the pixel. */
+.hero-daily-today::after{content:var(--plan-progress,"")}
+.hero-daily-open{display:none}
+html.nsp-has-plan .hero-daily-open{display:inline}
+html.nsp-has-plan :is(.hero-daily-create,.hero-daily-guest){display:none}
+html.nsp-signed-in .hero-daily-signup{display:none}
+/* The plan card on wider screens stands in the hero's grid row next to the text block «Забота о себе… Продукты
+   природы…», centred on the same line as that block (where it stood before). Its text is final from the first paint
+   (index.html, pages.tsx), so its height and place do not change while the page loads. */
+@media(min-width:640px){
+ body .home-hero.home-hero--banner>.hero-daily{position:relative;inset:auto;transform:none;grid-row:1;grid-column:2;justify-self:end;align-self:center;margin:0}
+}
+@media(min-width:960px) and (pointer:fine){
+ body .home-hero.home-hero--forest>.hero-daily{margin-right:calc(5vw - var(--pad-x))}
+}
+/* «ВАШ ЕЖЕДНЕВНЫЙ РИТМ» sits a touch to the left of the card's centre line (the pulse icon made it look shifted right). */
+.hero-daily .hero-daily-eyebrow{transform:translateX(-6px)}
+/* Pulling the page past its ends on a computer (or a tablet): white above, like the header, and white below, like the
+   footer. The page's light-green gradient is a fixed layer (body::before) that would fill those areas too, so it is
+   clipped to the page itself; the area around the page is white. On a phone the page has its own background and the
+   layer is not needed (the areas past the ends are set above: white header colour on top, tab-bar green below). */
+@media(min-width:640px){
+ html:root{background:#fff}
+ /* A pixel off the very top and two off the very bottom: both edges are white (header, footer) anyway, and no hairline of
+    the light-green layer can show between the page and the white around it. */
+ body{clip-path:inset(1px 0 2px 0)}
+}
+@media(max-width:639px){body::before{display:none}}
+/* The header's shadow falls only downward: nothing of it shows above the header when the page is pulled past its top
+   (the white there runs straight into the white header, with no dividing line). */
+body .site-header{box-shadow:0 16px 28px -16px rgb(30 80 70 / .35)}

@@ -4,7 +4,7 @@ import { resolve, extname, sep } from 'node:path';
 import { adaptPrototype, ORIGINAL_PROTOTYPE } from './prototype-adapter.mjs';
 import { isIndexableHost, BLOCKED_ROBOTS, NOINDEX_HEADER } from './indexing.mjs';
 import { createAccounts } from './accounts.mjs';
-import { productBase, findCustomProduct, customRows } from './site-admin.mjs';
+import { productBase, findCustomProduct, customRows, findContentArticle, contentArticlePaths } from './site-admin.mjs';
 import { customProduct } from '../src/custom-product.mjs';
 import { createAi } from './ai-agent.mjs';
 // Local settings (DATABASE_URL of the local Postgres, scripts/local-db.mjs) live in .env, which git ignores; the dev stand
@@ -14,7 +14,8 @@ const dist=resolve('dist');
 const manifest=JSON.parse(await readFile(resolve(dist,'prerender-manifest.json'),'utf8'));
 const routes=new Map(manifest.routes.map(r=>[r.url,r.file]));
 const content=JSON.parse(await readFile('src/generated/content.json','utf8'));
-const accounts=await createAccounts({databaseUrl:process.env.DATABASE_URL,productIds:new Set(content.products.map(p=>p.id)),productBase:id=>productBase(content.products.find(p=>p.id===id)),cardProducts:content.products,buildRate:content.pricing.rubPerUnit,categories:content.categories});
+const accounts=await createAccounts({databaseUrl:process.env.DATABASE_URL,productIds:new Set(content.products.map(p=>p.id)),productBase:id=>productBase(content.products.find(p=>p.id===id)),cardProducts:content.products,buildRate:content.pricing.rubPerUnit,categories:content.categories,articlePaths:content.articles.map(a=>a.path)});
+const productPaths=new Map(content.products.map(p=>[p.id,p.path]));
 // The consultation agent (off until YANDEX_API_KEY and YANDEX_FOLDER_ID are set; scripts/ai-agent.mjs).
 const ai=createAi({content,pool:accounts.enabled?accounts.pool:null});
 // Local-only design reference, never copied into dist: the app prototype adapted for device frames,
@@ -34,10 +35,14 @@ if(content.redirects[path]){res.writeHead(308,{Location:content.redirects[path]}
  let status=200;try{const info=await stat(target);if(!info.isFile())throw new Error('not file');}catch{target=resolve(dist,'404/index.html');status=404;}
  // A card created in site management has no built page: the not-found page's shell carries it, and the browser renders it.
  const created=status===404&&accounts.enabled&&/^\/product\/[a-z0-9-]+\/$/.test(path)?await findCustomProduct(accounts.pool,path.split('/')[2],content.categories).catch(()=>null):null;
+ // An article added in site management: the same shell, with the article's text right in the page for search engines.
+ const added=status===404&&!created&&accounts.enabled&&/^\/blog\/[a-z0-9-]+\/$/.test(path)?await findContentArticle(accounts.pool,path.split('/')[2],productPaths).catch(()=>null):null;
+ if(added){const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const shell=(await readFile(target,'utf8')).replace(/<title>.*?<\/title>/s,`<title>${esc(added.title)} | NSP Center</title>`).replace(/<meta name="description"[^>]*>/,`<meta name="description" content="${esc((added.description||added.title).slice(0,200))}"/>`).replace(/<link rel="canonical"[^>]*>/,`<link rel="canonical" href="https://nsp-center.ru${added.path}"/>`).replace(/(<div id="root"[^>]*>)[\s\S]*?(<\/div><script type="application\/json" id="nsp-page-data">)/,`$1<main class="site-main"><article class="article-detail"><h1>${esc(added.title)}</h1>${added.html}</article></main>$2`).replace(/(<script type="application\/json" id="nsp-page-data">).*?(<\/script>)/s,`$1${JSON.stringify({article:added}).replace(/</g,'\\u003c')}$2`);
+  res.writeHead(200,{'Content-Type':mime['.html'],'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});res.end(req.method==='HEAD'?undefined:shell);return;}
  if(created){const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const shell=(await readFile(target,'utf8')).replace(/<title>.*?<\/title>/s,`<title>${esc(created.name)} | NSP Center</title>`).replace(/<meta name="description"[^>]*>/,`<meta name="description" content="${esc(created.name)} — купить в NSP Center."/>`).replace(/<link rel="canonical"[^>]*>/,`<link rel="canonical" href="https://nsp-center.ru${created.path}"/>`).replace(/(<script type="application\/json" id="nsp-page-data">).*?(<\/script>)/s,`$1${JSON.stringify({product:created}).replace(/</g,'\\u003c')}$2`);
   res.writeHead(200,{'Content-Type':mime['.html'],'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});res.end(req.method==='HEAD'?undefined:shell);return;}
  // The sitemap also lists the created cards that customers can see.
- if(path==='/sitemap.xml'&&accounts.enabled){const settings=await accounts.pool.query('select product_id, hidden from product_visibility').catch(()=>({rows:[]}));const hidden=new Set(settings.rows.filter(r=>r.hidden).map(r=>r.product_id));const extra=(await customRows(accounts.pool).catch(()=>[])).filter(r=>!hidden.has(r.product_id)).map(r=>`<url><loc>https://nsp-center.ru${customProduct(r.product_id,r.data,content.categories).path}</loc></url>`).join('');
+ if(path==='/sitemap.xml'&&accounts.enabled){const settings=await accounts.pool.query('select product_id, hidden from product_visibility').catch(()=>({rows:[]}));const hidden=new Set(settings.rows.filter(r=>r.hidden).map(r=>r.product_id));const extra=(await customRows(accounts.pool).catch(()=>[])).filter(r=>!hidden.has(r.product_id)).map(r=>`<url><loc>https://nsp-center.ru${customProduct(r.product_id,r.data,content.categories).path}</loc></url>`).join('')+(await contentArticlePaths(accounts.pool).catch(()=>[])).map(p=>`<url><loc>https://nsp-center.ru${p}</loc></url>`).join('');
   const xml=(await readFile(target,'utf8')).replace('</urlset>',extra+'</urlset>');res.writeHead(200,{'Content-Type':'application/xml; charset=utf-8','Cache-Control':'no-cache'});res.end(req.method==='HEAD'?undefined:xml);return;}
  // Fonts and hashed bundles never change under the same address: kept by the browser, so the header text does not
  // flash between pages while a font is re-checked.

@@ -6,6 +6,7 @@ import './app.css';
 import { installHomeScrollReturn } from './home-scroll-return.mjs';
 import { installSwipeBack } from './swipe-back.mjs';
 import { installInstantTap } from './instant-tap.mjs';
+import { installWarmup } from './page-warmup.mjs';
 import { finishSplash, registerServiceWorker } from './pwa';
 const root=document.getElementById('root')!;
 const url=location.pathname+location.search;
@@ -20,6 +21,7 @@ if(root.hasChildNodes()&&root.dataset.route===url)hydrateRoot(root,<App url={url
 const homeReturn=installHomeScrollReturn(window,document);
 installSwipeBack(window,document);
 installInstantTap(window,document);
+installWarmup(window,document);
 const navigation=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;
 const saved=homeReturn??(navigation?.type==='back_forward'||navigation?.type==='reload'?Number(sessionStorage.getItem(scrollKey())):0);
 // Coming back with «Назад»: the page stays hidden (class nsp-restoring, set in index.html before the first paint) until it

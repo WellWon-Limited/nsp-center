@@ -1,4 +1,4 @@
-import type { ExpertNote, Product } from './content-types';
+import type { Article, ExpertNote, Product } from './content-types';
 
 // What the administrator changed on the server (scripts/site-admin.mjs, GET /api/site), applied over the built site in
 // the visitor's browser: the warehouse rate turns each product's у.е. prices into new rubles; a product's own prices
@@ -7,7 +7,18 @@ import type { ExpertNote, Product } from './content-types';
 
 export type ProductOverride = { retailUnits: number | null; partnerUnits: number | null; retailRub: number | null; partnerRub: number | null; availability: string | null };
 export type CardOverride = { name?: string; image?: string };
-export type SiteSettings = { rate: { rubPerUnit: number; updatedAt: string } | null; products: Record<string, ProductOverride>; hiddenNotes: Record<string, string[]>; cards?: Record<string, CardOverride>; ratings?: Record<string, { sum: number; count: number }>; visibility?: Record<string, boolean>; extraProducts?: Product[]; noteStars?: Record<string, Record<string, number>> };
+export type SiteSettings = { rate: { rubPerUnit: number; updatedAt: string } | null; products: Record<string, ProductOverride>; hiddenNotes: Record<string, string[]>; cards?: Record<string, CardOverride>; ratings?: Record<string, { sum: number; count: number }>; visibility?: Record<string, boolean>; extraProducts?: Product[]; content?: SiteContent; hiddenContent?: Record<string, string[]>; noteStars?: Record<string, Record<string, number>> };
+/** «Контент» of site management (src/site-content.mjs): what an administrator added, newest first. */
+export type Promo = { id: number; title: string; text: string; from: string; to: string; image: string; link: string };
+export type Photo = { id: number; image: string; caption: string };
+export type AddedVideo = { id: number; url: string; title: string };
+export type Answer = { id: number; q: string; a: string };
+export type AddedArticle = Article & { contentId: number; custom: true; data: { title: string; lead: string; body: string; cover: string; date: string; products: string[] } };
+export type SiteContent = { promos: Promo[]; photos: Photo[]; videos: AddedVideo[]; faq: Answer[]; articles: AddedArticle[] };
+export const emptyContent: SiteContent = { promos: [], photos: [], videos: [], faq: [], articles: [] };
+/** Built content an administrator hid (old videos by id, articles by id, FAQ answers by faqKey). */
+export const isHiddenContent = (site: SiteSettings | null, kind: string, key: string) => Boolean(site?.hiddenContent?.[kind]?.includes(key));
+
 /** The administrator's content of one product card (GET /api/product-content); set fields replace the built ones. */
 export type ProductContent = { name?: string; about?: string[]; highlights?: string[]; properties?: Record<string, string>; documents?: { name: string; url: string }[]; image?: string };
 
@@ -122,5 +133,19 @@ export function readSite(v: unknown): SiteSettings | null {
   const extraProducts = (Array.isArray(x.extraProducts) ? x.extraProducts : []).filter((p): p is Product => Boolean(p) && typeof p === 'object'
     && typeof p.id === 'string' && /^[a-z0-9-]+$/.test(p.id) && p.path === `/product/${p.id}/` && typeof p.name === 'string' && p.custom === true
     && Boolean(p.prices) && typeof p.prices.retail === 'number' && typeof p.categoryPath === 'string' && Array.isArray(p.breadcrumbs));
-  return { rate, products, hiddenNotes, cards, ratings, noteStars: noteStarsMap, visibility, extraProducts };
+  // Content: only well-formed entries of each kind (local files, plain strings); anything else is dropped.
+  const c = (x.content && typeof x.content === 'object' ? x.content : {}) as Record<string, unknown>;
+  const list = (v: unknown) => Array.isArray(v) ? v.filter((i): i is Record<string, unknown> => Boolean(i) && typeof i === 'object' && Number.isInteger(i.id) || (Boolean(i) && typeof i === 'object' && Number.isInteger((i as Record<string, unknown>).contentId))) : [];
+  const str = (v: unknown) => typeof v === 'string' ? v : '';
+  const file = (v: unknown) => typeof v === 'string' && /^\/(api\/files|images|media)\//.test(v) ? v : '';
+  const content: SiteContent = {
+    promos: list(c.promos).map(i => ({ id: Number(i.id), title: str(i.title), text: str(i.text), from: str(i.from), to: str(i.to), image: file(i.image), link: str(i.link).startsWith('/') ? str(i.link) : '' })).filter(p => p.title),
+    photos: list(c.photos).map(i => ({ id: Number(i.id), image: file(i.image), caption: str(i.caption) })).filter(p => p.image),
+    videos: list(c.videos).map(i => ({ id: Number(i.id), url: str(i.url), title: str(i.title) })).filter(v => v.url),
+    faq: list(c.faq).map(i => ({ id: Number(i.id), q: str(i.q), a: str(i.a) })).filter(a => a.q && a.a),
+    articles: list(c.articles).filter(a => a.custom === true && typeof a.path === 'string' && /^\/blog\/[a-z0-9-]+\/$/.test(a.path as string) && typeof a.html === 'string') as unknown as AddedArticle[],
+  };
+  const hiddenContent: Record<string, string[]> = {};
+  for (const [kind, keys] of Object.entries((x.hiddenContent as Record<string, unknown>) || {})) if (Array.isArray(keys)) hiddenContent[kind] = keys.filter((k): k is string => typeof k === 'string');
+  return { rate, products, hiddenNotes, cards, ratings, noteStars: noteStarsMap, visibility, extraProducts, content, hiddenContent };
 }

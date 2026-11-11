@@ -7,3 +7,31 @@ body .site-main .article-detail.journal-article-page .av-document--ivory .av-her
 @media(max-width:639px){body .site-main .article-detail.journal-article-page .av-document--ivory .av-hero{min-height:calc(var(--phone-first-screen-height) - var(--space-48))}}
 
 @media(max-width:639px){body .site-main .journal-article-page .av-reading-layout{padding-top:var(--space-32)}}
+/* Text rhythm of an article: a heading sits close to its own text and farther from the text before it; paragraphs and
+   list items are spaced so the page reads as one even column, not as islands. */
+.journal-article-page .av-reading .av-article-copy>p{line-height:1.7;margin:0 0 16px}
+.journal-article-page .av-reading .av-article-copy>h2{margin:36px 0 14px}
+.journal-article-page .av-reading .av-article-copy>h2:first-child{margin-top:0}
+.journal-article-page .av-reading .av-article-copy>:is(ul,ol){margin:0 0 20px}
+.journal-article-page .av-reading .av-article-copy li{margin-bottom:8px;line-height:1.6}
+.journal-article-page .av-reading .av-article-copy .av-inline-image{margin-top:20px;margin-bottom:20px}
+.journal-article-page .av-reading .av-lead{margin-bottom:28px}
+.journal-article-page .av-reading .av-lead p{line-height:1.7}
+@media(max-width:639px){
+ .journal-article-page .av-reading .av-article-copy>p{line-height:1.65;margin-bottom:14px}
+ .journal-article-page .av-reading .av-article-copy>h2{font-size:23px;margin:28px 0 12px}
+ .journal-article-page .av-reading .av-article-copy>:is(ul,ol){margin-bottom:16px}
+ .journal-article-page .av-reading .av-article-copy li{margin-bottom:6px}
+ .journal-article-page .av-reading .av-article-copy .av-inline-image{margin-top:16px;margin-bottom:16px}
+ .journal-article-page .av-reading .av-lead{margin-bottom:22px}
+ .journal-article-page .av-reading .av-lead p{line-height:1.65}
+ .journal-article-page .av-hero{margin-bottom:0}
+ body .site-main .journal-article-page .av-reading-layout{padding-top:24px;padding-bottom:24px}
+ .journal-article-page .av-hero-copy .av-journal-link{margin-bottom:14px}
+ .journal-article-page .av-hero-copy .av-date{margin-top:12px}
+ .journal-article-page .av-reading .av-end{margin-top:28px}
+}
+/* An added article without a cover: the title runs across the page. */
+.journal-article .av-hero.av-hero--text{display:block;min-height:0}
+.journal-article .av-hero--text .av-hero-copy{max-width:900px;padding-bottom:32px}
+.journal-article .av-article-copy>p:first-child{font-size:1.08em}

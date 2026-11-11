@@ -1,0 +1,14 @@
+import type { Article } from './content-types';
+export const CONTENT_KINDS: string[];
+export const HIDEABLE_KINDS: string[];
+export const VIDEO_SOURCES: Record<string, string>;
+export type VideoInfo = { source: 'youtube' | 'rutube' | 'vk'; id: string; embed: string; href: string; poster: string };
+export function videoOf(url: string): VideoInfo | null;
+export function textToHtml(body: string): string;
+export function validateContent(kind: string, input: unknown, options?: { productIds?: Set<string> | null }): { value: Record<string, unknown>; error?: undefined } | { error: string; value?: undefined };
+export function humanDate(iso: string): string;
+export function articleOf(item: { id: number | string; slug: string; data: Record<string, unknown>; created_at?: unknown }, productPaths?: Map<string, string>): Article;
+export function articleSlug(title: string, taken: Set<string>): string;
+export function activePromos<T extends { from: string; to: string }>(promos: T[], today: string): T[];
+export function faqKey(question: string): string;
+export function mergeArticles(articles: Article[], added: Article[]): void;

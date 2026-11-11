@@ -9,12 +9,13 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(caches.keys()
-    .then(keys => Promise.all(keys.filter(key => key.startsWith('nsp-center-') && key !== CACHE).map(key => caches.delete(key))))
+    // The previous version's files stay until the next update: a page that opened from it a moment ago still finds them.
+    .then(keys => { const old = keys.filter(key => key.startsWith('nsp-center-') && key !== CACHE); return Promise.all(old.slice(0, -1).map(key => caches.delete(key))); })
     .then(() => self.clients.claim()));
 });
 
 const put = (request, response) => {
-  if (response.ok && response.type === 'basic') { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(request, copy)); }
+  if (response.ok && response.type === 'basic' && !response.redirected) { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(request, copy)); }
   return response;
 };
 
@@ -25,10 +26,15 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
   // Site management is never kept offline on a device (staff screens, research 2026-11-10).
   if (url.pathname === '/admin' || url.pathname.startsWith('/admin/')) return;
-  // Pages: network first, then the cached copy, then the cached home page (the app renders the route itself).
+  // Pages: a page seen before (or warmed up, below) opens at once from this version's copy while a fresh copy is fetched
+  // for next time; a new page comes from the network; offline, the cached home page renders any route itself.
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).then(response => put(request, response))
-      .catch(() => caches.match(request, { ignoreSearch: false }).then(hit => hit || caches.match('/'))));
+    event.respondWith(caches.open(CACHE).then(async cache => {
+      const hit = await cache.match(request);
+      const fresh = fetch(request).then(response => put(request, response)).catch(() => null);
+      if (hit) { event.waitUntil(fresh); return hit; }
+      return (await fresh) || (await caches.match(request)) || (await caches.match('/')) || Response.error();
+    }));
     return;
   }
   // Built files carry a content hash: cache first. Images and media: the cache, refreshed in the background.
@@ -52,5 +58,22 @@ self.addEventListener('notificationclick', event => {
     const open = list.find(client => client.url === target) || list[0];
     if (open) { open.focus(); return open.navigate ? open.navigate(target) : undefined; }
     return self.clients.openWindow(target);
+  }));
+});
+
+// Warming up: the page asks for the pages a visitor is about to open (the tabs, the link under a finger, sections and
+// products in view; src/page-warmup.mjs), so they open at once. Only same-site pages, never site management or the API.
+self.addEventListener('message', event => {
+  const urls = event.data?.type === 'warm' && Array.isArray(event.data.urls) ? event.data.urls : [];
+  if (!urls.length) return;
+  event.waitUntil(caches.open(CACHE).then(async cache => {
+    for (const url of urls.slice(0, 40)) {
+      if (typeof url !== 'string' || !url.startsWith('/') || url.startsWith('//') || /^\/(admin|api)(\/|$)/.test(url)) continue;
+      if (await cache.match(url)) continue;
+      try {
+        const response = await fetch(url, { credentials: 'same-origin' });
+        if (response.ok && response.type === 'basic' && !response.redirected && (response.headers.get('content-type') || '').includes('text/html')) await cache.put(url, response);
+      } catch { /* offline: nothing to warm */ }
+    }
   }));
 });

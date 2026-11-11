@@ -47,11 +47,17 @@ test('Cart and profile reserve the screen while saved account data is loading',(
  }
 });
 
-test('The home plan does not prerender a guest invitation before the account is known',()=>{
+test('The home plan card is final from the first paint: no loading line; this browser\'s plan and name come before the app starts',()=>{
  const doc=cheerio.load(readFileSync('dist/index.html','utf8'));
  const plan=doc('[data-ds-id="home-daily-plan"]');
- assert.equal(plan.attr('aria-busy'),'true');
- assert.equal(plan.find('.hero-daily-pending[role="status"]').length,1);
- assert.equal(plan.find('.hero-daily-signup,.hero-daily-action,h2').length,0,'unknown account must not be shown as a guest');
- assert.match(plan.text(),/Загружаем ваш план/);
+ assert.equal(plan.attr('aria-busy'),undefined);
+ assert.doesNotMatch(plan.text(),/Загружаем/);
+ assert.equal(plan.find('h2 .hero-daily-name').length,1);
+ assert.equal(plan.find('.hero-daily-create').length+plan.find('.hero-daily-open').length,2);
+ const head=doc('head').html();
+ assert.match(head,/classList\.add\("nsp-has-plan"\)/);
+ assert.match(head,/--plan-name/);
+ const css=readFileSync('src/app.css','utf8');
+ assert.match(css,/html\.nsp-has-plan :is\(\.hero-daily-create,\.hero-daily-guest\)\{display:none\}/);
+ assert.match(css,/html\.nsp-signed-in \.hero-daily-signup\{display:none\}/);
 });

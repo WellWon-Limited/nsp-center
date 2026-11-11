@@ -5,7 +5,7 @@
 
 export const TAP_MOVE = 10;
 export const TAP_MS = 600;
-export const INSTANT_TARGETS = '.bottom-nav a[href],.site-header a[href]:not(.mobile-menu a),.site-header button:not(.mobile-menu button)';
+export const INSTANT_TARGETS = '.bottom-nav a[href],.catalog-entry-link,.site-header a[href]:not(.mobile-menu a),.site-header button:not(.mobile-menu button)';
 
 /** A touch counts as a tap when the finger barely moved and was lifted quickly. */
 export function isTap(dx, dy, ms) {

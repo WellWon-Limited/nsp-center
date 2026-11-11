@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState
 import { addNotice } from './notices.mjs';
 import { applySite, readSite, withoutCardFields, type CardPrices, type SiteSettings } from './site';
 import { mergeCustom } from './custom-product.mjs';
+import { mergeArticles } from './site-content.mjs';
 import content from './generated/summary.json';
 import type { Content, Product } from './content-types';
 import { withProductImages } from './product-images';
@@ -101,13 +102,15 @@ export function StoreProvider({children}:{children:ReactNode}) {
   const [cardPrices,setCardPricesState]=useState<CardPrices|null>(null);
   const current=useRef<{site:SiteSettings|null;card:CardPrices|null}>({site:null,card:null});
   // Cards created in site management join the catalog first, then every product gets the settings.
-  const apply=()=>{mergeCustom(data.products,data.categories,current.current.site?.extraProducts??[]);applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);};
+  const apply=()=>{mergeCustom(data.products,data.categories,current.current.site?.extraProducts??[]);mergeArticles(data.articles,current.current.site?.content?.articles??[]);applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);};
   const setSite=(next:SiteSettings|null)=>{current.current.site=next;apply();setSiteState(next);try{if(next)localStorage.setItem(SITE_CACHE,JSON.stringify(withoutCardFields(next)));else localStorage.removeItem(SITE_CACHE);}catch{/* ignore */}};
   const setCardPrices=(next:CardPrices|null)=>{current.current.card=next;apply();setCardPricesState(next);};
   useLayoutEffect(()=>{let cached:SiteSettings|null=null;try{cached=readSite(JSON.parse(localStorage.getItem(SITE_CACHE)||'null'));}catch{/* none */}if(cached)setSite(cached);
     fetch('/api/site',{headers:{Accept:'application/json'}}).then(async r=>{if(r.status===503)return setSite(null);if(!r.ok||!(r.headers.get('content-type')||'').includes('json'))return;setSite(readSite(await r.json()));}).catch(()=>{/* offline: keep the cached settings */});
   },[]);
-  useEffect(()=>{setState(restore());setReady(true);document.getElementById('root')?.setAttribute('data-hydrated','true');},[]);
+  // Restored before the first paint after start — and moved to today's plan right away, as index.html reads it — so pages
+  // built from this browser's data (the home plan card) show the final content at once, with no switch a moment later.
+  useLayoutEffect(()=>{setState(rollPlan(restore(),today()));setReady(true);document.getElementById('root')?.setAttribute('data-hydrated','true');},[]);
   // A discount card belongs to the account: card prices are on only for a signed-in account with a card number.
   const cardHolder=state.signedIn&&Boolean(state.account?.partnerId);
   useEffect(()=>{if(ready&&state.card!==cardHolder)setState(s=>({...s,card:cardHolder}));},[ready,cardHolder,state.card]);
