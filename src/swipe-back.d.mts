@@ -3,3 +3,4 @@ export function standaloneIos(win: Window): boolean;
 export function installSwipeBack(win: Window, doc: Document): () => void;
 export const BACK_BUTTONS: string;
 export function backButton(doc: Document): HTMLAnchorElement | null;
+export const STEP_BACK: string;
