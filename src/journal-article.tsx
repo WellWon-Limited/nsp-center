@@ -12,6 +12,12 @@ export const journalCoverAlt=(article:Article)=>journalImages[article.id]?.alt||
 export function orderJournalArticles(articles:Article[]){const ordered=articles.slice();const magnesium=ordered.findIndex(a=>a.id==='interesnye-fakty-pro-magniy');const immunity=ordered.findIndex(a=>a.id==='immunitet-tozhe-nuzhdaetsya-v-zashchite');if(magnesium>immunity&&immunity>=0)[ordered[magnesium],ordered[immunity]]=[ordered[immunity],ordered[magnesium]];return ordered;}
 export function JournalArticle({article}:{article:Article}){
  if(article.id===immuneArticleId)return <ImmuneArticle/>;
+ // An article added in site management: the same journal page — title and date, its cover beside them (or the title
+ // alone across the page without a cover), then the text.
+ if(article.custom)return <div className="av-document av-document--ivory journal-article" data-ds-id="article-added">
+  <header className={`av-hero${article.image?'':' av-hero--text'}`}><div className="av-hero-copy"><span className="av-journal-link"><BackLink fallback="/blog/"/></span><h1>{article.title}</h1>{article.date&&<span className="av-date">{article.date}</span>}</div>{article.image&&<img className="av-hero-image" src={article.image} alt={article.title} width="1536" height="1024" fetchPriority="high"/>}</header>
+  <div className="av-reading-layout"><div className="av-reading"><div className="av-article-copy" dangerouslySetInnerHTML={{__html:article.html}}/><div className="av-end"><a href="/consultation/">Задать вопрос <Icon name="chevron" size={20}/></a></div></div></div>
+ </div>;
  const media=journalImages[article.id];
  if(!media)return <div className="av-document"><h1>{article.title}</h1><div className="av-reading" dangerouslySetInnerHTML={{__html:article.html}}/></div>;
  const {lead,body}=prepareJournalArticle(article,media);

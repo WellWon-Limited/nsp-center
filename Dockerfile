@@ -17,7 +17,7 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/src/generated/content.json ./src/generated/content.json
 COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs /app/scripts/accounts.mjs /app/scripts/site-admin.mjs /app/scripts/order-admin.mjs /app/scripts/ai-agent.mjs /app/scripts/card-prices.mjs ./scripts/
 # Rules shared by the browser and the server (email and phone checks); tests/docker-runtime.test.mjs keeps this list complete.
-COPY --from=build /app/src/contact-fields.mjs /app/src/custom-product.mjs ./src/
+COPY --from=build /app/src/contact-fields.mjs /app/src/custom-product.mjs /app/src/site-content.mjs ./src/
 COPY --from=build ["/app/assets/NSP App Prototype.html", "./assets/"]
 USER node
 EXPOSE 4173

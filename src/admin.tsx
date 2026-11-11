@@ -1,4 +1,5 @@
 import { OrdersSection } from './admin-orders';
+import { FaqSection, JournalSection, PhotosSection, PromosSection, VideosSection, type ContentTab } from './admin-content';
 import './admin.css';
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { ProductPicker } from './personal';
@@ -22,10 +23,10 @@ type Overview = SiteSettings & {
   staff: { email: string; name: string; createdAt: string; lastLogin: string | null }[];
   customers: number;
 };
-type Tab = 'summary' | 'orders' | 'products' | 'rate' | 'reviews' | 'chat' | 'staff';
+type Tab = 'summary' | 'orders' | 'products' | 'rate' | 'reviews' | 'chat' | 'staff' | ContentTab;
 // Icons as in the site's phone tab bar (home, catalog grid, chat, profile) and header (bag); groups with a heading.
-const tabs: [Tab, string, string, string][] = [['summary', 'Сводка', 'home', 'Сводка'], ['orders', 'Заказы', 'bag', 'Заказы'], ['products', 'Товары', 'grid', 'Товары'], ['rate', 'Курс у.е.', 'sliders', 'Курс'], ['reviews', 'Отзывы', 'star', 'Отзывы'], ['chat', 'Чат-консультант', 'message', 'Чат'], ['staff', 'Сотрудники', 'user-separated', 'Команда']];
-const groups: [string, Tab[]][] = [['', ['summary']], ['Магазин', ['orders', 'products', 'rate']], ['Покупатели', ['reviews', 'chat']], ['Команда', ['staff']]];
+const tabs: [Tab, string, string, string][] = [['summary', 'Сводка', 'home', 'Сводка'], ['orders', 'Заказы', 'bag', 'Заказы'], ['products', 'Товары', 'grid', 'Товары'], ['rate', 'Курс у.е.', 'sliders', 'Курс'], ['reviews', 'Отзывы', 'star', 'Отзывы'], ['chat', 'Чат-консультант', 'message', 'Чат'], ['staff', 'Сотрудники', 'user-separated', 'Команда'], ['promos', 'Акции', 'tag', 'Акции'], ['photos', 'Фотогалерея', 'image', 'Фото'], ['videos', 'Видеогалерея', 'play', 'Видео'], ['journal', 'Журнал', 'book', 'Журнал'], ['faq', 'Частые вопросы', 'help', 'Вопросы']];
+const groups: [string, Tab[]][] = [['', ['summary']], ['Магазин', ['orders', 'products', 'rate']], ['Контент', ['promos', 'photos', 'videos', 'journal', 'faq']], ['Покупатели', ['reviews', 'chat']], ['Команда', ['staff']]];
 const when = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const number = (v: number | null | undefined) => v === null || v === undefined ? '' : String(v).replace('.', ',');
 const productName = (id: string) => { const p = data.products.find(x => x.id === id); return p ? shortName(p.name) : id; };
@@ -138,6 +139,11 @@ export function AdminPanel() {
         {overview && tab === 'products' && <ProductsSection overview={overview} run={run} />}
         {overview && tab === 'reviews' && <ReviewsSection overview={overview} run={run} />}
         {tab === 'chat' && <ChatLogSection />}
+        {overview && tab === 'promos' && <PromosSection site={overview} run={run} />}
+        {overview && tab === 'photos' && <PhotosSection site={overview} run={run} />}
+        {overview && tab === 'videos' && <VideosSection site={overview} run={run} />}
+        {overview && tab === 'journal' && <JournalSection site={overview} run={run} />}
+        {overview && tab === 'faq' && <FaqSection site={overview} run={run} />}
         {overview && tab === 'staff' && <StaffSection overview={overview} run={run} reload={() => void load()} />}
       </main>
     </div>
@@ -448,23 +454,33 @@ function StaffSection({ overview, run, reload }: { overview: Overview; run: Run;
 
 /** «Чат»: what visitors asked the consultation agent in the last 30 days and what it answered (scripts/ai-agent.mjs).
  *  Questions are kept without the account, so a visitor is not named. */
+/** «Чат-консультант»: what visitors ask in the site chat and what it answered (scripts/site-admin.mjs /api/admin/chat-log),
+ *  newest first; «Без ответа» lists the questions the chat could not answer, so the shop sees what to add. */
+type ChatEntry = { at: string; question: string; answer: string; products: string; answered: boolean };
 function ChatLogSection() {
-  const [log, setLog] = useState<{ month: { questions: number; tokens: number }; entries: { at: string; question: string; answer: string; products: string; sources: { speaker: string; lecture: string }[]; flagged: boolean }[] } | null>(null);
-  const [state, setState] = useState<'loading' | 'off' | 'ready'>('loading');
+  const [filter, setFilter] = useState<'all' | 'unanswered'>('all');
+  const [log, setLog] = useState<{ counts: { today: number; week: number; month: number; unanswered: number }; entries: ChatEntry[] } | null>(null);
+  const [error, setError] = useState(false);
+  const [open, setOpen] = useState<number | null>(null);
   useEffect(() => {
-    fetch('/api/ai/status').then(r => r.ok ? r.json() : null).then(s => { if (!s?.enabled) setState('off'); }).catch(() => setState('off'));
-    fetch('/api/admin/ai-log', { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then(b => { if (b) { setLog(b); setState(s => s === 'off' ? 'off' : 'ready'); } }).catch(() => { /* none */ });
-  }, []);
+    let off = false; setError(false);
+    fetch(`/api/admin/chat-log${filter === 'unanswered' ? '?filter=unanswered' : ''}`, { headers: { Accept: 'application/json' } })
+      .then(r => r.ok ? r.json() : Promise.reject(new Error(String(r.status)))).then(b => { if (!off) setLog(b); }).catch(() => { if (!off) setError(true); });
+    return () => { off = true; };
+  }, [filter]);
+  const tiles: [string, number | undefined][] = [['Сегодня', log?.counts.today], ['За 7 дней', log?.counts.week], ['За 30 дней', log?.counts.month], ['Без ответа за 30 дней', log?.counts.unanswered]];
   return <section className="admin-card" data-ds-id="admin-chat">
-    <h2>Чат с ИИ-консультантом</h2>
-    {state === 'off' && <p className="admin-lead">Нейросеть пока не подключена: чат отвечает готовыми материалами из лекций. Когда на сервере появится ключ YandexGPT, здесь будут вопросы посетителей и ответы агента.</p>}
-    {log && <p className="admin-lead">В этом месяце: {log.month.questions} вопросов, {log.month.tokens.toLocaleString('ru-RU')} токенов. Вопросы хранятся 30 дней, без имени и почты посетителя.</p>}
-    {log && !log.entries.length && <p className="ds-muted">Вопросов пока не было.</p>}
-    <ul className="admin-reviews">{log?.entries.map((e, i) => <li key={i} className={`admin-review${e.flagged ? ' admin-review--pending' : ''}`}>
-      <p className="admin-review-meta">{when(e.at)}{e.flagged ? ' · ответ заменён: в нём было обещание лечения' : ''}</p>
-      <p><strong>Вопрос:</strong> {e.question}</p>
-      <p><strong>Ответ:</strong> {e.answer}</p>
-      {(e.products || e.sources.length > 0) && <p className="admin-review-meta">{e.products && `Товары: ${e.products.split(',').map(productName).join(', ')}`}{e.sources.length > 0 && ` · Источник: ${e.sources.map(s => `${s.speaker}, «${s.lecture}»`).join('; ')}`}</p>}
+    <p className="admin-lead">Вопросы, которые посетители задают в чате на сайте, и ответы чата. Имя, почта и телефон посетителя не сохраняются; записи хранятся 90 дней.</p>
+    <div className="admin-chat-stats">{tiles.map(([label, n]) => <div key={label}><strong>{n ?? '—'}</strong><span>{label}</span></div>)}</div>
+    <div className="admin-choice" role="radiogroup" aria-label="Какие вопросы показать">{([['all', 'Все вопросы'], ['unanswered', 'Без ответа']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={filter === v} className={filter === v ? 'active' : ''} onClick={() => { setFilter(v); setOpen(null); }}>{label}</button>)}</div>
+    {error && <p className="admin-error" role="alert">Не удалось загрузить вопросы. Обновите страницу.</p>}
+    {!log && !error && <p className="ds-muted">Загружаем…</p>}
+    {log && !log.entries.length && <p className="ds-muted">{filter === 'unanswered' ? 'Вопросов без ответа нет.' : 'Вопросов пока не было.'}</p>}
+    <ul className="admin-chat-log">{log?.entries.map((e, i) => <li key={`${e.at}-${i}`} className={e.answered ? '' : 'is-unanswered'}>
+      <p className="admin-review-meta">{when(e.at)}{e.answered ? '' : ' · чат не смог ответить'}</p>
+      <p className="admin-chat-question">{e.question}</p>
+      <button type="button" className="admin-chat-answer" aria-expanded={open === i} onClick={() => setOpen(open === i ? null : i)}><span>{e.answer}</span></button>
+      {e.products && <p className="admin-review-meta">Товары в ответе: {e.products.split(',').map(productName).join(', ')}</p>}
     </li>)}</ul>
   </section>;
 }

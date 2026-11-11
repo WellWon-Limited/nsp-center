@@ -11,6 +11,16 @@ import { addNotice, namesLine } from './notices.mjs';
 /** Registers the service worker (served by the built site; in `npm run dev` the file is absent and nothing happens). */
 export function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
+  // A page opens from the kept copy at once; when the site has been updated, the new version takes over a moment later.
+  // If that happens right after the page opened (a refresh, a new tab), the page reloads once to show the new version
+  // instead of the old copy; later, during use, nothing is interrupted and the next page is the new one.
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  const opened = performance.now();
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded || performance.now() - opened > 15000) return;
+    reloaded = true; location.reload();
+  });
   addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => { /* the site works without it */ }); });
 }
 

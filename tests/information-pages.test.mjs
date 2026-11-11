@@ -63,11 +63,12 @@ test('The company page provides a homepage return and the certificates page keep
 
 test('Company article keeps its introduction, six principles, timeline and product/document links',()=>{
  const $=read('/company/');
- const intro='Более 50 лет Nature’s Sunshine соединяет знания о растениях и научный подход, чтобы забота о себе становилась частью повседневной жизни.';
+ const intro='NSP-центр помогает выбирать продукты на основе растительных ингредиентов и находить понятную информацию о составе, применении и качестве. Чтобы забота о себе становилась частью повседневной жизни.';
  assert.equal($('h1').length,1);
  assert.equal($('.co-hero p').length,0);
  assert.equal($('.co-article-lead').text(),intro);
  assert.equal($('.company-page').text().split(intro).length-1,1);
+ assert.ok(!/Nature[’']s Sunshine/i.test($('.company-page').text()));
  assert.equal($('.co-principle-grid>article').length,6);
  assert.deepEqual($('.co-timeline article>strong').map((_,e)=>$(e).text()).get(),['1972','1974','2015','Сегодня']);
  assert.equal($('.co-research a[href="/company/sertifikaty/"]').length,1);

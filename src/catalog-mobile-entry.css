@@ -7,7 +7,8 @@
  .catalog-page--entry>.page-heading{margin-bottom:var(--space-24)}
  .catalog-mobile-entry{display:flex;flex-direction:column;gap:var(--space-10)}
  .catalog-entry-link{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:var(--space-12);min-height:56px;padding:var(--space-16);border:1px solid var(--color-ink-line);border-radius:var(--radius-control);background:var(--color-white);color:var(--color-ink);font-size:var(--text-14);font-weight:var(--weight-600);line-height:var(--leading-compact);text-decoration:none}
- .catalog-entry-link:is(:hover,:focus-visible){background:var(--color-ink);border-color:var(--color-ink);color:var(--color-white);text-decoration:none}
+ /* Only a real pointer hovers: a finger scrolling the list lights nothing up, and a tap goes straight to the section. */
+ .catalog-entry-link:focus-visible{background:var(--color-ink);border-color:var(--color-ink);color:var(--color-white);text-decoration:none}
  .catalog-entry-link>svg{flex:none}
  .catalog-entry-count{font-family:var(--font-mono);font-size:var(--text-11);opacity:.65}
  .catalog-mobile-back{display:inline-flex;align-items:center;gap:var(--space-8);min-height:40px;margin-bottom:0;font-size:var(--text-13);color:var(--color-ink);text-decoration:none}
@@ -49,3 +50,5 @@
 @media(max-width:639px){
  .site-main:has(>.back-link) .catalog-mobile-back{display:none}
 }
+
+@media(max-width:639px) and (hover:hover){.catalog-entry-link:hover{background:var(--color-ink);border-color:var(--color-ink);color:var(--color-white);text-decoration:none}}

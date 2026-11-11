@@ -1,0 +1,6 @@
+/* The quiz title and its introduction share the centre of the phone screen. */
+@media(max-width:639px){
+ .recommend>.page-heading{justify-content:center;text-align:center}
+ .recommend>.page-heading>div{width:100%}
+ .recommend>.page-heading p{margin-inline:auto}
+}

@@ -108,7 +108,9 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/overview')).status, 401, 'a customer session does not open site management');
   assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: 1 })).status, 401);
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: true })).status, 401, 'a customer cannot hide products');
+  assert.equal((await call('/api/admin/chat-log')).status, 401, 'a customer cannot read the chat questions');
   assert.equal((await call('/api/admin/new-product', 'PUT', { product: { name: 'Чужая карточка' } })).status, 401, 'a customer cannot create cards');
+  assert.equal((await call('/api/admin/site-content', 'PUT', { kind: 'faq', action: 'add', item: { q: 'Вопрос?', a: 'Ответ.' } })).status, 401, 'a customer cannot change the content');
 
   // Staff are separate accounts (npm run admin:create): their own sign-in, session and cookie; registration never makes one.
   session = '';
@@ -152,12 +154,36 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/delete-product', 'PUT', { productId: 'krem-dlya-ruk-2' })).status, 200);
   assert.deepEqual((await call('/api/site')).body.extraProducts.map(p => p.id), ['krem-dlya-ruk']);
 
+  // «Контент»: offers, photos, videos, articles and answers are added, changed and deleted; old ones are hidden and returned.
+  const content = (kind, action, extra) => call('/api/admin/site-content', 'PUT', { kind, action, ...extra });
+  assert.match((await content('video', 'add', { item: { url: 'https://example.com/x', title: 'Ролик' } })).body.error, /VK Видео, Rutube или YouTube/);
+  assert.equal((await content('video', 'add', { item: { url: 'https://vkvideo.ru/video-1_2', title: 'О компании' } })).body.content.videos[0].url, 'https://vkvideo.ru/video-1_2');
+  const faq = (await content('faq', 'add', { item: { q: 'Есть ли рассрочка?', a: 'Нет.' } })).body.content.faq[0];
+  assert.equal((await content('faq', 'update', { id: faq.id, item: { q: 'Есть ли рассрочка?', a: 'Пока нет.' } })).body.content.faq[0].a, 'Пока нет.');
+  const promo = await content('promo', 'add', { item: { title: 'Скидка 10%', text: 'На все БАД.', to: '2099-01-01' } });
+  assert.equal(promo.body.content.promos[0].title, 'Скидка 10%');
+  const article = (await content('article', 'add', { item: { title: 'Витамин D зимой', body: 'Зимой солнца мало, и витамин D нужен с едой.', products: ['alfalfa', 'unknown'] } })).body.content.articles[0];
+  assert.deepEqual([article.path, article.custom, article.data.products], ['/blog/vitamin-d-zimoy/', true, ['alfalfa']]);
+  assert.equal((await content('article', 'add', { item: { title: 'Витамин D зимой', body: 'Ещё одна статья с тем же заголовком.' } })).body.content.articles[0].path, '/blog/vitamin-d-zimoy-2/', 'the same title gets its own address');
+  assert.deepEqual((await content('video', 'hide', { key: 'bNT7e_FykCE' })).body.hiddenContent.video, ['bNT7e_FykCE']);
+  assert.deepEqual((await content('video', 'show', { key: 'bNT7e_FykCE' })).body.hiddenContent.video, []);
+  assert.equal((await content('promo', 'hide', { key: 'x' })).status, 400, 'offers are deleted, not hidden');
+  assert.equal((await content('faq', 'delete', { id: faq.id })).body.content.faq.length, 0);
+  assert.equal((await call('/api/site')).body.content.articles.length, 2, 'everyone sees the journal');
+
   // Hiding a product from customers and bringing it back («Товары» in site management).
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: 'yes' })).status, 400);
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'unknown-product', hidden: true })).status, 400);
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: true })).body.visibility.alfalfa, true);
   assert.equal((await call('/api/site')).body.visibility.alfalfa, true, 'every visitor learns the product is hidden');
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: false })).body.visibility.alfalfa, false, 'and it comes back');
+  // The site chat's questions: anyone's chat logs them (no name kept), only staff read them.
+  assert.equal((await call('/api/chat-log', 'POST', { question: ' ', answer: 'x' })).status, 400);
+  assert.equal((await call('/api/chat-log', 'POST', { question: 'Сколько стоит доставка?', answer: 'Бесплатно по СПб.', products: [], answered: true })).status, 201);
+  assert.equal((await call('/api/chat-log', 'POST', { question: 'Есть ли у вас корм для кошек?', answer: 'Пока не могу ответить на этот вопрос.', answered: false })).status, 201);
+  const chatLog = (await call('/api/admin/chat-log')).body;
+  assert.deepEqual([chatLog.counts.today, chatLog.counts.unanswered, chatLog.entries[0].question], [2, 1, 'Есть ли у вас корм для кошек?']);
+  assert.deepEqual((await call('/api/admin/chat-log?filter=unanswered')).body.entries.map(e => e.question), ['Есть ли у вас корм для кошек?']);
   assert.deepEqual((await call('/api/admin/ai-log')).body, { month: { questions: 0, tokens: 0 }, entries: [] }, 'the chat log of the consultation agent');
   const overview = (await call('/api/admin/overview')).body;
   assert.equal(overview.rateHistory[0].rubPerUnit, 96.5);

@@ -82,6 +82,8 @@ export type Article = {
   body: string;
   related: string[];
   source: { raw: string; markdown: string };
+  /** Added in site management (src/site-content.mjs), not built. */
+  custom?: boolean;
 };
 
 export type ContentPage = {

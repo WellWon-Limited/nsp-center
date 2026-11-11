@@ -1,4 +1,4 @@
-/* The first viewport ends with a clean paper edge; article text starts after scrolling. */
+/* Desktop covers retain a paper edge; phone covers fill the space between the fixed panels. */
 #root .site-main :is(.company-page--nature .co-hero,.article-detail.journal-article-page .av-document--ivory .av-hero){
  --editorial-cover-edge:var(--space-32);
  min-height:calc(100svh - var(--site-header-height,106px) - var(--editorial-cover-edge));
@@ -6,6 +6,7 @@
 }
 @media(max-width:639px){
  #root .site-main :is(.company-page--nature .co-hero,.article-detail.journal-article-page .av-document--ivory .av-hero){
+  --editorial-cover-edge:0px;
   min-height:calc(var(--phone-first-screen-height) - var(--editorial-cover-edge));
  }
  #root .site-main :is(.company-page--nature .co-hero-copy,.journal-article-page .av-document--ivory .av-hero-copy){padding-bottom:0}

@@ -375,18 +375,21 @@ export function AssistantChat() {
   const onScroll = () => { const el = log.current; if (!el) return; const left = el.scrollHeight - el.scrollTop - el.clientHeight; atEnd.current = left < 80; setAway(left > 240); };
   const newChat = () => { setMessages([{ ...greeting, at: now() }]); setDraft(''); atEnd.current = true; };
   const toBottom = () => { log.current?.scrollTo({ top: log.current.scrollHeight, behavior: 'smooth' }); };
-  // Phone keyboard: how much of the screen it covers (visualViewport), so the input row can ride above it; the log stays
-  // scrolled to the latest messages. The bottom bar is never hidden.
+  // Phone keyboard, as messengers do it: while the keyboard is open the whole app (header, messages, input row) fits the
+  // part of the screen above it (visualViewport), so the header stays, the input row sits right on the keyboard and the
+  // page itself does not move. Updated once per frame and nothing is measured on the way, so typing stays smooth.
   useEffect(() => {
-    const vv = window.visualViewport;
-    const fit = () => { const covered = vv ? Math.max(0, window.innerHeight - vv.height - vv.offsetTop) : 0; const root = document.documentElement; root.style.setProperty('--chat-kb', `${Math.round(covered)}px`); root.style.setProperty('--chat-vh', `${Math.round(vv?.height ?? window.innerHeight)}px`); root.classList.toggle('chat-kb-open', covered > 60);
-      // The chat column ends exactly at the top of the bottom bar, or of the keyboard when it is open.
-      const nav = document.querySelector<HTMLElement>('.bottom-nav'); const navH = nav && getComputedStyle(nav).display !== 'none' ? Math.max(0, window.innerHeight - nav.getBoundingClientRect().top) : 0;
-      // Only the open keyboard needs JS; without it the column ends above the tab bar by CSS alone (no jump at first paint).
-      if (covered > 60) root.style.setProperty('--chat-bottom', `${Math.round(covered)}px`); else root.style.removeProperty('--chat-bottom'); void navH; window.scrollTo(0, 0);
+    const vv = window.visualViewport; if (!vv) return;
+    const root = document.documentElement; let frame = 0;
+    const apply = () => { frame = 0;
+      const open = window.innerHeight - vv.height - vv.offsetTop > 60 || (focused && vv.height < window.innerHeight - 60);
+      root.classList.toggle('chat-kb-open', open);
+      if (open) { root.style.setProperty('--chat-vh', `${Math.round(vv.height)}px`); root.style.setProperty('--chat-top', `${Math.round(vv.offsetTop)}px`); }
+      else { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
-    fit(); vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit); window.addEventListener('resize', fit);
-    return () => { vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit); document.documentElement.style.removeProperty('--chat-kb'); document.documentElement.style.removeProperty('--chat-vh'); document.documentElement.classList.remove('chat-kb-open'); document.documentElement.style.removeProperty('--chat-bottom'); window.removeEventListener('resize', fit); };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
+    apply(); vv.addEventListener('resize', schedule); vv.addEventListener('scroll', schedule);
+    return () => { cancelAnimationFrame(frame); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule); root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
   }, [focused]);
   useEffect(() => { try { const saved = JSON.parse(sessionStorage.getItem(storeKey) || 'null'); if (Array.isArray(saved) && saved.length) setMessages(saved); } catch { /* new chat */ } import('./generated/chat-index.json').then(m => setIndex((m.default ?? m) as Index)); }, []);
   useEffect(() => { if (messages.some(m => !m.at)) setMessages(ms => ms.map(m => m.at ? m : { ...m, at: now() })); }, [messages]);
@@ -405,6 +408,13 @@ export function AssistantChat() {
     show(); const t = window.setTimeout(show, 250); return () => clearTimeout(t); }, [messages, typing, index]);
   // A health question first gets a clarifying question (what else bothers you); the recommendation comes after the reply,
   // built from both messages, with the BAD warning. Shop questions (delivery, discount, consultant) are answered at once.
+  // Each question and its answer go to «Чат-консультант» in site management (scripts/site-admin.mjs, no name or email of
+  // the visitor); an answer the bot could not give is marked so the shop sees what people ask that the chat does not know.
+  const logChat = (question: string, reply: Message) => {
+    const answered = !/^(Пока не могу ответить|Секунду, готовлюсь)/.test(reply.text);
+    const products = [...new Set([reply.product, ...(reply.products ?? [])].filter((id): id is string => Boolean(id)))];
+    fetch('/api/chat-log', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question, answer: reply.text, products, answered }) }).catch(() => { /* the chat works without the log */ });
+  };
   const send = (text: string) => {
     const value = text.trim(); if (!value) return;
     // «Начать новый чат» (or «новый чат», «начать сначала», «заново») clears the conversation back to the greeting.
@@ -423,7 +433,7 @@ export function AssistantChat() {
       else if (intent(value)) reply = intent(value)!;
       else if (asked) reply = recommend(/^больше ничего/i.test(value) ? asked : `${asked} ${value}`, index);
       else { const first = answer(value, index); reply = !first.product ? first : asksAboutProduct(value, index) ? { ...first, text: `Вот что известно про «${shortName(index.products.find(p => p.id === first.product)?.name ?? '')}»: ниже — зачем это, как принимать и кому не подходит.${risky.test(value) ? ' Ваш случай лучше сначала обсудить с врачом — я не ставлю диагнозы и не подбираю лечение.' : ''}`, sections: productSections(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product), first.text), source: sourceOf(index.products.find(p => p.id === first.product), index.themes.find(t => t.product === first.product)) || undefined, warning: true } : clarify(value); }
-      setMessages(m => [...m, reply]); setTyping(false);
+      setMessages(m => [...m, reply]); setTyping(false); logChat(value, reply);
     };
     // With the agent connected (scripts/ai-agent.mjs) a health question goes to it; shop questions, warning signs and
     // «Предложите что-то ещё» keep their prepared answers, and any failure of the agent falls back to them too.
@@ -431,7 +441,7 @@ export function AssistantChat() {
       const history = messages.slice(-6).map(m => ({ role: m.from === 'bot' ? 'assistant' : 'user', text: m.text }));
       fetch('/api/ai/ask', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: value, history }) })
         .then(async r => { const b = await r.json().catch(() => null); if (!r.ok || typeof b?.text !== 'string') throw new Error('agent'); return b as { text: string; products: string[]; sources: { speaker: string; lecture: string }[]; chips?: string[] }; })
-        .then(b => { const products = b.products.filter(id => index.products.some(p => p.id === id)); setMessages(m => [...m, { from: 'bot', text: b.text, products, source: b.sources.length ? `Источник: ${b.sources.map(s => `${s.speaker ? `${s.speaker}, ` : ''}лекция «${s.lecture}»`).join('; ')}` : undefined, warning: products.length > 0, chips: b.chips }]); setTyping(false); })
+        .then(b => { const products = b.products.filter(id => index.products.some(p => p.id === id)); const reply: Message = { from: 'bot', text: b.text, products, source: b.sources.length ? `Источник: ${b.sources.map(s => `${s.speaker ? `${s.speaker}, ` : ''}лекция «${s.lecture}»`).join('; ')}` : undefined, warning: products.length > 0, chips: b.chips }; setMessages(m => [...m, reply]); setTyping(false); logChat(value, reply); })
         .catch(byRules);
       return;
     }

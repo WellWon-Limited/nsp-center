@@ -1,3 +1,4 @@
+import './recommend.css';
 import { useEffect, useState } from 'react';
 import type { Product } from './content-types';
 import { data, today, useStore } from './store';

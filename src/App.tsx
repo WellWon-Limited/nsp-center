@@ -38,7 +38,7 @@ const tabs=(p:string)=>p.startsWith('/catalog/')||p==='/health/'||p==='/health-m
 // navigation in sessionStorage ('nsp-center:via-nav').
 function PageBack({url}:{url:string}){const u=new URL(url,'http://nsp.local');const p=u.pathname;const from=useCameFrom();const [viaNav,setViaNav]=useState(false);
  useEffect(()=>{try{setViaNav(sessionStorage.getItem('nsp-center:via-nav')===p);sessionStorage.removeItem('nsp-center:via-nav');}catch{/* ignore */}},[p]);
- if((['/profile/','/personal/profile/'].includes(p)&&u.searchParams.get('admin')==='1')||['plan','marathon'].includes(u.searchParams.get('from')??'')||!from||ownsBackLink(p)||noBack(p)||(tabs(p)&&(from!=='/'||viaNav)))return null;return <BackLink fallback="/"/>;}
+ if((['/profile/','/personal/profile/'].includes(p)&&u.searchParams.get('admin')==='1')||['plan','marathon'].includes(u.searchParams.get('from')??'')||!from||ownsBackLink(p)||noBack(p)||(tabs(p)&&viaNav))return null;return <BackLink fallback="/"/>;}
 // The footer (links, contacts, seller, "БАД не является лекарственным средством") belongs to the public pages: the
 // catalog, products, articles, information pages and the cart (where the seller and the terms must be at hand before an
 // order). The personal app screens — sign-in and profile, «Мои покупки», the plan — and the chat end without it, as in
