@@ -16,7 +16,7 @@ export function Purchases() {
   return <>
     <Heading title="Мои покупки" description="Товары из ваших заказов. Добавьте нужные в корзину снова." />
     {!ready ? <div className="account-route-loading" aria-busy="true" aria-label="Загрузка" />
-      : !all.length ? <section className="purchases-empty" data-ds-id="purchases-empty"><p>Покупок ещё не было</p></section>
+      : !all.length ? <section className="purchases-empty empty-screen" data-ds-id="purchases-empty"><p>Покупок ещё не было</p></section>
       : <>
         <div className="purchases-search" data-ds-id="purchases-search">
           <label className="search-field"><Icon name="search" /><input value={q} onChange={e => setQ(e.target.value)} placeholder="Найти в покупках: название, артикул" aria-label="Поиск по покупкам" />{q && <button className="icon-btn icon-btn--sm" onClick={() => setQ('')} aria-label="Очистить поиск"><Icon name="close" size={16} /></button>}</label>

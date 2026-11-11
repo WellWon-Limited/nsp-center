@@ -67,7 +67,7 @@ export function Cart() {
   const heading = <Heading title="Корзина" description="Отметьте продукты для заказа и проверьте количество." />;
   if (!ready) return <>{heading}<div className="account-route-loading" aria-busy="true" aria-label="Загрузка" /></>;
   if (saved) return <>{heading}<Empty title="Черновик заказа сохранён" icon="check"><p>Заказ пока не отправлен в магазин: оформление на сайте ещё не подключено. Чтобы купить, свяжитесь с NSP Center — черновик виден в профиле.</p><a className="btn btn--primary" href="/contacts/">Контакты магазина</a><a href="/profile/">Посмотреть черновики</a></Empty></>;
-  if (!rows.length) return <>{heading}<p className="cart-empty" data-ds-id="cart-empty">Ваша корзина пока пуста</p>{removed && <UndoBar removed={removed} onUndo={undo} />}</>;
+  if (!rows.length) return <>{heading}<p className="cart-empty empty-screen" data-ds-id="cart-empty">Ваша корзина пока пуста</p>{removed && <UndoBar removed={removed} onUndo={undo} />}</>;
 
   return <>{heading}
     <div className="cart-layout cart-layout--market">

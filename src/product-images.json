@@ -670,5 +670,13 @@
   "l-carnitine": {
     "image": "/images/products/white-v2/l-carnitine.jpg",
     "original": "/images/products/l-carnitine-no-shadow.png"
+  },
+  "night-anti-age-face-cream-40": {
+    "image": "/images/products/white-v2/night-anti-age-face-cream-40.jpg",
+    "original": "/images/products/night-anti-age-face-cream-40.png"
+  },
+  "purifying-mattifying-toner": {
+    "image": "/images/products/white-v2/purifying-mattifying-toner.jpg",
+    "original": "/images/products/purifying-mattifying-toner.jpg"
   }
 }

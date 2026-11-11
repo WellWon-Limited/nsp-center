@@ -179,7 +179,7 @@ html:has(.chat), body:has(.chat) { overscroll-behavior: none; height: 100%; }
    doctor note is the column's bottom part, not a strip floating over the page, so nothing but the messages ever moves.
    Phone: the column ends above the bottom bar; with the keyboard open it ends above the keyboard (--chat-vh from
    visualViewport in assistant.tsx). */
-.chat { position: fixed; top: var(--site-header-height, 97px); bottom: var(--chat-bottom, 0px); left: 50%; z-index: 1; width: min(760px, calc(100vw - 2 * var(--space-28))); height: auto; margin: 0; transform: translateX(-50%); }
+.chat { position: relative; top: auto; bottom: auto; left: auto; z-index: 1; width: min(760px, calc(100vw - 2 * var(--space-28))); height: 100%; margin: 0 auto; transform: none; }
 .chat-log { padding-bottom: var(--space-12); }
 .chat-composer { position: static; left: auto; bottom: auto; z-index: auto; width: auto; transform: none; flex-shrink: 0; padding: var(--space-8) 0 var(--space-12); }
 .chat-down { position: absolute; right: var(--space-4); bottom: 104px; }
@@ -213,3 +213,14 @@ html:has(.chat), body:has(.chat) { overscroll-behavior: none; height: 100%; }
 .chat-log > .chat-composer { margin-top: auto; padding: var(--space-14) 0 var(--space-12); }
 .chat-down { bottom: var(--space-16); }
 @media (max-width: 639px) { .chat-down { bottom: var(--space-12); } .chat-log > .chat-composer { padding-bottom: var(--space-8); } }
+
+/* First paint = final layout (owner, 2026-11-11: no jumping when switching tabs): the chat page is one screen in normal
+   flow — the header at the top, the chat column filling the rest, on a phone ending above the tab bar by CSS alone
+   (calc of the bar's height). JS only moves the bottom up while the phone keyboard is open (--chat-bottom). */
+body:has(.chat) #root { display: flex; flex-direction: column; height: 100svh; min-height: 0; }
+body:has(.chat) .site-main { flex: 1 1 auto; min-height: 0; width: 100%; max-width: none; padding: 0; display: flex; }
+@media (max-width: 959px) { .chat { width: calc(100vw - 2 * var(--space-22)); } }
+@media (max-width: 639px) {
+  .chat { width: calc(100vw - 2 * var(--space-18)); height: 100%; }
+  body:has(.chat) .site-main { padding-bottom: var(--chat-bottom, calc(var(--phone-nav-height, 52px) + env(safe-area-inset-bottom))); }
+}

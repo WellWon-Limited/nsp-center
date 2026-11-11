@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { applyContent, applySite, noteKey, visibleNotes } from '../src/site.ts';
@@ -46,7 +46,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   const port = 20000 + Math.floor(Math.random() * 20000);
   const pg = new EmbeddedPostgres({ databaseDir: join(dir, 'db'), port, user: 'test', password: 'test', persistent: false, autoRehydrateSymlinks: true, onLog: () => {}, onError: () => {} });
   await pg.initialise(); await pg.start(); await pg.createDatabase('accounts');
-  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
+  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, categories: JSON.parse(readFileSync(new URL('../src/generated/content.json', import.meta.url), 'utf8')).categories, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
   const server = createServer((req, res) => accounts.handle(req, res, new URL(req.url, 'http://x')));
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   t.after(async () => { server.close(); await accounts.close(); await pg.stop(); rmSync(dir, { recursive: true, force: true }); });
@@ -107,6 +107,8 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.deepEqual((await call('/api/reviews?product=bee-pollen')).body.reviews, []);
   assert.equal((await call('/api/admin/overview')).status, 401, 'a customer session does not open site management');
   assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: 1 })).status, 401);
+  assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: true })).status, 401, 'a customer cannot hide products');
+  assert.equal((await call('/api/admin/new-product', 'PUT', { product: { name: 'Чужая карточка' } })).status, 401, 'a customer cannot create cards');
 
   // Staff are separate accounts (npm run admin:create): their own sign-in, session and cookie; registration never makes one.
   session = '';
@@ -133,6 +135,29 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/pending')).body.reviews, 1);
   assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 9 })).status, 400);
   assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 3 })).body.noteStars.alfalfa['Врач|Лекция|Текст'], 3);
+  // A new card: created hidden, filled in the editor, shown, seen by customers without its card price, then deleted.
+  const face = '/catalog/ukhod-za-kozhey-litsa-i-shei/';
+  assert.match((await call('/api/admin/new-product', 'PUT', { product: { name: 'Крем', categoryPath: face, retailRub: '' } })).body.error, /Розничная/);
+  const created = await call('/api/admin/new-product', 'PUT', { product: { name: 'Крем для рук', article: '', categoryPath: face, retailRub: '1990', partnerRub: '1490', availability: 'InStock' } });
+  assert.equal(created.body.id, 'krem-dlya-ruk');
+  assert.equal(created.body.visibility['krem-dlya-ruk'], true, 'a new card starts hidden');
+  assert.equal((await call('/api/admin/new-product', 'PUT', { product: { name: 'Крем для рук', categoryPath: face, retailRub: '990' } })).body.id, 'krem-dlya-ruk-2', 'the same name gets its own address');
+  assert.equal((await call('/api/product-content?id=krem-dlya-ruk')).body.base.name, 'Крем для рук', 'the editor opens it');
+  assert.equal((await call('/api/admin/content', 'PUT', { productId: 'krem-dlya-ruk', content: { about: ['Мягкий крем.'] } })).status, 200);
+  assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'krem-dlya-ruk', hidden: false })).status, 200);
+  assert.equal((await call('/api/card-prices')).body.prices['krem-dlya-ruk'], 1490, 'the card price for those who may see it');
+  const publicCard = (await call('/api/site')).body.extraProducts.find(p => p.id === 'krem-dlya-ruk');
+  assert.deepEqual([publicCard.path, publicCard.prices.partner], ['/product/krem-dlya-ruk/', null]);
+  assert.equal((await call('/api/admin/delete-product', 'PUT', { productId: 'alfalfa' })).status, 400, 'built cards are hidden, not deleted');
+  assert.equal((await call('/api/admin/delete-product', 'PUT', { productId: 'krem-dlya-ruk-2' })).status, 200);
+  assert.deepEqual((await call('/api/site')).body.extraProducts.map(p => p.id), ['krem-dlya-ruk']);
+
+  // Hiding a product from customers and bringing it back («Товары» in site management).
+  assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: 'yes' })).status, 400);
+  assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'unknown-product', hidden: true })).status, 400);
+  assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: true })).body.visibility.alfalfa, true);
+  assert.equal((await call('/api/site')).body.visibility.alfalfa, true, 'every visitor learns the product is hidden');
+  assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: false })).body.visibility.alfalfa, false, 'and it comes back');
   assert.deepEqual((await call('/api/admin/ai-log')).body, { month: { questions: 0, tokens: 0 }, entries: [] }, 'the chat log of the consultation agent');
   const overview = (await call('/api/admin/overview')).body;
   assert.equal(overview.rateHistory[0].rubPerUnit, 96.5);

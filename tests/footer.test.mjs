@@ -9,3 +9,10 @@ test('footer on public pages, not on personal screens', () => {
   for (const path of ['profile/', 'profile/purchases/', 'health/', 'consultation/']) assert.ok(!has(path), path);
   assert.doesNotMatch(readFileSync('dist/index.html', 'utf8'), /перенесены из локального снимка/);
 });
+
+// Reviews: a visitor who is not signed in sees how to leave a review, with or without the accounts server.
+test('the review form or a sign-in hint for every visitor', () => {
+  const src = readFileSync('src/reviews.tsx', 'utf8');
+  assert.match(src, /sessionReady && !state\.signedIn && <p className="review-signin">Чтобы оставить отзыв, <a href="\/profile\/">войдите в аккаунт<\/a>/);
+  assert.doesNotMatch(src, /\{accounts === 'server' && \(state\.signedIn/, 'the hint no longer depends on the accounts server');
+});

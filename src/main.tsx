@@ -4,6 +4,8 @@ import { trackProducts } from './store';
 import './design-system.css';
 import './app.css';
 import { installHomeScrollReturn } from './home-scroll-return.mjs';
+import { installSwipeBack } from './swipe-back.mjs';
+import { installInstantTap } from './instant-tap.mjs';
 import { finishSplash, registerServiceWorker } from './pwa';
 const root=document.getElementById('root')!;
 const url=location.pathname+location.search;
@@ -16,6 +18,8 @@ history.scrollRestoration='manual';
 addEventListener('pagehide',()=>{try{sessionStorage.setItem(scrollKey(),String(Math.round(scrollY)));}catch{}});
 if(root.hasChildNodes()&&root.dataset.route===url)hydrateRoot(root,<App url={url} pageData={pageData}/>);else createRoot(root).render(<App url={url} pageData={pageData}/>);
 const homeReturn=installHomeScrollReturn(window,document);
+installSwipeBack(window,document);
+installInstantTap(window,document);
 const navigation=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;
 const saved=homeReturn??(navigation?.type==='back_forward'||navigation?.type==='reload'?Number(sessionStorage.getItem(scrollKey())):0);
 // Coming back with «Назад»: the page stays hidden (class nsp-restoring, set in index.html before the first paint) until it
@@ -28,6 +32,8 @@ const reveal=()=>{
 // Reveal the destination only after hydration restores local plan/account state. A cached offline shell may belong
 // to another route; the head guard keeps that shell hidden until React has rendered the requested destination.
 const restoreAndReveal=()=>{
+ // A tap on the menu button before the page came alive (index.html remembers it) still opens the menu.
+ if((window as {__nspMenuTap?:number}).__nspMenuTap){delete (window as {__nspMenuTap?:number}).__nspMenuTap;document.querySelector<HTMLButtonElement>('.menu-toggle[aria-expanded="false"]')?.click();}
  const started=performance.now();
  const tryScroll=()=>{
   if(saved>0)scrollTo({top:saved,behavior:'instant'});

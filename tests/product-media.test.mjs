@@ -13,7 +13,7 @@ test('Product image replacements stay local and keep every original gallery phot
  assert.equal(productCover({id:'unmapped',image:'/original.jpg'}),'/original.jpg');
 });
 test('Product detail and catalog cards show the same preferred product photograph before JavaScript',()=>{
- for(const p of products){const $=cheerio.load(readFileSync(resolve(root,'dist',p.path.slice(1),'index.html'),'utf8'));assert.equal($('.main-product-image img').attr('src'),productCover(p),p.id);assert.equal($('.thumbnails').length,0,p.id);assert.equal($('.product-gallery img').length,1,p.id);}
+ for(const p of products.filter(p=>!p.hidden)){const $=cheerio.load(readFileSync(resolve(root,'dist',p.path.slice(1),'index.html'),'utf8'));assert.equal($('.main-product-image img').attr('src'),productCover(p),p.id);assert.equal($('.thumbnails').length,0,p.id);assert.equal($('.product-gallery img').length,1,p.id);}
  const $=cheerio.load(readFileSync(resolve(root,'dist/catalog/index.html'),'utf8'));$('.product-card').each((_,card)=>{const path=$(card).find('h3 a').attr('href'),p=products.find(p=>p.path===path);assert.ok(p,path);assert.equal($(card).find('.product-visual img').attr('src'),productCover(p),p.id);});
 });
 

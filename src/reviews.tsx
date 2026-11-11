@@ -11,7 +11,7 @@ const Stars = ({ value }: { value: number }) => <span className="review-stars" a
 
 /** Published reviews and the form; `empty`: no expert comments above, so «Отзывов пока нет» shows when there are none. */
 export function CustomerReviews({ productId, empty }: { productId: string; empty: boolean }) {
-  const { state, accounts } = useStore();
+  const { state, accounts, sessionReady } = useStore();
   const [reviews, setReviews] = useState<Review[]>([]);
   useEffect(() => {
     if (accounts !== 'server') return;
@@ -25,7 +25,9 @@ export function CustomerReviews({ productId, empty }: { productId: string; empty
       <p>{r.text}</p>
     </article>)}</div>}
     {empty && !reviews.length && <p className="reviews-empty">Отзывов пока нет</p>}
-    {accounts === 'server' && (state.signedIn && state.account?.server ? <ReviewForm productId={productId} /> : <p className="review-signin">Чтобы оставить отзыв, <a href="/profile/">войдите в аккаунт</a>.</p>)}
+    {/* A visitor who is not signed in always sees how to leave a review (owner, 2026-11-11), with or without the accounts
+        server; a signed-in account on the server gets the form. */}
+    {state.signedIn && state.account?.server && accounts === 'server' ? <ReviewForm productId={productId} /> : sessionReady && !state.signedIn && <p className="review-signin">Чтобы оставить отзыв, <a href="/profile/">войдите в аккаунт</a>.</p>}
   </>;
 }
 

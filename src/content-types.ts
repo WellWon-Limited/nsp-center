@@ -3,7 +3,7 @@ export type DocumentLink = { name: string; size: string; url: string | null };
 export type SiteLink = { text: string | null; url: string };
 
 /** Retail is for everyone; partner is for discount-card holders (null when the price list lacks the product). */
-export type ProductPrices = { retail: number; partner: number | null; source: 'price-list' | 'snapshot'; units?: { retail: number; partner?: number } };
+export type ProductPrices = { retail: number; partner: number | null; source: 'price-list' | 'snapshot' | 'admin'; units?: { retail: number; partner?: number } };
 
 export type Product = {
   id: string;
@@ -17,6 +17,8 @@ export type Product = {
   currency: string | null;
   availability: string | null;
   availability_text: string | null;
+  /** Not shown to customers: a line no longer supplied (src/product-stock.json) or hidden by an administrator. */
+  hidden?: boolean;
   brand: string | null;
   category: string | null;
   categoryPath: string | null;
@@ -43,6 +45,8 @@ export type Product = {
   stars?: { value: number; count: number; sum: number };
   /** A photo the administrator uploaded in place of the built one (src/site.ts). */
   adminImage?: string;
+  /** Created in site management (src/custom-product.mjs), not built. */
+  custom?: boolean;
   /** A set's products (src/set-contents.json). */
   setProducts?: string[];
 };

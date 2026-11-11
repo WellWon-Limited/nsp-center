@@ -3,8 +3,10 @@ import type { Product } from './content-types';
 import { data, money, useStore } from './store';
 import type { Theme, ThemePair } from './themes';
 import { BackLink, Icon, ProductCard, ProductGrid } from './ui';
+import { listed } from './site';
 
-const productById = (id: string) => data.products.find(p => p.id === id);
+// A product hidden from customers is left out of theme pages (src/site.ts).
+const productById = (id: string) => data.products.find(p => p.id === id && listed(p));
 
 const pairsOf = (t: Theme) => t.pairs.map(pair => ({ ...pair, product: productById(pair.productId) })).filter((pair): pair is ThemePair & { product: Product } => Boolean(pair.product));
 

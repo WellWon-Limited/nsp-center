@@ -190,7 +190,7 @@ export function createAi({ content, env = process.env, pool = null, provider: gi
     if (perIp.size > 5000) for (const [k, v] of perIp) if (v.day !== day) perIp.delete(k);
     const history = Array.isArray(body?.history) ? body.history.filter(h => h && typeof h.text === 'string').slice(-6) : [];
     const fragments = retrieve(index, expandQuery([question, ...history.filter(h => h.role !== 'assistant').map(h => h.text)].join(' ')), 8);
-    const candidates = [...new Set(fragments.flatMap(f => f.products))].slice(0, 8).map(id => content.products.find(p => p.id === id)).filter(Boolean)
+    const candidates = [...new Set(fragments.flatMap(f => f.products))].slice(0, 8).map(id => content.products.find(p => p.id === id)).filter(p => p && !p.hidden)
       .map(p => ({ id: p.id, name: p.name.replace(/\s*\([^)]*\)/g, '').trim(), available: p.availability !== 'OutOfStock' }));
     let out;
     try { out = await provider(buildMessages({ question, history, fragments, products: candidates })); }
