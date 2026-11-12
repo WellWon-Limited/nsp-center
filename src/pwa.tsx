@@ -22,7 +22,9 @@ export function registerServiceWorker() {
     // This reload is the site's own (a new version), not the visitor's: the install card must not take it as one.
     reloaded = true; try { sessionStorage.setItem('nsp-center:update-reload', '1'); } catch { /* ignore */ } location.reload();
   });
-  addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => { /* the site works without it */ }); });
+  // The app may start after the page's load event (src/main.tsx paints the page first), so both cases register.
+  const register = () => { navigator.serviceWorker.register('/sw.js').catch(() => { /* the site works without it */ }); };
+  if (document.readyState === 'complete') register(); else addEventListener('load', register, { once: true });
 }
 
 // Loading screen on phones only: index.html covers the first page of a visit with the circular logo on a warm light

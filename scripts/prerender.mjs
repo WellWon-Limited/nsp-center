@@ -3,7 +3,7 @@ import {publicProduct} from './card-prices.mjs';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import { createServer } from 'vite';
-import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 const server=await createServer({server:{middlewareMode:true},appType:'custom'});
 try {
@@ -12,7 +12,11 @@ try {
  const themeJsonLd=(theme,href)=>theme?{'@context':'https://schema.org','@graph':[{'@type':'Article',headline:theme.h1,description:theme.description,url:href,dateModified:theme.updated,inLanguage:'ru'},...(theme.faq.length?[{'@type':'FAQPage',mainEntity:theme.faq.map(f=>({'@type':'Question',name:f.question,acceptedAnswer:{'@type':'Answer',text:f.answer}}))}]:[])]}:null;
  const built=JSON.parse(await readFile('src/generated/content.json','utf8'));
  // Card prices are not public (scripts/card-prices.mjs): the pages and their embedded data carry retail prices only.
- const data={...built,products:built.products.map(publicProduct)};const template=await readFile('dist/index.html','utf8');
+ const data={...built,products:built.products.map(publicProduct)};const rawTemplate=await readFile('dist/index.html','utf8');
+ // The app's script (src/boot.tsx) starts after the first paint (src/main.tsx); it is fetched together with the page
+ // so it is ready by then.
+ const bootChunk=(await readdir('dist/assets')).find(f=>/^boot-.*\.js$/.test(f));
+ const template=bootChunk?rawTemplate.replace('</head>',`<link rel="modulepreload" crossorigin href="/assets/${bootChunk}"/></head>`):rawTemplate;
  const routes=[...data.routes.map(r=>({url:r.url,title:r.title})),...Array.from({length:Math.ceil(data.products.filter(p=>!p.hidden).length/28)-1},(_,i)=>({url:'/catalog/?PAGEN_1='+(i+2),title:data.routes.find(r=>r.path==='/catalog/').title})),...extraRoutes,{url:'/404/',title:'Страница не найдена'}];const manifest=[];
  // The brand once: a page named after the shop itself (the home page's «NSP-Center») is just «NSP Center».
  // Personal and staff pages stay out of search: noindex in the page and not in the sitemap.

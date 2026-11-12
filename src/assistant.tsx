@@ -384,34 +384,43 @@ export function AssistantChat() {
   // Phone keyboard, as messengers do it: while the keyboard is open the whole app (header, messages, input row) fits the
   // part of the screen above it (visualViewport), so the header stays, the input row sits right on the keyboard and the
   // page itself does not move. Updated once per frame and nothing is measured on the way, so typing stays smooth.
-  // iPhone (research 2026-11-12): the keyboard shrinks only the visible part (visualViewport), never the page, fires its
-  // resize at the end of its animation, and may pan the visible part to the field (offsetTop, followed by --chat-top);
-  // iOS 26.0 also leaves offsetTop above 0 after it closes. So the app is followed every frame for the length of the
-  // keyboard's animation, and after the field loses focus the state is checked again a moment later. The page is never
-  // scrolled to the top by hand (that yanked it on every keyboard step before).
+  // iPhone (research 2026-11-12): the keyboard shrinks only the visible part (visualViewport), never the page, and when
+  // the field it is focusing would end up under the keyboard iOS slides the whole screen up to it — the header shook
+  // while the app tried to follow that slide (owner, 2026-11-12: the header stays still). So the room is made before
+  // the keyboard comes: at the touch on the field the app already ends where the keyboard will begin (its height as
+  // measured last time, else an estimate), the field sits above it and iOS has nothing to slide; when the keyboard is
+  // up, the app takes the exact visible size once. Nothing follows the keyboard frame by frame.
   useEffect(() => {
     const vv = window.visualViewport; if (!vv) return;
-    const root = document.documentElement; let frame = 0; let follow = 0; let settle = 0;
+    const root = document.documentElement; let frame = 0; let settle = 0;
+    const KEY = 'nsp-center:keyboard-height';
+    const guess = () => { const saved = Number(sessionStorage.getItem(KEY)); return saved > 150 ? saved : Math.round(window.innerHeight * 0.42); };
+    const set = (height: number, top: number) => { root.style.setProperty('--chat-vh', `${Math.round(height)}px`); root.style.setProperty('--chat-top', `${Math.round(top)}px`); };
     const apply = () => { frame = 0;
+      const keyboard = window.innerHeight - vv.height - vv.offsetTop;
       // Open while the input has the focus (the keyboard is up), whatever the phone reports about its size: some iPhones
       // shrink the whole window for the keyboard, so the window and the visible part are equal and only the focus tells.
-      const open = focused.current || window.innerHeight - vv.height - vv.offsetTop > 60;
+      const open = focused.current || keyboard > 60;
       root.classList.toggle('chat-kb-open', open);
-      if (open) {
-        root.style.setProperty('--chat-vh', `${Math.round(vv.height)}px`); root.style.setProperty('--chat-top', `${Math.round(vv.offsetTop)}px`);
-      } else { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
+      if (open && keyboard > 60) { set(vv.height, vv.offsetTop); try { sessionStorage.setItem(KEY, String(Math.round(keyboard))); } catch { /* next time an estimate */ } }
+      else if (!open) { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
-    // Every frame for 700 ms: the input row rides up with the keyboard instead of jumping once it has stopped.
-    const track = () => { const until = performance.now() + 700; cancelAnimationFrame(follow);
-      const step = () => { apply(); if (performance.now() < until) follow = requestAnimationFrame(step); }; follow = requestAnimationFrame(step); };
-    const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle); track(); };
+    const prepare = (e: TouchEvent) => {
+      if (focused.current || !(e.target as Element)?.closest?.('.chat-input input')) return;
+      root.classList.add('chat-kb-open'); set(window.innerHeight - guess(), 0);
+      atEnd.current = true; if (log.current) log.current.scrollTop = log.current.scrollHeight;
+      // A touch that did not end in typing (a scroll that started on the field) gives the room back.
+      clearTimeout(settle); settle = window.setTimeout(() => { if (!focused.current) apply(); }, 700);
+    };
+    const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle); schedule(); };
     const onFocusOut = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = false; clearTimeout(settle);
-      settle = window.setTimeout(() => { if (!document.activeElement?.closest?.('.chat-input')) track(); }, 300); };
+      settle = window.setTimeout(() => { if (!document.activeElement?.closest?.('.chat-input')) schedule(); }, 300); };
     apply(); vv.addEventListener('resize', schedule); vv.addEventListener('scroll', schedule);
+    document.addEventListener('touchstart', prepare, { passive: true, capture: true });
     document.addEventListener('focusin', onFocusIn); document.addEventListener('focusout', onFocusOut);
-    return () => { cancelAnimationFrame(frame); cancelAnimationFrame(follow); clearTimeout(settle); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule);
-      document.removeEventListener('focusin', onFocusIn); document.removeEventListener('focusout', onFocusOut);
+    return () => { cancelAnimationFrame(frame); clearTimeout(settle); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule);
+      document.removeEventListener('touchstart', prepare, { capture: true }); document.removeEventListener('focusin', onFocusIn); document.removeEventListener('focusout', onFocusOut);
       root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
   }, []);
   const { state: who, ready: whoReady } = useStore();
