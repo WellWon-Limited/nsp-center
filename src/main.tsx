@@ -12,6 +12,11 @@ import { installAppHistory } from './app-history.mjs';
 // navigation) and the scroll memory are installed at once.
 history.scrollRestoration='manual';
 addEventListener('pagehide',()=>{try{sessionStorage.setItem(`nsp-scroll:${location.pathname}${location.search}`,String(Math.round(scrollY)));}catch{/* no scroll return */}});
+// The page the visitor leaves the app on: iOS may close an app left in the background to free memory, and the next
+// launch starts at the home page; within 30 minutes the app opens this page again (index.html), as apps do.
+const rememberPage=()=>{try{localStorage.setItem('nsp-center:last-page',JSON.stringify({url:location.pathname+location.search,at:Date.now()}));}catch{/* starts at home */}};
+addEventListener('pagehide',rememberPage);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')rememberPage();});
 installAppHistory(window,document,standaloneIos(window));
 installSwipeBack(window,document);
 installInstantTap(window,document);
