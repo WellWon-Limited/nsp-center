@@ -387,7 +387,7 @@ export function AssistantChat() {
   // iPhone (research 2026-11-12): the keyboard shrinks only the visible part (visualViewport), never the page, and when
   // the field it is focusing would end up under the keyboard iOS slides the whole screen up to it — the header shook
   // while the app tried to follow that slide (owner, 2026-11-12: the header stays still). So the room is made before
-  // the keyboard comes: at the touch on the field the app already ends where the keyboard will begin (its height as
+  // the keyboard comes: when the field gets the focus the app already ends where the keyboard will begin (its height as
   // measured last time, else an estimate), the field sits above it and iOS has nothing to slide; when the keyboard is
   // up, the app takes the exact visible size once. Nothing follows the keyboard frame by frame.
   useEffect(() => {
@@ -406,21 +406,17 @@ export function AssistantChat() {
       else if (!open) { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
-    const prepare = (e: TouchEvent) => {
-      if (focused.current || !(e.target as Element)?.closest?.('.chat-input input')) return;
-      root.classList.add('chat-kb-open'); set(window.innerHeight - guess(), 0);
-      atEnd.current = true; if (log.current) log.current.scrollTop = log.current.scrollHeight;
-      // A touch that did not end in typing (a scroll that started on the field) gives the room back.
-      clearTimeout(settle); settle = window.setTimeout(() => { if (!focused.current) apply(); }, 700);
-    };
-    const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle); schedule(); };
+    // At the moment the field gets the focus (not at the touch: moving the field under the finger lost the tap, and the
+    // keyboard did not open), before iOS has measured where to slide.
+    const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle);
+      if (window.innerHeight - vv.height - vv.offsetTop <= 60) { root.classList.add('chat-kb-open'); set(window.innerHeight - guess(), 0); }
+      if (log.current) log.current.scrollTop = log.current.scrollHeight; schedule(); };
     const onFocusOut = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = false; clearTimeout(settle);
       settle = window.setTimeout(() => { if (!document.activeElement?.closest?.('.chat-input')) schedule(); }, 300); };
     apply(); vv.addEventListener('resize', schedule); vv.addEventListener('scroll', schedule);
-    document.addEventListener('touchstart', prepare, { passive: true, capture: true });
     document.addEventListener('focusin', onFocusIn); document.addEventListener('focusout', onFocusOut);
     return () => { cancelAnimationFrame(frame); clearTimeout(settle); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule);
-      document.removeEventListener('touchstart', prepare, { capture: true }); document.removeEventListener('focusin', onFocusIn); document.removeEventListener('focusout', onFocusOut);
+      document.removeEventListener('focusin', onFocusIn); document.removeEventListener('focusout', onFocusOut);
       root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
   }, []);
   const { state: who, ready: whoReady } = useStore();
