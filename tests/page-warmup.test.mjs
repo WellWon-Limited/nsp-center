@@ -43,3 +43,24 @@ test('scrolling the catalog sections lights nothing up; a hover colour only for 
   assert.doesNotMatch(css, /\.catalog-entry-link:is\(:hover/);
   assert.match(css, /\(hover:hover\)\{\.catalog-entry-link:hover/);
 });
+
+test('photos: kept on the device across updates, served from it first, and warmed with the pages they belong to', async () => {
+  const sw = read('scripts/sw-template.js');
+  assert.match(sw, /const IMAGES = 'nsp-images';/);
+  assert.match(sw, /if \(url\.pathname\.startsWith\('\/images\/'\)\) \{ event\.respondWith\(image\(request\)\); return; \}/);
+  // The first-screen photos of a page, for the screen's width: the phone's <source>, else the <img>; lazy ones are not.
+  const body = sw.match(/const firstScreenPhotos = ([\s\S]*?\n});/)[1];
+  const firstScreenPhotos = new Function(`return (${body.replace(/;$/, '')})`)();
+  const html = '<picture class="x"><source media="(max-width:639px)" srcSet="/images/a-phone.jpg"/><img src="/images/a.jpg" fetchPriority="high"/></picture><img src="/images/b.jpg" loading="lazy"/><img src="/images/c.jpg"/>';
+  assert.deepEqual(firstScreenPhotos(html, 390), ['/images/a-phone.jpg', '/images/c.jpg']);
+  assert.deepEqual(firstScreenPhotos(html, 1440), ['/images/a.jpg', '/images/c.jpg']);
+  assert.match(read('src/page-warmup.mjs'), /postMessage\(\{ type: 'warm', urls, width: win\.innerWidth, photos \}\)/);
+  const serve = read('scripts/serve.mjs');
+  assert.match(serve, /kept\?'public, max-age=604800, stale-while-revalidate=86400'/);
+  assert.match(serve, /res\.writeHead\(304,headers\)/);
+});
+
+test('the first row of product photos and the lead article cover load with the page, not lazily', () => {
+  assert.match(read('src/ui.tsx'), /<ProductCard key=\{p\.id\} product=\{p\} eager=\{i<4\}\/>/);
+  assert.match(read('src/pages.tsx'), /<ArticleCard key=\{a\.id\} article=\{a\} first=\{i===0\}\/>/);
+});

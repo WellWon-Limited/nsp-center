@@ -2,6 +2,10 @@
 const VERSION = '__VERSION__';
 const CACHE = `nsp-center-${VERSION}`;
 const PRECACHE = __PRECACHE__;
+// Photos keep their own cache across versions (a changed photo gets a new file name), so an update of the site does
+// not make every photo download again. The oldest go first beyond IMAGE_LIMIT.
+const IMAGES = 'nsp-images';
+const IMAGE_LIMIT = 300;
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting()));
@@ -16,6 +20,21 @@ self.addEventListener('activate', event => {
 
 const put = (request, response) => {
   if (response.ok && response.type === 'basic' && !response.redirected) { const copy = response.clone(); caches.open(CACHE).then(cache => cache.put(request, copy)); }
+  return response;
+};
+const keepImage = async (request, response) => {
+  if (!response.ok || response.type !== 'basic' || response.redirected) return;
+  const cache = await caches.open(IMAGES);
+  await cache.put(request, response);
+  const keys = await cache.keys();
+  for (const key of keys.slice(0, Math.max(0, keys.length - IMAGE_LIMIT))) await cache.delete(key);
+};
+/** A photo: from the device at once if it was seen or warmed before, else from the network (and kept). */
+const image = async request => {
+  const hit = (await caches.open(IMAGES).then(cache => cache.match(request))) || (await caches.match(request));
+  if (hit) return hit;
+  const response = await fetch(request);
+  keepImage(request, response.clone()).catch(() => {});
   return response;
 };
 
@@ -37,12 +56,15 @@ self.addEventListener('fetch', event => {
     }));
     return;
   }
-  // Built files carry a content hash: cache first. Images and media: the cache, refreshed in the background.
+  // Built files carry a content hash: cache first. Photos: from the device first, never downloaded again in the
+  // background (that competed with the next page's own requests). Uploaded media, fonts, icons: the cache, refreshed in
+  // the background.
   if (url.pathname.startsWith('/assets/')) {
     event.respondWith(caches.match(request).then(hit => hit || fetch(request).then(response => put(request, response))));
     return;
   }
-  if (/^\/(media|images|icons|fonts|prototype\/fonts)\//.test(url.pathname) || url.pathname === '/manifest.webmanifest') {
+  if (url.pathname.startsWith('/images/')) { event.respondWith(image(request)); return; }
+  if (/^\/(media|icons|fonts|prototype\/fonts)\//.test(url.pathname) || url.pathname === '/manifest.webmanifest') {
     event.respondWith(caches.match(request).then(hit => {
       const fresh = fetch(request).then(response => put(request, response)).catch(() => hit);
       return hit || fresh;
@@ -63,16 +85,50 @@ self.addEventListener('notificationclick', event => {
 
 // Warming up: the page asks for the pages a visitor is about to open (the tabs, the link under a finger, sections and
 // products in view; src/page-warmup.mjs), so they open at once. Only same-site pages, never site management or the API.
+// With each page come the photos of its first screen (the ones it does not load lazily), for the visitor's screen width,
+// so the page opens with its photos already on the device.
+const firstScreenPhotos = (html, width) => {
+  const fits = media => {
+    if (!media) return true;
+    const max = /max-width:\s*(\d+)px/.exec(media), min = /min-width:\s*(\d+)px/.exec(media);
+    return (!max || width <= Number(max[1])) && (!min || width >= Number(min[1]));
+  };
+  const out = [];
+  const add = src => { const first = (src || '').trim().split(/\s+/)[0]; if (first.startsWith('/images/') && !out.includes(first)) out.push(first); };
+  const attr = (tag, name) => new RegExp(`\\s${name}="([^"]*)"`, 'i').exec(tag)?.[1];
+  for (const tag of html.match(/<link [^>]*rel="preload"[^>]*>/gi) || []) if (attr(tag, 'as') === 'image' && fits(attr(tag, 'media'))) add(attr(tag, 'href'));
+  for (const picture of html.match(/<picture[^>]*>[\s\S]*?<\/picture>/gi) || []) {
+    const img = /<img [^>]*>/i.exec(picture)?.[0] || '';
+    if (/loading="lazy"/i.test(img)) continue;
+    const source = (picture.match(/<source [^>]*>/gi) || []).find(tag => fits(attr(tag, 'media')));
+    add(source ? attr(source, 'srcset') : attr(img, 'src'));
+  }
+  for (const img of html.replace(/<picture[^>]*>[\s\S]*?<\/picture>/gi, '').match(/<img [^>]*>/gi) || []) if (!/loading="lazy"/i.test(img)) add(attr(img, 'src'));
+  return out.slice(0, 8);
+};
+const warmPhotos = async (html, width, count) => {
+  const cache = await caches.open(IMAGES);
+  for (const src of firstScreenPhotos(html, width).slice(0, count)) {
+    if (await cache.match(src)) continue;
+    try { await keepImage(new Request(src), await fetch(src)); } catch { /* offline */ }
+  }
+};
 self.addEventListener('message', event => {
   const urls = event.data?.type === 'warm' && Array.isArray(event.data.urls) ? event.data.urls : [];
   if (!urls.length) return;
+  const width = Number(event.data.width) || 390;
+  const photos = Math.max(0, Math.min(8, Number(event.data.photos ?? 8) || 0));
   event.waitUntil(caches.open(CACHE).then(async cache => {
     for (const url of urls.slice(0, 40)) {
       if (typeof url !== 'string' || !url.startsWith('/') || url.startsWith('//') || /^\/(admin|api)(\/|$)/.test(url)) continue;
-      if (await cache.match(url)) continue;
       try {
-        const response = await fetch(url, { credentials: 'same-origin' });
-        if (response.ok && response.type === 'basic' && !response.redirected && (response.headers.get('content-type') || '').includes('text/html')) await cache.put(url, response);
+        let page = await cache.match(url);
+        if (!page) {
+          const response = await fetch(url, { credentials: 'same-origin' });
+          if (!(response.ok && response.type === 'basic' && !response.redirected && (response.headers.get('content-type') || '').includes('text/html'))) continue;
+          await cache.put(url, response.clone()); page = response;
+        }
+        if (photos) await warmPhotos(await page.text(), width, photos);
       } catch { /* offline: nothing to warm */ }
     }
   }));

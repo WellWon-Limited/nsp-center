@@ -218,6 +218,7 @@ html:has(.chat), body:has(.chat) { overscroll-behavior: none; height: 100%; }
    flow — the header at the top, the chat column filling the rest, on a phone ending above the tab bar by CSS alone
    (calc of the bar's height). While the phone keyboard is open the app fits the space above it (below). */
 body:has(.chat) #root { display: flex; flex-direction: column; height: 100svh; min-height: 0; }
+html[data-catalog-design] body:has(.chat):has(.site-header) > #root { min-height: 0; }
 body:has(.chat) .site-main { flex: 1 1 auto; min-height: 0; width: 100%; max-width: none; padding: 0; display: flex; }
 @media (max-width: 959px) { .chat { width: calc(100vw - 2 * var(--space-22)); } }
 @media (max-width: 639px) {
@@ -230,7 +231,10 @@ body:has(.chat) .site-main { flex: 1 1 auto; min-height: 0; width: 100%; max-wid
    the page underneath does not scroll. */
 @media (max-width: 639px) {
   html.chat-kb-open, html.chat-kb-open body { overflow: hidden; overscroll-behavior: none; }
-  html.chat-kb-open body:has(.chat) #root { position: fixed; left: 0; right: 0; top: var(--chat-top, 0px); height: var(--chat-vh, 100svh); }
+  /* Stronger than the site's page rules (#root min-height:100svh and position:relative on every page with a header),
+     which used to win: the app kept the whole screen's height and the input row stayed under the keyboard. */
+  html.chat-kb-open[data-catalog-design] body:has(.chat):has(.site-header) > #root,
+  html.chat-kb-open body:has(.chat) #root { position: fixed; left: 0; right: 0; top: var(--chat-top, 0px); height: var(--chat-vh, 100svh); min-height: 0; }
   html.chat-kb-open body:has(.chat) .site-main { padding-bottom: 0; }
   html.chat-kb-open body:has(.chat) .bottom-nav { display: none; }
   /* Under the input row only the chat's own light background: no white strip (kept below the footer on other pages)

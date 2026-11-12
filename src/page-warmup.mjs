@@ -22,11 +22,13 @@ export function installWarmup(win, doc) {
   const sw = win.navigator.serviceWorker;
   if (!sw) return;
   const asked = new Set();
-  const send = list => {
+  // With each page the worker also keeps the photos of its first screen for this screen's width (`photos`: how many):
+  // all of them for the tabs, the menu and the link under a finger, the main one for links merely in view.
+  const send = (list, photos = 8) => {
     const urls = list.filter(url => url && !asked.has(url));
     if (!urls.length || !sw.controller) return;
     urls.forEach(url => asked.add(url));
-    sw.controller.postMessage({ type: 'warm', urls });
+    sw.controller.postMessage({ type: 'warm', urls, width: win.innerWidth, photos });
   };
   const here = () => win.location.href;
   const links = selector => [...doc.querySelectorAll(selector)].map(a => pageOf(a.getAttribute('href'), here()));
@@ -38,7 +40,7 @@ export function installWarmup(win, doc) {
     if (!('IntersectionObserver' in win)) return;
     let left = MAX_IN_VIEW;
     const seen = new win.IntersectionObserver(entries => {
-      for (const entry of entries) if (entry.isIntersecting && left > 0) { left--; seen.unobserve(entry.target); send([pageOf(entry.target.getAttribute('href'), here())]); }
+      for (const entry of entries) if (entry.isIntersecting && left > 0) { left--; seen.unobserve(entry.target); send([pageOf(entry.target.getAttribute('href'), here())], 1); }
       if (left <= 0) seen.disconnect();
     }, { rootMargin: '200px 0px' });
     doc.querySelectorAll('.product-card h3 a[href]').forEach(a => seen.observe(a));

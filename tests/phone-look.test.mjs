@@ -37,10 +37,14 @@ test('the FAQ does not repeat its heading', () => {
 
 test('with the keyboard open the chat fits the space above it and the header stays', () => {
   const chat = read('src/assistant.css');
-  assert.match(chat, /html\.chat-kb-open body:has\(\.chat\) #root \{ position: fixed; left: 0; right: 0; top: var\(--chat-top, 0px\); height: var\(--chat-vh, 100svh\); \}/);
+  // The keyboard rule outranks the site's page rules (#root min-height:100svh, position:relative), which used to keep the
+  // input row under the keyboard.
+  assert.match(chat, /html\.chat-kb-open\[data-catalog-design\] body:has\(\.chat\):has\(\.site-header\) > #root,\n  html\.chat-kb-open body:has\(\.chat\) #root \{ position: fixed; left: 0; right: 0; top: var\(--chat-top, 0px\); height: var\(--chat-vh, 100svh\); min-height: 0; \}/);
   const code = read('src/assistant.tsx');
   assert.match(code, /requestAnimationFrame\(apply\)/, 'updated once per frame');
   assert.doesNotMatch(code, /window\.scrollTo\(0, 0\)/, 'the page is not yanked to the top on every keyboard step');
+  assert.match(code, /document\.addEventListener\('focusin', onFocusIn\)/, 'the keyboard is followed from the moment the field gets the focus');
+  assert.match(code, /className="chat-send"[^>]*onPointerDown=\{e => e\.preventDefault\(\)\}/, 'sending keeps the keyboard open, as in messengers');
 });
 
 test('every inline script of the page head is valid JavaScript (a broken one silently drops the first-paint data)', () => {

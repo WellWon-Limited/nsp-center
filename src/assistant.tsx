@@ -368,7 +368,7 @@ export function AssistantChat() {
   const [typing, setTyping] = useState(false);
   const end = useRef<HTMLDivElement>(null);
   const log = useRef<HTMLDivElement>(null);
-  const [focused, setFocused] = useState(false);
+  const focused = useRef(false);
   // «↓» appears when the visitor has scrolled up more than a screen's worth from the latest messages.
   const [away, setAway] = useState(false);
   // Whether the visitor is at the latest messages: only then does a new message move the view (reading older advice is
@@ -384,21 +384,36 @@ export function AssistantChat() {
   // Phone keyboard, as messengers do it: while the keyboard is open the whole app (header, messages, input row) fits the
   // part of the screen above it (visualViewport), so the header stays, the input row sits right on the keyboard and the
   // page itself does not move. Updated once per frame and nothing is measured on the way, so typing stays smooth.
+  // iPhone (research 2026-11-12): the keyboard shrinks only the visible part (visualViewport), never the page, fires its
+  // resize at the end of its animation, and may pan the visible part to the field (offsetTop, followed by --chat-top);
+  // iOS 26.0 also leaves offsetTop above 0 after it closes. So the app is followed every frame for the length of the
+  // keyboard's animation, and after the field loses focus the state is checked again a moment later. The page is never
+  // scrolled to the top by hand (that yanked it on every keyboard step before).
   useEffect(() => {
     const vv = window.visualViewport; if (!vv) return;
-    const root = document.documentElement; let frame = 0;
+    const root = document.documentElement; let frame = 0; let follow = 0; let settle = 0;
     const apply = () => { frame = 0;
       // Open while the input has the focus (the keyboard is up), whatever the phone reports about its size: some iPhones
       // shrink the whole window for the keyboard, so the window and the visible part are equal and only the focus tells.
-      const open = focused || window.innerHeight - vv.height - vv.offsetTop > 60;
+      const open = focused.current || window.innerHeight - vv.height - vv.offsetTop > 60;
       root.classList.toggle('chat-kb-open', open);
-      if (open) { root.style.setProperty('--chat-vh', `${Math.round(vv.height)}px`); root.style.setProperty('--chat-top', `${Math.round(vv.offsetTop)}px`); }
-      else { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
+      if (open) {
+        root.style.setProperty('--chat-vh', `${Math.round(vv.height)}px`); root.style.setProperty('--chat-top', `${Math.round(vv.offsetTop)}px`);
+      } else { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
+    // Every frame for 700 ms: the input row rides up with the keyboard instead of jumping once it has stopped.
+    const track = () => { const until = performance.now() + 700; cancelAnimationFrame(follow);
+      const step = () => { apply(); if (performance.now() < until) follow = requestAnimationFrame(step); }; follow = requestAnimationFrame(step); };
+    const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle); track(); };
+    const onFocusOut = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = false; clearTimeout(settle);
+      settle = window.setTimeout(() => { if (!document.activeElement?.closest?.('.chat-input')) track(); }, 300); };
     apply(); vv.addEventListener('resize', schedule); vv.addEventListener('scroll', schedule);
-    return () => { cancelAnimationFrame(frame); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule); root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
-  }, [focused]);
+    document.addEventListener('focusin', onFocusIn); document.addEventListener('focusout', onFocusOut);
+    return () => { cancelAnimationFrame(frame); cancelAnimationFrame(follow); clearTimeout(settle); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule);
+      document.removeEventListener('focusin', onFocusIn); document.removeEventListener('focusout', onFocusOut);
+      root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
+  }, []);
   const { state: who, ready: whoReady } = useStore();
   const storeKey = chatKey(who.signedIn ? who.account?.email : null);
   // The saved conversation of this visitor (guest or account); a change of account loads that account's own one.
@@ -490,7 +505,7 @@ export function AssistantChat() {
       {/* The input row ends the conversation (owner, 2026-11-10): it scrolls away with the messages, and the way back to it is
           down to the end (or the «↓» button). */}
       <div className="chat-composer">
-        <form className="chat-input" onSubmit={submit}><input value={draft} onChange={e => setDraft(e.target.value)} onFocus={() => { setFocused(true); atEnd.current = true; }} onBlur={() => setFocused(false)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить"><Icon name="arrow" size={20} /></button></form>
+        <form className="chat-input" onSubmit={submit}><input value={draft} onChange={e => setDraft(e.target.value)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить" onPointerDown={e => e.preventDefault()}><Icon name="arrow" size={20} /></button></form>
         <p className="chat-note">Помощник не заменяет консультацию врача.</p>
       </div>
       <div ref={end} />
