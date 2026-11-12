@@ -158,7 +158,7 @@ html[data-home-design="d"] body .home-path-thumb img[src$="/khlorofill-zhidkiy-c
 html[data-home-design="d"] body:has(.home-first-screen){background:transparent}
 html[data-home-design="d"] body:has(.home-first-screen)>#root{background:var(--color-bg);isolation:isolate}
 html[data-home-design="d"] body:has(.home-first-screen) .ambient{display:block;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-html[data-home-design="d"] body:has(.home-first-screen) .ambient i{display:block;position:absolute;width:700px;height:700px;border-radius:var(--radius-circle);background:var(--color-mint);filter:blur(var(--ambient-blur-70));opacity:.46;top:-200px;left:-320px;right:auto}
-html[data-home-design="d"] body:has(.home-first-screen) .ambient i:nth-child(2){background:var(--color-blue);top:300px;left:auto;right:-340px}
-html[data-home-design="d"] body:has(.home-first-screen) .ambient i:nth-child(3){background:var(--color-sand);opacity:.4;top:1350px;left:-380px;right:auto}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient i{display:block;position:absolute;width:700px;height:700px;border-radius:var(--radius-circle);--ambient-c:var(--color-mint);--ambient-b:70px;opacity:.46;top:-200px;left:-320px;right:auto}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient i:nth-child(2){--ambient-c:var(--color-blue);top:300px;left:auto;right:-340px}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient i:nth-child(3){--ambient-c:var(--color-sand);opacity:.4;top:1350px;left:-380px;right:auto}
 html[data-home-design="d"] body:has(.home-first-screen) .site-footer :is(.footer-main,.footer-top,.footer-bottom,.footer-legal,.footer-legal-inner){background:transparent}

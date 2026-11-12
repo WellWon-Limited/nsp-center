@@ -11,9 +11,9 @@ html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)){b
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))::before,html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))::after{display:none}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{background:var(--color-bg);isolation:isolate;position:relative}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient{display:block;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 500px),transparent calc(100% - 120px));mask-image:linear-gradient(#000 calc(100% - 500px),transparent calc(100% - 120px))}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i{display:block;position:absolute;width:420px;height:420px;border-radius:50%;background:var(--color-mint);filter:blur(60px);opacity:.5;top:-120px;left:-200px;right:auto}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(2){background:var(--color-blue);top:380px;left:auto;right:-220px}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(3){background:var(--color-sand);opacity:.4;top:1100px;left:-240px;right:auto}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i{display:block;position:absolute;width:420px;height:420px;border-radius:50%;--ambient-c:var(--color-mint);--ambient-b:60px;opacity:.5;top:-120px;left:-200px;right:auto}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(2){--ambient-c:var(--color-blue);top:380px;left:auto;right:-220px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(3){--ambient-c:var(--color-sand);opacity:.4;top:1100px;left:-240px;right:auto}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header .header-actions .icon-btn{background:transparent;box-shadow:none;border:0}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-footer{border-top:1px solid rgb(29 58 54 / .1);background:transparent}
