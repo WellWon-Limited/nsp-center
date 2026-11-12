@@ -11,17 +11,9 @@ import { addNotice, namesLine } from './notices.mjs';
 /** Registers the service worker (served by the built site; in `npm run dev` the file is absent and nothing happens). */
 export function registerServiceWorker() {
   if (!('serviceWorker' in navigator)) return;
-  // A page opens from the kept copy at once; when the site has been updated, the new version takes over a moment later.
-  // If that happens right after the page opened (a refresh, a new tab), the page reloads once to show the new version
-  // instead of the old copy; later, during use, nothing is interrupted and the next page is the new one.
-  const hadController = Boolean(navigator.serviceWorker.controller);
-  const opened = performance.now();
-  let reloaded = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (!hadController || reloaded || performance.now() - opened > 15000) return;
-    // This reload is the site's own (a new version), not the visitor's: the install card must not take it as one.
-    reloaded = true; try { sessionStorage.setItem('nsp-center:update-reload', '1'); } catch { /* ignore */ } location.reload();
-  });
+  // A page opens from the kept copy at once; when the site has been updated, the new version takes over in the
+  // background and the next page opened is the new one. The page on screen is not reloaded for it (owner, 2026-11-12:
+  // that reload replayed the home heading, «Забота» appeared twice, on the first visit after an update).
   // The app may start after the page's load event (src/main.tsx paints the page first), so both cases register.
   const register = () => { navigator.serviceWorker.register('/sw.js').catch(() => { /* the site works without it */ }); };
   if (document.readyState === 'complete') register(); else addEventListener('load', register, { once: true });

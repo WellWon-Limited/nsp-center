@@ -20,3 +20,6 @@
 /* On phones the loading screen covers the first page: the words wait under it and rise once it is gone (index.html,
    src/pwa.tsx). Rising while it still faded out left light patches of its colour around the words on iPhone. */
 html.nsp-splash .hero-heading--enter .hero-title-word{animation-play-state:paused}
+/* Once per visit (index.html marks html.nsp-hero-played): coming back to the home page, or a page the site itself
+   reloaded, shows the heading in place instead of «Забота» appearing a second time. */
+html.nsp-hero-played .hero-heading--enter .hero-title-word{animation:none}

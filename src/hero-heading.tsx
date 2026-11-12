@@ -7,7 +7,7 @@ const lines = ['Забота о себе', 'в вашем ритме'];
 
 export function HeroHeading() {
  const [animate] = useState(() => !entrancePlayed);
- useEffect(() => { entrancePlayed = true; }, []);
+ useEffect(() => { entrancePlayed = true; try { sessionStorage.setItem('nsp-center:hero-played', '1'); } catch { /* plays again next time */ } }, []);
  let wordIndex = 0;
  return <h1 aria-label="Забота о себе в вашем ритме" className={animate ? 'hero-heading--enter' : undefined}>
   {lines.map((line, lineIndex) => <Fragment key={line}>
