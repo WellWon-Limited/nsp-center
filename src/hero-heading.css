@@ -17,5 +17,6 @@
 @media(prefers-reduced-motion:reduce){
  .hero-heading--enter .hero-title-word{animation:none}
 }
-/* On phones the loading screen covers the first page: the words wait under it and rise only as it fades (index.html). */
-html.nsp-splash:not(.nsp-splash-out) .hero-heading--enter .hero-title-word{animation-play-state:paused}
+/* On phones the loading screen covers the first page: the words wait under it and rise once it is gone (index.html,
+   src/pwa.tsx). Rising while it still faded out left light patches of its colour around the words on iPhone. */
+html.nsp-splash .hero-heading--enter .hero-title-word{animation-play-state:paused}

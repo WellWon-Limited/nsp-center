@@ -271,5 +271,8 @@ html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .
    no white strip under the content (owner, 2026-11-12). */
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{min-height:100svh}
 /* The space the page keeps under its content for the phone's bottom bar is the page colour too (it showed the white
-   of the top edge while scrolling to the end). */
-html[data-catalog-design]:root body:has(.site-header):not(:has(.home-first-screen)){background:var(--color-bg)}
+   of the top edge while scrolling to the end). The colour is an image layer and body's own background-color stays
+   transparent: Safari (iOS 26) fills the pulled-down area above the page with body's background-color when it has one,
+   which put a light-green band above the white header; with it transparent, Safari uses html's colour, white at the
+   top and the page colour at the bottom (src/home-scroll-edges.mjs), like the home page. */
+html[data-catalog-design]:root body:has(.site-header):not(:has(.home-first-screen)){background:linear-gradient(var(--color-bg),var(--color-bg)) transparent}

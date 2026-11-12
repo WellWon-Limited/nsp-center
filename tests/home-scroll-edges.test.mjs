@@ -65,3 +65,11 @@ test('the restyled catalog paints its bottom edge too, whatever the home design'
  b.win.scrollY = 2100; b.fire('scroll'); b.flush();
  assert.equal(b.root.dataset.homeScrollEdge, 'bottom');
 });
+
+test('site pages paint their colour as an image, so the pulled-down area above the header stays white on iPhone', async () => {
+ // Safari (iOS 26) fills the area above the page with body's background-color when it has one; html's colour then
+ // follows the scroll edge (white at the top, the page colour at the bottom).
+ const { readFileSync } = await import('node:fs');
+ const css = readFileSync(new URL('../src/catalog-design-variants.css', import.meta.url), 'utf8');
+ assert.match(css, /html\[data-catalog-design\]:root body:has\(\.site-header\):not\(:has\(\.home-first-screen\)\)\{background:linear-gradient\(var\(--color-bg\),var\(--color-bg\)\) transparent\}/);
+});

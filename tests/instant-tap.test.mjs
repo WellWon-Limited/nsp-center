@@ -50,6 +50,16 @@ test('the whole product card opens the product, with the heart and buttons on to
   assert.match(css, /\.product-card \.product-meta>\.btn\{position:relative;z-index:2\}/);
 });
 
-test('the home heading waits under the loading screen and rises as it fades', () => {
-  assert.match(read('src/hero-heading.css'), /html\.nsp-splash:not\(\.nsp-splash-out\) \.hero-heading--enter \.hero-title-word\{animation-play-state:paused\}/);
+test('the home heading waits under the loading screen and rises once it is gone', () => {
+  const css = read('src/hero-heading.css');
+  assert.match(css, /html\.nsp-splash \.hero-heading--enter \.hero-title-word\{animation-play-state:paused\}/);
+  assert.doesNotMatch(css, /nsp-splash-out/);
+});
+
+test('the loading screen: no progress line, no blur layers, its own colour reaches the top edge', () => {
+  const html = read('index.html');
+  assert.doesNotMatch(html, /nsp-launch-progress/);
+  assert.doesNotMatch(html, /\.nsp-launch::(?:before|after)/);
+  // The status bar takes the screen's background-color; the gradient starts with the same colour at the top.
+  assert.match(html, /background-color:#d3ebe1;background-image:[^;]*linear-gradient\(180deg,#d3ebe1 0/);
 });
