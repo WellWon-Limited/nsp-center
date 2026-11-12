@@ -32,7 +32,7 @@ const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http:/
 if(content.redirects[path]){res.writeHead(308,{Location:content.redirects[path]});res.end();return;}if(!path.endsWith('/')&&!extname(path)){res.writeHead(308,{Location:path+'/'+url.search});res.end();return;}
  if(prototypes.has(path)){const bytes=prototypes.get(path);res.writeHead(200,{'Content-Type':mime['.html'],'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff'});if(req.method==='HEAD')res.end();else res.end(bytes);return;}
  const page=url.searchParams.get('PAGEN_1');const key=path+(page?'?PAGEN_1='+page:'');const file=routes.get(key)||routes.get(path)||(path==='/'?'index.html':path.replace(/^\//,''));let target=resolve(dist,file);if(target!==dist&&!target.startsWith(dist+sep)){res.writeHead(403);res.end();return;}
- let status=200;try{const info=await stat(target);if(!info.isFile())throw new Error('not file');}catch{target=resolve(dist,'404/index.html');status=404;}
+ let status=200,modified=null;try{const info=await stat(target);if(!info.isFile())throw new Error('not file');modified=info.mtime;}catch{target=resolve(dist,'404/index.html');status=404;}
  // A card created in site management has no built page: the not-found page's shell carries it, and the browser renders it.
  const created=status===404&&accounts.enabled&&/^\/product\/[a-z0-9-]+\/$/.test(path)?await findCustomProduct(accounts.pool,path.split('/')[2],content.categories).catch(()=>null):null;
  // An article added in site management: the same shell, with the article's text right in the page for search engines.
@@ -47,6 +47,15 @@ if(content.redirects[path]){res.writeHead(308,{Location:content.redirects[path]}
  // Fonts and hashed bundles never change under the same address: kept by the browser, so the header text does not
  // flash between pages while a font is re-checked.
  const forever=/^\/(assets|prototype\/fonts|fonts)\//.test(path);
- const bytes=await readFile(target);res.writeHead(status,{'Content-Type':mime[extname(target)]||'application/octet-stream','Cache-Control':forever&&status===200?'public, max-age=31536000, immutable':'no-cache','X-Content-Type-Options':'nosniff'});if(req.method==='HEAD')res.end();else res.end(bytes);
+ // Photos and icons are kept by the browser for a week (a changed photo gets a new file name, -v2), so a page seen before
+ // shows them at once without the network. Every other file says when it changed, so a re-check costs no download.
+ const kept=/^\/(images|icons)\//.test(path);
+ const type=mime[extname(target)]||'application/octet-stream',html=type===mime['.html'];
+ const stamp=status===200&&modified&&!html?new Date(Math.floor(modified.getTime()/1000)*1000).toUTCString():null;
+ const cache=status!==200?'no-cache':forever?'public, max-age=31536000, immutable':kept?'public, max-age=604800, stale-while-revalidate=86400':'no-cache';
+ const headers={'Content-Type':type,'Cache-Control':cache,'X-Content-Type-Options':'nosniff',...(stamp?{'Last-Modified':stamp}:{})};
+ const since=Date.parse(req.headers['if-modified-since']||'');
+ if(stamp&&!Number.isNaN(since)&&since>=Date.parse(stamp)){res.writeHead(304,headers);res.end();return;}
+ const bytes=await readFile(target);res.writeHead(status,headers);if(req.method==='HEAD')res.end();else res.end(bytes);
 }catch{res.writeHead(400);res.end('Bad request');}});
 const port=Number(process.env.PORT)||5217;const host=process.env.HOST||'127.0.0.1';server.listen(port,host,()=>console.log(`NSP Center: http://${host}:${port}${accounts.enabled?" · accounts: Postgres":""}${ai.enabled?` · AI: ${ai.provider}`:""} ${process.env.WW_TEST==='1'?`(isolated ${process.env.WW_TEST_ID||''})`:''}`));
