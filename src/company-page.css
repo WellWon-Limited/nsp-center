@@ -1,3 +1,4 @@
+.co-hero-media{display:contents}
 /* The approved article fills the page; all shared navigation and footer stay in App. */
 @media(max-width:639px){
  .company-page--nature .company-concept--article .co-hero-image{inset:0;height:100%;object-position:90% center}
@@ -20,7 +21,7 @@ body:has(.company-page--nature) .site-main{max-width:none;padding:0}
 .company-concept--article{--co-ink:var(--color-ink);color:var(--color-ink)}
 body .site-main .company-page--nature .company-concept.company-concept--article .co-hero{min-height:calc(100svh - var(--site-header-height,106px) - var(--space-48));margin-bottom:0}
 .company-concept--article .co-hero-copy{max-width:850px;padding:76px 6vw 76px 7vw}
-.company-concept--article .co-hero h1{max-width:680px;font-size:clamp(42px,4vw,64px);font-weight:600;line-height:1.12;letter-spacing:-.045em}
+.company-concept--article .co-hero :is(h1,.co-hero-title){max-width:680px;font-size:clamp(42px,4vw,64px);font-weight:600;line-height:1.12;letter-spacing:-.045em}
 .company-concept--article .co-home-return{margin-bottom:var(--space-24)}
 .company-concept--article .co-hero-copy>.co-kicker{margin-bottom:var(--space-18)}
 .company-concept--article .co-article-lead{max-width:808px;margin:auto;padding:var(--space-48,48px) var(--space-24) 0;color:var(--color-ink);font-size:18px;line-height:1.9}
@@ -45,7 +46,7 @@ body .site-main .company-page--nature .company-concept.company-concept--article 
 @media(max-width:639px){
  body .site-main .company-page--nature .company-concept.company-concept--article .co-hero{min-height:calc(var(--phone-first-screen-height) - var(--space-48))}
  .company-concept--article .co-hero-copy{padding:30px var(--space-24) 270px;max-width:none}
- .company-concept--article .co-hero h1{font-size:36px}
+ .company-concept--article .co-hero :is(h1,.co-hero-title){font-size:36px}
  .company-concept--article .co-article-lead{padding-top:var(--space-32);font-size:16px}
  .company-concept--article :is(.co-section,.co-research){padding-block:var(--space-32)}
  .company-concept--article :is(.co-story h2,.co-section-heading h2,.co-research h2,.co-timeline>h2){font-size:27px}
@@ -58,3 +59,14 @@ body .site-main .company-page--nature .company-concept.company-concept--article 
 @media(min-width:640px){
  .company-concept--article .co-closing.co-section{max-width:none;width:100%;padding-inline:max(var(--space-24),calc((100% - 760px)/2))}
 }
+
+/* «О компании» title (company-content.tsx). Phones keep the photo cover: the title is there for search and screen
+   readers, and the way home sits over the photo where it was. */
+@media(max-width:959px){
+ .company-concept--article{position:relative}
+ .company-concept--article .co-page-heading{position:absolute;z-index:2;top:30px;left:var(--space-24);color:var(--color-white)}
+ .company-concept--article .co-page-heading :is(.co-page-kicker,h1){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+ .company-concept--article .co-page-heading .co-home-return{margin:0}
+ .company-concept--article .co-hero-copy{padding-top:calc(30px + 44px + var(--space-24))}
+}
+@media(min-width:640px) and (max-width:959px){.company-concept--article .co-page-heading{top:76px;left:7vw}.company-concept--article .co-hero-copy{padding-top:calc(76px + 44px + var(--space-24))}}

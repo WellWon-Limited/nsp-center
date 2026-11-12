@@ -201,6 +201,19 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.match(helper.body.password, /^[a-zA-Z2-9]{16}$/);
   assert.equal((await call('/api/admin/staff', 'PUT', { email: 'boss@example.ru', remove: true })).status, 400, 'cannot remove yourself');
   assert.deepEqual((await call('/api/admin/overview')).body.staff.map(u => u.email).sort(), ['boss@example.ru', 'helper@example.ru']);
+  // A forgotten staff password: an administrator issues a new one-time password; the old one stops working.
+  const renewed = await call('/api/admin/staff', 'PUT', { email: 'helper@example.ru', reset: true });
+  assert.equal(renewed.status, 200);
+  assert.match(renewed.body.password, /^[a-zA-Z2-9]{16}$/);
+  assert.notEqual(renewed.body.password, helper.body.password);
+  assert.equal((await call('/api/admin/staff', 'PUT', { email: 'anna@example.ru', reset: true })).status, 404, 'a customer has no staff password');
+  {
+    const boss = session; session = '';
+    assert.equal((await call('/api/admin/login', 'POST', { login: 'helper@example.ru', password: helper.body.password })).status, 401, 'the old password no longer works');
+    session = '';
+    assert.equal((await call('/api/admin/login', 'POST', { login: 'helper@example.ru', password: renewed.body.password })).status, 200, 'the new password works');
+    session = boss;
+  }
   assert.equal((await call('/api/admin/staff', 'PUT', { email: 'helper@example.ru', remove: true })).status, 200);
   const bossSession = session; session = '';
   assert.equal((await call('/api/admin/login', 'POST', { login: 'helper@example.ru', password: helper.body.password })).status, 401, 'a removed member of staff cannot sign in');

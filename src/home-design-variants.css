@@ -1,0 +1,164 @@
+/* Home page design (Г, attribute data-home-design="d" set in index.html): a soft mint-and-blue page, glassy white
+   cards with large rounded corners, pastel tiles, small spaced labels and dark pill buttons. Content — photos, texts
+   and buttons — is the site's own. */
+
+/* ── Shared ─────────────────────────────────────────────────────────────────────────────────────── */
+html[data-home-design] body:has(.home-first-screen){background:radial-gradient(60% 50% at 0% 0%,#d6ebe1 0,rgb(214 235 225 / 0) 70%),radial-gradient(55% 55% at 100% 30%,#dde6f7 0,rgb(221 230 247 / 0) 70%),radial-gradient(50% 45% at 0% 100%,#f1ead9 0,rgb(241 234 217 / 0) 70%),#eef3f0;background-attachment:fixed}
+html[data-home-design] body:has(.home-first-screen)::before{display:none}
+/* Header: glass over the page, icons in white circles. */
+html[data-home-design] body:has(.home-first-screen) .site-header{background:rgb(255 255 255 / .55);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
+@media(min-width:960px){
+ html[data-home-design] body:has(.home-first-screen) .site-header .header-actions .icon-btn{width:48px;height:48px;border-radius:50%;background:rgb(255 255 255 / .85);box-shadow:0 6px 18px -12px rgb(29 58 54 / .5)}
+}
+/* Three paths: pastel tiles without a frame. */
+html[data-home-design] body .home-paths>a.home-path{border:0;border-radius:28px;box-shadow:none}
+html[data-home-design] body .home-paths>a.home-path:nth-child(1){background:linear-gradient(120deg,#cfe3d8,#e3eee8)}
+html[data-home-design] body .home-paths>a.home-path:nth-child(2){background:linear-gradient(120deg,#cbd9f3,#eaeff8)}
+html[data-home-design] body .home-paths>a.home-path:nth-child(3){background:linear-gradient(120deg,#eee3cf,#f5efe4)}
+html[data-home-design] body .home-path-thumb{background:rgb(255 255 255 / .55);border-radius:20px}
+html[data-home-design] body .home-path-arrow{border:0;background:transparent}
+/* Product cards of the home page: glass, the photo on its own rounded white panel. */
+html[data-home-design] body [data-ds-id="home-products"] .product-card.panel{background:rgb(255 255 255 / .62);border:0;border-radius:28px;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45);padding:14px}
+html[data-home-design] body [data-ds-id="home-products"] .product-card .product-visual{background:#fbfdfc;border-radius:22px}
+/* Test and marathon: the dark green card and the blue one. */
+html[data-home-design] body .home-care .care-card{border:0;border-radius:28px}
+html[data-home-design] body .home-care .care-card--marathon{background:linear-gradient(135deg,#eef2f9,#c9d8f3);color:var(--color-ink)}
+/* Journal cards: glass with the photo inset. */
+html[data-home-design] body [data-ds-id="home-blog"] .article-card.panel{background:rgb(255 255 255 / .62);border:0;border-radius:28px;box-shadow:none}
+/* «Вопросы — это хорошее начало»: a light glass band with a dark pill button. */
+html[data-home-design] body .home-consult{background:rgb(255 255 255 / .66);color:var(--color-ink);border:0;border-radius:28px}
+html[data-home-design] body .home-consult :is(h2,p,a:not(.btn)){color:var(--color-ink)}
+html[data-home-design] body .home-consult .btn{background:var(--color-ink);border-color:var(--color-ink);color:#fff;border-radius:16px}
+html[data-home-design] body .home-consult .btn svg{color:#fff}
+/* Reviews and «О NSP Center»: glass instead of framed boxes. */
+html[data-home-design] body .home-story :is(.story-intro-card,.home-review,blockquote,[class*="review-card"]){border-color:transparent;background:rgb(255 255 255 / .62);border-radius:28px}
+
+/* ── Hero, computers ─────────────────────────────────────────────────────────────────────────────────────────── */
+
+/* ═══ Details ═══
+   «Знакомство с NSP» next to «Выбрать продукты»; the plan as the small card of the first design (icon, title,
+   one line, arrow) so the three path tiles show on the first screen; «В корзину» keeps the site's dark colour; the
+   card over the «О NSP Center» photo is solid; reviews, the pickup point and the footer in the first design's style. */
+html[data-home-design="d"] body [data-ds-id="home-products"] .product-meta>.card-cart-button{background:var(--color-ink);border-color:var(--color-ink)}
+/* «Знакомство с NSP»: a quiet text link beside the dark button. */
+html[data-home-design="d"] body .home-hero .hero-copy .ds-cluster{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+html[data-home-design="d"] body .home-hero .hero-copy .hero-secondary{display:inline-flex;align-items:center;gap:6px;color:#3d7a64;font-weight:700;font-size:16px;text-decoration:none}
+
+/* The small plan card: icon tile, «Ваш план» and one line, an arrow; the whole card opens the plan. */
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily{display:grid;grid-template-columns:52px minmax(0,1fr) 24px;column-gap:16px;row-gap:2px;align-items:center;padding:16px 20px;border-radius:22px;background:rgb(255 255 255 / .94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:0;box-shadow:0 22px 44px -30px rgb(29 58 54 / .55);text-align:left;color:var(--color-ink);transform:none}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-eyebrow{grid-column:1;grid-row:1/3;width:52px;height:52px;margin:0;border-radius:16px;background:#e2eee8;color:#3d7a64;display:grid;place-items:center;font-size:0;letter-spacing:0;transform:none}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-eyebrow svg{width:26px;height:26px}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily h2{grid-column:2;margin:0;font-size:17px;line-height:1.3;color:var(--color-ink);text-align:left}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily p{grid-column:2;margin:0;font-size:13.5px;line-height:1.4;color:#52645e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-action{grid-column:3;grid-row:1/3;margin:0;padding:0;min-height:0;font-size:0;color:var(--color-ink);justify-content:center}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-action svg{width:20px;height:20px}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-action::after{content:"";position:absolute;inset:0;border-radius:inherit}
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-signup{display:none}
+/* «О NSP Center»: the card over the photo is solid white. */
+html[data-home-design="d"] body .home-story .story-intro-card{background:#fff;border:0;border-radius:28px;box-shadow:0 30px 60px -40px rgb(29 58 54 / .5)}
+/* Reviews: glass cards of the first design, a green quote mark, no dark frame. */
+html[data-home-design="d"] body .home-story .story-review{border:0;border-radius:28px;background:rgb(255 255 255 / .66);box-shadow:0 18px 40px -32px rgb(29 58 54 / .45)}
+html[data-home-design="d"] body .home-story .story-quote{color:#3d7a64}
+/* Pickup point: the dark band becomes a light glass card like the reviews, with the dark button of the first design. */
+html[data-home-design="d"] body .home-story .story-pickup.story-pickup--forest{background:rgb(255 255 255 / .66);color:var(--color-ink);border:0;border-radius:28px;box-shadow:0 18px 40px -32px rgb(29 58 54 / .45)}
+html[data-home-design="d"] body .home-story .story-pickup--forest :is(h2,h3,p,a:not(.btn),span,strong,.story-pickup-city,.story-pickup-street,.story-pickup-details){color:var(--color-ink)}
+html[data-home-design="d"] body .home-story .story-pickup--forest svg{color:#3d7a64}
+html[data-home-design="d"] body .home-story .story-pickup--forest .story-pickup-info{border-color:rgb(29 58 54 / .12)}
+html[data-home-design="d"] body .home-story .story-pickup--forest .btn{background:var(--color-ink);border-color:var(--color-ink);color:#fff;border-radius:16px}
+html[data-home-design="d"] body .home-story .story-pickup--forest .btn svg{color:#fff}
+/* Footer: on the page's own light background with a thin line above, as in the first design (no white band, no
+   orange stripe). */
+html[data-home-design="d"] body:has(.home-first-screen) .site-footer{border-top:1px solid rgb(29 58 54 / .1);background:transparent}
+html[data-home-design="d"] body:has(.home-first-screen) .site-footer :is(.footer-main,.footer-top,.footer-bottom,.footer-legal){background:transparent}
+
+/* ── Hero, computers ── */
+@media(min-width:960px){
+ html[data-home-design="d"] body .home-first-screen{height:auto;min-height:0}
+ html[data-home-design="d"] body .home-first-screen>.home-hero--banner{flex:0 0 auto}
+ html[data-home-design="d"] body .home-hero--forest :is(.hero-upper-twig,.hero-flower-detail,.hero-photo-link){display:none}
+ /* D and F: text left, the photo as a rounded card right. */
+ html[data-home-design="d"] body .home-hero.home-hero--banner.home-hero--forest{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);grid-template-rows:auto auto;column-gap:56px;align-items:center;align-content:start;height:auto;max-height:none;min-height:0;margin-top:0;padding:32px var(--pad-x) 24px;container-type:normal;color:var(--color-ink)}
+ html[data-home-design="d"] body .home-hero--forest .hero-backdrop{display:none}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-photo{position:relative;inset:auto;grid-column:2;grid-row:1;width:100%;height:clamp(330px,27vw,420px);border-radius:32px;overflow:hidden;box-shadow:0 30px 60px -40px rgb(29 58 54 / .6);container-type:normal}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-photo::before{background:none}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-photo picture{display:block;background:none}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-photo img{width:100%;height:100%;max-width:100%;object-fit:cover;object-position:52% 64%;-webkit-mask-image:none;mask-image:none}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-copy{grid-column:1;grid-row:1/3;position:relative;z-index:1}
+ html[data-home-design="d"] body .home-hero.home-hero--forest :is(.hero-copy h1,.hero-copy>p,.hero-note,.hero-note strong){color:var(--color-ink);text-shadow:none}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-copy h1{font-weight:800;letter-spacing:-.045em;font-size:clamp(44px,4.4vw,68px);line-height:1.02}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-copy h1 .hero-title-line--end{color:#3d7a64}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-copy>p{color:#4b5f59;font-size:18px;max-width:520px}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-copy .btn--primary{background:var(--color-ink);border-color:var(--color-ink);color:#fff;border-radius:18px;padding:17px 26px}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-note .tiny-leaf{width:44px;height:44px;border-radius:50%;border:1px solid rgb(29 58 54 / .15);display:grid;place-items:center;color:var(--color-ink)}
+ /* D: the small plan card overlaps the bottom of the photo, as in the first design. */
+ html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily{position:relative;inset:auto;grid-column:2;grid-row:2;justify-self:stretch;align-self:start;width:auto;max-width:none;margin:-44px 32px 0;z-index:2}
+ /* F: the text sits on a glass panel; the small plan card goes under the photo, full width of it. */
+ 
+ 
+ /* E: the wide photo as a rounded card, text on it; the small plan card sits on the photo, bottom right. */
+ 
+ 
+ 
+ 
+}
+
+/* ═══ Г (design d) refined (owner, 2026-11-12) ═══════════════════════════════════════════════════════════════════ */
+/* «Натурально. Каждый день.» above the heading, as in the first design; only in this variant for now. */
+.home-hero .hero-copy .hero-pill{display:none}
+/* A quiet line, not a pill: a short green rule, the leaf and small spaced capitals, as the first design's section labels. */
+html[data-home-design="d"] body .home-hero .hero-copy .hero-pill{display:inline-flex;align-items:center;gap:10px;margin-bottom:22px;color:#3d7a64;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+html[data-home-design="d"] body .home-hero .hero-copy .hero-pill svg{width:18px;height:18px}
+/* The pulse icon exactly in the middle of its tile (the hidden words took a place and a gap beside it). */
+html[data-home-design="d"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-eyebrow{display:flex;align-items:center;justify-content:center;gap:0;line-height:0;align-self:center}
+/* The three path tiles: the jars stand on the tile's own colour (the white packshot background blends into it). */
+html[data-home-design="d"] body .home-path-thumb{background:transparent}
+/* Preserve package colours; the vector silhouette clips only the surrounding white canvas. */
+html[data-home-design="d"] body .home-path-thumb{mix-blend-mode:normal}
+/* The first screen is the hero and the three tiles; «Начните с основ» begins below the screen's bottom edge. */
+@media(min-width:960px){
+ /* The photo grows with the screen, so the three tiles follow the hero at the usual distance and close the first
+    screen; «Начните с основ» starts below its bottom edge. */
+ html[data-home-design="d"] body .home-first-screen{min-height:calc(100svh - var(--site-header-height,79px) - var(--space-28))}
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-photo{height:clamp(330px,calc(100svh - var(--site-header-height,79px) - 352px),620px)}
+}
+/* Г: no dash before the label, and the header icons and the quality mark without circles. */
+html[data-home-design="d"] body:has(.home-first-screen) .site-header .header-actions .icon-btn{background:transparent;box-shadow:none;border:0}
+html[data-home-design="d"] body .home-hero.home-hero--forest .hero-note .tiny-leaf{border:0;background:transparent;width:auto;height:auto}
+/* Г: the text block a little to the right and a little higher (owner, 2026-11-12). */
+@media(min-width:960px){
+ html[data-home-design="d"] body .home-hero.home-hero--forest .hero-copy{margin-left:56px;top:-28px}
+}
+/* Г: the quality mark in the middle of its two lines of text. */
+html[data-home-design="d"] body .home-hero.home-hero--forest .hero-note{align-items:center}
+html[data-home-design="d"] body .home-hero.home-hero--forest .hero-note .tiny-leaf{display:flex;align-items:center}
+/* Г: the open page in the header menu is marked with a small dark-green dot under it, as in the first design. */
+@media(min-width:640px){
+ html[data-home-design="d"] body .desktop-nav a.active::after{left:50%;right:auto;width:4px;height:4px;bottom:-12px;border-radius:50%;background:#1d3a36;transform:translateX(-50%)}
+}
+/* Pickup returns to the same glass surface as the customer reviews. */
+html[data-home-design="d"] body .home-story .story-pickup.story-pickup--forest{background:rgb(255 255 255 / .66);border:0}
+
+/* Opaque header, and the same page surface beyond the desktop scroll boundary. */
+html[data-home-design="d"]:has(.home-first-screen){background:var(--color-white)}
+html[data-home-design="d"][data-home-scroll-edge="bottom"]:has(.home-first-screen){background:var(--color-bg)}
+html[data-home-design="d"] body:has(.home-first-screen) .site-header{background:var(--color-white);-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-home-design="d"] body:has(.home-first-screen) .site-header::before{content:'';position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--color-white);pointer-events:none}
+@media(max-width:639px){
+ html[data-home-design="d"][data-home-scroll-edge="bottom"]:has(.home-first-screen){background:#091b16}
+}
+/* Alpha-only masks retain the original image pixels, including white packaging and labels. */
+html[data-home-design="d"] body .home-path-thumb img{mix-blend-mode:normal;-webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;mask-mode:alpha}
+html[data-home-design="d"] body .home-path-thumb img[src$="/omega-3-epa.jpg"]{-webkit-mask-image:url('/images/products/home-masks/omega.svg');mask-image:url('/images/products/home-masks/omega.svg')}
+html[data-home-design="d"] body .home-path-thumb img[src$="/uvlazhnyayushchiy-krem-dlya-litsa-spf15-moisturizing-face-cream-intensive-hydration-48-hours-spf15.jpg"]{-webkit-mask-image:url('/images/products/home-masks/bremani-cream.svg');mask-image:url('/images/products/home-masks/bremani-cream.svg')}
+html[data-home-design="d"] body .home-path-thumb img[src$="/colloidal-silver-forte.jpg"]{-webkit-mask-image:url('/images/products/home-masks/colloidal-silver.svg');mask-image:url('/images/products/home-masks/colloidal-silver.svg')}
+html[data-home-design="d"] body .home-path-thumb img[src$="/khlorofill-zhidkiy-chlorophyll-liquid.jpg"]{-webkit-mask-image:url('/images/products/home-masks/chlorophyll.svg');mask-image:url('/images/products/home-masks/chlorophyll.svg')}
+
+/* Match the prototype's continuous surface: the page owns the base and its ambient shapes.
+   Footer sections remain transparent, so no separate coloured strip starts below the address. */
+html[data-home-design="d"] body:has(.home-first-screen){background:transparent}
+html[data-home-design="d"] body:has(.home-first-screen)>#root{background:var(--color-bg);isolation:isolate}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient{display:block;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient i{display:block;position:absolute;width:700px;height:700px;border-radius:var(--radius-circle);background:var(--color-mint);filter:blur(var(--ambient-blur-70));opacity:.46;top:-200px;left:-320px;right:auto}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient i:nth-child(2){background:var(--color-blue);top:300px;left:auto;right:-340px}
+html[data-home-design="d"] body:has(.home-first-screen) .ambient i:nth-child(3){background:var(--color-sand);opacity:.4;top:1350px;left:-380px;right:auto}
+html[data-home-design="d"] body:has(.home-first-screen) .site-footer :is(.footer-main,.footer-top,.footer-bottom,.footer-legal,.footer-legal-inner){background:transparent}

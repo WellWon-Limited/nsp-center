@@ -23,3 +23,8 @@ test('Journal index, reviews and contacts preserve their exact home section',()=
   assert.equal(homeStoryReturn(`${path}?from=home-about&section=${section}`),`/#about-${section}`);
  }
 });
+
+test('«Задать вопрос» from the home page comes back to the question band of the home page', () => {
+ assert.equal(homeStoryReturn('/consultation/?from=home-about&section=consult'), '/#home-consult');
+ assert.equal(homeStoryReturn('/consultation/'), null);
+});

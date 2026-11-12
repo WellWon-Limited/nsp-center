@@ -1,0 +1,125 @@
+/* «О компании» on computers in the first design's template (owner, 2026-11-12): the title «О компании» on the page and
+   everything else — our photos and our text — inside ONE light translucent block (<html data-about-design="1">, set
+   in index.html). */
+@media(min-width:960px){
+html[data-about-design] #root .company-page--nature .company-concept--article{box-sizing:border-box;max-width:1280px;margin:0 auto 56px;padding:28px 28px 0;background:transparent;color:var(--color-ink)}
+/* The title, as on the other pages: the way home, a small green label, the large heading. */
+html[data-about-design] #root .company-concept--article .co-page-heading{margin:0 0 32px}
+html[data-about-design] #root .company-concept--article .co-page-heading .co-home-return{margin:0 0 18px;color:var(--color-ink)}
+html[data-about-design] #root .company-page--nature .co-page-heading .co-home-return:is(:hover,:focus-visible,:active){color:var(--color-ink)}
+html[data-about-design] #root .company-concept--article .co-page-kicker{display:block;margin-bottom:10px;color:#3d7a64;font-size:14px;font-weight:800}
+html[data-about-design] #root .company-concept--article .co-page-heading h1{margin:0;font-size:clamp(40px,3.6vw,54px);font-weight:800;letter-spacing:-.04em;line-height:1.04}
+/* The block. */
+html[data-about-design] #root .company-concept--article>#about{box-sizing:border-box;max-width:1000px;margin:0 auto;padding:46px;border:1px solid rgb(255 255 255 / .9);border-radius:32px;background:rgb(255 255 255 / .7);box-shadow:0 30px 60px -48px rgb(29 58 54 / .4)}
+html[data-about-design] #root .company-concept--article>#about>*{box-sizing:border-box;width:auto;max-width:none;margin:48px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--color-ink)}
+html[data-about-design] #root .company-concept--article>#about>:first-child{margin-top:0}
+/* The cover photo and its words. */
+html[data-about-design] #root .site-main .company-page--nature .company-concept.company-concept--article .co-hero{position:relative;display:flex;flex-direction:column;align-items:stretch;min-height:0;height:auto;margin-bottom:0;overflow:hidden;border-radius:24px;background:transparent;color:var(--color-ink)}
+html[data-about-design] #root .company-concept--article .co-hero::before,html[data-about-design] #root .company-concept--article .co-hero::after{display:none}
+html[data-about-design] #root .company-concept--article .co-hero-image{order:-1;position:static;inset:auto;display:block;width:100%;height:420px;object-fit:cover;object-position:60% 55%;border-radius:24px;transform:none;opacity:1}
+html[data-about-design] #root .company-concept--article .co-hero-caption{display:none}
+html[data-about-design] #root .company-concept--article .co-hero-copy{position:static;align-self:stretch;max-width:none;margin:32px 0 0;padding:0;transform:none;color:var(--color-ink)}
+html[data-about-design] #root .company-concept--article .co-hero-copy :is(.co-kicker,.co-hero-title){color:var(--color-ink);text-shadow:none}
+html[data-about-design] #root .company-concept--article .co-hero-copy>.co-kicker{margin:0 0 12px;color:#3d7a64;font-size:12px;letter-spacing:.14em}
+html[data-about-design] #root .company-concept--article .co-hero .co-hero-title{max-width:none;margin:0;font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.15}
+/* Text and photos inside. */
+html[data-about-design] #root .company-concept--article>#about>.co-article-lead{margin-top:18px;font-size:17px;line-height:1.8}
+html[data-about-design] #root .company-concept--article .co-intro-strip{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px 28px;padding:22px 0!important;border-block:1px solid rgb(29 58 54 / .1)!important}
+html[data-about-design] #root .company-concept--article .co-intro-strip>strong{font-size:22px}
+html[data-about-design] #root .company-concept--article .co-intro-strip>span{font-size:14px;color:#41544e}
+html[data-about-design] #root .company-concept--article :is(.co-story h2,.co-section-heading h2,.co-research h2,.co-timeline>h2,.co-closing h2){font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.2;color:var(--color-ink)}
+html[data-about-design] #root .company-concept--article .co-kicker{color:#3d7a64}
+html[data-about-design] #root .company-concept--article :is(.co-story img,.co-research>img){display:block;width:100%;height:380px;object-fit:cover;border-radius:24px}
+html[data-about-design] #root .company-concept--article .co-story figure{margin:28px 0 0}
+html[data-about-design] #root .company-concept--article .co-research>div{padding:28px 0 0}
+html[data-about-design] #root .company-concept--article .co-principle-grid article,html[data-about-design] #root .company-concept--article .co-timeline article{border-color:rgb(29 58 54 / .12)}
+html[data-about-design] #root .company-concept--article .co-closing{text-align:left}
+html[data-about-design] #root .company-concept--article .co-closing :is(h2,p,span,a){color:var(--color-ink)}
+html[data-about-design] #root .company-concept--article .co-closing .co-button{background:var(--color-ink);border-color:var(--color-ink);color:#fff}
+html[data-about-design] #root .company-concept--article .co-closing .co-button svg{color:#fff}
+html[data-about-design] #root .company-concept--article .co-closing>div{justify-content:flex-start}
+
+/* ── 1 «Как в прототипе»: one reading column, photos across the block, sections one after another. ──────────────── */
+html[data-about-design="1"] #root .company-concept--article .co-closing{padding-top:40px!important;border-top:1px solid rgb(29 58 54 / .1)!important}
+
+
+}
+
+/* ── 1, refined (owner, 2026-11-12) ────────────────────────────────────────────────────────────────────────────── */
+@media(min-width:960px){
+ /* The first screen shows words and the photo together: the photo's words and the introduction on the left, the
+    daisies on the right (the narrower frame keeps them in the middle). */
+ html[data-about-design="1"] #root .company-concept--article>#about{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);column-gap:44px}
+ html[data-about-design="1"] #root .company-concept--article>#about>*{grid-column:1/-1}
+ html[data-about-design="1"] #root .site-main .company-page--nature .company-concept.company-concept--article .co-hero{display:contents}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-copy{grid-column:1;grid-row:1;align-self:end;margin:0}
+ html[data-about-design="1"] #root .company-concept--article .co-hero .co-hero-title{font-size:38px}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-image{grid-column:2;grid-row:1/span 2;width:100%;height:100%;min-height:440px;margin:0;object-position:84% 50%;border-radius:24px}
+ html[data-about-design="1"] #root .company-concept--article>#about>.co-article-lead{grid-column:1;grid-row:2;align-self:start;margin-top:20px;font-size:16px;line-height:1.75}
+ /* No «‹ Назад» above the title: «О компании» is a tab of the header menu. */
+ html[data-about-design] #root .company-concept--article .co-page-heading .co-home-return:not(:has([data-story-return])){display:none}
+ /* The hands and the laboratory: the whole photo, nothing cut at the top or bottom. */
+ html[data-about-design="1"] #root .company-concept--article :is(.co-story img,.co-research>img){height:auto;aspect-ratio:3/2}
+ /* «Познакомиться с продуктами. Начать с себя.»: the words on the left, the two buttons on the right. */
+ html[data-about-design="1"] #root .company-concept--article .co-closing{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:48px;align-items:center}
+ html[data-about-design="1"] #root .company-concept--article .co-closing>:not(div){grid-column:1;margin-inline:0}
+ html[data-about-design="1"] #root .company-concept--article .co-closing>div{grid-column:2;grid-row:1/span 3;display:flex;flex-direction:column;align-items:stretch;gap:14px;margin:0}
+ html[data-about-design="1"] #root .company-concept--article .co-closing>div>a{justify-content:space-between;gap:24px}
+}
+@media(min-width:960px){
+ /* Text across the whole block, not a narrow column on the left. */
+ html[data-about-design="1"] #root .company-concept--article :is(.co-story p,.co-section-heading p,.co-research p,.co-principle-grid p,.co-timeline p){max-width:none}
+ /* Six principles: three in a row, each under a thin line. */
+ html[data-about-design="1"] #root .company-concept--article .co-principle-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px 36px;margin-top:28px}
+ html[data-about-design="1"] #root .company-concept--article .co-principle-grid article{display:block;padding:20px 0 0;border:0;border-top:1px solid rgb(29 58 54 / .12)}
+ html[data-about-design="1"] #root .company-concept--article .co-principle-grid article>span{display:block;margin-bottom:10px;color:#3d7a64;font-weight:800}
+ html[data-about-design="1"] #root .company-concept--article .co-principle-grid h3{margin:0 0 8px;font-size:20px}
+ /* «Как развивалась продукция»: four steps in a row. */
+ html[data-about-design="1"] #root .company-concept--article .co-timeline>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:28px}
+ html[data-about-design="1"] #root .company-concept--article .co-timeline article{display:block;padding:20px 0 0;border:0;border-top:2px solid #3d7a64}
+ html[data-about-design="1"] #root .company-concept--article .co-timeline article>strong{display:block;margin-bottom:10px;font-size:28px}
+ html[data-about-design="1"] #root .company-concept--article .co-timeline h3{margin:0 0 8px;font-size:17px}
+ /* «Задать вопрос»: a second button of the same size, outlined, with room between the two. */
+ html[data-about-design="1"] #root .company-concept--article .co-closing>div{gap:16px;min-width:260px}
+ html[data-about-design="1"] #root .company-concept--article .co-closing .co-text-link{display:inline-flex;align-items:center;justify-content:space-between;gap:24px;min-height:var(--control-height,52px);padding:0 22px;border:1.5px solid var(--color-ink);border-radius:var(--radius-14,14px);background:transparent;color:var(--color-ink);font-weight:700;text-decoration:none}
+ html[data-about-design="1"] #root .company-concept--article .co-closing .co-text-link:hover{background:rgb(29 58 54 / .06)}
+ html[data-about-design="1"] #root .company-concept--article .co-closing .co-text-link svg{color:var(--color-ink)}
+}
+@media(min-width:960px){
+ /* A wider block (the site's full width) and a larger daisy photo in it. */
+ html[data-about-design="1"] #root .company-concept--article>#about{max-width:1224px;padding:52px 56px;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);column-gap:56px}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-image{min-height:520px;object-position:80% 50%}
+ html[data-about-design="1"] #root .company-concept--article .co-hero .co-hero-title{font-size:40px}
+}
+@media(min-width:960px){
+ /* The photo's words start level with the photo's top; the «О компании · NSP-центр» label is not repeated (the page
+    title says it); a lower photo with the daisies a little to the left. */
+ html[data-about-design="1"] #root .company-concept--article .co-hero-copy{align-self:start}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-copy>.co-kicker{display:none}
+ html[data-about-design="1"] #root .company-concept--article .co-hero .co-hero-title{margin-top:-6px}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-image{min-height:400px;object-position:92% 46%}
+}
+@media(min-width:960px){
+ /* The introduction follows the words directly (spare height goes below it), and the daisies move left: the photo is
+    a little enlarged and its empty left part goes out of the frame. */
+ html[data-about-design="1"] #root .company-concept--article>#about{grid-template-rows:auto 1fr}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-image{width:135%;max-width:none;height:420px;min-height:0;margin-left:-35%;object-position:50% 46%;border-radius:0;clip-path:inset(0 0 0 25.926% round 24px)}
+}
+@media(min-width:960px){
+ /* The photo's words, smaller and calmer than the page title, stand with the introduction in the middle of the
+    photo's height. */
+ html[data-about-design="1"] #root .company-concept--article>#about{grid-template-rows:1fr auto auto 1fr}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-copy{grid-row:2;align-self:end}
+ html[data-about-design="1"] #root .company-concept--article>#about>.co-article-lead{grid-row:3}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-image{grid-row:1/span 4}
+ html[data-about-design="1"] #root .company-concept--article .co-hero .co-hero-title{margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.28;color:#2c4a43}
+}
+@media(min-width:960px){
+ /* The photo's words in the same size and weight as the section headings («История продукции. От простой идеи.»). */
+ html[data-about-design="1"] #root .company-concept--article .co-hero .co-hero-title{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.2;color:var(--color-ink)}
+}
+@media(min-width:960px){
+ /* The hands and the laboratory: a little narrower, centred, still the whole photo. */
+ html[data-about-design="1"] #root .company-concept--article :is(.co-story img,.co-research>img){width:min(100%,840px);margin-inline:auto}
+ html[data-about-design="1"] #root .company-concept--article .co-story figcaption{width:min(100%,840px);margin-inline:auto}
+}

@@ -1,0 +1,36 @@
+/* Smallest text sizes (owner, 2026-11-12; research: Apple's minimum is 11 pt with 17 pt body text on iPhone, Google's
+   Material scale goes down to 11–12 sp for labels and captions, and iPhone Safari zooms into a form field whose text is
+   under 16 px). The site's floor: uppercase spaced labels 11 px, any other text 12 px, form fields on a phone 16 px.
+   The sizes below lift only what was under that floor; everything larger keeps its size. */
+
+/* Small spaced labels over cards and sections, the stock mark. */
+.ds-kicker,.co-kicker,.information-kicker,.story-eyebrow{font-size:11px}
+.product-card .ds-kicker,.product-card .pill,.stock-pill{font-size:11px}
+
+/* Plain small text: the medical note, the footer's address, photo captions, the numbers in the catalog list and in
+   «О компании». */
+.fine-print,.site-footer p,.site-footer small,figcaption,.co-principle-grid article>span,.catalog-sidebar>a>span{font-size:12px}
+.hero-note :is(span,strong){font-size:12px}
+
+@media(max-width:639px){
+ /* Phone: the composition line of a card, the footer links, the catalog's filters and the contacts links. */
+ .product-card .card-parts,.product-card .card-parts :is(em,b){font-size:12px}
+ .site-footer a{font-size:13px}
+ .catalog-page .filter-row,.catalog-page .filter-row label,.catalog-page .sort-trigger{font-size:13px}
+ .information-text-link{font-size:13px}
+ /* Phone form fields at 16 px: iPhone does not zoom into them when they are tapped. */
+ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px}
+}
+
+/* The same floor where stronger page rules set the smaller size (checked page by page on a phone and a computer). */
+#root :is(.product-card,.article-card,.section-heading,.home-story) :is(.ds-kicker,.story-eyebrow){font-size:11px}
+#root .product-card :is(.pill,.stock-pill){font-size:11px}
+#root :is(.fine-print,figcaption,.catalog-sidebar>a>span){font-size:12px}
+@media(max-width:639px){
+ #root .site-footer a{font-size:13px}
+ #root .site-footer :is(p,small){font-size:12px}
+}
+@media(max-width:639px){
+ #root .section-heading>a{font-size:13px}
+ #root .site-footer span{font-size:12px}
+}

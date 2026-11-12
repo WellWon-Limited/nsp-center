@@ -28,12 +28,9 @@ export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChan
   const root = useRef<HTMLDivElement>(null);
   const unread = state.notices.filter(n => !n.read).length;
   useEffect(() => { setPermission('Notification' in window && runningAsApp(window) ? Notification.permission : 'unsupported'); }, [open]);
-  const [cleared, setCleared] = useState<Notice[] | null>(null);
-  useEffect(() => { if (!cleared) return; const t = setTimeout(() => setCleared(null), 5000); return () => clearTimeout(t); }, [cleared]);
   const readAll = () => setState(s => ({ ...s, notices: s.notices.map(n => ({ ...n, read: true })) }));
   const remove = (id: string) => setState(s => ({ ...s, notices: s.notices.filter(n => n.id !== id) }));
-  const clearAll = () => { setCleared(state.notices); setState(s => ({ ...s, notices: [] })); };
-  const undoClear = () => { if (cleared) setState(s => ({ ...s, notices: [...s.notices, ...cleared.filter(n => !s.notices.some(x => x.id === n.id))] })); setCleared(null); };
+  const clearAll = () => setState(s => ({ ...s, notices: [] }));
   // Opening the panel reads everything (owner, 2026-11-10): the bell number goes away at once, and the notices that were
   // new at that moment stay marked as new while the panel is open, so it is still clear what came.
   const [fresh, setFresh] = useState<Set<string>>(new Set());
@@ -70,10 +67,9 @@ export function NotificationsButton({open,onOpenChange}:{open:boolean;onOpenChan
           <button type="button" className="notification-remove" aria-label={`Удалить уведомление: ${n.title}`} onClick={() => remove(n.id)}><Icon name="close" size={14} /></button>
         </li>)}</ul>
       </section>)}</div>
-        : cleared ? <div className="notifications-empty"><p>Уведомления удалены</p></div>
         : <div className="notifications-empty"><Icon name="bell" size={28} /><p><strong>Уведомлений пока нет</strong></p><p>Здесь появятся напоминания о приёме и товары, которых вы ждали.</p></div>}
       {state.notices.length > 0 && <button type="button" className="text-button notifications-clear" onClick={clearAll}>Очистить всё</button>}
-      {cleared && <p className="notifications-undo" role="status">Уведомления удалены <button type="button" className="text-button" onClick={undoClear}>Вернуть</button></p>}
+      {/* After «Очистить всё» the panel says at once that there are no notifications (owner, 2026-11-12). */}
       {permission === 'default' && <button type="button" className="btn btn--primary notifications-enable" onClick={enable}>Присылать уведомления</button>}
       {permission === 'granted' && <p className="notifications-note">Напоминания приходят уведомлениями, пока приложение открыто или свёрнуто.</p>}
       {permission === 'denied' && <p className="notifications-note">Уведомления выключены в настройках устройства.</p>}
