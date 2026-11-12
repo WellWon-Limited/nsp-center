@@ -71,5 +71,10 @@ html[data-home-design="d"] body .bottom-nav{left:14px;right:14px;bottom:max(12px
 html[data-home-design="d"] body .bottom-nav a,html[data-home-design="d"] body .bottom-nav a>span{color:rgb(29 58 54 / .58)}
 html[data-home-design="d"] body .bottom-nav a[aria-current="page"],html[data-home-design="d"] body .bottom-nav a[aria-current="page"]>span{color:var(--color-ink)}
 html[data-home-design="d"] body .bottom-nav::before,html[data-home-design="d"] body .bottom-nav::after{content:none}
+/* While the next tab opens (src/instant-tap.mjs marks the tapped one .is-going), the tapped icon takes the current
+   colour and the one being left the quiet colour — in this design's dark ink on the white bar. The older dark bar's
+   white for these states (app.css) made both icons vanish on the white bar for a moment. */
+html[data-home-design="d"] body .bottom-nav a.is-going,html[data-home-design="d"] body .bottom-nav a.is-going>span{color:var(--color-ink)}
+html[data-home-design="d"] body .bottom-nav:has(a.is-going) a[aria-current="page"]:not(.is-going),html[data-home-design="d"] body .bottom-nav:has(a.is-going) a[aria-current="page"]:not(.is-going)>span{color:rgb(29 58 54 / .58)}
 html[data-home-design="d"] body::after{content:none}
 }

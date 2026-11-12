@@ -63,3 +63,9 @@ test('the loading screen: no progress line, no blur layers, its own colour reach
   // The status bar takes the screen's background-color; the gradient starts with the same colour at the top.
   assert.match(html, /background-color:#d3ebe1;background-image:[^;]*linear-gradient\(180deg,#d3ebe1 0/);
 });
+
+test('switching tabs on the white phone bar: the tapped icon turns dark, the one being left turns quiet, none vanish', () => {
+  const css = read('src/home-phone-variants.css');
+  assert.match(css, /html\[data-home-design="d"\] body \.bottom-nav a\.is-going,html\[data-home-design="d"\] body \.bottom-nav a\.is-going>span\{color:var\(--color-ink\)\}/);
+  assert.match(css, /html\[data-home-design="d"\] body \.bottom-nav:has\(a\.is-going\) a\[aria-current="page"\]:not\(\.is-going\)>span\{color:rgb\(29 58 54 \/ \.58\)\}/);
+});
