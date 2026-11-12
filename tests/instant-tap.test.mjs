@@ -40,7 +40,7 @@ test('a still tap on a tab clicks it once and lights it up at once', () => {
 
 test('a menu tap before the page is alive is remembered and replayed', () => {
   assert.match(read('index.html'), /closest\("\.menu-toggle"\)\)window\.__nspMenuTap=1/);
-  assert.match(read('src/main.tsx'), /__nspMenuTap[\s\S]*\.menu-toggle\[aria-expanded="false"\][\s\S]*click\(\)/);
+  assert.match(read('src/boot.tsx'), /__nspMenuTap[\s\S]*\.menu-toggle\[aria-expanded="false"\][\s\S]*click\(\)/);
 });
 
 test('the whole product card opens the product, with the heart and buttons on top', () => {
@@ -68,4 +68,14 @@ test('switching tabs on the white phone bar: the tapped icon turns dark, the one
   const css = read('src/home-phone-variants.css');
   assert.match(css, /html\[data-home-design="d"\] body \.bottom-nav a\.is-going,html\[data-home-design="d"\] body \.bottom-nav a\.is-going>span\{color:var\(--color-ink\)\}/);
   assert.match(css, /html\[data-home-design="d"\] body \.bottom-nav:has\(a\.is-going\) a\[aria-current="page"\]:not\(\.is-going\)>span\{color:rgb\(29 58 54 \/ \.58\)\}/);
+});
+
+test('a tab opens painted at once: the page is drawn before the app script runs, with one stylesheet in the head', () => {
+  const main = read('src/main.tsx');
+  assert.match(main, /requestAnimationFrame\(\(\)=>setTimeout\(\(\)=>\{ void import\('\.\/boot'\); \},0\)\);/);
+  assert.match(main, /installAppHistory\(window,document,standaloneIos\(window\)\);/, 'taps keep working before the app starts');
+  assert.match(main, /import '\.\/app\.css';/);
+  assert.match(read('vite.config.ts'), /cssCodeSplit:false/, 'no styles arrive with the app script');
+  assert.match(read('scripts/prerender.mjs'), /rel="modulepreload" crossorigin href="\/assets\/\$\{bootChunk\}"/);
+  assert.match(read('src/pwa.tsx'), /if \(document\.readyState === 'complete'\) register\(\); else addEventListener\('load', register, \{ once: true \}\);/);
 });

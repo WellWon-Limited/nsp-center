@@ -43,7 +43,12 @@ test('with the keyboard open the chat fits the space above it and the header sta
   const code = read('src/assistant.tsx');
   assert.match(code, /requestAnimationFrame\(apply\)/, 'updated once per frame');
   assert.doesNotMatch(code, /window\.scrollTo\(0, 0\)/, 'the page is not yanked to the top on every keyboard step');
-  assert.match(code, /document\.addEventListener\('focusin', onFocusIn\)/, 'the keyboard is followed from the moment the field gets the focus');
+  assert.match(code, /document\.addEventListener\('focusin', onFocusIn\)/);
+  // The header stays still: room for the keyboard is made at the touch on the field (no iOS slide), nothing follows the
+  // keyboard frame by frame.
+  assert.match(code, /document\.addEventListener\('touchstart', prepare, \{ passive: true, capture: true \}\)/);
+  assert.match(code, /set\(window\.innerHeight - guess\(\), 0\)/);
+  assert.doesNotMatch(code, /const track = /);
   assert.match(code, /className="chat-send"[^>]*onPointerDown=\{e => e\.preventDefault\(\)\}/, 'sending keeps the keyboard open, as in messengers');
 });
 
