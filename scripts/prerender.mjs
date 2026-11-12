@@ -16,9 +16,9 @@ try {
  const routes=[...data.routes.map(r=>({url:r.url,title:r.title})),...Array.from({length:Math.ceil(data.products.filter(p=>!p.hidden).length/28)-1},(_,i)=>({url:'/catalog/?PAGEN_1='+(i+2),title:data.routes.find(r=>r.path==='/catalog/').title})),...extraRoutes,{url:'/404/',title:'Страница не найдена'}];const manifest=[];
  // The brand once: a page named after the shop itself (the home page's «NSP-Center») is just «NSP Center».
  // Personal and staff pages stay out of search: noindex in the page and not in the sitemap.
- // The home page's first screen photos start loading with the first line of the page (not after the styles are read),
- // each screen only its own: the phone photos below 640 px, the computer ones from 640 px.
- const HOME_PRELOAD=[['mobile-omega-white-v1','(max-width: 639px)'],['desktop-omega-white-v1','(min-width: 640px)'],['forest-upper-twig-retouch-v1','(min-width: 640px)']].map(([f,m])=>`<link rel="preload" as="image" href="/images/hero-photo-options/${f}.jpg" media="${m}" fetchpriority="high"/>`).join('')
+ // The home page's first screen photo starts loading with the first line of the page (not after the styles are read).
+ // Phones, tablets and computers show the same photo, so it is one file and nothing else is fetched for the first screen.
+ const HOME_PRELOAD='<link rel="preload" as="image" href="/images/hero-photo-options/desktop-omega-white-v1.jpg" fetchpriority="high"/>'
   // The heading's own font comes with the first request too, so the heading and the lines under it do not jump when it arrives.
   +'<link rel="preload" as="font" type="font/ttf" href="/fonts/hero-options/golos-text-500.ttf" crossorigin/>';
  const PRIVATE=new Set(['/admin/','/profile/purchases/']);
