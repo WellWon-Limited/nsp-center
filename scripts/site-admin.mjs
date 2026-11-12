@@ -525,6 +525,18 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (path === '/api/admin/staff') {
     const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
     if (emailError(email)) { send(res, 400, { error: emailError(email) }); return true; }
+    // A new password for a member of staff who forgot theirs (owner, 2026-11-12): shown once, like the first one; their
+    // other sessions end. Resetting your own password keeps you signed in here.
+    if (body?.reset === true) {
+      const { rows: [member] } = await pool.query("select id from users where lower(email) = $1 and role = 'admin'", [email]);
+      if (!member) { send(res, 404, { error: 'Нет сотрудника с такой почтой.' }); return true; }
+      const password = oneTimePassword();
+      await pool.query('update users set password_hash = $2 where id = $1', [member.id, await ctx.hashPassword(password)]);
+      if (email !== user.email.toLowerCase()) await pool.query('delete from sessions where user_id = $1', [member.id]);
+      await log(user, 'staff-password-reset', { email });
+      send(res, 200, { email, password });
+      return true;
+    }
     if (body?.remove === true) {
       if (email === user.email.toLowerCase()) { send(res, 400, { error: 'Нельзя удалить самого себя.' }); return true; }
       const { rows: [gone] } = await pool.query("update users set role = 'removed' where lower(email) = $1 and role = 'admin' returning id", [email]);

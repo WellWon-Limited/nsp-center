@@ -147,3 +147,29 @@
   font-size: var(--text-14);
   cursor: pointer;
 }
+
+/* Current design (owner, 2026-11-12): the install card is a soft rounded card without a frame, and «Установить» the
+   site's dark button — no green outline. */
+.install-banner { border: 0; border-radius: 28px; padding: var(--space-20); }
+.btn.install-banner-action { border: 0; border-radius: var(--radius-14, 14px); background: var(--color-ink); color: var(--color-white); }
+.btn.install-banner-action:hover,
+.btn.install-banner-action:focus-visible { border: 0; background: #2b4f49; color: var(--color-white); }
+.btn.install-banner-action:active { border: 0; background: #14302b; color: var(--color-white); }
+
+/* «Установить» in the site's light accent: the mint of the path tiles with dark words, no dark fill or outline. */
+.btn.install-banner-action { border: 0; background: linear-gradient(120deg, #cfe3d8, #e3eee8); color: var(--color-ink); }
+.btn.install-banner-action:hover,
+.btn.install-banner-action:focus-visible { border: 0; background: linear-gradient(120deg, #bfd9cb, #d6e7de); color: var(--color-ink); }
+.btn.install-banner-action:active { border: 0; background: #b3d1c1; color: var(--color-ink); }
+
+/* «Установить» in the green of the site's small labels («Натурально. Каждый день.», «Ваш ежедневный ритм»), white words. */
+.btn.install-banner-action { border: 0; background: #3d7a64; color: var(--color-white); }
+.btn.install-banner-action:hover,
+.btn.install-banner-action:focus-visible { border: 0; background: #346b57; color: var(--color-white); }
+.btn.install-banner-action:active { border: 0; background: #2c5c4a; color: var(--color-white); }
+
+/* «Установить»: back to the light green of the path tiles, dark words (owner, 2026-11-12). */
+.btn.install-banner-action { border: 0; background: linear-gradient(120deg, #cfe3d8, #e3eee8); color: var(--color-ink); }
+.btn.install-banner-action:hover,
+.btn.install-banner-action:focus-visible { border: 0; background: linear-gradient(120deg, #bfd9cb, #d6e7de); color: var(--color-ink); }
+.btn.install-banner-action:active { border: 0; background: #b3d1c1; color: var(--color-ink); }

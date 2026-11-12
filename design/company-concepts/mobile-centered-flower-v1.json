@@ -1,0 +1,7 @@
+{
+  "purpose": "Center the existing company flowers in the unchanged 220px phone card; desktop source stays unchanged",
+  "input": "public/images/company-concepts/botanical-white-independent-v1.jpg",
+  "output": "public/images/company-concepts/botanical-white-mobile-centered-v1.jpg",
+  "method": "Built-in imagegen edit: shift the two white echinacea flowers and stems horizontally to the center; preserve natural green garden, daylight, droplets and full petals in a landscape 3:2 composition. Fill the vacated right background with matching garden. No new flowers, text, logos, zoom or portrait crop.",
+  "date": "2026-11-12"
+}

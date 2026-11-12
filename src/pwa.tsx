@@ -19,7 +19,8 @@ export function registerServiceWorker() {
   let reloaded = false;
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (!hadController || reloaded || performance.now() - opened > 15000) return;
-    reloaded = true; location.reload();
+    // This reload is the site's own (a new version), not the visitor's: the install card must not take it as one.
+    reloaded = true; try { sessionStorage.setItem('nsp-center:update-reload', '1'); } catch { /* ignore */ } location.reload();
   });
   addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => { /* the site works without it */ }); });
 }
@@ -50,13 +51,19 @@ const standalone=()=>runningAsApp(window);
 let deferred: InstallPrompt | null = null;
 let installed = false;
 let installationChecked = false;
+// Once installed, neither the card at the top nor the profile card offers the install again (owner, 2026-11-12), also in
+// the browser tab where the related-apps check is not available.
+const INSTALLED_KEY = 'nsp-center:app-installed';
+function rememberInstalled(on: boolean) { try { if (on) localStorage.setItem(INSTALLED_KEY, '1'); else localStorage.removeItem(INSTALLED_KEY); } catch { /* ignore */ } }
+if (typeof window !== 'undefined') { try { installed = localStorage.getItem(INSTALLED_KEY) === '1'; } catch { /* ignore */ } }
 let installationCheck:Promise<void>|null=null;
 const checkInstallation=()=>installationCheck??=relatedAppInstalled(window).then(found=>{installed=installed||found;installationChecked=true;changed();});
 const installListeners = new Set<() => void>();
 const changed = () => installListeners.forEach(fn => fn());
 if (typeof window !== 'undefined') {
-  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e as InstallPrompt; changed(); });
-  addEventListener('appinstalled', () => { deferred = null; installed = true; installationChecked=true; changed(); });
+  // The browser offers the install only while the app is not installed: that clears the memo of an earlier install.
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e as InstallPrompt; rememberInstalled(false); changed(); });
+  addEventListener('appinstalled', () => { deferred = null; installed = true; installationChecked=true; rememberInstalled(true); changed(); });
 }
 
 /** One installation state drives both the entry offer and the account card. */
@@ -76,7 +83,7 @@ export function useInstall() {
   const install=async()=>{
     if(!available||!deferred)return false;
     const offer=deferred;deferred=null;
-    try{await offer.prompt();const choice=await offer.userChoice;if(choice.outcome==='accepted')installed=true;return true;}
+    try{await offer.prompt();const choice=await offer.userChoice;if(choice.outcome==='accepted'){installed=true;rememberInstalled(true);}return true;}
     catch{return false;}finally{changed();}
   };
   return {available,platform,phone,install};
@@ -95,13 +102,23 @@ function InstallSteps({platform}:{platform:InstallPlatform}){
 }
 
 // «Больше не спрашивать» turns the card at the top off for good in this browser (the profile card still offers the install).
-const neverAskKey = 'nsp-center:install-never';
-const neverAsk = () => { try { return localStorage.getItem(neverAskKey) === '1'; } catch { return false; } };
+// A new key (2026-11-12): «больше не спрашивать» chosen during the design checks is forgotten, the card shows again.
+const neverAskKey = 'nsp-center:install-never-2';
+// Any page opened with ?install=again turns the card back on (and shows it), e.g. after «Больше не спрашивать» by mistake.
+const askAgain = () => { try { return new URLSearchParams(location.search).get('install') === 'again'; } catch { return false; } };
+const neverAsk = () => { try { if (askAgain()) localStorage.removeItem(neverAskKey); return localStorage.getItem(neverAskKey) === '1'; } catch { return false; } };
 
 // The card at the top comes up when the visitor enters the site or reloads a page, not on every move between pages.
+// Once per visit: the first page of the tab or a reload (owner, 2026-11-12) — never while moving between pages.
+const SHOWN_KEY = 'nsp-center:install-shown';
+// Read once when the page opens: whether this page was reloaded by the site itself (a new version), not by the visitor.
+let ownReload = false;
+if (typeof window !== 'undefined') { try { ownReload = sessionStorage.getItem('nsp-center:update-reload') === '1'; sessionStorage.removeItem('nsp-center:update-reload'); } catch { /* ignore */ } }
 const enteredOrReloaded = () => {
   const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
-  if (nav?.type === 'reload') return true;
+  if (askAgain()) return true;
+  if (nav?.type === 'reload') return !ownReload;
+  try { if (sessionStorage.getItem(SHOWN_KEY)) return false; } catch { /* first page */ }
   try { return !document.referrer || new URL(document.referrer).origin !== location.origin; } catch { return true; }
 };
 
@@ -126,7 +143,7 @@ export function InstallBanner() {
       const heading = document.querySelector('.hero-copy h1');
       const entrance = heading?.getAnimations({ subtree: true }) ?? [];
       void Promise.allSettled(entrance.map(animation => animation.finished)).then(() => {
-        if (!cancelled) timer = window.setTimeout(() => setOpen(true), 400);
+        if (!cancelled) timer = window.setTimeout(() => { try { sessionStorage.setItem(SHOWN_KEY, '1'); } catch { /* ignore */ } setOpen(true); }, 400);
       });
     });
     return () => { cancelled = true; clearTimeout(timer); };

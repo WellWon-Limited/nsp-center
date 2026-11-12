@@ -55,11 +55,12 @@ function PurchasePrices({product:p}:{product:Product}){const {state}=useStore();
  if(state.card&&partner!==null)return <div className="purchase-prices purchase-prices--plain" data-ds-id="purchase-prices"><div className="price-row current price-row--partner"><span>Ваша цена по карте</span><strong>{money(partner)}</strong></div><div className="price-row"><span>Розничная цена</span><span className="price-was">{money(retail)}</span></div></div>;
  return <div className="purchase-prices purchase-prices--plain" data-ds-id="purchase-prices"><div className="price-row current"><span>Цена</span><strong>{money(retail)}</strong></div>{p.prices.source==='price-list'&&<CardOffer/>}</div>;}
 // The description: the rewritten copy (src/product-copy) when there is one — paragraphs, then the short highlights —
-// otherwise the snapshot description and its "Идеальный набор" block. Video reviews have their own tab.
+// otherwise the snapshot description. The snapshot's "Идеальный набор" block (photos of the products to take with it and
+// the old site's price lines) is not shown (owner, 2026-11-12); what goes with what is the «С чем сочетают?» block below.
+// Video reviews have their own tab.
 function ProductDescription({product:p}:{product:Product}){
  if(p.copy)return <div className="product-copy">{p.copy.about.map((text,i)=><p key={i}>{text}</p>)}{p.copy.highlights.length>0&&<ul className="product-highlights">{p.copy.highlights.map(h=><li key={h}><Icon name="check" size={16}/>{h}</li>)}</ul>}</div>;
- const set=p.sectionsHtml['Идеальный набор'];
- return <div className="product-copy">{p.descriptionHtml?<RichContent html={p.descriptionHtml}/>:<p>{p.description}</p>}{set&&<section><h2>Идеальный набор</h2><RichContent html={set}/></section>}</div>;}
+ return <div className="product-copy">{p.descriptionHtml?<RichContent html={p.descriptionHtml}/>:<p>{p.description}</p>}</div>;}
 // Certificates and video reviews: a row on wide screens; on a phone one item at a time, switched with round arrows on it.
 function PhoneSlider({count,labels,children}:{count:number;labels:[string,string];children:(current:number)=>ReactNode}){const [current,setCurrent]=useState(0);const last=count-1;
  return <div className="phone-slider">{children(current)}{last>0&&<>{current>0&&<button type="button" className="slider-arrow slider-arrow--prev" onClick={()=>setCurrent(i=>i-1)} aria-label={labels[0]}><Icon name="chevron" size={22}/></button>}{current<last&&<button type="button" className="slider-arrow slider-arrow--next" onClick={()=>setCurrent(i=>i+1)} aria-label={labels[1]}><Icon name="chevron" size={22}/></button>}</>}</div>;}

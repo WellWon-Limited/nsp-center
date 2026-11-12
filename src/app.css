@@ -610,3 +610,7 @@ html.nsp-signed-in .hero-daily-signup{display:none}
    (the white there runs straight into the white header, with no dividing line). */
 body .site-header{box-shadow:0 16px 28px -16px rgb(30 80 70 / .35)}
 @media(max-width:639px){html:root{background:#fff}}
+/* The article number goes under the product name on every product page and screen, not beside it (owner, 2026-11-12). */
+.product-title-row{flex-direction:column;align-items:flex-start;gap:var(--space-6)}
+/* The personal screens and the chat show the footer on computers only (App.tsx footerOnPhone). */
+@media(max-width:959px){.site-footer--computer-only{display:none}}

@@ -57,7 +57,10 @@ export type Notice = {id:string; title:string; text:string; date:string; url:str
 function restoreNotices(v:unknown):Notice[]{if(!Array.isArray(v))return [];return v.filter((n):n is Notice=>Boolean(n)&&typeof n.id==='string'&&typeof n.title==='string').slice(0,50).map(n=>({id:n.id.slice(0,60),title:n.title.slice(0,120),text:typeof n.text==='string'?n.text.slice(0,300):'',date:typeof n.date==='string'?n.date.slice(0,40):'',url:typeof n.url==='string'&&n.url.startsWith('/')?n.url.slice(0,200):'/',read:n.read===true,...(typeof n.at==='string'&&Number.isFinite(Date.parse(n.at))?{at:n.at}:{}),...(n.kind==='intake'||n.kind==='stock'||n.kind==='review'?{kind:n.kind}:{})}));}
 // Day log of the intake plan: date (YYYY-MM-DD) -> ids of the products ticked that day.
 function restoreLog(v:unknown):Record<string,string[]>{if(!v||typeof v!=='object')return {};return Object.fromEntries(Object.entries(v as Record<string,unknown>).filter(([date,ids])=>/^\d{4}-\d\d-\d\d$/.test(date)&&Array.isArray(ids)).map(([date,ids])=>[date,[...new Set((ids as unknown[]).filter((id):id is string=>typeof id==='string'&&validIds.has(id)))]]));}
-function restore():LocalState {try{return restoreFrom(JSON.parse(localStorage.getItem('nsp-center:v1')||'null'));}catch{return initial;}}
+// Only a signed-in account's things are kept on the device (owner, 2026-11-12): a guest's cart, lists and plan live for
+// this tab only (sessionStorage) — they follow the guest from page to page and are gone when the tab is closed.
+const STATE_KEY='nsp-center:v1';
+function restore():LocalState {try{const kept=JSON.parse(localStorage.getItem(STATE_KEY)||'null');if(kept?.signedIn)return restoreFrom(kept);return restoreFrom(JSON.parse(sessionStorage.getItem(STATE_KEY)||'null'));}catch{return initial;}}
 /** Checks a saved state (this browser's copy, or account data from the server) field by field. */
 function restoreFrom(parsed:any):LocalState {
   try { if(!parsed || typeof parsed!=='object')return initial;
@@ -76,17 +79,14 @@ export type ServerSession={account:Omit<Account,'passwordHash'|'server'>;data:Re
 const DIRTY='nsp-center:sync-dirty';
 const pickSynced=(s:LocalState)=>Object.fromEntries(SYNC_KEYS.map(k=>[k,s[k]])) as Synced;
 const syncPayload=(s:LocalState)=>JSON.stringify({profile:{firstName:s.account?.firstName,lastName:s.account?.lastName,phone:s.account?.phone,partnerId:s.account?.partnerId},data:pickSynced(s)});
-/** Signed in to a server account: on page load ('load') the server's data replaces this browser's copy; at sign-in
- *  ('signin') it is joined with what was picked as a guest (cart summed, lists united, the plan kept if the account has none). */
+/** Signed in to a server account: the server's data replaces this browser's copy, on page load and at sign-in alike. The
+ *  account is a separate record (owner, 2026-11-12): what was picked or planned as a guest does not move into it; a new
+ *  account starts empty. */
 export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load'|'signin'):LocalState{
   const acc={...restoreAccount({...account,passwordHash:'',server:true})!};
   const base:LocalState={...s,account:acc,signedIn:true,name:acc.firstName,card:Boolean(acc.partnerId),saved:null};
-  if(!data||!SYNC_KEYS.some(k=>k in data))return base;
-  const remote=pickSynced(restoreFrom({...s,...data}));
-  if(mode==='load')return {...base,...remote};
-  const cart={...remote.cart};for(const [id,q] of Object.entries(s.cart))cart[id]=Math.min(99,(cart[id]||0)+q);
-  const hasPlan=remote.intake.length>0||Object.values(remote.intakePlans).some(list=>list.length>0);
-  return {...base,...remote,cart,favorites:[...new Set([...remote.favorites,...s.favorites])],waitlist:[...remote.waitlist,...s.waitlist.filter(w=>!remote.waitlist.some(x=>x.id===w.id))],orders:[...remote.orders,...s.orders.filter(o=>!remote.orders.some(x=>x.id===o.id))],...(hasPlan?{}:{intake:s.intake,intakeDate:s.intakeDate,intakePlans:s.intakePlans})};
+  if(!data||!SYNC_KEYS.some(k=>k in data))return mode==='load'?base:{...base,...pickSynced(initial),intakeDate:today()};
+  return {...base,...pickSynced(restoreFrom({...s,...data}))};
 }
 /** Sign-out of a server account: the device keeps nothing of it (the server has it all). */
 export const closeSession=(s:LocalState):LocalState=>({...s,...pickSynced(initial),intakeDate:today(),account:null,signedIn:false,card:false,saved:null,name:''});
@@ -114,7 +114,7 @@ export function StoreProvider({children}:{children:ReactNode}) {
   // A discount card belongs to the account: card prices are on only for a signed-in account with a card number.
   const cardHolder=state.signedIn&&Boolean(state.account?.partnerId);
   useEffect(()=>{if(ready&&state.card!==cardHolder)setState(s=>({...s,card:cardHolder}));},[ready,cardHolder,state.card]);
-  useEffect(()=>{if(ready)try{localStorage.setItem('nsp-center:v1',JSON.stringify(state));}catch{/* in-memory remains usable */}},[state,ready]);
+  useEffect(()=>{if(ready)try{const value=JSON.stringify(state);if(state.signedIn){localStorage.setItem(STATE_KEY,value);sessionStorage.removeItem(STATE_KEY);}else{sessionStorage.setItem(STATE_KEY,value);localStorage.removeItem(STATE_KEY);localStorage.removeItem('nsp-center:guest');}}catch{/* in-memory remains usable */}},[state,ready]);
   // The intake plan belongs to one calendar day in the visitor's own time zone: at local midnight (and whenever the tab
   // comes back after the date changed) the scheduled day becomes active and the previous plan is archived.
   useEffect(()=>{if(!ready)return;const roll=()=>setState(s=>rollPlan(s,today()));let timer=0;
@@ -197,14 +197,16 @@ export function StoreProvider({children}:{children:ReactNode}) {
     const notices=result.arrivals.reduce((list,p)=>addNotice(list,{id:`stock-${p.id}`,kind:'stock',title:'Товар снова в наличии',text:shortName(p.name),at,date:'',url:p.path,read:false}),s.notices);
     return {...s,waitlist:result.entries,notices};
   });},[ready,state.waitlist,site]);
-  const waitFor=(p:Product)=>{setState(s=>{
+  const waitFor=(p:Product)=>{if(!state.signedIn&&!state.waitlist.some(x=>x.id===p.id)){setToast('Войдите в аккаунт, чтобы узнать о поступлении товара');return;}setState(s=>{
     const included=s.waitlist.some(x=>x.id===p.id);
     if(!included&&p.availability!=='OutOfStock')return s;
     return {...s,waitlist:included?s.waitlist.filter(x=>x.id!==p.id):[...s.waitlist,{id:p.id,notified:false}]};
   });};
   const add=(p:Product,q=1)=>{if(p.availability==='OutOfStock')return;setState(s=>({...s,cart:{...s.cart,[p.id]:Math.min(99,(s.cart[p.id]||0)+q)}}));setToast(`${shortName(p.name)} — в корзине`);};
   const qty=(id:string,q:number)=>setState(s=>{const cart={...s.cart};if(q<=0)delete cart[id];else cart[id]=Math.min(99,q);return {...s,cart};});
-  const favorite=(id:string)=>setState(s=>({...s,favorites:s.favorites.includes(id)?s.favorites.filter(x=>x!==id):[...s.favorites,id]}));
+  // Favourites and the waiting list belong to an account (owner, 2026-11-12): a guest is asked to sign in at the top of the
+  // screen instead; taking a product out still works.
+  const favorite=(id:string)=>{if(!state.signedIn&&!state.favorites.includes(id)){setToast('Войдите в аккаунт, чтобы добавить товар в избранное');return;}setState(s=>({...s,favorites:s.favorites.includes(id)?s.favorites.filter(x=>x!==id):[...s.favorites,id]}));};
   return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify:setToast,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout,staff,setStaff}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
 }
 export function useStore(){const v=useContext(Context);if(!v)throw new Error('Missing StoreProvider');return v;}

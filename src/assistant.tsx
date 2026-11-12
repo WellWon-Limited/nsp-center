@@ -22,7 +22,9 @@ type Message = { at?: string; emergency?: boolean; products?: string[]; source?:
 const greeting: Message = { from: 'bot', text: 'Здравствуйте! Я бот-помощник NSP Center. Подскажу по продуктам — по лекциям врачей, а ещё по доставке, оплате и скидкам. Я не врач и не ставлю диагнозы.', chips: ['Плохо сплю', 'Нет сил днём', 'Тяжесть после еды', 'Часто простываю', 'Как получить скидку?', 'Где вы находитесь?', 'Связаться со специалистом'] };
 /** "14:20": the time a message was written, shown under the last message of a series. */
 const now = () => new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
-const storeKey = 'nsp-center:chat';
+// The conversation belongs to whoever is signed in: a guest's chat is not shown in an account, nor one account's in
+// another (owner, 2026-11-12).
+const chatKey = (email?: string | null) => `nsp-center:chat${email ? `:${email.toLowerCase()}` : ''}`;
 const phone = data.site.phones?.[1] || '+79626854838';
 const email = data.site.emails?.[0] || 'sales@nsp-center.ru';
 // Contact with a person: a call or an email only (owner, 2026-11-10: no WhatsApp in the chat).
@@ -372,6 +374,10 @@ export function AssistantChat() {
   // Whether the visitor is at the latest messages: only then does a new message move the view (reading older advice is
   // not interrupted; research 2026-11-10).
   const atEnd = useRef(true);
+  // Opening the page (or coming back to it) shows the end of the conversation with the question field, whatever the
+  // last answer's length (owner, 2026-11-12); the «long answer opens at its first line» rule is for new answers only.
+  const openedAt = useRef(0);
+  useEffect(() => { openedAt.current = performance.now(); }, []);
   const onScroll = () => { const el = log.current; if (!el) return; const left = el.scrollHeight - el.scrollTop - el.clientHeight; atEnd.current = left < 80; setAway(left > 240); };
   const newChat = () => { setMessages([{ ...greeting, at: now() }]); setDraft(''); atEnd.current = true; };
   const toBottom = () => { log.current?.scrollTo({ top: log.current.scrollHeight, behavior: 'smooth' }); };
@@ -393,9 +399,16 @@ export function AssistantChat() {
     apply(); vv.addEventListener('resize', schedule); vv.addEventListener('scroll', schedule);
     return () => { cancelAnimationFrame(frame); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule); root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
   }, [focused]);
-  useEffect(() => { try { const saved = JSON.parse(sessionStorage.getItem(storeKey) || 'null'); if (Array.isArray(saved) && saved.length) setMessages(saved); } catch { /* new chat */ } import('./generated/chat-index.json').then(m => setIndex((m.default ?? m) as Index)); }, []);
+  const { state: who, ready: whoReady } = useStore();
+  const storeKey = chatKey(who.signedIn ? who.account?.email : null);
+  // The saved conversation of this visitor (guest or account); a change of account loads that account's own one.
+  const skipSave = useRef(true);
+  // A guest's conversation lasts while they move between the site's pages in this tab and starts anew when the page is
+  // reloaded (owner, 2026-11-12); an account's conversation is kept for the account.
+  useEffect(() => { if (!whoReady) return; skipSave.current = true; let saved: unknown = null; try { const reloaded = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload'; if (!who.signedIn && reloaded) sessionStorage.removeItem(storeKey); saved = JSON.parse(sessionStorage.getItem(storeKey) || 'null'); } catch { /* new chat */ } setMessages(Array.isArray(saved) && saved.length ? saved as Message[] : [{ ...greeting, at: now() }]); openedAt.current = performance.now(); }, [storeKey, whoReady]);
+  useEffect(() => { import('./generated/chat-index.json').then(m => setIndex((m.default ?? m) as Index)); }, []);
   useEffect(() => { if (messages.some(m => !m.at)) setMessages(ms => ms.map(m => m.at ? m : { ...m, at: now() })); }, [messages]);
-  useEffect(() => { try { sessionStorage.setItem(storeKey, JSON.stringify(messages.slice(-60))); } catch { /* ignore */ }
+  useEffect(() => { if (skipSave.current) skipSave.current = false; else try { sessionStorage.setItem(storeKey, JSON.stringify(messages.slice(-60))); } catch { /* ignore */ }
     // The visitor's own message always shows; an answer shows when the visitor was at the end, and a long answer opens at
     // its beginning rather than its end.
     const lastMsg = messages[messages.length - 1];
@@ -403,7 +416,7 @@ export function AssistantChat() {
     // An answer that does not fit on the screen opens at its first line, with the question just above it.
     const show = () => { const el = log.current; if (!el) return; const nodes = el.querySelectorAll<HTMLElement>('.chat-messages > .chat-msg'); const node = nodes[nodes.length - 1];
       const fits = !node || node.offsetHeight <= el.clientHeight - 140;
-      if (typing || lastMsg?.from !== 'bot' || fits) { el.scrollTop = el.scrollHeight; return; }
+      if (performance.now() - openedAt.current < 1500 || typing || lastMsg?.from !== 'bot' || fits) { el.scrollTop = el.scrollHeight; return; }
       // The visitor's own question stays in view at the top, with the beginning of the answer under it (owner, 2026-11-10).
       const asked = nodes[nodes.length - 2]; const top = (asked && asked.classList.contains('chat-msg--user') ? asked : node).getBoundingClientRect().top;
       el.scrollTop += top - el.getBoundingClientRect().top - 12; };

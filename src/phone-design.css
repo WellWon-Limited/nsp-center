@@ -1,0 +1,178 @@
+/* Phones and tablets in the computer's design (owner, 2026-11-12): every page but the home page (its phone layout is in
+   home-phone-variants.css, with the bottom bar) gets the light page with soft lights, the white header without a
+   shadow, the transparent footer, the small green labels over the titles, white cards with large rounded corners and
+   no dark frames, and the «one light block» template of the information pages, articles, «О компании» and
+   «Сертификаты». The chat keeps its layout and takes the same look. */
+@media(max-width:959px){
+/* ── Page surface, header, footer ───────────────────────────────────────────────────────────────────────────────── */
+html[data-catalog-design]:has(.site-header):not(:has(.home-first-screen)){background:var(--color-white)}
+html[data-catalog-design][data-home-scroll-edge="bottom"]:has(.site-header):not(:has(.home-first-screen)){background:var(--color-bg)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)){background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))::before,html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))::after{display:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{background:var(--color-bg);isolation:isolate;position:relative}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient{display:block;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;-webkit-mask-image:linear-gradient(#000 calc(100% - 500px),transparent calc(100% - 120px));mask-image:linear-gradient(#000 calc(100% - 500px),transparent calc(100% - 120px))}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i{display:block;position:absolute;width:420px;height:420px;border-radius:50%;background:var(--color-mint);filter:blur(60px);opacity:.5;top:-120px;left:-200px;right:auto}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(2){background:var(--color-blue);top:380px;left:auto;right:-220px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(3){background:var(--color-sand);opacity:.4;top:1100px;left:-240px;right:auto}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header .header-actions .icon-btn{background:transparent;box-shadow:none;border:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-footer{border-top:1px solid rgb(29 58 54 / .1);background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-footer :is(.footer-main,.footer-top,.footer-bottom,.footer-legal,.footer-legal-inner){background:transparent}
+
+/* ── Titles: the small green label above, a dark heavy title ──────────────────────────────────────────────────── */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .page-heading h1{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .page-heading>div:not(:has(.ds-kicker))::before{content:"NSP Center";display:block;margin-bottom:6px;color:#3d7a64;font-size:13px;font-weight:800}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .catalog-page .page-heading>div:not(:has(.ds-kicker))::before{content:"Каталог NSP"}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .plan-page .page-heading>div:not(:has(.ds-kicker))::before{content:"Ваш ежедневный ритм";font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.page-heading,.account-head) .ds-kicker{color:#3d7a64;font-size:13px;font-weight:800;letter-spacing:0;text-transform:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .account-head h1{font-size:30px;font-weight:800;letter-spacing:-.03em}
+
+/* ── Cards: white, rounded, soft shadow, no dark frames ─────────────────────────────────────────────────────────── */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .panel:not(.catalog-sidebar):not(.catalog-tools):not(.tabs):not(.product-card){background:#fff;border:0;border-radius:22px;box-shadow:0 16px 34px -28px rgb(29 58 54 / .45)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card.panel{background:#fff;border:0;border-radius:22px;padding:10px;box-shadow:0 14px 30px -26px rgb(29 58 54 / .45)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .product-visual{background-color:#fff;border-radius:16px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .ds-kicker{color:#3d7a64}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .favorite{background:transparent;box-shadow:none;border:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.auth,.recommend-question,.purchase-box,.order-summary,.cart-items,.account-card){border:0!important;border-radius:24px;background-color:#fff;box-shadow:0 16px 34px -28px rgb(29 58 54 / .45)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .recommend-question.panel .answer-list>.panel.panel--interactive{background:#f3f7f5;box-shadow:none;border-radius:16px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .catalog-entry-link{border:0;border-radius:18px;background:#fff;box-shadow:0 12px 26px -24px rgb(29 58 54 / .5)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .catalog-tools .search-field{border:0!important;background:#fff;box-shadow:0 12px 28px -22px rgb(29 58 54 / .5)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .catalog-sidebar>a.active{background:var(--color-ink);color:#fff}
+
+/* ── Product page: the photo and the price as white cards; the tabs along the top of the text card, the open one mint ─ */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-detail .product-gallery.panel{border:0;border-radius:26px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-content.product-content--plain{background:#fff;border:0;border-radius:24px;box-shadow:0 16px 34px -28px rgb(29 58 54 / .45);overflow:hidden}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-content--plain .tabs{gap:4px;padding:6px;margin:0;border:0;border-bottom:1px solid rgb(29 58 54 / .08);border-radius:0;background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-content--plain .tabs>button{border:0;border-radius:14px;background:transparent;color:#52645e}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-content--plain .tabs>button.active{background:linear-gradient(120deg,#cfe3d8,#e3eee8);color:var(--color-ink)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-content--plain>[role=tabpanel]{padding:20px 18px}
+
+/* ── Plan ─────────────────────────────────────────────────────────────────────────────────────────────────────────── */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .plan-page .personal-grid>.plan-column>.panel,html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .plan-page .personal-grid>.panel{background:#fff;border:0;border-radius:22px;box-shadow:0 16px 34px -28px rgb(29 58 54 / .45);padding:22px 18px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .plan-page .personal-grid .care-card{border-radius:24px}
+
+/* ── Information pages: the heading on the page, the content in one light block, an empty page without a block ─── */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-page{background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){background:transparent;border-bottom:0;padding:16px 18px 18px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div::before{content:"NSP Center";display:block;margin:0 0 6px;color:#3d7a64;font-size:13px;font-weight:800}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:has(.information-kicker)>div::before{display:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading .information-kicker{color:#3d7a64;font-size:13px;font-weight:800;letter-spacing:.04em}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.12}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>p{margin:8px 0 0;font-size:15px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){box-sizing:border-box;width:auto;max-width:none;margin:0 18px 28px;padding:22px 18px;background:rgb(255 255 255 / .72);border:1px solid rgb(255 255 255 / .9);border-radius:26px;box-shadow:0 24px 48px -40px rgb(29 58 54 / .45)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content) img{border-radius:18px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content :is(h2,.rich-content h2){font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content:has(>.information-empty){background:transparent;border:0;box-shadow:none;padding:24px 0 48px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content>.information-empty{min-height:160px;display:flex;align-items:center;justify-content:center;text-align:center;background:transparent;border:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content>.information-empty .information-empty-message{margin:0;font-size:19px;font-weight:700;color:#41544e}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-contact-grid>a{border:0;border-radius:20px;background:#eef5f1}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-reviews{gap:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content :is(.information-review,.information-review:nth-child(4n+2),.information-review:nth-child(4n+3)){padding:20px 0;border:0;border-bottom:1px solid rgb(29 58 54 / .1);border-radius:0;background:transparent;box-shadow:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-review:last-child{border-bottom:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-question{background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-closing{margin:0 18px 28px;border-radius:26px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content--legal>.rich-content{max-width:none;margin:0}
+
+/* ── Articles: date and title on the page, then one light block — the introduction, the cover, the text ────────── */
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory{position:relative;isolation:isolate;display:grid;grid-template-columns:18px minmax(0,1fr) 18px;grid-template-rows:auto 18px;box-sizing:border-box;width:auto;margin:0 18px 28px;padding:16px 0 0;background:transparent;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory::before{content:"";position:absolute;grid-column:1/-1;grid-row:2/auto;inset:0;z-index:-1;background:rgb(255 255 255 / .72);border:1px solid rgb(255 255 255 / .9);border-radius:26px;box-shadow:0 24px 48px -40px rgb(29 58 54 / .45)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory :is(.av-hero,.av-reading-layout,.av-reading){display:contents}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero::before{content:"";display:block;grid-column:1/-1;grid-row:2;height:18px;background:none}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero::after{display:none}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy{grid-column:1/-1;grid-row:1;display:flex;flex-direction:column;align-items:flex-start;position:static;max-width:none;margin:0;padding:0 0 18px;transform:none;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy :is(h1,span,a){color:var(--color-ink);text-shadow:none}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy .av-journal-link{margin:0 0 8px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy .av-date{order:1;margin:0 0 6px;color:#3d7a64;font-size:13px;font-weight:800}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy h1{order:2;margin:0;font-size:28px;font-weight:800;letter-spacing:-.03em;line-height:1.12}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-lead{grid-column:2;grid-row:3;margin:0 0 16px;font-size:16px;line-height:1.7}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{grid-column:2;grid-row:4;position:static;inset:auto;display:block;width:100%;height:220px!important;min-height:0;margin:0;object-fit:cover;border-radius:18px;transform:none;opacity:1}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image[src$="/virus-centered-v1.jpg"]{object-position:50% 12%}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>:not(.av-lead){grid-column:2;min-width:0;max-width:none;margin:0}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>.av-lead+:not(.av-lead){margin-top:28px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>section{margin-top:28px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>.av-end{margin:24px 0 0;padding-bottom:22px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading h2{font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(.av-inline-image,figure) img{border-radius:18px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading .av-section-number{color:#3d7a64;font-weight:800}
+
+/* ── «О компании»: the title on the page; the photo, its words and every section in one light block ─────────────── */
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article{position:static;box-sizing:border-box;margin:0 18px 28px;padding:16px 0 0;background:transparent;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-page-heading{position:static;margin:0 0 18px;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-page-heading :is(.co-page-kicker,h1){position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-page-heading .co-home-return:not(:has([data-story-return])){display:none}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-page-kicker{display:block;margin:0 0 6px;color:#3d7a64;font-size:13px;font-weight:800}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-page-heading h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about{box-sizing:border-box;padding:18px;background:rgb(255 255 255 / .72);border:1px solid rgb(255 255 255 / .9);border-radius:26px;box-shadow:0 24px 48px -40px rgb(29 58 54 / .45)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about>*{box-sizing:border-box;width:auto;max-width:none;margin:28px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about>:first-child{margin-top:0}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept.company-concept--article .co-hero{display:flex;flex-direction:column;align-items:stretch;min-height:0!important;height:auto;margin:0;overflow:visible;background:transparent;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero::before,html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero::after{display:none}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-image{order:-1;position:static;inset:auto;display:block;width:100%;height:220px;object-fit:cover;object-position:80% 50%;border-radius:18px;transform:none;opacity:1}
+@media(max-width:639px){
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-image{height:220px;object-position:50% 50%;object-view-box:inset(5% 10% 5% 10%)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-media{order:2;display:block;height:220px;width:100%;margin-top:18px;border-radius:18px;overflow:hidden}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-copy{order:0;margin-top:0!important}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about{display:flex;flex-direction:column}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept.company-concept--article .co-hero{display:contents!important}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about>.co-article-lead{order:1;display:block;margin-top:12px}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about>:not(.co-hero):not(.co-article-lead){order:3}
+}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-caption{display:none}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-copy{align-self:stretch;position:static;max-width:none;margin:18px 0 0;padding:0;transform:none;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero-copy>.co-kicker{display:none}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-hero .co-hero-title{margin:0;font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.2;color:var(--color-ink);text-shadow:none}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article>#about>.co-article-lead{margin-top:12px;font-size:15px;line-height:1.7}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-intro-strip{display:flex;flex-wrap:wrap;gap:8px 18px;padding:16px 0!important;border-block:1px solid rgb(29 58 54 / .1)!important}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article :is(.co-story h2,.co-section-heading h2,.co-research h2,.co-timeline>h2,.co-closing h2){font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.2;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-kicker{color:#3d7a64}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article :is(.co-story img,.co-research>img){display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:18px}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-closing{text-align:left}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-closing :is(h2,p,span,a){color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-closing .co-button{background:var(--color-ink);border-color:var(--color-ink);color:#fff}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-closing .co-button svg{color:#fff}
+html[data-catalog-design] #root .site-main .company-page--nature .company-concept--article .co-closing .co-text-link{display:inline-flex;align-items:center;justify-content:space-between;gap:16px;min-height:48px;padding:0 18px;border:1.5px solid var(--color-ink);border-radius:14px;color:var(--color-ink)}
+
+/* ── «Сертификаты»: the way back, the label and the title on the page; the introduction, the photo and every
+   section in one light block ─────────────────────────────────────────────────────────────────────────────────── */
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept{display:block;box-sizing:border-box;margin:0 18px 28px;padding:16px 0 0;background:transparent;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>.cert-back{position:static;margin:0 0 8px;padding:0;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>.cert-back :is(a,span,svg){color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero{display:flex;flex-direction:column;align-items:stretch;min-height:0!important;height:auto;margin:0;padding:0;background:transparent;overflow:visible;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero::before,html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero::after{display:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy{display:contents}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>.co-kicker{order:0;margin:0 0 6px;color:#3d7a64;font-size:13px;font-weight:800;letter-spacing:.04em}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>h1{order:1;margin:0 0 18px;color:var(--color-ink);font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.1;text-shadow:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>p{order:2;width:auto;max-width:none;margin:0;padding:18px 18px 14px;border-radius:26px 26px 0 0;background:rgb(255 255 255 / .72);color:var(--color-ink);font-size:15px;line-height:1.65;text-shadow:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero>img{order:3;position:static;inset:auto;display:block;box-sizing:border-box;width:100%;height:220px;margin:0;padding:0 18px;object-fit:cover;object-position:50% 85%;border-radius:0 0 0 0;background:rgb(255 255 255 / .72);transform:none;opacity:1;clip-path:inset(0 18px round 18px)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>section:not(.co-hero){margin:0;padding:24px 18px 0;background:rgb(255 255 255 / .72);border:0;border-radius:0;box-shadow:none;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>section:last-child{padding-bottom:22px;border-radius:0 0 26px 26px}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept :is(.co-section-heading h2,section>h2,.co-closing h2){font-size:23px;font-weight:800;letter-spacing:-.02em;line-height:1.2;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept section:not(.co-hero) :is(p,span,a,h3,strong){color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-kicker{color:#3d7a64}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-closing{text-align:left}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-closing .co-button{background:var(--color-ink);border-color:var(--color-ink);color:#fff}
+
+/* ── Chat: the same layout; the light page with lights behind it, white answers, the question field outlined ──── */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .chat .chat-input{background:#fff;border:1.5px solid rgb(29 58 54 / .28);box-shadow:0 10px 24px -18px rgb(29 58 54 / .45)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .chat .chat-input:focus-within{border-color:var(--color-ink)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .chat .chat-input input{background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .chat .chat-suggest button{background:#fff;border-color:rgb(29 58 54 / .2)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .chat .chat-note{font-size:11px;opacity:.8}
+}
+@media(max-width:639px){
+ /* The catalog's category list lies on the same page surface (it had its own sage background). */
+ html[data-catalog-design] body:has(.catalog-page--entry) .site-main{background:transparent}
+ /* Chat: the conversation runs down to the screen's bottom edge, behind the floating bottom bar, so what scrolls is
+    seen around the bar; the question field still stops above the bar (the space at the end of the conversation). */
+ html[data-home-design="d"] body:has(.chat) .site-main{padding-bottom:0}
+ html[data-home-design="d"] body:has(.chat) .chat .chat-log{padding-bottom:calc(max(12px,env(safe-area-inset-bottom)) + 56px)}
+ html[data-home-design="d"] body:has(.chat) .chat-down{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 84px)}
+ html.chat-kb-open[data-home-design="d"] body:has(.chat) .chat .chat-log{padding-bottom:0}
+ html.chat-kb-open[data-home-design="d"] body:has(.chat) .chat-down{bottom:var(--space-12)}
+}
+@media(max-width:959px){
+ /* Photos inside the text stay inside the block (they had a small negative side margin from the old full-width page). */
+ html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(.av-inline-image,figure){box-sizing:border-box;width:100%;max-width:100%;margin-left:0;margin-right:0}
+ html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(.av-inline-image,figure) img{width:100%;max-width:100%}
+ html[data-catalog-design] body .site-main :is(#about,.information-content,.delivery-content,.av-document--ivory,.certificates-page>.company-concept) img{max-width:100%}
+}
