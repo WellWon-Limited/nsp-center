@@ -2,9 +2,8 @@ import { OrdersSection } from './admin-orders';
 import { FaqSection, JournalSection, PhotosSection, PromosSection, VideosSection, type ContentTab } from './admin-content';
 import './admin.css';
 import './admin-design.css';
-import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { installHomeScrollEdges } from './home-scroll-edges.mjs';
-import { ProductPicker } from './personal';
 import type { Product } from './content-types';
 import { data, money, shortName, useStore } from './store';
 import { builtHidden, pricesUnder, readSite, type ProductContent, type ProductOverride, type SiteSettings } from './site';
@@ -253,10 +252,31 @@ function RateSection({ overview, run }: { overview: Overview; run: Run }) {
   </section>;
 }
 
+/** Sections as on the site: the catalog's top sections, each followed by its own subsections. */
+function catalogSections() {
+  const top = data.categories.filter(c => c.parent === '/catalog/');
+  return top.flatMap(t => [{ path: t.path, label: t.name.trim() }, ...data.categories.filter(c => c.parent === t.path).map(c => ({ path: c.path, label: `— ${c.name.trim()}` }))]);
+}
+const PAGE_SIZE = 40;
+
 function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
   const [picked, setPicked] = useState('');
   const [open, setOpen] = useState<string | null>(null);
   useEffect(() => { if (picked) setOpen(picked); }, [picked]);
+  // Filters (owner, 2026-11-13): a section as on the site, then a name or article within it; hidden cards are included.
+  const [section, setSection] = useState('');
+  const [query, setQuery] = useState('');
+  const [shown, setShown] = useState(PAGE_SIZE);
+  useEffect(() => { setShown(PAGE_SIZE); }, [section, query]);
+  const sections = useMemo(catalogSections, []);
+  const filtering = Boolean(section || query.trim());
+  const found = useMemo(() => {
+    if (!filtering) return [];
+    const inSection = section ? new Set(data.categories.find(c => c.path === section)?.products ?? []) : null;
+    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    return data.products.filter(p => (!inSection || inSection.has(p.path)) && words.every(w => `${p.name} ${p.article ?? ''}`.toLowerCase().includes(w)))
+      .sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+  }, [filtering, section, query]);
   // Changed: own prices or stock, or brought back to the site by hand (it stays open here after «Вернуть на сайт»).
   const changed = data.products.filter(p => (overview.products[p.id] || overview.visibility?.[p.id] === false) && !p.hidden && p.id !== picked);
   const hidden = data.products.filter(p => p.hidden && p.id !== picked);
@@ -270,13 +290,24 @@ function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
   </li>;
   return <section className="admin-card" data-ds-id="admin-products">
     <h2>Цены и наличие</h2>
-    <p className="admin-lead">Выберите товар: впишите название или артикул, или откройте список стрелкой и пролистайте. Пустое поле цены — цена из прайса по текущему курсу. «Нет в наличии» включает кнопку «Сообщить о поступлении»; когда товар снова в наличии, ждущие покупатели получат уведомление.</p>
+    <p className="admin-lead">Выберите раздел, как на сайте, и найдите в нём товар по названию или артикулу. Пустое поле цены — цена из прайса по текущему курсу. «Нет в наличии» включает кнопку «Сообщить о поступлении»; когда товар снова в наличии, ждущие покупатели получат уведомление.</p>
     <NewProduct run={run} onCreated={setPicked} />
-    <div className="admin-picker"><ProductPicker exclude={[]} value={picked} onChange={setPicked} placeholder="Название или артикул" label="Товар" withHidden /></div>
+    <div className="admin-product-filters" data-ds-id="admin-product-filters">
+      <label>Раздел<select className="field" value={section} onChange={e => setSection(e.target.value)}><option value="">Все разделы</option>{sections.map(c => <option key={c.path} value={c.path}>{c.label}</option>)}</select></label>
+      <label>Поиск<input className="field" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Название или артикул" enterKeyHint="search" /></label>
+      {filtering && <button type="button" className="btn btn--secondary" onClick={() => { setSection(''); setQuery(''); }}>Сбросить</button>}
+    </div>
     {product && <ul className="admin-products">{row(product)}</ul>}
-    <h3>{changed.length ? 'Изменённые товары' : product ? '' : 'Изменённых товаров пока нет'}</h3>
-    <ul className="admin-products">{changed.map(row)}</ul>
-    {hidden.length > 0 && <><h3>Скрыты с сайта</h3><p className="admin-hint-muted">Покупатели не видят их в каталоге, поиске и чате; по старой ссылке страница товара говорит, что его нет в продаже. Откройте товар, чтобы вернуть его на сайт.</p><ul className="admin-products">{hidden.map(row)}</ul></>}
+    {filtering ? <>
+      <h3>{found.length ? `Найдено: ${found.length}` : 'Ничего не найдено'}</h3>
+      {!found.length && <p className="admin-hint-muted">Проверьте название или артикул, или выберите «Все разделы».</p>}
+      <ul className="admin-products">{found.slice(0, shown).map(row)}</ul>
+      {found.length > shown && <button type="button" className="btn btn--secondary admin-more" onClick={() => setShown(n => n + PAGE_SIZE)}>Показать ещё {Math.min(PAGE_SIZE, found.length - shown)}</button>}
+    </> : <>
+      <h3>{changed.length ? 'Изменённые товары' : product ? '' : 'Изменённых товаров пока нет'}</h3>
+      <ul className="admin-products">{changed.map(row)}</ul>
+      {hidden.length > 0 && <><h3>Скрыты с сайта</h3><p className="admin-hint-muted">Покупатели не видят их в каталоге, поиске и чате; по старой ссылке страница товара говорит, что его нет в продаже. Откройте товар, чтобы вернуть его на сайт.</p><ul className="admin-products">{hidden.map(row)}</ul></>}
+    </>}
   </section>;
 }
 
