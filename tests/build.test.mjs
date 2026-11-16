@@ -216,7 +216,7 @@ test('The site is installable and works offline: manifest, icons and a service w
   const $ = cheerio.load(htmlFor('/'));
   assert.equal($('link[rel="manifest"]').attr('href'), '/manifest.webmanifest');
   assert.equal($('link[rel="apple-touch-icon"]').attr('href'), '/icons/apple-touch-icon.png');
-  assert.equal($('.nsp-launch').length,1);assert.equal($('.nsp-launch img').attr('src'),'/icons/splash.svg');assert.equal($('.nsp-launch-tagline').text(),'Забота о себе в вашем ритме.');assert.equal($('.nsp-launch-tagline br,.nsp-launch .loading').length,0);assert.equal($('.nsp-launch').attr('aria-hidden'),'true');
+  assert.equal($('.nsp-launch').length,1);assert.equal(Buffer.from($('.nsp-launch img').attr('src').split(',')[1],'base64').toString(),readFileSync(resolve(root,'public/icons/splash.svg'),'utf8'),'launch logo is embedded in the first document; no late image request');assert.equal($('.nsp-launch-tagline').text(),'Забота о себе в вашем ритме.');assert.equal($('.nsp-launch-tagline br,.nsp-launch .loading').length,0);assert.equal($('.nsp-launch').attr('aria-hidden'),'true');
 });
 
 test('Products added after the snapshot have a page, price-list prices, a local image and a place on the first category page', () => {
