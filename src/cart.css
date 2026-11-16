@@ -3,6 +3,10 @@
 
 .cart-lists { display: grid; gap: var(--space-18); align-content: start; min-width: 0; }
 .cart-layout--market .order-summary { align-self: start; }
+/* «К заказу» lands on the beginning of the summary, below the fixed phone header. */
+@media(max-width:959px){
+ .cart-layout--market .order-summary{scroll-margin-top:calc(var(--site-header-height,123px) + var(--space-16))}
+}
 @media (min-width: 960px) {
   .cart-layout--market .order-summary { position: sticky; top: var(--space-24); }
 }

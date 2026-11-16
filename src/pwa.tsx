@@ -186,7 +186,7 @@ export function useIntakeReminders() {
       const now = new Date();
       // Due: the time has come within the last half hour (opening the app at 15:00 does not replay the 08:00 reminder).
       const minutes = now.getHours() * 60 + now.getMinutes();
-      const due = state.intake.filter(it => { const [h, m] = it.time.split(':').map(Number); const late = minutes - (h * 60 + m); return !it.done && late >= 0 && late <= 30 && !state.reminded.includes(`${today()}:${it.id}:${it.time}`); });
+      const due = state.intake.filter(it => { if (!it.time) return false; const [h, m] = it.time.split(':').map(Number); const late = minutes - (h * 60 + m); return !it.done && late >= 0 && late <= 30 && !state.reminded.includes(`${today()}:${it.id}:${it.time}`); });
       if (!due.length) return;
       const items = due.map(it => ({ it, name: shortName(data.products.find(p => p.id === it.id)?.name || '') })).filter(x => x.name);
       setState(s => ({ ...s,

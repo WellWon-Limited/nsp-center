@@ -1,3 +1,4 @@
+import { seedKnowledge } from './product-knowledge.mjs';
 // Accounts API of the site server (scripts/serve.mjs): registration, sign-in, sign-out and the account's own data
 // (cart, favourites, waiting list, intake plan, marathon) kept in Postgres, so they follow the visitor to any device.
 // It works only when DATABASE_URL is set; without it every /api/ request answers 503 and the site keeps its
@@ -155,7 +156,7 @@ const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, 
  * (name, description, properties, certificates, photo), shown in the administrator's editor next to the changes.
  * The schema is created on the first request; a database that is down gives 503 and is retried on the next request.
  */
-export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, cbr = true, categories = [], articlePaths = [] } = {}) {
+export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, cbr = true, categories = [], articlePaths = [], knowledgeThemes = [], lectureCorpusFile } = {}) {
   const productPaths = new Map(cardProducts.filter(p => p?.path).map(p => [p.id, p.path]));
   if (!databaseUrl && !givenPool) return { enabled: false, handle: (req, res) => send(res, 503, { error: 'Сервер аккаунтов не подключён.' }), close: async () => {} };
   const pool = givenPool ?? new (await import('pg')).default.Pool({ connectionString: databaseUrl, max: 5 });
@@ -164,7 +165,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
   let ready = null;
   // Staff accounts are created only by `npm run admin:create` or by an administrator in «Сотрудники» — never by
   // registering with a listed email (anyone could register it first). ADMIN_EMAILS is no longer read.
-  const migrate = () => (ready ??= pool.query(SCHEMA + SITE_SCHEMA).catch(error => { ready = null; throw error; }));
+  const migrate = () => (ready ??= pool.query(SCHEMA + SITE_SCHEMA).then(()=>seedKnowledge(pool,{products:cardProducts,themes:knowledgeThemes,corpusFile:lectureCorpusFile})).catch(error => { ready = null; throw error; }));
   const signIns = limiter(10, 15 * 60 * 1000), registrations = limiter(20, 60 * 60 * 1000);
 
   async function startSession(req, userId, staff = false) {

@@ -1,4 +1,5 @@
 import './purchases.css';
+import {AuthScreen} from './auth';
 import { useState } from 'react';
 import { data, shortName, useStore } from './store';
 import { Heading, Icon, ProductCard } from './ui';
@@ -7,8 +8,10 @@ import { orderDate, purchased } from './purchased-ids.mjs';
 // "Мои покупки", like "Покупки" on Wildberries: what the visitor has already ordered as catalog cards (price, heart,
 // "В корзину") with the date of the latest order (and "(2)" when ordered twice), the catalog's search field, newest first.
 export function Purchases() {
-  const { state, ready } = useStore();
+  const { state, ready, sessionReady } = useStore();
   const [q, setQ] = useState('');
+  if(!ready||!sessionReady)return <div className="account-route-loading" aria-busy="true" aria-label="Загрузка"/>;
+  if(!state.signedIn||!state.account)return <AuthScreen/>;
   const byId = new Map(data.products.map(p => [p.id, p]));
   const all = purchased(state.orders, new Set(byId.keys())).map(x => ({ ...x, product: byId.get(x.id)! }));
   const needle = q.trim().toLowerCase();

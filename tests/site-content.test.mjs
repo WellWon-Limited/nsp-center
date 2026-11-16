@@ -56,3 +56,12 @@ test('a «back in stock» notice opens that product\'s card, also when it was sa
   assert.match(code, /\/\^stock-\(\.\+\)\$\//);
   assert.match(code, /<a href=\{noticeHref\(n\)\}>/);
 });
+
+test('campaigns bind only existing products, deduplicate selections, and keep conditions and dates',()=>{
+ const options={productIds:new Set(['alfalfa','aloe-vera-juice'])};
+ const input={title:'Ежедневная забота',text:'Условия акции',from:'2026-11-01',to:'2026-11-30',products:['alfalfa','aloe-vera-juice','alfalfa']};
+ assert.deepEqual(validateContent('promo',input,options).value.products,['alfalfa','aloe-vera-juice']);
+ assert.ok(validateContent('promo',{...input,products:['missing']},options).error);
+ assert.ok(validateContent('promo',{...input,products:'alfalfa'},options).error);
+ assert.deepEqual(validateContent('promo',{title:'Общее предложение'},options).value.products,[]);
+});

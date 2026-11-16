@@ -81,7 +81,7 @@ test('Every product carries the retail and partner prices of the NSP price list,
     assert.ok($('[data-ds-id="purchase-prices"] .price-row.current').text().includes(String(expected.retail).replace(/\B(?=(\d{3})+$)/g, '\u00a0')), `${product.path}: retail price before JavaScript`);
     assert.equal($('.card-offer').length, expected.partner === null ? 0 : 1, `${product.path}: discount-card offer before JavaScript`);
   }
-  assert.equal(listed, 118, 'Products matched to the November 2026 price list');
+  assert.equal(listed, 111, 'Snapshot products matched to the corrected November 2026 price list');
 });
 
 test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with retail prices', () => {
@@ -102,7 +102,7 @@ test('All 166 product SSR documents have valid nested Product/Offer JSON-LD with
     assert.equal(Number(offer.price), pricesFor(original, priceList).retail, `${path}: structured price must be the retail price`);
     assert.equal(offer.priceCurrency, 'RUB', `${path}: currency differs`);
     assert.equal(offer.availability?.split('/').at(-1), product.availability, `${path}: stock status differs`);
-    assert.ok(String(structured.image).includes(productCover(product)), `${path}: structured image differs`);
+    assert.ok(String(structured.image).includes($('.main-product-image img').first().attr('src')), `${path}: structured image differs`);
     if (structured.aggregateRating) {
       assert.equal(structured.aggregateRating['@type'], 'AggregateRating', `${path}: invalid aggregate rating type`);
       assert.equal(Number(structured.aggregateRating.ratingValue), original.rating, `${path}: rating differs`);
@@ -151,7 +151,7 @@ test('Every prerendered route uses available local assets and safe internal link
         assert.ok(!/^javascript:/iu.test(value), `${route.url}: unsafe link ${value}`);
         assert.ok(!/(?:mc\.yandex|google-analytics|googletagmanager|doubleclick)/iu.test(value), `${route.url}: legacy tracking ${value}`);
         if (url.origin !== base) continue;
-        if (/^\/(?:assets|media)\//u.test(url.pathname) || element.name === 'link' && element.attribs.rel !== 'canonical') {
+        if (/^\/(?:assets|media|images)\//u.test(url.pathname) || element.name === 'link' && element.attribs.rel !== 'canonical') {
           assert.ok(existsSync(mediaFile(value)), `${route.url}: missing built asset ${value}`);
         } else if (element.name === 'a') {
           const canonical = pathOf(value);

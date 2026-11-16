@@ -1,3 +1,10 @@
+import {CategoriesSection} from './admin-categories';
+import {RequiredLabel,RequiredHint,useUnsavedProduct} from './admin-form';
+import {ProductMediaEditor, ProductAssetFields, type ProductAssets} from './admin-product-media';
+import {customProduct} from './custom-product.mjs';
+import type {ProductKnowledge} from './product-knowledge-types';
+import {KnowledgeEditor} from './admin-knowledge';
+import { DISCOUNT_PERCENTS, readProductBadges, type ProductBadges } from './product-badges.mjs';
 import { OrdersSection } from './admin-orders';
 import { FaqSection, JournalSection, PhotosSection, PromosSection, VideosSection, type ContentTab } from './admin-content';
 import './admin.css';
@@ -6,9 +13,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, 
 import { installHomeScrollEdges } from './home-scroll-edges.mjs';
 import type { Product } from './content-types';
 import { data, money, shortName, useStore } from './store';
-import { builtHidden, pricesUnder, readSite, type ProductContent, type ProductOverride, type SiteSettings } from './site';
-import { factOrder } from './catalog';
-import { productCover } from './product-media.mjs';
+import { builtHidden, pricesUnder, readSite, type ProductOverride, type SiteSettings } from './site';
 import { Icon, SiteBackdrop } from './ui';
 import { Field, PasswordInput } from './auth';
 
@@ -24,10 +29,10 @@ type Overview = SiteSettings & {
   staff: { email: string; name: string; createdAt: string; lastLogin: string | null }[];
   customers: number;
 };
-type Tab = 'summary' | 'orders' | 'products' | 'rate' | 'reviews' | 'chat' | 'staff' | ContentTab;
+type Tab = 'summary' | 'orders' | 'products' | 'categories' | 'rate' | 'reviews' | 'chat' | 'staff' | ContentTab;
 // Icons as in the site's phone tab bar (home, catalog grid, chat, profile) and header (bag); groups with a heading.
-const tabs: [Tab, string, string, string][] = [['summary', 'Сводка', 'home', 'Сводка'], ['orders', 'Заказы', 'bag', 'Заказы'], ['products', 'Товары', 'grid', 'Товары'], ['rate', 'Курс у.е.', 'sliders', 'Курс'], ['reviews', 'Отзывы', 'star', 'Отзывы'], ['chat', 'Чат-консультант', 'message', 'Чат'], ['staff', 'Сотрудники', 'user-separated', 'Команда'], ['promos', 'Акции', 'tag', 'Акции'], ['photos', 'Фотогалерея', 'image', 'Фото'], ['videos', 'Видеогалерея', 'play', 'Видео'], ['journal', 'Журнал', 'book', 'Журнал'], ['faq', 'Частые вопросы', 'help', 'Вопросы']];
-const groups: [string, Tab[]][] = [['', ['summary']], ['Магазин', ['orders', 'products', 'rate']], ['Контент', ['promos', 'photos', 'videos', 'journal', 'faq']], ['Покупатели', ['reviews', 'chat']], ['Команда', ['staff']]];
+const tabs: [Tab, string, string, string][] = [['summary', 'Сводка', 'home', 'Сводка'], ['orders', 'Заказы', 'bag', 'Заказы'], ['products', 'Товары', 'grid', 'Товары'], ['categories', 'Категории', 'grid', 'Категории'], ['rate', 'Курс у.е.', 'sliders', 'Курс'], ['reviews', 'Отзывы', 'star', 'Отзывы'], ['chat', 'Чат-консультант', 'message', 'Чат'], ['staff', 'Сотрудники', 'user-separated', 'Команда'], ['promos', 'Акции', 'tag', 'Акции'], ['photos', 'Фотогалерея', 'image', 'Фото'], ['videos', 'Видеогалерея', 'play', 'Видео'], ['journal', 'Журнал', 'book', 'Журнал'], ['faq', 'Частые вопросы', 'help', 'Вопросы']];
+const groups: [string, Tab[]][] = [['', ['summary']], ['Магазин', ['orders', 'products', 'categories', 'rate']], ['Контент', ['promos', 'photos', 'videos', 'journal', 'faq']], ['Покупатели', ['reviews', 'chat']], ['Команда', ['staff']]];
 const when = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const number = (v: number | null | undefined) => v === null || v === undefined ? '' : String(v).replace('.', ',');
 const productName = (id: string) => { const p = data.products.find(x => x.id === id); return p ? shortName(p.name) : id; };
@@ -103,7 +108,7 @@ function StaffSignIn() {
 
 export function AdminPanel() {
   const { setSite, notify, staff, setStaff } = useStore();
-  const [tab, setTabState] = useState<Tab>('summary');
+  const [tab, setTabState] = useState<Tab>(()=>{const requested=new URLSearchParams(location.search).get('section');return tabs.some(([id])=>id===requested)?requested as Tab:'summary'});
   const headerRef = useRef<HTMLElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -122,8 +127,7 @@ export function AdminPanel() {
     desktop.addEventListener('change', update);
     return () => desktop.removeEventListener('change', update);
   }, []);
-  // Each entrance to staff management starts with the summary; a previous section is not restored.
-  useEffect(() => { history.replaceState(history.state, '', '/admin/'); }, []);
+  // Sign-in starts at summary; reloading an authenticated URL preserves the current section.
   const setTab = (t: Tab) => { closeMenu(); setTabState(t); history.replaceState(history.state, '', t === 'summary' ? '/admin/' : `/admin/?section=${t}`); window.scrollTo({ top: 0, behavior: 'instant' }); requestAnimationFrame(() => document.querySelector<HTMLElement>('.admin-title')?.focus({preventScroll: true})); };
   const [overview, setOverview] = useState<Overview | null>(null);
   const [error, setError] = useState('');
@@ -135,9 +139,9 @@ export function AdminPanel() {
   }).catch(() => setError('Нет связи с сервером.'));
   useEffect(() => { void load(); }, []);
   /** Runs a change; on success applies the returned site settings (when there are any) and reloads the overview. */
-  const run = async (path: string, body: unknown, done: string) => {
+  const run = async (path: string, body: unknown, done: string, onError?:(message:string)=>void) => {
     const r = await adminCall(path, body);
-    if (!r.ok) { notify(String(r.body?.error || 'Не удалось сохранить.')); return false; }
+    if (!r.ok) { const message=String(r.body?.error || 'Не удалось сохранить.');notify(message);onError?.(message);return false; }
     if (r.body && 'products' in r.body) setSite(readSite(r.body));
     notify(done); await load(); return true;
   };
@@ -172,6 +176,7 @@ export function AdminPanel() {
         {tab === 'orders' && <OrdersSection />}
         {overview && tab === 'rate' && <RateSection overview={overview} run={run} />}
         {overview && tab === 'products' && <ProductsSection overview={overview} run={run} />}
+        {overview && tab === 'categories' && <CategoriesSection site={overview} run={run} />}
         {overview && tab === 'reviews' && <ReviewsSection overview={overview} run={run} />}
         {tab === 'chat' && <ChatLogSection />}
         {overview && tab === 'promos' && <PromosSection site={overview} run={run} />}
@@ -197,12 +202,17 @@ function AdminNavigation({tab, pending, choose}: {tab: Tab; pending: number; cho
 function SummarySection({ overview, pending, open }: { overview: Overview; pending: number; open: (t: Tab) => void }) {
   const [orders, setOrders] = useState<Record<string, number> | null>(null);
   useEffect(() => { fetch('/api/admin/orders?status=all&page=1', { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then(b => setOrders(b?.summary ?? null)).catch(() => setOrders(null)); }, []);
-  const out = data.products.filter(p => p.availability === 'OutOfStock').length;
+  const hiddenCount = data.products.filter(p => p.hidden).length;
+  const visibleCount = data.products.length - hiddenCount;
+  const inStock = data.products.filter(p => !p.hidden && p.availability !== 'OutOfStock').length;
+  const out = visibleCount - inStock;
   const rate = overview.rate?.rubPerUnit ?? data.pricing.rubPerUnit;
   const cards: [Tab, string, string, string][] = [
     ['orders', 'Новые заказы', orders ? String(orders.new ?? 0) : '—', orders ? `В обработке: ${orders.processing ?? 0}` : 'Заказы с сайта пока не приходят'],
     ['reviews', 'Отзывы на проверке', String(pending), pending ? 'Ждут публикации' : 'Все отзывы проверены'],
-    ['products', 'Нет в наличии', String(out), `из ${data.products.length} товаров`],
+    ['products', 'В наличии', String(inStock), 'Видны на сайте и доступны к покупке'],
+    ['products', 'Нет в наличии', String(out), 'Видны на сайте, ожидают поступления'],
+    ['products', 'Скрыто с сайта', String(hiddenCount), `Всего карточек: ${data.products.length}`],
     ['rate', 'Курс у.е.', `${number(rate)} ₽`, overview.rate?.updatedAt ? `обновлён ${when(overview.rate.updatedAt)}` : 'по прайсу'],
     ['staff', 'Покупателей', String(overview.customers), `Сотрудников: ${overview.staff.length}`],
   ];
@@ -242,7 +252,7 @@ function RateSection({ overview, run }: { overview: Overview; run: Run }) {
       {overview.cbr && <div><dt>Курс ЦБ на {new Date(overview.cbr.date).toLocaleDateString('ru-RU')}</dt><dd>{number(overview.cbr.rubPerUsd)} ₽ за $ — для сравнения</dd></div>}
     </dl>
     <form className="admin-rate-form" onSubmit={save}>
-      <label>Новый курс, ₽ за 1 у.е.<input className="field" inputMode="decimal" value={value} onChange={e => { setValue(e.target.value); setConfirm(false); }} /></label>
+      <label>Новый курс, ₽ за 1 у.е.<input className="field" required inputMode="decimal" value={value} onChange={e => { setValue(e.target.value); setConfirm(false); }} /></label>
       <button className="btn btn--primary" disabled={!valid || next === current}>Сохранить</button>
     </form>
     {valid && next !== current && sample && <p className="admin-hint">Например, {shortName(sample.name)}: {money(sampleAt(current))} → {money(sampleAt(next))}</p>}
@@ -254,106 +264,134 @@ function RateSection({ overview, run }: { overview: Overview; run: Run }) {
 
 /** Sections as on the site: the catalog's top sections, each followed by its own subsections. */
 function catalogSections() {
-  const top = data.categories.filter(c => c.parent === '/catalog/');
-  return top.flatMap(t => [{ path: t.path, label: t.name.trim() }, ...data.categories.filter(c => c.parent === t.path).map(c => ({ path: c.path, label: `— ${c.name.trim()}` }))]);
+  const visit=(parent:string,depth=0):{path:string;label:string}[]=>data.categories.filter(c=>c.parent===parent).flatMap(c=>[{path:c.path,label:`${'— '.repeat(depth)}${c.name.trim()}`},...visit(c.path,depth+1)]);
+  return visit('/catalog/');
 }
 const PAGE_SIZE = 40;
 
 function ProductsSection({ overview, run }: { overview: Overview; run: Run }) {
   const [picked, setPicked] = useState('');
-  const [open, setOpen] = useState<string | null>(null);
-  useEffect(() => { if (picked) setOpen(picked); }, [picked]);
+  const [editingProductId,setEditingProductId]=useState<string|null>(()=>new URLSearchParams(location.search).get('product'));
+  const [creating,setCreating]=useState(()=>new URLSearchParams(location.search).get('new')==='1');
+  useEffect(() => { if (picked) setEditingProductId(picked); }, [picked]);
   // Filters (owner, 2026-11-13): a section as on the site, then a name or article within it; hidden cards are included.
-  const [section, setSection] = useState('');
-  const [query, setQuery] = useState('');
+  const [section, setSection] = useState(()=>new URLSearchParams(location.search).get('category')||'');
+  const [query, setQuery] = useState(()=>new URLSearchParams(location.search).get('q')||'');
+  useEffect(()=>{const params=new URLSearchParams(location.search);params.set('section','products');for(const [key,value] of Object.entries({product:creating?'':editingProductId||'',new:creating?'1':'',category:section,q:query})){if(value)params.set(key,value);else params.delete(key)}if(!creating&&!editingProductId)params.delete('editorTab');history.replaceState(history.state,'','/admin/?'+params.toString())},[creating,editingProductId,section,query]);
   const [shown, setShown] = useState(PAGE_SIZE);
   useEffect(() => { setShown(PAGE_SIZE); }, [section, query]);
   const sections = useMemo(catalogSections, []);
   const filtering = Boolean(section || query.trim());
   const found = useMemo(() => {
-    if (!filtering) return [];
     const inSection = section ? new Set(data.categories.find(c => c.path === section)?.products ?? []) : null;
     const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return data.products.filter(p => (!inSection || inSection.has(p.path)) && words.every(w => `${p.name} ${p.article ?? ''}`.toLowerCase().includes(w)))
       .sort((a, b) => a.name.localeCompare(b.name, 'ru'));
   }, [filtering, section, query]);
   // Changed: own prices or stock, or brought back to the site by hand (it stays open here after «Вернуть на сайт»).
-  const changed = data.products.filter(p => (overview.products[p.id] || overview.visibility?.[p.id] === false) && !p.hidden && p.id !== picked);
-  const hidden = data.products.filter(p => p.hidden && p.id !== picked);
-  const product = data.products.find(p => p.id === picked);
+  const visible = data.products.filter(p => !p.hidden);
+  const hidden = data.products.filter(p => p.hidden);
   const row = (p: Product) => <li key={p.id}>
-    <button type="button" className="admin-product-row" aria-expanded={open === p.id} onClick={() => setOpen(open === p.id ? null : p.id)}>
-      <span><strong>{shortName(p.name)}</strong><small>Арт. {p.article ?? '—'}{p.hidden ? ' · скрыт с сайта' : overview.products[p.id] ? ' · изменён' : overview.visibility?.[p.id] === false ? ' · возвращён на сайт' : ''}</small></span>
+    <button type="button" className="admin-product-row" onClick={()=>{setEditingProductId(p.id);window.scrollTo({top:0,behavior:'instant'})}}>
+      <span><strong>{shortName(p.name)}</strong><small>Арт. {p.article ?? '—'}{p.hidden ? ' · скрыт с сайта' : (overview.products[p.id] || overview.knowledge?.[p.id]) ? ' · изменён' : overview.visibility?.[p.id] === false ? ' · возвращён на сайт' : ''}</small></span>
       <span className="admin-product-prices">{money(p.prices.retail)}{p.prices.partner !== null && <small>по карте {money(p.prices.partner)}</small>}<small className={p.availability === 'OutOfStock' ? 'out' : 'in'}>{p.availability === 'OutOfStock' ? 'Нет в наличии' : 'В наличии'}</small></span>
     </button>
-    {open === p.id && <ProductTabs key={p.id} product={p} override={overview.products[p.id]} run={run} />}
+
   </li>;
+  if(creating)return <section className="admin-product-workspace" data-ds-id="admin-new-product-workspace"><button type="button" className="back-link admin-products-back" onClick={()=>setCreating(false)}><Icon name="chevron" size={18}/>К товарам</button><header><div><h1>Новая карточка товара</h1><p>Заполните сведения, найдите материалы в лекциях и прикрепите источники.</p></div><span>Черновик</span></header><NewProduct run={run} onCreated={id=>{rememberEditorTab('price');setPicked(id);setEditingProductId(id);setCreating(false)}} onCancel={()=>setCreating(false)}/></section>;
+  const knowledgeProduct=editingProductId?data.products.find(p=>p.id===editingProductId):null;
+  if(knowledgeProduct)return <section className="admin-product-workspace" data-ds-id="admin-product-workspace"><button type="button" className="back-link admin-products-back" onClick={()=>{setEditingProductId(null);window.scrollTo({top:0,behavior:'instant'})}}><Icon name="chevron" size={18}/>К товарам</button><header><div><h1>Редактор товара</h1><p className="admin-editing-product-name"><strong>{shortName(knowledgeProduct.name)}</strong></p></div><span>{knowledgeProduct.hidden?'Скрыт с сайта':'На сайте'}</span></header><ProductTabs key={knowledgeProduct.id} product={knowledgeProduct} override={overview.products[knowledgeProduct.id]} run={run} initialTab="price"/></section>;
   return <section className="admin-card" data-ds-id="admin-products">
     <h2>Цены и наличие</h2>
-    <p className="admin-lead">Выберите раздел, как на сайте, и найдите в нём товар по названию или артикулу. Пустое поле цены — цена из прайса по текущему курсу. «Нет в наличии» включает кнопку «Сообщить о поступлении»; когда товар снова в наличии, ждущие покупатели получат уведомление.</p>
-    <NewProduct run={run} onCreated={setPicked} />
+    <p className="admin-lead">Все товары доступны ниже: сначала скрытые, затем видимые на сайте. Раздел и поиск помогут найти нужную карточку. Пустое поле цены — цена из прайса по текущему курсу. «Нет в наличии» включает кнопку «Сообщить о поступлении»; когда товар снова в наличии, ждущие покупатели получат уведомление.</p>
+    <button type="button" className="btn btn--primary admin-new-product-open" onClick={()=>{setCreating(true);window.scrollTo({top:0,behavior:'instant'})}}><Icon name="plus" size={18}/>Новая карточка товара</button>
     <div className="admin-product-filters" data-ds-id="admin-product-filters">
       <label>Раздел<select className="field" value={section} onChange={e => setSection(e.target.value)}><option value="">Все разделы</option>{sections.map(c => <option key={c.path} value={c.path}>{c.label}</option>)}</select></label>
       <label>Поиск<input className="field" type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Название или артикул" enterKeyHint="search" /></label>
       {filtering && <button type="button" className="btn btn--secondary" onClick={() => { setSection(''); setQuery(''); }}>Сбросить</button>}
     </div>
-    {product && <ul className="admin-products">{row(product)}</ul>}
     {filtering ? <>
       <h3>{found.length ? `Найдено: ${found.length}` : 'Ничего не найдено'}</h3>
       {!found.length && <p className="admin-hint-muted">Проверьте название или артикул, или выберите «Все разделы».</p>}
       <ul className="admin-products">{found.slice(0, shown).map(row)}</ul>
       {found.length > shown && <button type="button" className="btn btn--secondary admin-more" onClick={() => setShown(n => n + PAGE_SIZE)}>Показать ещё {Math.min(PAGE_SIZE, found.length - shown)}</button>}
     </> : <>
-      <h3>{changed.length ? 'Изменённые товары' : product ? '' : 'Изменённых товаров пока нет'}</h3>
-      <ul className="admin-products">{changed.map(row)}</ul>
-      {hidden.length > 0 && <><h3>Скрыты с сайта</h3><p className="admin-hint-muted">Покупатели не видят их в каталоге, поиске и чате; по старой ссылке страница товара говорит, что его нет в продаже. Откройте товар, чтобы вернуть его на сайт.</p><ul className="admin-products">{hidden.map(row)}</ul></>}
+      {hidden.length > 0 && <><h3>Скрыты с сайта</h3><ul className="admin-products">{hidden.map(row)}</ul></>}
+      <h3>Видны на сайте · {visible.length}</h3><ul className="admin-products">{visible.slice(0,shown).map(row)}</ul>
+      {visible.length>shown&&<button type="button" className="btn btn--secondary admin-more" onClick={()=>setShown(n=>n+PAGE_SIZE)}>Показать ещё {Math.min(PAGE_SIZE,visible.length-shown)}</button>}
     </>}
   </section>;
 }
 
-type EditTab = 'price' | 'about' | 'facts' | 'docs' | 'photo';
-const editTabs: [EditTab, string][] = [['price', 'Цены и наличие'], ['about', 'Название и описание'], ['facts', 'Состав и применение'], ['docs', 'Сертификаты'], ['photo', 'Фото']];
+function rememberEditorTab(tab:string){const params=new URLSearchParams(location.search);params.set('editorTab',tab);history.replaceState(history.state,'','/admin/?'+params.toString())}
+
+type EditTab = 'price' | 'about' | 'facts' | 'docs' | 'photo' | 'videos';
+const editTabs: [EditTab, string][] = [['price', 'Цены, наличие и метки'], ['about', 'Название и описание'], ['facts', 'Состав и применение'], ['docs', 'Сертификаты'], ['photo', 'Фото'], ['videos', 'Видео']];
 /** A product's editor: prices and stock, and the card's content (everything a visitor sees on the product page). */
-function ProductTabs({ product: p, override, run }: { product: Product; override?: ProductOverride; run: Run }) {
-  const [tab, setTab] = useState<EditTab>('price');
+function ProductTabs({ product: p, override, run, initialTab='price' }: { product: Product; override?: ProductOverride; run: Run; initialTab?:EditTab }) {
+  const panel=useRef<HTMLDivElement>(null),[loadingHeight,setLoadingHeight]=useState(0);
+  const [tab, setTab] = useState<EditTab>(()=>{const requested=new URLSearchParams(location.search).get('editorTab');return editTabs.some(([id])=>id===requested)?requested as EditTab:initialTab});
   return <div className="admin-editor">
+    <RequiredHint/>
     <Visibility product={p} run={run} />
-    <nav className="admin-subtabs" role="tablist">{editTabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => setTab(id)}>{label}</button>)}</nav>
-    {tab === 'price' ? <ProductEditor product={p} override={override} run={run} /> : <ContentEditor product={p} tab={tab} run={run} />}
+    <nav className="admin-subtabs" role="tablist">{editTabs.map(([id, label]) => <button key={id} type="button" role="tab" aria-selected={tab === id} className={tab === id ? 'active' : ''} onClick={() => {setLoadingHeight(panel.current?.getBoundingClientRect().height||0);setTab(id);rememberEditorTab(id)}}>{label}</button>)}</nav>
+    <div ref={panel} className="admin-product-tab-body">{tab === 'price' ? <ProductEditor product={p} override={override} run={run} /> : tab === 'about'||tab==='facts' ? <KnowledgeEditor product={p} run={run} mode={tab} loadingMinHeight={loadingHeight}/> : <ProductMediaEditor product={p} tab={tab} run={run} />}</div>
   </div>;
 }
 
 /** «Новая карточка»: the essentials only — name, article, section, prices and stock. The card is created hidden and
  *  opens in the usual editor below, where its description, composition, certificates and photo are filled in; then
  *  «Показать на сайте» opens it to customers (scripts/site-admin.mjs /api/admin/new-product, src/custom-product.mjs). */
-function NewProduct({ run, onCreated }: { run: Run; onCreated: (id: string) => void }) {
-  const empty = { name: '', article: '', categoryPath: '', retailRub: '', partnerRub: '', availability: 'InStock' };
-  const [open, setOpen] = useState(false);
-  const [f, setF] = useState(empty);
-  const set = (k: keyof typeof f) => (v: string) => setF(x => ({ ...x, [k]: v }));
-  const sections = data.categories.filter(c => c.path !== '/catalog/').map(c => ({ path: c.path, label: c.parent && c.parent !== '/catalog/' ? `${data.categories.find(x => x.path === c.parent)?.name ?? ''} › ${c.name}` : c.name })).sort((a, b) => a.label.localeCompare(b.label, 'ru'));
-  const save = async (e: FormEvent) => {
-    e.preventDefault();
-    const before = new Set(data.products.map(p => p.id));
-    if (!await run('/api/admin/new-product', { product: f }, `Карточка создана: ${f.name.trim()}. Заполните описание и фото, затем покажите её на сайте`)) return;
-    const created = data.products.find(p => !before.has(p.id));
-    setF(empty); setOpen(false);
-    if (created) onCreated(created.id);
-  };
-  if (!open) return <button type="button" className="btn btn--primary admin-new-product-open" onClick={() => setOpen(true)}><Icon name="plus" size={18} />Новая карточка товара</button>;
-  return <form className="admin-editor admin-new-product" onSubmit={save} data-ds-id="admin-new-product">
-    <h3>Новая карточка товара</h3>
-    <div className="admin-editor-grid">
-      <label>Название<input className="field" value={f.name} onChange={e => set('name')(e.target.value)} placeholder="Например: Крем для рук (Hand Cream)" required /></label>
-      <label>Артикул<input className="field" value={f.article} onChange={e => set('article')(e.target.value)} placeholder="Необязательно" /></label>
-      <label>Раздел каталога<select className="field" value={f.categoryPath} onChange={e => set('categoryPath')(e.target.value)} required><option value="">Выберите раздел</option>{sections.map(c => <option key={c.path} value={c.path}>{c.label}</option>)}</select></label>
-      <label>Розничная цена, ₽<input className="field" inputMode="numeric" value={f.retailRub} onChange={e => set('retailRub')(e.target.value)} required /></label>
-      <label>Цена по карте, ₽<input className="field" inputMode="numeric" value={f.partnerRub} onChange={e => set('partnerRub')(e.target.value)} placeholder="Необязательно" /></label>
-    </div>
-    <div className="admin-choice" role="radiogroup" aria-label="Наличие">{([['InStock', 'В наличии'], ['OutOfStock', 'Нет в наличии']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={f.availability === v} className={f.availability === v ? 'active' : ''} onClick={() => set('availability')(v)}>{label}</button>)}</div>
-    <p className="admin-hint-muted">Карточка появится скрытой: покупатели её не увидят, пока вы не добавите описание и фото и не нажмёте «Показать на сайте». Цены в рублях не меняются при смене курса у.е.</p>
-    <div className="admin-editor-actions"><button className="btn btn--primary">Создать карточку</button><button type="button" className="btn btn--secondary" onClick={() => { setF(empty); setOpen(false); }}>Отмена</button></div>
-  </form>;
+function BadgeEditor({value,onChange}:{value:ProductBadges;onChange:(value:ProductBadges)=>void}) {
+ return <fieldset className="admin-badge-editor"><legend>Метки товара</legend>
+  <label>Скидка<select className="field" value={value.discountPercent} onChange={e=>onChange({...value,discountPercent:Number(e.target.value)})}><option value={0}>Без скидки</option>{DISCOUNT_PERCENTS.map(n=><option key={n} value={n}>−{n}%</option>)}</select></label>
+  <div className="admin-badge-checks"><label><input type="checkbox" checked={value.isNew} onChange={e=>onChange({...value,isNew:e.target.checked})}/>Новинка</label><label><input type="checkbox" checked={value.isHit} onChange={e=>onChange({...value,isHit:e.target.checked})}/>Хит продаж</label></div>
+  <p className="admin-hint-muted">Метки видны на карточках товара по всему сайту. «Нет в наличии» появляется автоматически по наличию. Метка скидки обозначает акцию; итоговую цену укажите в полях цены выше.</p>
+ </fieldset>;
+}
+
+function NewProduct({run,onCreated,onCancel}:{run:Run;onCreated:(id:string)=>void;onCancel:()=>void}){
+ const categoryField=useRef<HTMLSelectElement>(null);
+ const panel=useRef<HTMLDivElement>(null),[loadingHeight,setLoadingHeight]=useState(0);
+ const [f,setF]=useState({name:'',article:'',categoryPath:'',retailRub:'',partnerRub:'',availability:'InStock',badges:readProductBadges(null)});
+ const [tab,setTab]=useState<EditTab>(()=>{const requested=new URLSearchParams(location.search).get('editorTab');return editTabs.some(([id])=>id===requested)?requested as EditTab:'price'}),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const [knowledge,setKnowledge]=useState<ProductKnowledge>({about:[],highlights:[],benefit:'',recommendations:[],pairs:[],sources:[],experts:[]});
+ const [properties,setProperties]=useState<Record<string,string>>({});
+ const [assets,setAssets]=useState<ProductAssets>({photos:[],documents:[],videos:[]});
+ const [showImmediately,setShowImmediately]=useState(true);
+ useLayoutEffect(()=>{if(tab==='price'&&error&&!f.categoryPath)categoryField.current?.focus();},[tab,error,f.categoryPath]);
+ const draftSnapshot=JSON.stringify([f,knowledge,properties,assets,showImmediately]);const initialDraft=useRef(draftSnapshot);useUnsavedProduct(draftSnapshot!==initialDraft.current);
+ const set=(key:keyof typeof f)=>(value:string)=>setF(x=>({...x,[key]:value}));
+ const sections=data.categories.filter(c=>c.path!=='/catalog/').map(c=>({path:c.path,label:c.parent&&c.parent!=='/catalog/'?`${data.categories.find(x=>x.path===c.parent)?.name??''} › ${c.name}`:c.name})).sort((a,b)=>a.label.localeCompare(b.label,'ru'));
+ const draftProduct=customProduct('new-draft',{...f,retailRub:Number(f.retailRub)||1,partnerRub:null,availability:f.availability==='OutOfStock'?'OutOfStock':'InStock'},data.categories);
+ const hasKnowledge=Boolean(knowledge.about.some(s=>s.trim())||knowledge.sources.length||knowledge.recommendations.length||knowledge.pairs.length||knowledge.experts?.length);
+ const save=async(e:FormEvent)=>{
+  e.preventDefault();if(busy)return;setError('');
+  if(!f.categoryPath){setTab('price');setError('Выберите категорию товара. Карточка появится именно в этой категории.');categoryField.current?.focus();return}
+  if(f.name.trim().length<2||!f.retailRub.trim()){setTab('price');setError('Укажите название, раздел каталога и розничную цену.');return}
+  if(!assets.photos.length){setTab('photo');rememberEditorTab('photo');setError('Добавьте хотя бы одно фото товара.');return}
+  setBusy(true);const before=new Set(data.products.map(p=>p.id));
+  try{
+   if(!await run('/api/admin/new-product',{product:f,publish:showImmediately,content:{summary:knowledge.benefit,properties,...assets,image:assets.photos[0]||''},...(hasKnowledge?{knowledge}:{})},`Карточка создана: ${f.name.trim()}. ${showImmediately?'Товар появился в каталоге.':'Она скрыта от покупателей.'}`)){setError('Карточка не создана. Проверьте сообщение об ошибке и заполненные поля.');return}
+   const created=data.products.find(p=>!before.has(p.id));if(created)onCreated(created.id);
+  }finally{setBusy(false)}
+ };
+ return <form className="admin-new-product-workspace-form" onSubmit={save} noValidate data-ds-id="admin-new-product">
+  <RequiredHint/>
+  <nav className="admin-subtabs" role="tablist" aria-label="Новая карточка товара">{([['price','Цены, наличие и метки'],['about','Название и описание'],['facts','Состав и применение'],['photo','Фото'],['docs','Сертификаты'],['videos','Видео']] as const).map(([id,label])=><button type="button" role="tab" key={id} aria-selected={tab===id} className={tab===id?'active':''} onClick={()=>{setLoadingHeight(panel.current?.getBoundingClientRect().height||0);setTab(id);rememberEditorTab(id)}}>{label}</button>)}</nav>
+  <div ref={panel} className="admin-product-tab-body">{error&&<p className="admin-error" role="alert">{error}</p>}
+  {tab==='price'&&<section className="knowledge-paper new-product-basic"><h2>Основные сведения</h2><div className="admin-editor-grid">
+   <label><RequiredLabel>Название</RequiredLabel><input className="field" required minLength={2} maxLength={200} value={f.name} onChange={e=>set('name')(e.target.value)} placeholder="Название товара"/></label>
+   <label>Артикул<input className="field" value={f.article} onChange={e=>set('article')(e.target.value)} placeholder="Необязательно"/></label>
+   <label><RequiredLabel>Категория товара</RequiredLabel><select ref={categoryField} className="field" required aria-invalid={Boolean(error&&!f.categoryPath)} value={f.categoryPath} onChange={e=>set('categoryPath')(e.target.value)}><option value="">Выберите категорию</option>{sections.map(c=><option key={c.path} value={c.path}>{c.label}</option>)}</select></label>
+   <label><RequiredLabel>Розничная цена, ₽</RequiredLabel><input className="field" required inputMode="numeric" value={f.retailRub} onChange={e=>set('retailRub')(e.target.value)}/></label>
+   <label>Цена по карте, ₽<input className="field" inputMode="numeric" value={f.partnerRub} onChange={e=>set('partnerRub')(e.target.value)} placeholder="Необязательно"/></label>
+  </div><BadgeEditor value={f.badges} onChange={badges=>setF(x=>({...x,badges}))}/><div className="admin-choice" role="radiogroup" aria-label="Наличие">{(['InStock','OutOfStock'] as const).map(value=><button type="button" role="radio" key={value} aria-checked={f.availability===value} className={f.availability===value?'active':''} onClick={()=>set('availability')(value)}>{value==='InStock'?'В наличии':'Нет в наличии'}</button>)}</div></section>}
+  {(tab==='about'||tab==='facts')&&<KnowledgeEditor product={draftProduct} run={run} mode={tab} loadingMinHeight={loadingHeight} draftValue={knowledge} onDraftChange={setKnowledge} contentValue={{name:f.name,properties}} onContentChange={value=>{setProperties(value.properties);setF(x=>({...x,name:value.name}))}}/>}
+  {(tab==='photo'||tab==='docs'||tab==='videos')&&<section className="knowledge-paper"><ProductAssetFields tab={tab} value={assets} onChange={setAssets}/></section>}
+  </div><label className="new-product-publish"><input type="checkbox" checked={showImmediately} onChange={e=>setShowImmediately(e.target.checked)}/>Показать в каталоге сразу после создания</label>
+  <footer className="knowledge-savebar"><p>{showImmediately?'После создания товар появится в каталоге в общем формате карточек.':'Карточка сохранится скрытой. Её можно будет показать на сайте позже.'}</p><div className="admin-editor-actions"><button type="button" className="btn btn--secondary" onClick={onCancel}>Отмена</button><button className="btn btn--primary" disabled={busy}>{busy?'Создаём…':'Создать карточку'}</button></div></footer>
+ </form>;
 }
 
 /** Shown to customers or hidden: a hidden product leaves the catalog, search, home, theme pages and the chat (src/site.ts);
@@ -362,7 +400,7 @@ function Visibility({ product: p, run }: { product: Product; run: Run }) {
   const hidden = Boolean(p.hidden);
   return <div className={`admin-visibility${hidden ? ' is-hidden' : ''}`}>
     <p>{hidden ? <><strong>Скрыт с сайта.</strong> Покупатели не видят товар в каталоге, поиске и чате.{builtHidden(p) ? ' Эта линейка больше не поставляется.' : p.custom ? ' Новая карточка: заполните описание и фото во вкладках ниже, затем покажите её.' : ''}</> : <><strong>Виден покупателям.</strong> Скройте, если товар больше не продаётся, — вернуть можно в любой момент.</>}</p>
-    <button type="button" className={`btn ${hidden ? 'btn--primary' : 'btn--secondary'}`} onClick={() => void run('/api/admin/visibility', { productId: p.id, hidden: !hidden }, hidden ? `${p.custom ? 'Показали' : 'Вернули'} на сайте: ${shortName(p.name)}` : `Скрыли с сайта: ${shortName(p.name)}`)}>{hidden ? p.custom ? 'Показать на сайте' : 'Вернуть на сайт' : 'Скрыть с сайта'}</button>
+    <button type="button" className="btn btn--primary admin-visibility-toggle" onClick={() => void run('/api/admin/visibility', { productId: p.id, hidden: !hidden }, hidden ? `${p.custom ? 'Показали' : 'Вернули'} на сайте: ${shortName(p.name)}` : `Скрыли с сайта: ${shortName(p.name)}`)}>{hidden ? p.custom ? 'Показать на сайте' : 'Вернуть на сайт' : 'Скрыть с сайта'}</button>
     {p.custom && <DeleteCard product={p} run={run} />}
   </div>;
 }
@@ -374,79 +412,11 @@ function DeleteCard({ product: p, run }: { product: Product; run: Run }) {
   return <span className="admin-confirm admin-delete-confirm"><span>Удалить «{shortName(p.name)}» со всем описанием и фото?</span><button type="button" className="btn btn--primary" onClick={() => void run('/api/admin/delete-product', { productId: p.id }, `Карточка удалена: ${shortName(p.name)}`)}>Да, удалить</button><button type="button" className="btn btn--secondary" onClick={() => setSure(false)}>Нет</button></span>;
 }
 
-type Base = { name: string; about: string[]; highlights: string[]; description: string; properties: Record<string, string>; documents: { name: string; url: string }[] };
-const paragraphs = (s: string) => s.split(/\n\s*\n/).map(x => x.trim()).filter(Boolean);
-const lines = (s: string) => s.split('\n').map(x => x.trim()).filter(Boolean);
-/** Name, description, composition, certificates and photo of a card. It starts from what the card shows now (the
- *  administrator's earlier changes, else the built card) and saves the whole content at once. */
-function ContentEditor({ product: p, tab, run }: { product: Product; tab: Exclude<EditTab, 'price'>; run: Run }) {
-  const { notify } = useStore();
-  const [base, setBase] = useState<Base | null>(null);
-  const [saved, setSaved] = useState<ProductContent | null>(null);
-  const [f, setF] = useState<{ name: string; about: string; highlights: string; properties: Record<string, string>; documents: { name: string; url: string }[]; image: string } | null>(null);
-  const [busy, setBusy] = useState(false);
-  useEffect(() => {
-    let off = false;
-    fetch(`/api/product-content?id=${encodeURIComponent(p.id)}`, { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : null).then((b: { base: Base | null; content: ProductContent | null } | null) => {
-      if (off || !b?.base) return;
-      const c = b.content ?? {};
-      setBase(b.base); setSaved(b.content);
-      setF({ name: c.name ?? b.base.name, about: (c.about ?? (b.base.about.length ? b.base.about : paragraphs(b.base.description))).join('\n\n'), highlights: (c.highlights ?? b.base.highlights).join('\n'), properties: Object.fromEntries(factOrder.map(([key]) => [key, c.properties?.[key] ?? b.base!.properties[key] ?? ''])), documents: c.documents ?? b.base.documents, image: c.image ?? '' });
-    }).catch(() => { /* shown as loading */ });
-    return () => { off = true; };
-  }, [p.id]);
-  if (!f || !base) return <p className="ds-muted">Загружаем карточку…</p>;
-  const set = <K extends keyof NonNullable<typeof f>>(k: K, v: NonNullable<typeof f>[K]) => setF(x => x && { ...x, [k]: v });
-  const upload = async (file: File, kind: 'image' | 'document') => {
-    setBusy(true);
-    try {
-      const r = await fetch(`/api/admin/upload?product=${encodeURIComponent(p.id)}&kind=${kind}&name=${encodeURIComponent(file.name)}`, { method: 'POST', headers: { 'Content-Type': file.type || 'application/octet-stream' }, body: file });
-      const b = await r.json().catch(() => null);
-      if (!r.ok) { notify(b?.error || 'Не удалось загрузить файл.'); return null; }
-      return b as { url: string; name: string };
-    } catch { notify('Нет связи с сервером.'); return null; } finally { setBusy(false); }
-  };
-  const save = async (e: FormEvent) => {
-    e.preventDefault();
-    const props = Object.fromEntries(Object.entries(f.properties).filter(([k, v]) => v.trim() !== (base.properties[k] ?? '').trim()));
-    const content: ProductContent = {
-      ...(f.name.trim() !== base.name ? { name: f.name.trim() } : {}),
-      ...(paragraphs(f.about).join('\n\n') !== (base.about.length ? base.about : paragraphs(base.description)).join('\n\n') ? { about: paragraphs(f.about) } : {}),
-      ...(lines(f.highlights).join('\n') !== base.highlights.join('\n') ? { highlights: lines(f.highlights) } : {}),
-      ...(Object.keys(props).length ? { properties: props } : {}),
-      ...(JSON.stringify(f.documents) !== JSON.stringify(base.documents) ? { documents: f.documents } : {}),
-      ...(f.image ? { image: f.image } : {}),
-    };
-    if (await run('/api/admin/content', Object.keys(content).length ? { productId: p.id, content } : { productId: p.id, reset: true }, `Сохранено: ${shortName(f.name)}`)) setSaved(Object.keys(content).length ? content : null);
-  };
-  const reset = async () => { if (await run('/api/admin/content', { productId: p.id, reset: true }, `Как было: ${shortName(base.name)}`)) { setSaved(null); setF({ name: base.name, about: (base.about.length ? base.about : paragraphs(base.description)).join('\n\n'), highlights: base.highlights.join('\n'), properties: Object.fromEntries(factOrder.map(([key]) => [key, base.properties[key] ?? ''])), documents: base.documents, image: '' }); } };
-  const cover = f.image || productCover({ ...p, adminImage: undefined });
-  return <form className="admin-content" onSubmit={save}>
-    {tab === 'about' && <>
-      <label>Название<input className="field" value={f.name} onChange={e => set('name', e.target.value)} /></label>
-      <label>Описание — абзацы через пустую строку<textarea className="field" rows={8} value={f.about} onChange={e => set('about', e.target.value)} /></label>
-      <label>Главное о продукте — по одному пункту в строке<textarea className="field" rows={4} value={f.highlights} onChange={e => set('highlights', e.target.value)} /></label>
-    </>}
-    {tab === 'facts' && factOrder.map(([key, label]) => <label key={key}>{label}<textarea className="field" rows={key.startsWith('Состав') || key === 'Применение' ? 4 : 2} placeholder="Пусто — пункт не показывается" value={f.properties[key]} onChange={e => set('properties', { ...f.properties, [key]: e.target.value })} /></label>)}
-    {tab === 'docs' && <>
-      <div className="admin-docs">{f.documents.map((d, i) => <figure key={d.url}><img src={d.url} alt={`Сертификат, страница ${i + 1}`} loading="lazy" /><button type="button" className="btn btn--secondary" onClick={() => set('documents', f.documents.filter((_, j) => j !== i))}>Убрать</button></figure>)}</div>
-      {!f.documents.length && <p className="ds-muted">Сертификатов нет — вкладка «Сертификаты» на странице товара не показывается.</p>}
-      <label className="admin-file">Добавить скан сертификата (JPG, PNG, WEBP)<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async e => { const file = e.target.files?.[0]; e.target.value = ''; if (!file) return; const up = await upload(file, 'document'); if (up) set('documents', [...f.documents, up]); }} /></label>
-    </>}
-    {tab === 'photo' && <>
-      <div className="admin-photo">{cover && <img src={cover} alt={p.name} />}</div>
-      <label className="admin-file">Загрузить другое фото (JPG, PNG, WEBP)<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async e => { const file = e.target.files?.[0]; e.target.value = ''; if (!file) return; const up = await upload(file, 'image'); if (up) set('image', up.url); }} /></label>
-      {f.image && <button type="button" className="btn btn--secondary" onClick={() => set('image', '')}>Вернуть исходное фото</button>}
-    </>}
-    <p className="admin-hint-muted">Изменения видны на сайте после «Сохранить». Новый файл сохраняется вместе с карточкой.</p>
-    <div className="admin-editor-actions"><button className="btn btn--primary" disabled={busy}>{busy ? 'Загружаем файл…' : 'Сохранить'}</button>{saved && <button type="button" className="btn btn--secondary" onClick={() => void reset()}>Вернуть всё как было</button>}<a href={p.path} className="admin-link">Открыть товар</a></div>
-  </form>;
-}
-
 function ProductEditor({ product: p, override: o, run }: { product: Product; override?: ProductOverride; run: Run }) {
-  const [f, setF] = useState({ retailUnits: number(o?.retailUnits), partnerUnits: number(o?.partnerUnits), retailRub: number(o?.retailRub), partnerRub: number(o?.partnerRub), availability: o?.availability ?? (p.availability === 'OutOfStock' ? 'OutOfStock' : 'InStock') });
+  const [f, setF] = useState({ retailUnits: number(o?.retailUnits), partnerUnits: number(o?.partnerUnits), retailRub: number(o?.retailRub), partnerRub: number(o?.partnerRub), availability: o?.availability ?? (p.availability === 'OutOfStock' ? 'OutOfStock' : 'InStock'), badges: readProductBadges(o?.badges ?? p.badges) });
   const set = (k: keyof typeof f) => (v: string) => setF(x => ({ ...x, [k]: v }));
-  const save = (e: FormEvent) => { e.preventDefault(); void run('/api/admin/product', { productId: p.id, ...f }, `Сохранено: ${shortName(p.name)}`); };
+  const [saved,setSaved]=useState(()=>JSON.stringify(f));useUnsavedProduct(JSON.stringify(f)!==saved);
+  const save = async(e: FormEvent) => { e.preventDefault(); if(await run('/api/admin/product', { productId: p.id, ...f }, `Сохранено: ${shortName(p.name)}`))setSaved(JSON.stringify(f)); };
   const units = p.prices.units;
   return <form className="admin-price" onSubmit={save}>
     <div className="admin-editor-grid">
@@ -455,6 +425,7 @@ function ProductEditor({ product: p, override: o, run }: { product: Product; ove
       <label>Розничная, ₽ — вместо расчёта<input className="field" inputMode="numeric" placeholder="не задана" value={f.retailRub} onChange={e => set('retailRub')(e.target.value)} /></label>
       <label>По карте, ₽ — вместо расчёта<input className="field" inputMode="numeric" placeholder="не задана" value={f.partnerRub} onChange={e => set('partnerRub')(e.target.value)} /></label>
     </div>
+    <BadgeEditor value={f.badges} onChange={badges=>setF(x=>({...x,badges}))}/>
     <div className="admin-choice" role="radiogroup" aria-label="Наличие">{([['InStock', 'В наличии'], ['OutOfStock', 'Нет в наличии']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={f.availability === v} className={f.availability === v ? 'active' : ''} onClick={() => set('availability')(v)}>{label}</button>)}</div>
     <div className="admin-editor-actions"><button className="btn btn--primary">Сохранить</button>{o && <button type="button" className="btn btn--secondary" onClick={() => void run('/api/admin/product', { productId: p.id, reset: true }, `Как в прайсе: ${shortName(p.name)}`)}>Вернуть как в прайсе</button>}<a href={p.path} className="admin-link">Открыть товар</a></div>
   </form>;
@@ -522,9 +493,9 @@ function StaffSection({ overview, run, reload }: { overview: Overview; run: Run;
     <p className="admin-lead">Сотрудник входит на странице управления сайтом (nsp-center.ru/admin/) по своей почте. Это отдельный аккаунт: покупки на сайте он делает обычным аккаунтом покупателя. Покупателей на сайте: {overview.customers}.</p>
     <ul className="admin-users">{overview.staff.map(u => <li key={u.email}><span><strong>{u.name || u.email}</strong><small>{u.email}{u.lastLogin ? ` · входил ${when(u.lastLogin)}` : ' · ещё не входил'}</small></span><span className="admin-user-actions"><button type="button" className="btn btn--secondary" onClick={() => setResetting(u.email)}>Новый пароль</button>{u.email.toLowerCase() !== me?.email.toLowerCase() && <button type="button" className="btn btn--secondary" onClick={() => setRemoving(u.email)}>Удалить</button>}</span></li>)}</ul>
     <h3>Добавить сотрудника</h3>
-    <form className="admin-staff-form" onSubmit={add}>
+    <RequiredHint/><form className="admin-staff-form" onSubmit={add}>
       <label>Имя и фамилия<input className="field" value={name} onChange={e => setName(e.target.value)} placeholder="Иван Петров" maxLength={120} /></label>
-      <label>Почта сотрудника<input className="field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@nsp-center.ru" required /></label>
+      <label><RequiredLabel>Почта сотрудника</RequiredLabel><input className="field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@nsp-center.ru" required /></label>
       <button className="btn btn--primary" disabled={!email.trim()}>Добавить</button>
     </form>
     {issued && <div className="admin-confirm" role="status"><p>{renewed ? <>Новый пароль для {issued.email}: </> : <>Сотрудник {issued.email} добавлен. Пароль для первого входа: </>}<code>{issued.password}</code></p><span>Пароль показан один раз. Передайте его лично или по телефону, не в переписке.</span><button type="button" className="btn btn--secondary" onClick={() => setIssued(null)}>Готово</button></div>}

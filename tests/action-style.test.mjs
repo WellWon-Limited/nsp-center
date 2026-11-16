@@ -24,7 +24,8 @@ test('Editorial buttons use the same rounding token as standard homepage buttons
 });
 
 test('Return links use a chevron instead of a text arrow',()=>{
- for(const route of ['company/','company/sertifikaty/','company/reviews/','contacts/','delivery/','product/omega-3-epa/']){
+ // Only pages below the top level have one (top-level pages — menu, tab bar — have none, research 2026-11-14).
+ for(const route of ['company/sertifikaty/','product/omega-3-epa/','blog/interesnye-fakty-pro-magniy/']){
   const $=read(route);const links=$('.back-link,.information-home');
   assert.ok(links.length>0,route);
   links.each((_,e)=>{assert.doesNotMatch($(e).text(),/←/,route);assert.equal($(e).find('svg path').attr('d'),iconPath,route)});

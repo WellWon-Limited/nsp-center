@@ -1,0 +1,9 @@
+/* Approved catalog: one shared site search and a compact heading. Keep query URLs usable. */
+html[data-catalog-design] body .site-main .catalog-page .page-heading>div::before{display:none!important;content:none!important}
+@media(min-width:960px){
+ html[data-catalog-design] body:has(.catalog-page) .site-main{padding-top:var(--space-24)}
+ html[data-catalog-design] body .site-main .catalog-page .page-heading{margin-top:0;margin-bottom:var(--space-24);padding-top:0}
+ html[data-catalog-design] body .site-main .catalog-page .catalog-tools .search-field{display:none!important}
+ html[data-catalog-design] body .site-main .catalog-page .catalog-tools{padding:0!important;gap:0!important;background:transparent!important;border:0!important;box-shadow:none!important;margin-bottom:var(--space-20)!important}
+ html[data-catalog-design] body .site-main .catalog-page .catalog-tools .filter-row{margin-top:0!important}
+}

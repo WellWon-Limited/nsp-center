@@ -3,7 +3,7 @@
    and white cards with large rounded corners and a soft shadow instead of frames. The menu on the left keeps its
    layout and look. */
 body:has(.admin-app,.admin-signin)::before{display:none}
-:is(.admin-app,.admin-signin) .admin-header{background:#fff;box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
+:is(.admin-app,.admin-signin) .admin-header{background:var(--header-edge-paint);box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
 :is(.admin-app,.admin-signin) .admin-header .icon-btn{background:transparent;box-shadow:none;border:0}
 :is(.admin-app,.admin-signin) .admin-header-label{color:#3d7a64;font-weight:800}
 /* Section titles: the small green label above, a large heavy title. */
@@ -12,7 +12,13 @@ body:has(.admin-app,.admin-signin)::before{display:none}
 /* Cards. */
 .admin-app :is(.admin-card,.admin-summary-card,.admin-review,.admin-order,.admin-users,.admin-dialog,.admin-entry){border:0;border-radius:24px;background-color:#fff;box-shadow:0 18px 40px -32px rgb(29 58 54 / .45)}
 .admin-app .admin-summary-card:hover{box-shadow:0 22px 44px -30px rgb(29 58 54 / .55)}
-.admin-app .admin-editor{border-radius:0 0 18px 18px;background:#f3f7f5}
+.admin-app .admin-editor{border:1px solid var(--color-ink-line);border-radius:18px;background:var(--color-white)}
+/* An opened product is one card (owner, 2026-11-13: no other background on «Товары»): its row and its editor in one
+   white frame, the dark edge of the open row going round both; notices in the design system's tints. */
+.admin-app .admin-products .admin-product-row[aria-expanded="true"]{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.admin-app .admin-products .admin-product-row[aria-expanded="true"]+.admin-editor{margin-top:-1px;border-color:var(--color-ink);border-top-color:var(--color-ink-line);border-radius:0 0 18px 18px}
+.admin-app .admin-visibility{background:var(--color-ink-soft);color:var(--color-ink)}
+.admin-app .admin-visibility.is-hidden{background:var(--color-digestion-tint);color:var(--color-ink)}
 .admin-app :is(input,select,textarea).field,.admin-app .admin-search input{border-radius:14px}
 
 /* The same surface and sign-in card as the customer account, including scroll edges. */
@@ -96,3 +102,63 @@ body:has(.admin-app,.admin-signin)::after{display:none}
 
 /* «Сотрудники»: «Новый пароль» and «Удалить» side by side at the right of a row. */
 .admin-app .admin-user-actions{display:flex;align-items:center;gap:8px;flex:none}
+
+/* Staff pages use the exact same header surface as the storefront, including sign-in. */
+html body #root :is(.admin-app,.admin-signin) .admin-header{background:var(--header-edge-paint)!important}
+/* The same narrow navigation column in every staff section. */
+@media(min-width:960px){.admin-app .admin-shell{grid-template-columns:176px minmax(0,1fr)}}
+/* One viewport-anchored shell: opening an editor never moves the navigation. */
+@media(min-width:960px){
+ html body #root .admin-app .admin-shell{grid-template-columns:176px minmax(0,1fr)!important;max-width:none!important;width:100%!important;margin:0!important;padding:24px 28px 32px!important;gap:24px!important}
+}
+
+/* Opaque working surfaces keep long product forms readable. */
+.admin-app .admin-product-workspace :is(.knowledge-paper,.admin-price,.admin-visibility,.admin-content){background:var(--color-white);border-radius:20px}
+.admin-app .admin-product-workspace :is(.admin-price,.admin-visibility){padding:20px}
+.admin-product-asset-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin:16px 0}
+.admin-product-asset-grid figure{margin:0;padding:12px;border:1px solid var(--color-border);border-radius:16px;min-width:0}
+.admin-product-asset-grid img{width:100%;height:180px;object-fit:contain;background:var(--color-white)}
+.admin-product-asset-grid figcaption{font-size:13px;margin:8px 0;overflow-wrap:anywhere}
+.admin-product-asset-grid figure>div{display:flex;gap:8px;flex-wrap:wrap}
+.admin-product-asset-grid .btn{font-size:12px;white-space:normal}
+.admin-product-assets{list-style:none;padding:0;display:grid;gap:12px}
+.admin-product-assets li{display:flex;justify-content:space-between;align-items:center;gap:12px;overflow-wrap:anywhere}
+.admin-product-media label{display:grid;gap:8px;margin-block:12px}
+.admin-product-media>button{margin-top:16px}
+
+/* Discount controls retain a visible frame and chevron in every interaction state. */
+.admin-app .admin-product-workspace .admin-badge-editor{background:var(--color-ink-soft);border:1px solid var(--color-ink-line)}
+html body #root .admin-app .admin-product-workspace select.field,
+html body #root .admin-app .admin-product-workspace select.field:is(:hover,:focus,:focus-visible){
+ -webkit-appearance:none;appearance:none;min-height:48px;width:100%;min-width:0;max-width:100%;box-sizing:border-box;
+ border:1px solid var(--color-ink);border-radius:14px;color:var(--color-ink);background-color:var(--color-white);
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231d3a36' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+ background-repeat:no-repeat;background-position:right 16px center;background-size:16px;padding:11px 44px 11px 14px;cursor:pointer;box-shadow:none
+}
+html body #root .admin-app .admin-product-workspace select.field:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px}
+.admin-app .admin-product-workspace .admin-visibility-toggle,
+.admin-app .admin-product-workspace .admin-visibility-toggle:is(:hover,:focus-visible){background:var(--color-ink);border:1px solid var(--color-ink);color:var(--color-white);font-weight:700;min-height:48px}
+/* Captions and actions belong to their own media card, including narrow phones. */
+.admin-app .admin-product-asset-grid{grid-template-columns:repeat(auto-fill,minmax(min(180px,100%),1fr));min-width:0;max-width:100%}
+.admin-app .admin-product-asset-grid figure{display:flex;flex-direction:column;gap:10px;min-width:0;max-width:100%;box-sizing:border-box}
+.admin-app .admin-product-asset-grid img{display:block;flex:none;max-width:100%}
+.admin-app .admin-product-asset-grid figcaption{position:static;display:block;inset:auto;transform:none;min-width:0;max-width:100%;width:100%;margin:0;color:var(--color-ink);text-align:left;line-height:1.5;overflow-wrap:anywhere}
+.admin-app .admin-product-asset-grid figure>div{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0;margin-top:auto}
+.admin-app .admin-product-asset-grid .btn{width:100%;max-width:100%;min-width:0;min-height:44px;height:auto;padding:10px 12px;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere;line-height:1.4;text-align:center}
+.admin-app .admin-product-assets li{min-width:0;flex-wrap:wrap}
+.admin-app .admin-product-assets li>a{flex:1 1 180px;min-width:0;max-width:100%;overflow-wrap:anywhere}
+.admin-app .admin-product-assets .btn{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.admin-app .admin-product-workspace .admin-file{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;box-sizing:border-box}
+
+.admin-required-mark{color:color-mix(in srgb,var(--color-danger) 75%,var(--color-ink));font-weight:700;white-space:nowrap}
+.admin-required-label{display:block;color:inherit;min-width:0;overflow-wrap:anywhere}
+.admin-required-help{font-size:12px;line-height:1.5;color:var(--color-muted);margin:0 0 16px}
+.admin-knowledge-split .admin-required-help{margin-bottom:16px}
+
+.admin-app .admin-product-workspace>header .admin-editing-product-name{margin:8px 0 0;color:var(--color-ink);font-size:20px;line-height:1.4;overflow-wrap:anywhere}
+.admin-app .admin-product-workspace>header .admin-editing-product-name strong{font-weight:700}
+.admin-app .admin-product-workspace>.admin-editor>.admin-required-help{margin:0 0 12px}
+
+/* Native file inputs must shrink with the 320px editor, rather than keeping their intrinsic desktop width. */
+.admin-app .admin-content-image{min-width:0;max-width:100%}
+.admin-app .admin-file input[type=file]{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;margin-top:var(--space-8)}

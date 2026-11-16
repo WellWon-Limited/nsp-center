@@ -1,3 +1,4 @@
+import videoPosters from './video-posters.json' with {type:'json'};
 const blockTags=new Set(['p','h2','h3','h4','ul','ol','div','section','article','figure','table','blockquote']);
 const voidTags=new Set(['br','hr','img','input','source','wbr']);
 export const plainInfo=value=>String(value).replace(/<[^>]*>/g,'').replace(/&nbsp;|&#160;/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim();
@@ -32,7 +33,7 @@ export function videoSections(html){
  return [...html.matchAll(/<figure>([\s\S]*?)<\/figure>/gi)].map(m=>{
   const href=m[1].match(/href="([^"]+)"/)?.[1]||'';const id=href.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|watch\?v=))([\w-]{11})/)?.[1];
   const title=plainInfo(m[1].match(/<figcaption>([\s\S]*?)<\/figcaption>/i)?.[1]||'Видео').replace(/_2$/,'');
-  return id?{id,title,href,poster:`/images/video-thumbnails/${id}.jpg`}:null;
+  return id?{id,title,href,poster:videoPosters[id]??''}:null;
  }).filter(Boolean);
 }
 export function contactSections(html){

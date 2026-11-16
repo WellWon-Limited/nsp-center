@@ -1,9 +1,12 @@
+import { KNOWLEDGE_SCHEMA, inheritedKnowledge, checkKnowledge, searchLectures, lectureContext, saveProductKnowledge } from './product-knowledge.mjs';
+import {readManagedCatalog,managedCategoryList,catalogAdminState,saveManagedCatalog} from './catalog-admin.mjs';
+import { validateProductBadges } from '../src/product-badges.mjs';
 import { ORDER_SCHEMA, orderAdminRoute } from './order-admin.mjs';
 import { randomBytes } from 'node:crypto';
 import { cardPricesFor, cardUnitsOf, publicSiteSettings } from './card-prices.mjs';
 import { emailError } from '../src/contact-fields.mjs';
 import { customProduct, freeId, validateNewProduct } from '../src/custom-product.mjs';
-import { CONTENT_KINDS, HIDEABLE_KINDS, articleOf, articleSlug, validateContent as validateSiteContent } from '../src/site-content.mjs';
+import { CONTENT_KINDS, HIDEABLE_KINDS, videoOf, articleOf, articleSlug, validateContent as validateSiteContent } from '../src/site-content.mjs';
 import { randomInt } from 'node:crypto';
 /** 16 characters without look-alikes (no 0/O, 1/l/I): a staff member's first password, shown once. */
 export const oneTimePassword = () => Array.from({ length: 16 }, () => 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(56)]).join('');
@@ -29,6 +32,7 @@ create table if not exists product_overrides (
   availability text,
   updated_at timestamptz not null default now()
 );
+alter table product_overrides add column if not exists badges jsonb;
 create table if not exists content_items (
   id bigserial primary key,
   kind text not null,
@@ -117,7 +121,7 @@ create table if not exists admin_log (
   action text not null,
   detail jsonb not null default '{}',
   at timestamptz not null default now()
-);` + ORDER_SCHEMA;
+);` + ORDER_SCHEMA + KNOWLEDGE_SCHEMA;
 
 const AVAILABILITY = new Set(['InStock', 'OutOfStock']);
 // Uploads: photos and certificate scans only, as images (no SVG — it can carry scripts).
@@ -136,6 +140,7 @@ export function validateContent(c) {
   if (!c || typeof c !== 'object') return { error: 'Нет данных карточки.' };
   const out = {};
   if (c.name !== undefined) { const name = String(c.name).trim(); if (name.length < 2 || name.length > 200) return { error: 'Название — от 2 до 200 знаков.' }; out.name = name; }
+  if (c.summary !== undefined) { if (typeof c.summary !== 'string' || c.summary.length > 300) return { error: 'Короткая строка — не больше 300 знаков.' }; out.summary=c.summary.trim(); }
   if (c.about !== undefined) out.about = textList(c.about, 20, 2000) ?? [];
   if (c.highlights !== undefined) out.highlights = textList(c.highlights, 20, 300) ?? [];
   if (c.properties !== undefined) {
@@ -146,7 +151,9 @@ export function validateContent(c) {
     if (!Array.isArray(c.documents) || c.documents.length > 30 || c.documents.some(d => !localUrl(d?.url))) return { error: 'Сертификаты заполнены неверно.' };
     out.documents = c.documents.map(d => ({ name: String(d.name ?? '').slice(0, 160), url: d.url }));
   }
-  if (c.image !== undefined && c.image !== null) { if (!localUrl(c.image)) return { error: 'Фото заполнено неверно.' }; out.image = c.image; }
+  if(c.photos!==undefined){if(!Array.isArray(c.photos)||!c.photos.length||c.photos.length>20||c.photos.some(u=>!localUrl(u)))return {error:'Добавьте от 1 до 20 фотографий товара.'};out.photos=[...new Set(c.photos)];out.image=out.photos[0]||'';}
+  if(c.videos!==undefined){if(!Array.isArray(c.videos)||c.videos.length>20||c.videos.some(v=>!videoOf(v?.url)||typeof v.title!=='string'||!v.title.trim()||v.title.length>200))return {error:'Добавьте название и ссылку на VK Видео, Rutube или YouTube.'};out.videos=c.videos.map(v=>({url:videoOf(v.url).href,title:v.title.trim()}));}
+  if (c.photos===undefined && c.image !== undefined && c.image !== null) { if (!localUrl(c.image)) return { error: 'Фото заполнено неверно.' }; out.image = c.image; }
   return { value: out };
 }
 const REVIEW_STATUS = new Set(['pending', 'published', 'hidden']);
@@ -180,33 +187,39 @@ export const customRows = async pool => (await pool.query('select product_id, da
 /** One created card as a product (for the server's page shell and sitemap), or null. */
 export async function findCustomProduct(pool, id, categories) {
   const { rows } = await pool.query('select product_id, data from custom_products where product_id = $1', [id]);
-  return rows[0] ? customProduct(rows[0].product_id, rows[0].data, categories) : null;
+  const catalog=await readManagedCatalog(pool,categories);
+  return rows[0] ? customProduct(rows[0].product_id, {...rows[0].data,categoryPath:catalog.assignments[id]??rows[0].data.categoryPath}, categories) : null;
 }
 
 /** Public settings every page applies: the rate, product overrides and hidden expert comments. */
 export async function siteSettings(pool, categories = [], productPaths = new Map()) {
-  const [{ rows: rate }, { rows: products }, { rows: notes }, { rows: cards }, { rows: ratings }, { rows: stars }, { rows: visibility }, custom, { rows: items }, { rows: hiddenItems }] = await Promise.all([
+  const catalog=await readManagedCatalog(pool,categories);
+  const catalogCategories=await managedCategoryList(pool,categories);
+  const [{ rows: rate }, { rows: products }, { rows: notes }, { rows: cards }, { rows: ratings }, { rows: stars }, { rows: visibility }, custom, { rows: items }, { rows: hiddenItems }, { rows: knowledge }] = await Promise.all([
     pool.query("select value, updated_at from site_settings where key = 'rate'"),
     pool.query('select * from product_overrides'),
     pool.query('select product_id, note_key from hidden_notes'),
-    pool.query("select product_id, data->>'name' as name, data->>'image' as image from product_content"),
+    pool.query("select product_id, data->>'name' as name, data->>'image' as image, data->>'summary' as summary, data->'properties'->>'Объём' as package from product_content"),
     pool.query("select product_id, sum(rating)::int as sum, count(*)::int as count from reviews where status = 'published' group by product_id"),
     pool.query('select product_id, note_key, rating from note_stars'),
     pool.query('select product_id, hidden from product_visibility'),
     customRows(pool),
     pool.query('select id, kind, slug, data, created_at from content_items order by created_at desc, id desc'),
     pool.query('select kind, key from content_hidden'),
+    pool.query('select product_id,data from product_knowledge'),
   ]);
   const hiddenNotes = {};
   for (const n of notes) (hiddenNotes[n.product_id] ??= []).push(n.note_key);
   return {
+    catalog,
     rate: rate[0] ? { rubPerUnit: Number(rate[0].value.rubPerUnit), updatedAt: rate[0].updated_at } : null,
-    products: Object.fromEntries(products.map(p => [p.product_id, { retailUnits: num(p.retail_units), partnerUnits: num(p.partner_units), retailRub: p.retail_rub, partnerRub: p.partner_rub, availability: p.availability }])),
+    products: Object.fromEntries(products.map(p => [p.product_id, { retailUnits: num(p.retail_units), partnerUnits: num(p.partner_units), retailRub: p.retail_rub, partnerRub: p.partner_rub, availability: p.availability, ...(p.badges ? { badges: p.badges } : {}) }])),
+    knowledge: Object.fromEntries(knowledge.map(r=>[r.product_id,r.data])),
     hiddenNotes,
     // Shown or hidden from customers by an administrator; a product not listed here is as built (src/product-stock.json).
     visibility: Object.fromEntries(visibility.map(v => [v.product_id, v.hidden])),
     // Cards created in site management, without their card price (src/custom-product.mjs).
-    extraProducts: custom.map(r => customProduct(r.product_id, r.data, categories)),
+    extraProducts: custom.map(r => customProduct(r.product_id, {...r.data,categoryPath:catalog.assignments[r.product_id]??r.data.categoryPath}, catalogCategories)),
     // «Контент» in site management: offers, photos, videos, articles and FAQ answers (src/site-content.mjs), newest
     // first, and the old site's videos, articles and answers an administrator hid.
     content: {
@@ -214,7 +227,7 @@ export async function siteSettings(pool, categories = [], productPaths = new Map
       photos: items.filter(i => i.kind === 'photo').map(i => ({ id: Number(i.id), ...i.data })),
       videos: items.filter(i => i.kind === 'video').map(i => ({ id: Number(i.id), ...i.data })),
       faq: items.filter(i => i.kind === 'faq').map(i => ({ id: Number(i.id), ...i.data })).reverse(),
-      articles: items.filter(i => i.kind === 'article').map(i => ({ ...articleOf(i, productPaths), contentId: Number(i.id), data: i.data })),
+      articles: items.filter(i => i.kind === 'article').map(i => ({ ...articleOf(i, new Map([...productPaths, ...custom.map(r => [r.product_id, `/product/${r.product_id}/`])])), contentId: Number(i.id), data: i.data })),
     },
     hiddenContent: Object.fromEntries(HIDEABLE_KINDS.map(kind => [kind, hiddenItems.filter(h => h.kind === kind).map(h => h.key)])),
     // Stars of published customer reviews, added to the old site's rating on every card and product page.
@@ -222,7 +235,7 @@ export async function siteSettings(pool, categories = [], productPaths = new Map
     // Stars of expert comments that differ from the default five (set by the administrator on the product page).
     noteStars: stars.reduce((all, s) => ({ ...all, [s.product_id]: { ...all[s.product_id], [s.note_key]: s.rating } }), {}),
     // A card's own name and photo (the rest of the content is fetched on the product's page: /api/product-content).
-    cards: Object.fromEntries(cards.map(c => [c.product_id, { ...(c.name ? { name: c.name } : {}), ...(c.image ? { image: c.image } : {}) }]).filter(([, c]) => Object.keys(c).length)),
+    cards: Object.fromEntries(cards.map(c => [c.product_id, { ...(c.name ? { name: c.name } : {}), ...(typeof c.image==='string' ? { image: c.image } : {}), ...(typeof c.summary==='string'?{summary:c.summary}:{}), ...(typeof c.package==='string'?{package:c.package}:{}) }]).filter(([, c]) => Object.keys(c).length)),
   };
 }
 
@@ -324,7 +337,29 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (!user) { send(res, 401, { error: 'Войдите в управление сайтом.' }); return true; }
 
   if (await orderAdminRoute(ctx, req, res, path, url, user)) return true;
+  if(path==='/api/admin/categories'){
+    if(method==='GET'){const state=await catalogAdminState(pool,ctx.categories,ctx.cardProducts??[]);send(res,200,{catalog:state.config,categories:state.categories,products:state.products.map(p=>({id:p.id,name:p.name,categoryPath:p.categoryPath,hidden:p.hidden,availability:p.availability}))});return true;}
+    if(method!=='PUT'){send(res,405,{error:'Метод не поддерживается.'});return true;}
+    const result=await saveManagedCatalog(ctx,user,await readJson(req));
+    if(result.error)send(res,result.status??400,{error:result.error});else send(res,200,await siteSettings(pool,ctx.categories,ctx.productPaths));
+    return true;
+  }
 
+  if(path==='/api/admin/knowledge-search'&&method==='GET'){send(res,200,await searchLectures(pool,url.searchParams.get('q'),url.searchParams.get('page')));return true;}
+  if(path==='/api/admin/knowledge'&&method==='GET'){
+    const q=String(url.searchParams.get('q')??'').trim().slice(0,120);
+    const lectureId=url.searchParams.get('lecture');
+    if(lectureId){const lecture=await lectureContext(pool,lectureId,url.searchParams.get('q'));send(res,lecture?200:404,lecture??{error:'Лекция не найдена.'});return true;}
+    const sourceId=url.searchParams.get('source');
+    if(sourceId){const {rows}=await pool.query('select id,name,article,data from knowledge_products where id=$1',[sourceId]);send(res,rows[0]?200:404,rows[0]??{error:'Материалы товара не найдены.'});return true;}
+    const productId=url.searchParams.get('product');
+    const [products,lectures,saved,counts]=await Promise.all([
+      pool.query('select id,name,article from knowledge_products where name ilike $1 or article ilike $1 order by name limit 200',['%'+q+'%']),
+      pool.query('select id,course,lecture,speaker from knowledge_lectures where lecture ilike $1 or speaker ilike $1 order by lecture limit 100',['%'+q+'%']),
+      productId?pool.query('select data from product_knowledge where product_id=$1 union all select data from knowledge_products where id=$1 limit 1',[productId]):Promise.resolve({rows:[]}),
+      pool.query('select (select count(*)::int from knowledge_products) as products,(select count(*)::int from knowledge_lectures) as lectures')
+    ]);send(res,200,{products:products.rows,lectures:lectures.rows,knowledge:saved.rows[0]?.data??null,counts:counts.rows[0]});return true;
+  }
   // How many reviews wait for approval: the administrator's profile and bell show it.
   if (path === '/api/admin/pending' && method === 'GET') {
     const { rows: [{ count }] } = await pool.query("select count(*)::int as count from reviews where status = 'pending'");
@@ -392,13 +427,24 @@ export async function siteRoute(ctx, req, res, path, url) {
     else {
       const checked = validateContent(body.content);
       if (checked.error) { send(res, 400, { error: checked.error }); return true; }
-      await pool.query('insert into product_content (product_id, data, updated_at) values ($1, $2, now()) on conflict (product_id) do update set data = excluded.data, updated_at = now()', [body.productId, JSON.stringify(checked.value)]);
+      await pool.query('insert into product_content (product_id, data, updated_at) values ($1, $2, now()) on conflict (product_id) do update set data = product_content.data || excluded.data, updated_at = now()', [body.productId, JSON.stringify(checked.value)]);
     }
     await log(user, body.reset === true ? 'content-reset' : 'content', { productId: body.productId });
     send(res, 200, await siteSettings(pool, ctx.categories, ctx.productPaths));
     return true;
   }
 
+  if(path==='/api/admin/product-knowledge'){
+    if(!(await knownProduct(body?.productId))){send(res,400,{error:'Нет такого товара.'});return true;}
+    const content=body.content===undefined?{value:{}}:validateContent(body.content);
+    if(content.error){send(res,400,{error:content.error});return true;}
+    const input=body.sourceProductId?await inheritedKnowledge(pool,{knowledgeSourceId:body.sourceProductId}):body.knowledge;
+    const checked=input===null&&body.content?{value:null}:await checkKnowledge(pool,input,id=>id!==body.productId&&knownProduct(id));
+    if(checked.error){send(res,400,{error:checked.error});return true;}
+    await saveProductKnowledge(pool,body.productId,checked.value,content.value);
+    await log(user,'product-knowledge',{productId:body.productId,sources:checked.value?.sources.map(s=>s.id)??[]});
+    send(res,200,await siteSettings(pool,ctx.categories,ctx.productPaths));return true;
+  }
   if (path === '/api/admin/rate') {
     const rate = amount(body?.rubPerUnit, 1000, false);
     if (rate.error || rate.value === null) { send(res, 400, { error: 'Курс — число больше нуля, например 94 или 94,5.' }); return true; }
@@ -416,15 +462,17 @@ export async function siteRoute(ctx, req, res, path, url) {
       send(res, 200, await siteSettings(pool, ctx.categories, ctx.productPaths));
       return true;
     }
+    const badges = body.badges === undefined ? null : validateProductBadges(body.badges);
+    if (badges?.error) { send(res, 400, { error: badges.error }); return true; }
     const fields = { retailUnits: amount(body.retailUnits, 100000, false), partnerUnits: amount(body.partnerUnits, 100000, false), retailRub: amount(body.retailRub, 10000000, true), partnerRub: amount(body.partnerRub, 10000000, true) };
     if (Object.values(fields).some(f => f.error)) { send(res, 400, { error: 'Цена — число больше нуля. Пустое поле — цена из прайса.' }); return true; }
     const availability = body.availability === null || body.availability === undefined || body.availability === '' ? null : body.availability;
     if (availability !== null && !AVAILABILITY.has(availability)) { send(res, 400, { error: 'Наличие: «в наличии» или «нет в наличии».' }); return true; }
     const v = Object.fromEntries(Object.entries(fields).map(([k, f]) => [k, f.value]));
-    await pool.query(`insert into product_overrides (product_id, retail_units, partner_units, retail_rub, partner_rub, availability, updated_at) values ($1, $2, $3, $4, $5, $6, now())
-      on conflict (product_id) do update set retail_units = excluded.retail_units, partner_units = excluded.partner_units, retail_rub = excluded.retail_rub, partner_rub = excluded.partner_rub, availability = excluded.availability, updated_at = now()`,
-      [body.productId, v.retailUnits, v.partnerUnits, v.retailRub, v.partnerRub, availability]);
-    await log(user, 'product', { productId: body.productId, ...v, availability });
+    await pool.query(`insert into product_overrides (product_id, retail_units, partner_units, retail_rub, partner_rub, availability, badges, updated_at) values ($1, $2, $3, $4, $5, $6, $7, now())
+      on conflict (product_id) do update set retail_units = excluded.retail_units, partner_units = excluded.partner_units, retail_rub = excluded.retail_rub, partner_rub = excluded.partner_rub, availability = excluded.availability, badges = coalesce(excluded.badges, product_overrides.badges), updated_at = now()`,
+      [body.productId, v.retailUnits, v.partnerUnits, v.retailRub, v.partnerRub, availability, badges ? JSON.stringify(badges.value) : null]);
+    await log(user, 'product', { productId: body.productId, ...v, availability, ...(badges ? { badges: badges.value } : {}) });
     send(res, 200, await siteSettings(pool, ctx.categories, ctx.productPaths));
     return true;
   }
@@ -446,7 +494,8 @@ export async function siteRoute(ctx, req, res, path, url) {
       if (files.length) await pool.query("delete from files where product_id = 'content' and id = any($1)", [files]);
       await log(user, 'content-delete', { kind, id: Number(body.id) });
     } else if (action === 'add' || action === 'update') {
-      const checked = validateSiteContent(kind, body?.item, { productIds });
+      const contentProductIds = productIds ? new Set([...productIds, ...(await customRows(pool)).map(r => r.product_id)]) : null;
+      const checked = validateSiteContent(kind, body?.item, { productIds: contentProductIds });
       if (checked.error) { send(res, 400, { error: checked.error }); return true; }
       if (action === 'update') {
         const { rowCount } = await pool.query('update content_items set data = $3, updated_at = now() where id = $1 and kind = $2', [Number(body?.id) || 0, kind, JSON.stringify(checked.value)]);
@@ -465,14 +514,28 @@ export async function siteRoute(ctx, req, res, path, url) {
     return true;
   }
   if (path === '/api/admin/new-product') {
-    const checked = validateNewProduct(body?.product, ctx.categories ?? []);
+    const checked = validateNewProduct(body?.product, await managedCategoryList(pool,ctx.categories??[]));
     if (checked.error) { send(res, 400, { error: checked.error }); return true; }
     const taken = new Set([...(productIds ?? []), ...(await customRows(pool)).map(r => r.product_id)]);
     if (checked.value.article && (ctx.cardProducts ?? []).some(p => p.article === checked.value.article)) { send(res, 400, { error: 'Товар с таким артикулом уже есть в каталоге — найдите его в списке выше.' }); return true; }
     const id = freeId(checked.value.name, taken);
-    await pool.query('insert into custom_products (product_id, data) values ($1, $2)', [id, JSON.stringify(checked.value)]);
-    // A new card waits hidden until its description and photo are in; «Показать на сайте» opens it to customers.
-    await pool.query('insert into product_visibility (product_id, hidden) values ($1, true) on conflict (product_id) do update set hidden = true, updated_at = now()', [id]);
+    if(body.product?.knowledgeSourceId&&typeof body.product.knowledgeSourceId!=='string'){send(res,400,{error:'Выберите источник из базы лекций.'});return true;}
+    let knowledge=await inheritedKnowledge(pool,{knowledgeSourceId:body.product?.knowledgeSourceId,name:checked.value.name,article:checked.value.article});
+    if(body.product?.knowledgeSourceId&&!knowledge){send(res,400,{error:'Материалы товара в базе лекций не найдены.'});return true;}
+    if(body.knowledge!==undefined){const draft=await checkKnowledge(pool,body.knowledge,pid=>pid!==id&&knownProduct(pid));if(draft.error){send(res,400,{error:draft.error});return true;}knowledge=draft.value;}
+    const checkedContent=body.content===undefined?{value:{}}:validateContent(body.content);
+    if(checkedContent.error){send(res,400,{error:checkedContent.error});return true;}
+    if(!checkedContent.value.image){send(res,400,{error:'Добавьте хотя бы одно фото товара.'});return true;}
+    const content={...checkedContent.value,...(knowledge?{about:knowledge.about,highlights:knowledge.highlights}:{})};
+    const client=await pool.connect();
+    try{
+      await client.query('begin');
+      await client.query('insert into custom_products (product_id, data) values ($1, $2)', [id, JSON.stringify(checked.value)]);
+      if(knowledge)await client.query('insert into product_knowledge(product_id,data) values($1,$2)',[id,JSON.stringify(knowledge)]);
+      if(Object.keys(content).length)await client.query('insert into product_content(product_id,data) values($1,$2)',[id,JSON.stringify(content)]);
+      await client.query('insert into product_visibility (product_id, hidden) values ($1, $2)',[id,body.publish!==true]);
+      await client.query('commit');
+    }catch(error){await client.query('rollback');throw error}finally{client.release()}
     await log(user, 'product-create', { productId: id, ...checked.value });
     send(res, 200, { id, ...(await siteSettings(pool, ctx.categories, ctx.productPaths)) });
     return true;
@@ -480,7 +543,7 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (path === '/api/admin/delete-product') {
     const { rowCount } = typeof body?.productId === 'string' ? await pool.query('delete from custom_products where product_id = $1', [body.productId]) : { rowCount: 0 };
     if (!rowCount) { send(res, 400, { error: 'Удалить можно только карточку, созданную в управлении сайтом.' }); return true; }
-    for (const table of ['product_visibility', 'product_overrides', 'product_content', 'hidden_notes', 'note_stars', 'files', 'reviews']) await pool.query(`delete from ${table} where product_id = $1`, [body.productId]);
+    for (const table of ['product_knowledge', 'product_visibility', 'product_overrides', 'product_content', 'hidden_notes', 'note_stars', 'files', 'reviews']) await pool.query(`delete from ${table} where product_id = $1`, [body.productId]);
     await log(user, 'product-delete', { productId: body.productId });
     send(res, 200, await siteSettings(pool, ctx.categories, ctx.productPaths));
     return true;

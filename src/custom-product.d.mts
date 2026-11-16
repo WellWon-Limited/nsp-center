@@ -1,5 +1,6 @@
+import type { ProductBadges } from './product-badges.mjs';
 import type { Category, Product } from './content-types';
-export type NewProduct = { name: string; article: string; categoryPath: string; retailRub: number; partnerRub: number | null; availability: 'InStock' | 'OutOfStock' };
+export type NewProduct = { name: string; article: string; categoryPath: string; retailRub: number; partnerRub: number | null; availability: 'InStock' | 'OutOfStock'; badges?: ProductBadges };
 export function slugOf(name: string): string;
 export function freeId(name: string, taken: Set<string>): string;
 export function validateNewProduct(input: unknown, categories: Category[]): { value: NewProduct; error?: undefined } | { error: string; value?: undefined };

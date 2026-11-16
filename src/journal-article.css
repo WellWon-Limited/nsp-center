@@ -35,3 +35,23 @@ body .site-main .article-detail.journal-article-page .av-document--ivory .av-her
 .journal-article .av-hero.av-hero--text{display:block;min-height:0}
 .journal-article .av-hero--text .av-hero-copy{max-width:900px;padding-bottom:32px}
 .journal-article .av-article-copy>p:first-child{font-size:1.08em}
+
+/* Keep the cover's lower edge visible after the actual heading and introduction, including long titles. */
+@layer typography-reference{
+@media(min-width:960px){
+ html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{height:min(740px,var(--article-cover-height,calc(100svh - 490px)))!important;min-height:0!important;max-width:100%;box-sizing:border-box}
+}
+@media(max-width:959px){
+ html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{height:min(220px,var(--article-cover-height,220px))!important;min-height:0!important;max-width:100%;box-sizing:border-box}
+}
+
+}
+
+/* On phones the reading paper starts after the title, rather than painting behind it. */
+@layer typography-reference{
+@media(max-width:959px){
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-document--ivory{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible!important}
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-document--ivory .av-hero-copy{background:transparent!important;padding-bottom:24px!important;min-width:0;max-width:100%;box-sizing:border-box}
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-document--ivory .av-hero-copy h1{max-width:100%!important;overflow-wrap:anywhere}
+}
+}

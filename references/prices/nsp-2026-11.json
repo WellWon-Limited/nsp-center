@@ -1,264 +1,12 @@
 {
-  "source": "PriceNSPnew_November2026.xls, sheet \"Лист1\": main tables only (code RU…, name, PV, Dealers, Dist, Retail); the left helper columns are ignored",
-  "savedAt": "2026-10-30",
+  "source": "PriceNSPnew_November2026 — корректировка (1).xls, Лист1: columns D–I; supplier notes in J; helper columns A–C ignored",
+  "savedAt": "2026-11-11",
   "unit": "USD (у.е. = доллар)",
   "partnerColumn": "dist",
   "retailColumn": "retail",
   "rubPerUnit": 94,
   "rubPerUnitNote": "Warehouse rate set by the owner on 2026-11-05: 94 ₽ per $ (the price list is in dollars). The rate changes over time: update this number and rebuild.",
   "items": {
-    "30": {
-      "name": "Alfalfa",
-      "pv": 9.23,
-      "dealer": 11.76,
-      "dist": 12.93,
-      "retail": 18.1
-    },
-    "70": {
-      "name": "Bee Pollen",
-      "pv": 10.89,
-      "dealer": 13.85,
-      "dist": 15.24,
-      "retail": 21.33
-    },
-    "90": {
-      "name": "Black Walnut*",
-      "pv": 10.19,
-      "dealer": 12.96,
-      "dist": 14.26,
-      "retail": 19.97
-    },
-    "140": {
-      "name": "Burdock",
-      "pv": 11.16,
-      "dealer": 14.2,
-      "dist": 15.61,
-      "retail": 21.87
-    },
-    "170": {
-      "name": "Casсara Sagrada",
-      "pv": 10.81,
-      "dealer": 13.75,
-      "dist": 15.13,
-      "retail": 21.18
-    },
-    "175": {
-      "name": "Una De Gato",
-      "pv": 16.34,
-      "dealer": 20.79,
-      "dist": 22.88,
-      "retail": 32.02
-    },
-    "204": {
-      "name": "Olive Leaf Extract",
-      "pv": 13.43,
-      "dealer": 17.1,
-      "dist": 18.8,
-      "retail": 26.33
-    },
-    "292": {
-      "name": "HP Garlic",
-      "pv": 21.07,
-      "dealer": 26.83,
-      "dist": 29.51,
-      "retail": 41.32
-    },
-    "312": {
-      "name": "Colloidal Minerals with Asai",
-      "pv": 23.4,
-      "dealer": 29.79,
-      "dist": 32.76,
-      "retail": 45.87
-    },
-    "360": {
-      "name": "Gotu Kola",
-      "pv": 13.22,
-      "dealer": 16.81,
-      "dist": 18.5,
-      "retail": 25.9
-    },
-    "410": {
-      "name": "Kelp",
-      "pv": 10.44,
-      "dealer": 13.29,
-      "dist": 14.63,
-      "retail": 20.47
-    },
-    "504": {
-      "name": "Pau D`Arco",
-      "pv": 13.86,
-      "dealer": 17.65,
-      "dist": 19.42,
-      "retail": 27.18
-    },
-    "514": {
-      "name": "Pau D`Arco N",
-      "pv": 13.86,
-      "dealer": 17.65,
-      "dist": 19.42,
-      "retail": 27.18
-    },
-    "515": {
-      "name": "Paw Paw NSP",
-      "pv": 36.81,
-      "dealer": 46.85,
-      "dist": 51.54,
-      "retail": 72.15
-    },
-    "550": {
-      "name": "Red Clover",
-      "pv": 9.87,
-      "dealer": 12.56,
-      "dist": 13.82,
-      "retail": 19.35
-    },
-    "630": {
-      "name": "Saw Palmetto",
-      "pv": 12.84,
-      "dealer": 16.33,
-      "dist": 17.97,
-      "retail": 25.15
-    },
-    "745": {
-      "name": "Wild Yam",
-      "pv": 15.72,
-      "dealer": 20.01,
-      "dist": 22.02,
-      "retail": 30.82
-    },
-    "746": {
-      "name": "Wild Yam N",
-      "pv": 15.72,
-      "dealer": 20.01,
-      "dist": 22.02,
-      "retail": 30.82
-    },
-    "775": {
-      "name": "Breath Ease",
-      "pv": 15.25,
-      "dealer": 19.42,
-      "dist": 21.35,
-      "retail": 29.89
-    },
-    "776": {
-      "name": "Hista Block",
-      "pv": 25.72,
-      "dealer": 32.73,
-      "dist": 36,
-      "retail": 50.41
-    },
-    "832": {
-      "name": "Capsicum & Garlic w/Parsley",
-      "pv": 14.6,
-      "dealer": 18.58,
-      "dist": 20.45,
-      "retail": 28.63
-    },
-    "840": {
-      "name": "CC-A",
-      "pv": 13.22,
-      "dealer": 16.83,
-      "dist": 18.51,
-      "retail": 25.91
-    },
-    "850": {
-      "name": "Eight",
-      "pv": 15.06,
-      "dealer": 19.18,
-      "dist": 21.1,
-      "retail": 29.54
-    },
-    "882": {
-      "name": "FC w/Dong Quai*",
-      "pv": 11.53,
-      "dealer": 14.67,
-      "dist": 16.13,
-      "retail": 22.59
-    },
-    "896": {
-      "name": "CC-A NSP",
-      "pv": 12.59,
-      "dealer": 16.03,
-      "dist": 17.63,
-      "retail": 24.68
-    },
-    "898": {
-      "name": "Ginkgo long",
-      "pv": 19.94,
-      "dealer": 25.38,
-      "dist": 27.91,
-      "retail": 39.08
-    },
-    "903": {
-      "name": "Glucosamine",
-      "pv": 17.36,
-      "dealer": 22.11,
-      "dist": 24.32,
-      "retail": 34.05
-    },
-    "906": {
-      "name": "Garcinia Combination",
-      "pv": 21.73,
-      "dealer": 27.65,
-      "dist": 30.43,
-      "retail": 42.6
-    },
-    "907": {
-      "name": "Ginkgo/Gotu Kola",
-      "pv": 21.43,
-      "dealer": 27.28,
-      "dist": 30,
-      "retail": 42.01
-    },
-    "917": {
-      "name": "HP fighter",
-      "pv": 17.25,
-      "dealer": 21.95,
-      "dist": 24.15,
-      "retail": 33.81
-    },
-    "930": {
-      "name": "Hawthorn Plus",
-      "pv": 17.33,
-      "dealer": 22.06,
-      "dist": 24.26,
-      "retail": 33.98
-    },
-    "935": {
-      "name": "HSN-W",
-      "pv": 20.49,
-      "dealer": 26.07,
-      "dist": 28.68,
-      "retail": 40.16
-    },
-    "940": {
-      "name": "HVP",
-      "pv": 13.86,
-      "dealer": 17.65,
-      "dist": 19.42,
-      "retail": 27.18
-    },
-    "984": {
-      "name": "Nature Lax N",
-      "pv": 10.27,
-      "dealer": 13.08,
-      "dist": 14.38,
-      "retail": 20.14
-    },
-    "990": {
-      "name": "Nature Lax",
-      "pv": 10.27,
-      "dealer": 13.08,
-      "dist": 14.38,
-      "retail": 20.14
-    },
-    "999": {
-      "name": "Vari - Gone",
-      "pv": 21.27,
-      "dealer": 27.06,
-      "dist": 29.76,
-      "retail": 41.67
-    },
     "1118": {
       "name": "Achieve w/Yohimbe NSP",
       "pv": 15.9,
@@ -287,13 +35,6 @@
       "dist": 24.04,
       "retail": 33.65
     },
-    "1198": {
-      "name": "AG-X",
-      "pv": 17.17,
-      "dealer": 21.86,
-      "dist": 24.04,
-      "retail": 33.65
-    },
     "1204": {
       "name": "C-X",
       "pv": 19.41,
@@ -308,26 +49,12 @@
       "dist": 44.73,
       "retail": 62.64
     },
-    "1248": {
-      "name": "Bon-C",
-      "pv": 9.79,
-      "dealer": 12.48,
-      "dist": 13.72,
-      "retail": 19.22
-    },
     "1295": {
       "name": "Boswellia Plus NSP",
       "pv": 24.09,
       "dealer": 30.65,
       "dist": 33.72,
       "retail": 47.21
-    },
-    "1296": {
-      "name": "Boswellia Plus",
-      "pv": 29.92,
-      "dealer": 38.07,
-      "dist": 41.88,
-      "retail": 58.63
     },
     "1346": {
       "name": "Loclo",
@@ -349,6 +76,13 @@
       "dealer": 21.73,
       "dist": 23.9,
       "retail": 33.48
+    },
+    "140": {
+      "name": "Burdock",
+      "pv": 11.16,
+      "dealer": 14.2,
+      "dist": 15.61,
+      "retail": 21.87
     },
     "1506": {
       "name": "Indol 3 Carbinol",
@@ -427,19 +161,26 @@
       "dist": 33.38,
       "retail": 46.74
     },
-    "1654": {
-      "name": "Defense Maintenance",
-      "pv": 26.35,
-      "dealer": 33.54,
-      "dist": 36.89,
-      "retail": 51.66
-    },
     "1661": {
       "name": "Lecithin",
       "pv": 26.25,
       "dealer": 33.41,
       "dist": 36.75,
       "retail": 51.45
+    },
+    "170": {
+      "name": "Casсara Sagrada",
+      "pv": 10.81,
+      "dealer": 13.75,
+      "dist": 15.13,
+      "retail": 21.18
+    },
+    "175": {
+      "name": "Una De Gato",
+      "pv": 16.34,
+      "dealer": 20.79,
+      "dist": 22.88,
+      "retail": 32.02
     },
     "1750": {
       "name": "Grapine w/Protectors",
@@ -454,13 +195,6 @@
       "dealer": 18.65,
       "dist": 20.51,
       "retail": 28.7
-    },
-    "1801": {
-      "name": "Chromium Chelat",
-      "pv": 12.85,
-      "dealer": 16.35,
-      "dist": 17.98,
-      "retail": 25.18
     },
     "1806": {
       "name": "Osteo Plus",
@@ -497,13 +231,6 @@
       "dist": 42.37,
       "retail": 59.31
     },
-    "1828": {
-      "name": "Colostrum",
-      "pv": 16.7,
-      "dealer": 21.26,
-      "dist": 23.38,
-      "retail": 32.74
-    },
     "1836": {
       "name": "Food Enzymes",
       "pv": 32.02,
@@ -514,7 +241,7 @@
     "1841": {
       "name": "Protease Plus",
       "pv": 26.71,
-      "dealer": 34,
+      "dealer": 34.0,
       "dist": 37.39,
       "retail": 52.35
     },
@@ -547,18 +274,95 @@
       "retail": 42.7
     },
     "1894": {
-      "name": "Chromium",
+      "name": "Chromium ",
       "pv": 11.66,
       "dealer": 14.84,
       "dist": 16.33,
       "retail": 22.86
     },
-    "2806": {
-      "name": "HTP(-5) Power",
-      "pv": 24.9,
-      "dealer": 31.69,
-      "dist": 34.86,
-      "retail": 48.8
+    "204": {
+      "name": "Olive Leaf Extract",
+      "pv": 13.43,
+      "dealer": 17.1,
+      "dist": 18.8,
+      "retail": 26.33
+    },
+    "21912": {
+      "name": "Pau D\"arco Lotion",
+      "pv": 24.54,
+      "dealer": 31.25,
+      "dist": 34.36,
+      "retail": 48.1
+    },
+    "22336": {
+      "name": "Collagen",
+      "pv": 41.05,
+      "dealer": 51.81,
+      "dist": 56.37,
+      "retail": 78.91
+    },
+    "22485": {
+      "name": "Vitamin D3",
+      "pv": 15.43,
+      "dealer": 19.64,
+      "dist": 21.6,
+      "retail": 30.25
+    },
+    "22751": {
+      "name": "Astragalus",
+      "pv": 17.33,
+      "dealer": 22.07,
+      "dist": 24.27,
+      "retail": 33.99
+    },
+    "22752": {
+      "name": "Morinda NSP",
+      "pv": 21.66,
+      "dealer": 27.58,
+      "dist": 30.34,
+      "retail": 42.47
+    },
+    "22892": {
+      "name": "Smart Meal NSP",
+      "pv": 47.33,
+      "dealer": 60.23,
+      "dist": 66.26,
+      "retail": 92.76
+    },
+    "23065": {
+      "name": "L-Carnitine",
+      "pv": 28.53,
+      "dealer": 36.32,
+      "dist": 39.95,
+      "retail": 55.93
+    },
+    "23309": {
+      "name": "Turmeric Curcumin",
+      "pv": 22.39,
+      "dealer": 28.5,
+      "dist": 31.35,
+      "retail": 43.89
+    },
+    "23329": {
+      "name": "TNT NSP",
+      "pv": 35.67,
+      "dealer": 45.41,
+      "dist": 49.95,
+      "retail": 69.93
+    },
+    "23496": {
+      "name": "Power Greens (Power Pouch)",
+      "pv": 41.64,
+      "dealer": 53.0,
+      "dist": 58.3,
+      "retail": 81.62
+    },
+    "24074": {
+      "name": "Chlorophyll Lime",
+      "pv": 36.93,
+      "dealer": 47.0,
+      "dist": 51.7,
+      "retail": 72.38
     },
     "2851": {
       "name": "Sunshine Brite Mint Tingle toothpaste",
@@ -567,12 +371,12 @@
       "dist": 13.08,
       "retail": 18.31
     },
-    "2879": {
-      "name": "Ury",
-      "pv": 20.23,
-      "dealer": 25.74,
-      "dist": 28.31,
-      "retail": 39.63
+    "292": {
+      "name": "HP Garlic",
+      "pv": 21.07,
+      "dealer": 26.83,
+      "dist": 29.51,
+      "retail": 41.32
     },
     "2937": {
       "name": "Fat Grabbers",
@@ -588,6 +392,13 @@
       "dist": 27.9,
       "retail": 39.06
     },
+    "30": {
+      "name": "Alfalfa",
+      "pv": 9.23,
+      "dealer": 11.76,
+      "dist": 12.93,
+      "retail": 18.1
+    },
     "3044": {
       "name": "Fizz Active",
       "pv": 14.98,
@@ -601,6 +412,13 @@
       "dealer": 32.3,
       "dist": 35.53,
       "retail": 49.74
+    },
+    "312": {
+      "name": "Colloidal Minerals with Asai",
+      "pv": 23.4,
+      "dealer": 29.79,
+      "dist": 32.76,
+      "retail": 45.87
     },
     "3134": {
       "name": "Mind-Max",
@@ -640,7 +458,7 @@
     "3345": {
       "name": "Whole Food Papayazyme",
       "pv": 27.5,
-      "dealer": 35,
+      "dealer": 35.0,
       "dist": 38.5,
       "retail": 53.9
     },
@@ -657,6 +475,13 @@
       "dealer": 18.04,
       "dist": 19.84,
       "retail": 27.76
+    },
+    "360": {
+      "name": "Gotu Kola",
+      "pv": 13.22,
+      "dealer": 16.81,
+      "dist": 18.5,
+      "retail": 25.9
     },
     "3664": {
       "name": "Free Amino Acids(Peptovit)",
@@ -700,6 +525,13 @@
       "dist": 30.47,
       "retail": 42.66
     },
+    "410": {
+      "name": "Kelp",
+      "pv": 10.44,
+      "dealer": 13.29,
+      "dist": 14.63,
+      "retail": 20.47
+    },
     "4100": {
       "name": "Bifidophilus  Flora Force",
       "pv": 23.5,
@@ -735,13 +567,6 @@
       "dist": 26.14,
       "retail": 36.59
     },
-    "4201": {
-      "name": "Mega-Chel",
-      "pv": 29.32,
-      "dealer": 37.33,
-      "dist": 41.05,
-      "retail": 57.47
-    },
     "4300": {
       "name": "TNT nutritional drink",
       "pv": 31.01,
@@ -749,19 +574,47 @@
       "dist": 43.43,
       "retail": 60.79
     },
-    "4803": {
-      "name": "Nutri-Calm",
-      "pv": 16.38,
-      "dealer": 20.84,
-      "dist": 22.93,
-      "retail": 32.1
-    },
     "4950": {
       "name": "Silver Shield Gel",
       "pv": 32.17,
       "dealer": 40.93,
       "dist": 45.04,
       "retail": 63.04
+    },
+    "514": {
+      "name": "Pau D`Arco N",
+      "pv": 13.86,
+      "dealer": 17.65,
+      "dist": 19.42,
+      "retail": 27.18
+    },
+    "515": {
+      "name": "Paw Paw NSP",
+      "pv": 36.81,
+      "dealer": 46.85,
+      "dist": 51.54,
+      "retail": 72.15
+    },
+    "550": {
+      "name": "Red Clover",
+      "pv": 9.87,
+      "dealer": 12.56,
+      "dist": 13.82,
+      "retail": 19.35
+    },
+    "60021": {
+      "name": "Pros Formula",
+      "pv": 22.2,
+      "dealer": 28.27,
+      "dist": 31.09,
+      "retail": 43.52
+    },
+    "60038": {
+      "name": "Perfect Eyes NSP",
+      "pv": 25.08,
+      "dealer": 31.93,
+      "dist": 35.12,
+      "retail": 49.16
     },
     "6154": {
       "name": "Defense Maintenance NSP",
@@ -776,6 +629,13 @@
       "dealer": 35.1,
       "dist": 38.6,
       "retail": 54.05
+    },
+    "630": {
+      "name": "Saw Palmetto",
+      "pv": 12.84,
+      "dealer": 16.33,
+      "dist": 17.97,
+      "retail": 25.15
     },
     "6500": {
       "name": "Solstic Energy Single Foils Packs",
@@ -797,6 +657,132 @@
       "dealer": 38.6,
       "dist": 42.46,
       "retail": 59.46
+    },
+    "70": {
+      "name": "Bee Pollen",
+      "pv": 10.89,
+      "dealer": 13.85,
+      "dist": 15.24,
+      "retail": 21.33
+    },
+    "746": {
+      "name": "Wild Yam N",
+      "pv": 15.72,
+      "dealer": 20.01,
+      "dist": 22.02,
+      "retail": 30.82
+    },
+    "775": {
+      "name": "Breath Ease",
+      "pv": 15.25,
+      "dealer": 19.42,
+      "dist": 21.35,
+      "retail": 29.89
+    },
+    "776": {
+      "name": "Hista Block",
+      "pv": 25.72,
+      "dealer": 32.73,
+      "dist": 36.0,
+      "retail": 50.41
+    },
+    "832": {
+      "name": "Capsicum & Garlic w/Parsley",
+      "pv": 14.6,
+      "dealer": 18.58,
+      "dist": 20.45,
+      "retail": 28.63
+    },
+    "850": {
+      "name": "Eight",
+      "pv": 15.06,
+      "dealer": 19.18,
+      "dist": 21.1,
+      "retail": 29.54
+    },
+    "882": {
+      "name": "FC w/Dong Quai*",
+      "pv": 11.53,
+      "dealer": 14.67,
+      "dist": 16.13,
+      "retail": 22.59
+    },
+    "896": {
+      "name": "CC-A NSP",
+      "pv": 12.59,
+      "dealer": 16.03,
+      "dist": 17.63,
+      "retail": 24.68
+    },
+    "90": {
+      "name": "Black Walnut*",
+      "pv": 10.19,
+      "dealer": 12.96,
+      "dist": 14.26,
+      "retail": 19.97
+    },
+    "903": {
+      "name": "Glucosamine",
+      "pv": 17.36,
+      "dealer": 22.11,
+      "dist": 24.32,
+      "retail": 34.05
+    },
+    "906": {
+      "name": "Garcinia Combination",
+      "pv": 21.73,
+      "dealer": 27.65,
+      "dist": 30.43,
+      "retail": 42.6
+    },
+    "907": {
+      "name": "Ginkgo/Gotu Kola",
+      "pv": 21.43,
+      "dealer": 27.28,
+      "dist": 30.0,
+      "retail": 42.01
+    },
+    "917": {
+      "name": "HP fighter",
+      "pv": 17.25,
+      "dealer": 21.95,
+      "dist": 24.15,
+      "retail": 33.81
+    },
+    "930": {
+      "name": "Hawthorn Plus",
+      "pv": 17.33,
+      "dealer": 22.06,
+      "dist": 24.26,
+      "retail": 33.98
+    },
+    "935": {
+      "name": "HSN-W",
+      "pv": 20.49,
+      "dealer": 26.07,
+      "dist": 28.68,
+      "retail": 40.16
+    },
+    "940": {
+      "name": "HVP",
+      "pv": 13.86,
+      "dealer": 17.65,
+      "dist": 19.42,
+      "retail": 27.18
+    },
+    "984": {
+      "name": "Nature Lax N",
+      "pv": 10.27,
+      "dealer": 13.08,
+      "dist": 14.38,
+      "retail": 20.14
+    },
+    "999": {
+      "name": "Vari - Gone",
+      "pv": 21.27,
+      "dealer": 27.06,
+      "dist": 29.76,
+      "retail": 41.67
     },
     "21600": {
       "name": "Purifying and Mattifying Toner.",
@@ -864,7 +850,7 @@
     "21613": {
       "name": "Makeover Conditioner. Normal & Damaged Hair.",
       "pv": 10.21,
-      "dealer": 13,
+      "dealer": 13.0,
       "dist": 14.3,
       "retail": 20.02
     },
@@ -883,165 +869,13 @@
       "retail": 22.42
     },
     "21616": {
-      "name": "WOW-Serum anti-age&lifting with chestnut extract",
+      "name": "WOW-Serum anti-age&lifting with chestnut extract ",
       "pv": 22.29,
       "dealer": 28.36,
       "dist": 31.2,
       "retail": 43.68
-    },
-    "21912": {
-      "name": "Pau D\"arco Lotion",
-      "pv": 24.54,
-      "dealer": 31.25,
-      "dist": 34.36,
-      "retail": 48.1
-    },
-    "22336": {
-      "name": "Collagen",
-      "pv": 41.05,
-      "dealer": 51.81,
-      "dist": 56.37,
-      "retail": 78.91
-    },
-    "22485": {
-      "name": "Vitamin D3",
-      "pv": 15.43,
-      "dealer": 19.64,
-      "dist": 21.6,
-      "retail": 30.25
-    },
-    "22751": {
-      "name": "Astragalus",
-      "pv": 17.33,
-      "dealer": 22.07,
-      "dist": 24.27,
-      "retail": 33.99
-    },
-    "22752": {
-      "name": "Morinda NSP",
-      "pv": 21.66,
-      "dealer": 27.58,
-      "dist": 30.34,
-      "retail": 42.47
-    },
-    "22892": {
-      "name": "Smart Meal NSP",
-      "pv": 47.33,
-      "dealer": 60.23,
-      "dist": 66.26,
-      "retail": 92.76
-    },
-    "22893": {
-      "name": "Smart Meal 810g",
-      "pv": 52.98,
-      "dealer": 67.44,
-      "dist": 74.17,
-      "retail": 103.84
-    },
-    "23065": {
-      "name": "L-Carnitine",
-      "pv": 28.53,
-      "dealer": 36.32,
-      "dist": 39.95,
-      "retail": 55.93
-    },
-    "23309": {
-      "name": "Turmeric Curcumin",
-      "pv": 22.39,
-      "dealer": 28.5,
-      "dist": 31.35,
-      "retail": 43.89
-    },
-    "23329": {
-      "name": "TNT NSP",
-      "pv": 35.67,
-      "dealer": 45.41,
-      "dist": 49.95,
-      "retail": 69.93
-    },
-    "23496": {
-      "name": "Power Greens (Power Pouch)",
-      "pv": 41.64,
-      "dealer": 53,
-      "dist": 58.3,
-      "retail": 81.62
-    },
-    "24074": {
-      "name": "Chlorophyll Lime",
-      "pv": 36.93,
-      "dealer": 47,
-      "dist": 51.7,
-      "retail": 72.38
-    },
-    "60021": {
-      "name": "Pros Formula",
-      "pv": 22.2,
-      "dealer": 28.27,
-      "dist": 31.09,
-      "retail": 43.52
-    },
-    "60024": {
-      "name": "Perfect Eyes",
-      "pv": 23.73,
-      "dealer": 30.21,
-      "dist": 33.23,
-      "retail": 46.52
-    },
-    "60038": {
-      "name": "Perfect Eyes NSP",
-      "pv": 25.08,
-      "dealer": 31.93,
-      "dist": 35.12,
-      "retail": 49.16
-    },
-    "61555": {
-      "name": "Cocoa Butter Creme",
-      "pv": 13.69,
-      "dealer": 17.42,
-      "dist": 19.16,
-      "retail": 26.82
-    },
-    "61560": {
-      "name": "Almond Apricot",
-      "pv": 13.42,
-      "dealer": 17.08,
-      "dist": 18.79,
-      "retail": 26.3
-    },
-    "61563": {
-      "name": "ApriCleanse",
-      "pv": 10.73,
-      "dealer": 13.66,
-      "dist": 15.03,
-      "retail": 21.05
-    },
-    "61564": {
-      "name": "Relaxing TT Oil",
-      "pv": 13.56,
-      "dealer": 17.25,
-      "dist": 18.98,
-      "retail": 26.58
-    },
-    "61565": {
-      "name": "WitchVera Gel",
-      "pv": 9.73,
-      "dealer": 12.38,
-      "dist": 13.63,
-      "retail": 19.08
-    },
-    "61566": {
-      "name": "Sea Salt Deodorant",
-      "pv": 9.86,
-      "dealer": 12.56,
-      "dist": 13.81,
-      "retail": 19.34
-    },
-    "61567": {
-      "name": "Cool Comfort Aftershave Gel",
-      "pv": 8.82,
-      "dealer": 11.22,
-      "dist": 12.34,
-      "retail": 17.28
     }
-  }
+  },
+  "checkedAt": "2026-11-16",
+  "sourceSha256": "73288f1c0a27657fa06c01274bb2af5d20a9d0356d63d5cd2e61ad54e3c7e964"
 }

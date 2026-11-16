@@ -8,7 +8,9 @@ test('The catalog mobile entry contains all categories and a separate all-produc
  const data=JSON.parse(readFileSync('src/generated/content.json','utf8'));
  const nav=$('[data-ds-id=catalog-mobile-categories]');
  assert.equal(nav.find('a').first().attr('href'),'/catalog/?view=products');
- const categories=data.categories.filter(c=>c.path!=='/catalog/');
+ const visible=new Set(data.products.filter(p=>!p.hidden).map(p=>p.path));
+ const categories=data.categories.filter(c=>c.path!=='/catalog/'&&c.products.some(path=>visible.has(path)));
+ for(const c of data.categories.filter(c=>c.path!=='/catalog/'&&!c.products.some(path=>visible.has(path))))assert.equal(nav.find(`a[href="${c.path}"]`).length,0,'empty category stays in management but leaves the phone menu');
  assert.equal(nav.find('a').length,categories.length+1);
  for(const c of categories)assert.equal(nav.find(`a[href="${c.path}"]`).length,1);
  assert.ok($('.catalog-layout .product-card').length>0,'desktop keeps its existing grid in the same document');
@@ -34,4 +36,16 @@ test('All-products mode survives filters and pagination while category URLs rema
 test('The homepage full-catalog action opens products directly rather than the mobile category menu',()=>{
  const $=cheerio.load(readFileSync('dist/index.html','utf8'));
  assert.equal($('[data-ds-id="home-products"] .section-heading>a').attr('href'),'/catalog/?view=products');
+});
+
+
+test('Every category exposes the same category-local phone search control',()=>{
+ const data=JSON.parse(readFileSync('src/generated/content.json','utf8'));
+ for(const category of data.categories){
+  const $=cheerio.load(readFileSync(`dist/${category.path.slice(1)}index.html`,'utf8'));
+  const input=$('.catalog-tools .catalog-phone-search input[type="search"]');
+  assert.equal(input.length,1,category.path);
+  assert.equal(input.attr('aria-label'),'Поиск в категории');
+  assert.equal(input.attr('placeholder'),'Найти продукт в этой категории');
+ }
 });

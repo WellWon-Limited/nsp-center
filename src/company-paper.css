@@ -1,0 +1,28 @@
+/* Selected layout 01 and greenhouse photograph 02, with the shared delivery-page heading. */
+@layer typography-reference{
+html body #root .company-page--paper>.company-concept--paper{display:block!important;box-sizing:border-box!important;width:min(calc(100% - 56px),1224px)!important;max-width:1224px!important;margin:0 auto 48px!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important}
+html body #root .company-concept--paper::before{display:none!important}
+html body #root .company-concept--paper>#about{display:block!important;box-sizing:border-box!important;width:100%!important;max-width:1224px!important;margin:0!important;padding:0!important;background:var(--color-glass-raised)!important;border:1px solid var(--color-glass-border)!important;border-radius:32px!important;overflow:hidden}
+html body #root .company-concept--paper .co-paper-entry{padding:32px 56px!important}
+html body #root .company-concept--paper .co-paper-entry>.co-article-lead{display:block!important;width:auto!important;max-width:none!important;margin:0 0 24px!important;padding:0!important}
+html body #root .company-concept--paper .co-paper-entry>.co-article-lead>p{font-size:16px!important;line-height:1.65!important;margin:0!important}
+html body #root .company-concept--paper .co-paper-cover{display:block!important;margin:0!important;width:100%!important}
+html body #root .company-concept--paper .co-paper-cover>img{display:block!important;width:100%!important;height:var(--company-cover-height,400px)!important;object-fit:cover!important;object-position:50% 50%!important;border-radius:24px!important}
+html body #root .company-concept--paper>#about>:not(.co-paper-entry){padding-inline:56px!important}
+@media(max-width:959px){
+ html body #root .company-page--paper>.company-concept--paper{width:calc(100% - 36px)!important}
+ html body #root .company-concept--paper .co-paper-entry{padding:24px 20px!important}
+ html body #root .company-concept--paper .co-paper-entry>.co-article-lead>p{font-size:15px!important}
+ html body #root .company-concept--paper .co-paper-cover>img{border-radius:18px!important}
+ html body #root .company-concept--paper>#about>:not(.co-paper-entry){padding-inline:20px!important}
+}
+}
+@layer typography-reference{
+ html body #root .company-concept--paper .co-paper-entry{padding-bottom:16px!important}
+ html body #root .company-concept--paper>#about>.co-intro-strip{margin:0!important;padding-block:16px!important}
+ html body #root .company-concept--paper .co-intro-strip+.co-story{margin-top:0!important;padding-top:24px!important}
+}
+@layer typography-reference{
+ html body #root .company-concept--paper .co-closing{padding-block:40px!important}
+ @media(max-width:959px){html body #root .company-concept--paper .co-closing{padding-block:28px!important}}
+}

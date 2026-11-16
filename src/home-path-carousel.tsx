@@ -58,10 +58,10 @@ export function HomePathCarousel({ children }: { children: ReactNode }) {
    reduced.removeEventListener('change', schedule);
   };
  }, [mobile, items.length]);
- const copies = (side: string) => items.map((item, i) => isValidElement(item) ? cloneElement(item as ReactElement<HTMLAttributes<HTMLElement>>, { key: `${side}-${i}`, 'aria-hidden': true, inert: true }) : null);
+ const copies = (side: string) => items.map((item, i) => isValidElement(item) ? cloneElement(item as ReactElement<HTMLAttributes<HTMLElement>>, { key: `${side}-${i}`, 'aria-hidden': true, tabIndex: -1, 'data-carousel-copy': side } as HTMLAttributes<HTMLElement>) : null);
  return <section ref={ref} className="home-paths" data-ds-id="home-pathways" data-carousel={mobile || undefined} aria-label="Категории продуктов">
-  {mobile && copies('before')}
   {items}
-  {mobile && copies('after')}
+  {copies('middle')}
+  {copies('after')}
  </section>;
 }

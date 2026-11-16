@@ -46,7 +46,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   const port = 20000 + Math.floor(Math.random() * 20000);
   const pg = new EmbeddedPostgres({ databaseDir: join(dir, 'db'), port, user: 'test', password: 'test', persistent: false, autoRehydrateSymlinks: true, onLog: () => {}, onError: () => {} });
   await pg.initialise(); await pg.start(); await pg.createDatabase('accounts');
-  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, categories: JSON.parse(readFileSync(new URL('../src/generated/content.json', import.meta.url), 'utf8')).categories, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
+  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, knowledgeThemes:[{mainProductId:'alfalfa',lead:'Люцерна: растительная питательная поддержка.',pairs:[{productId:'bee-pollen',why:'Пищевая поддержка рациона.'}],sources:[{course:'Курс',lecture:'Растения в питании',speaker:'Лектор'}]}], categories: JSON.parse(readFileSync(new URL('../src/generated/content.json', import.meta.url), 'utf8')).categories, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', name:'Люцерна', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
   const server = createServer((req, res) => accounts.handle(req, res, new URL(req.url, 'http://x')));
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   t.after(async () => { server.close(); await accounts.close(); await pg.stop(); rmSync(dir, { recursive: true, force: true }); });
@@ -81,6 +81,9 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/account', 'PUT', { data: {} }, { Origin: 'https://evil.example' })).status, 403);
   assert.equal((await fetch(base + '/api/auth/logout', { method: 'POST', headers: { 'Content-Type': 'text/plain', Cookie: session } })).status, 403);
 
+  const purchaseHistory=[{id:'HISTORY-1',date:'14.11.2026',total:1000,items:1,products:{'bee-pollen':1}}];
+  assert.equal((await call('/api/account','PUT',{data:{cart:{'bee-pollen':2},orders:purchaseHistory}})).status,200);
+  assert.deepEqual((await call('/api/auth/me')).body.data.orders,purchaseHistory,'purchase history stays with this account');
   const old = session;
   assert.equal((await call('/api/auth/logout', 'POST', {})).status, 204);
   assert.equal(session, '');
@@ -94,7 +97,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.match((await call('/api/auth/register', 'POST', { firstName: 'А', lastName: 'Б', email: 'anna2@gmail.com', password: 'password-1', consent: true })).body.error, /не поддерживаем/, 'and at registration');
   const byEmail = await call('/api/auth/login', 'POST', { login: 'Anna@Example.ru', password: 'password-1' });
   assert.equal(byEmail.status, 200);
-  assert.deepEqual(byEmail.body.data, { cart: { 'bee-pollen': 2 } });
+  assert.deepEqual(byEmail.body.data, { cart: { 'bee-pollen': 2 },orders:purchaseHistory },'purchase history returns after signing in again');
 
   const { rows } = await accounts.pool.query('select password_hash from users');
   assert.match(rows[0].password_hash, /^scrypt\$/, 'no plain passwords in the database');
@@ -110,7 +113,10 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'alfalfa', hidden: true })).status, 401, 'a customer cannot hide products');
   assert.equal((await call('/api/admin/chat-log')).status, 401, 'a customer cannot read the chat questions');
   assert.equal((await call('/api/admin/new-product', 'PUT', { product: { name: 'Чужая карточка' } })).status, 401, 'a customer cannot create cards');
+  assert.equal((await call('/api/admin/categories')).status,401,'category management is staff-only');
+  assert.equal((await call('/api/admin/categories','PUT',{action:'create',name:'Чужая категория',revision:0})).status,401);
   assert.equal((await call('/api/admin/site-content', 'PUT', { kind: 'faq', action: 'add', item: { q: 'Вопрос?', a: 'Ответ.' } })).status, 401, 'a customer cannot change the content');
+  assert.equal((await call('/api/admin/knowledge-search?q=магний')).status,401,'lecture transcripts are only available to staff');
 
   // Staff are separate accounts (npm run admin:create): their own sign-in, session and cookie; registration never makes one.
   session = '';
@@ -128,11 +134,103 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/me')).body.staff.email, 'boss@example.ru');
   assert.equal((await call('/api/auth/me')).status, 401, 'the staff cookie is not a customer session');
   assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: 'abc' })).status, 400);
+  const library=(await call('/api/admin/knowledge')).body;
+  assert.equal(library.counts.products,1);
+  assert.equal(library.counts.lectures,1);
+  const materials=(await call('/api/admin/knowledge?source=alfalfa')).body.data;
+  assert.equal(materials.recommendations[0].area,'nutrition');
+  assert.equal((await call('/api/admin/new-product','PUT',{product:{name:'Товар без фото',categoryPath:'/catalog/ukhod-za-kozhey-litsa-i-shei/',retailRub:1000}})).status,400,'a new product requires a photo');
+  const linked=(await call('/api/admin/new-product','PUT',{content:{image:'/images/journal-final/magnesium-cover-v1.jpg'},product:{name:'Люцерна, новая упаковка',categoryPath:'/catalog/ukhod-za-kozhey-litsa-i-shei/',retailRub:1000,knowledgeSourceId:'alfalfa'}})).body;
+  assert.deepEqual(linked.knowledge[linked.id].about,materials.about,'new cards immediately receive confirmed source material');
+  assert.equal(linked.knowledge[linked.id].pairs[0].productId,'bee-pollen');
+  const changed={...materials,benefit:'Поддержка питания',recommendations:[{area:'nutrition',reason:'Растительные ингредиенты для разнообразия рациона.'}]};
+  assert.equal((await call('/api/admin/product-knowledge','PUT',{productId:linked.id,knowledge:changed})).status,200);
+  assert.equal((await call('/api/site')).body.knowledge[linked.id].benefit,'Поддержка питания');
+  assert.equal((await call('/api/admin/product-knowledge','PUT',{productId:linked.id,knowledge:{...changed,sources:[]}})).status,400,'unattributed recommendations cannot be published');
+  assert.equal((await call('/api/admin/product-knowledge','PUT',{productId:linked.id,knowledge:{...changed,recommendations:[{area:'made-up',reason:'x'}]}})).status,400);
+
+  // The matching word occurs deep inside the transcript, not in its title or author.
+  const lectureBody='Вступление. '.repeat(1500)+'Речь о магнии. Магнием дополняют рацион. Подбирайте продукты внимательно. '+'Завершение. '.repeat(300);
+  await accounts.pool.query('insert into knowledge_lectures(id,course,lecture,speaker,body) values($1,$2,$3,$4,$5)',['body-only','Курс теста','Нервная система','Анна Лекторова',lectureBody]);
+  const found=(await call('/api/admin/knowledge-search?q='+encodeURIComponent('магний'))).body;
+  assert.ok(found.results.some(r=>r.id==='body-only'),'search finds Russian word forms in the transcript body');
+  assert.match(found.results.find(r=>r.id==='body-only').excerpt,/<nsp-match>/);
+  const context=(await call('/api/admin/knowledge?lecture=body-only&q='+encodeURIComponent('магний'))).body;
+  assert.match(context.excerpt,/магни/iu,'context opens near the match beyond the old 12,000-character cutoff');
+  assert.equal((await call('/api/admin/knowledge-search?q='+encodeURIComponent('уникальноенесуществующееслово'))).body.total,0);
+  assert.equal((await call('/api/admin/knowledge-search?q=')).body.total,0);
+  assert.equal((await call('/api/admin/knowledge-search?q='+encodeURIComponent("' OR 1=1 --"))).status,200,'query punctuation is data, not SQL');
+  for(let n=0;n<12;n++)await accounts.pool.query('insert into knowledge_lectures(id,course,lecture,speaker,body) values($1,$2,$3,$4,$5)',['page-'+n,'Курс','Другой материал '+n,'Лектор','Магний входит в рацион.']);
+  const first=(await call('/api/admin/knowledge-search?q='+encodeURIComponent('магний'))).body;
+  const next=(await call('/api/admin/knowledge-search?q='+encodeURIComponent('магний')+'&page=2')).body;
+  assert.equal(first.results.length,8);assert.equal(first.hasMore,true);
+  assert.equal(new Set([...first.results,...next.results].map(x=>x.id)).size,first.total,'search pagination has no gaps or duplicates');
+  const source={id:'body-only',course:'Курс теста',lecture:'Нервная система',speaker:'Анна Лекторова',query:'магний'};
+  const expertKnowledge={...changed,sources:[source],experts:[{sourceId:'body-only',speaker:'Подменённое имя',role:'Профессор',text:'Рассказывает о роли магния в повседневном питании.'}]};
+  const expertSaved=(await call('/api/admin/product-knowledge','PUT',{productId:linked.id,knowledge:expertKnowledge})).body.knowledge[linked.id];
+  assert.equal(expertSaved.experts[0].speaker,'Анна Лекторова','expert attribution comes from the attached lecture');
+  assert.equal(expertSaved.experts[0].role,'Автор лекции');
+  assert.equal(expertSaved.sources[0].query,'магний','the saved source keeps the query for reopening context');
+  const syncedCopy=(await call('/api/product-content?id='+linked.id)).body.content;
+  assert.deepEqual(syncedCopy.about,expertKnowledge.about,'knowledge and the displayed product description are saved together');
+  assert.equal((await call('/api/admin/product-knowledge','PUT',{productId:linked.id,knowledge:{...expertKnowledge,experts:[{sourceId:'missing',text:'Произвольный текст отзыва.'}]}})).status,400,'an expert note needs a real attached source');
+  assert.equal((await call('/api/admin/product-knowledge','PUT',{productId:linked.id,knowledge:{...expertKnowledge,experts:[{sourceId:'body-only',text:''}]}})).status,400);
+
+  const complete=(await call('/api/admin/new-product','PUT',{
+    product:{name:'Новый товар из редактора',categoryPath:'/catalog/ukhod-za-kozhey-litsa-i-shei/',retailRub:1500},
+    knowledge:expertKnowledge,content:{properties:{Состав:'Растительные ингредиенты.'},image:'/images/journal-final/magnesium-cover-v1.jpg'}
+  })).body;
+  assert.ok(complete.id,'new-product form creates the record only on final submit');
+  assert.equal(complete.visibility[complete.id],true,'a newly created card stays hidden');
+  assert.equal(complete.knowledge[complete.id].experts[0].speaker,'Анна Лекторова','lecture expert can be attached before the product exists');
+  assert.equal(complete.cards[complete.id].image,'/images/journal-final/magnesium-cover-v1.jpg');
+  const fullContent=(await call('/api/product-content?id='+complete.id)).body.content;
+  assert.equal(fullContent.properties.Состав,'Растительные ингредиенты.');
+  assert.deepEqual(fullContent.about,expertKnowledge.about);
+
+  const manual=await call('/api/admin/new-product','PUT',{
+    product:{name:'Готовая новая карточка',categoryPath:'/catalog/ukhod-za-kozhey-litsa-i-shei/',retailRub:2100,availability:'InStock'},publish:true,
+    content:{name:'Готовая новая карточка',summary:'Короткая строка для каталога',properties:{'Объём':'60 капсул','Состав 1 ед. (таблетки, пакетика, порции)':'Проверенный состав'},image:'/images/journal-final/magnesium-cover-v1.jpg'},
+    knowledge:{about:['Описание, заполненное администратором вручную.'],highlights:[],benefit:'Короткая строка для каталога',recommendations:[],pairs:[],sources:[],experts:[]}
+  });
+  assert.equal(manual.status,200);
+  const published=manual.body;assert.equal(published.visibility[published.id],false,'the new editor can publish a completed card immediately');
+  assert.equal(published.cards[published.id].summary,'Короткая строка для каталога');assert.equal(published.cards[published.id].package,'60 капсул');
+  const publicRecord=(await call('/api/site')).body;
+  assert.ok(publicRecord.extraProducts.some(p=>p.id===published.id));assert.equal(publicRecord.visibility[published.id],false);
+  const factsOnly=await call('/api/admin/product-knowledge','PUT',{productId:published.id,knowledge:null,content:{name:'Новое название',summary:'Новая строка',properties:{'Объём':'90 капсул'}}});
+  assert.equal(factsOnly.status,200,'the composition panel can save manual information without inventing lecture sources');
+  assert.equal(factsOnly.body.cards[published.id].name,'Новое название');assert.equal(factsOnly.body.cards[published.id].package,'90 капсул');
+  await call('/api/admin/delete-product','PUT',{productId:published.id});
+  const beforeFailed=(await call('/api/site')).body.extraProducts.length;
+  assert.equal((await call('/api/admin/new-product','PUT',{product:{name:'Неполный материал',categoryPath:'/catalog/ukhod-za-kozhey-litsa-i-shei/',retailRub:1500},knowledge:{...expertKnowledge,sources:[]}})).status,400);
+  assert.equal((await call('/api/site')).body.extraProducts.length,beforeFailed,'invalid lecture data cannot leave a half-created card');
+  await call('/api/admin/delete-product','PUT',{productId:complete.id});
+  await call('/api/admin/delete-product','PUT',{productId:linked.id});
+  assert.equal((await call('/api/site')).body.knowledge[linked.id],undefined,'deleting a card also removes its knowledge links');
+  const auto=(await call('/api/admin/new-product','PUT',{content:{image:'/images/journal-final/magnesium-cover-v1.jpg'},product:{name:'Люцерна',categoryPath:'/catalog/ukhod-za-kozhey-litsa-i-shei/',retailRub:1000}})).body;
+  assert.deepEqual(auto.knowledge[auto.id].about,materials.about,'an exact unambiguous match is linked automatically');
+  await call('/api/admin/delete-product','PUT',{productId:auto.id});
+
   assert.equal((await call('/api/admin/rate', 'PUT', { rubPerUnit: '96,5' })).body.rate.rubPerUnit, 96.5);
   assert.equal((await call('/api/admin/product', 'PUT', { productId: 'alfalfa', retailUnits: '15', availability: 'OutOfStock' })).status, 200);
   const site = (await call('/api/site')).body;
   assert.equal(site.rate.rubPerUnit, 96.5);
   assert.deepEqual(site.products.alfalfa, { retailUnits: 15, partnerUnits: null, retailRub: null, partnerRub: null, availability: 'OutOfStock' });
+  // Labels survive reloads and price-only edits; only staff can set them, unsupported discounts are rejected.
+  for (const discountPercent of [5, 10, 15, 20, 30, 50]) {
+    const badges = { discountPercent, isNew: true, isHit: true };
+    const saved = await call('/api/admin/product', 'PUT', { productId: 'alfalfa', availability: 'OutOfStock', badges });
+    assert.equal(saved.status, 200);
+    assert.deepEqual((await call('/api/site')).body.products.alfalfa.badges, badges);
+  }
+  assert.equal((await call('/api/admin/product', 'PUT', { productId: 'alfalfa', badges: { discountPercent: 99, isNew: true, isHit: false } })).status, 400);
+  assert.equal((await call('/api/site')).body.products.alfalfa.badges.discountPercent, 50, 'a rejected edit leaves the saved labels alone');
+  await call('/api/admin/product', 'PUT', { productId: 'alfalfa', retailRub: 2000 });
+  assert.equal((await call('/api/site')).body.products.alfalfa.badges.discountPercent, 50, 'older price-only clients preserve labels');
+  const clearedBadges = { discountPercent: 0, isNew: false, isHit: false };
+  await call('/api/admin/product', 'PUT', { productId: 'alfalfa', badges: clearedBadges });
+  assert.deepEqual((await call('/api/site')).body.products.alfalfa.badges, clearedBadges, 'staff can remove all labels');
   assert.equal((await call('/api/admin/note', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', hidden: true })).body.hiddenNotes.alfalfa[0], 'Врач|Лекция|Текст');
   assert.equal((await call('/api/admin/pending')).body.reviews, 1);
   assert.equal((await call('/api/admin/note-stars', 'PUT', { productId: 'alfalfa', key: 'Врач|Лекция|Текст', rating: 9 })).status, 400);
@@ -140,10 +238,11 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   // A new card: created hidden, filled in the editor, shown, seen by customers without its card price, then deleted.
   const face = '/catalog/ukhod-za-kozhey-litsa-i-shei/';
   assert.match((await call('/api/admin/new-product', 'PUT', { product: { name: 'Крем', categoryPath: face, retailRub: '' } })).body.error, /Розничная/);
-  const created = await call('/api/admin/new-product', 'PUT', { product: { name: 'Крем для рук', article: '', categoryPath: face, retailRub: '1990', partnerRub: '1490', availability: 'InStock' } });
+  const created = await call('/api/admin/new-product', 'PUT', { content:{image:'/images/journal-final/magnesium-cover-v1.jpg'},product: { name: 'Крем для рук', article: '', categoryPath: face, retailRub: '1990', partnerRub: '1490', availability: 'InStock', badges: { discountPercent: 15, isNew: true, isHit: false } } });
   assert.equal(created.body.id, 'krem-dlya-ruk');
+  assert.deepEqual(created.body.extraProducts.find(p=>p.id==='krem-dlya-ruk').badges,{discountPercent:15,isNew:true,isHit:false});
   assert.equal(created.body.visibility['krem-dlya-ruk'], true, 'a new card starts hidden');
-  assert.equal((await call('/api/admin/new-product', 'PUT', { product: { name: 'Крем для рук', categoryPath: face, retailRub: '990' } })).body.id, 'krem-dlya-ruk-2', 'the same name gets its own address');
+  assert.equal((await call('/api/admin/new-product', 'PUT', {content:{image:'/images/journal-final/magnesium-cover-v1.jpg'}, product: { name: 'Крем для рук', categoryPath: face, retailRub: '990' } })).body.id, 'krem-dlya-ruk-2', 'the same name gets its own address');
   assert.equal((await call('/api/product-content?id=krem-dlya-ruk')).body.base.name, 'Крем для рук', 'the editor opens it');
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'krem-dlya-ruk', content: { about: ['Мягкий крем.'] } })).status, 200);
   assert.equal((await call('/api/admin/visibility', 'PUT', { productId: 'krem-dlya-ruk', hidden: false })).status, 200);
@@ -154,6 +253,28 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/delete-product', 'PUT', { productId: 'krem-dlya-ruk-2' })).status, 200);
   assert.deepEqual((await call('/api/site')).body.extraProducts.map(p => p.id), ['krem-dlya-ruk']);
 
+  // Persistent categories: create, rename, assign existing/new cards, reject stale saves, remove with relocation.
+  let catalog=(await call('/api/admin/categories')).body.catalog;
+  let change=await call('/api/admin/categories','PUT',{action:'create',name:'Новая категория',revision:catalog.revision});
+  assert.equal(change.status,200);catalog=change.body.catalog;
+  const categoryPath=catalog.categories.find(c=>c.name==='Новая категория').path;
+  change=await call('/api/admin/categories','PUT',{action:'rename',path:categoryPath,name:'Уход каждый день',revision:catalog.revision});
+  assert.equal(change.status,200);catalog=change.body.catalog;
+  assert.equal(catalog.categories.find(c=>c.name==='Уход каждый день').path,categoryPath,'renaming keeps the existing address');
+  assert.equal((await call('/api/admin/categories','PUT',{action:'create',name:'Устаревшее окно',revision:0})).status,409);
+  change=await call('/api/admin/categories','PUT',{action:'move',productIds:['krem-dlya-ruk'],to:categoryPath,revision:catalog.revision});
+  assert.equal(change.status,200);catalog=change.body.catalog;
+  assert.equal((await call('/api/site')).body.extraProducts.find(p=>p.id==='krem-dlya-ruk').categoryPath,categoryPath);
+  const fresh=await call('/api/admin/new-product','PUT',{content:{image:'/images/journal-final/magnesium-cover-v1.jpg'},product:{name:'Проверка новой категории',categoryPath,retailRub:1200}});
+  assert.equal(fresh.status,200,'a new product can use a category created without rebuilding');
+  assert.equal(fresh.body.extraProducts.find(p=>p.id===fresh.body.id).categoryPath,categoryPath);
+  assert.equal((await call('/api/admin/categories','PUT',{action:'delete',path:categoryPath,revision:catalog.revision})).status,400,'products cannot be orphaned');
+  change=await call('/api/admin/categories','PUT',{action:'delete',path:categoryPath,to:face,revision:catalog.revision});
+  assert.equal(change.status,200);assert.equal(change.body.catalog.categories.find(c=>c.path===categoryPath).archived,true);
+  assert.equal((await call('/api/site')).body.extraProducts.find(p=>p.id==='krem-dlya-ruk').categoryPath,face);
+  assert.ok((await call('/api/admin/categories')).body.products.some(p=>p.id===fresh.body.id),'deleting the category preserves its products');
+  assert.equal((await call('/api/admin/delete-product','PUT',{productId:fresh.body.id})).status,200);
+
   // «Контент»: offers, photos, videos, articles and answers are added, changed and deleted; old ones are hidden and returned.
   const content = (kind, action, extra) => call('/api/admin/site-content', 'PUT', { kind, action, ...extra });
   assert.match((await content('video', 'add', { item: { url: 'https://example.com/x', title: 'Ролик' } })).body.error, /VK Видео, Rutube или YouTube/);
@@ -162,8 +283,22 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await content('faq', 'update', { id: faq.id, item: { q: 'Есть ли рассрочка?', a: 'Пока нет.' } })).body.content.faq[0].a, 'Пока нет.');
   const promo = await content('promo', 'add', { item: { title: 'Скидка 10%', text: 'На все БАД.', to: '2099-01-01' } });
   assert.equal(promo.body.content.promos[0].title, 'Скидка 10%');
+  const promoId=promo.body.content.promos[0].id;
+  const promoEdited=await content('promo','update',{id:promoId,item:{title:'Подборка',text:'Условия акции',products:['alfalfa','krem-dlya-ruk']}});
+  assert.deepEqual(promoEdited.body.content.promos[0].products,['alfalfa','krem-dlya-ruk'],'a campaign supports built and newly created products');
+  assert.deepEqual((await call('/api/site')).body.content.promos[0].products,['alfalfa','krem-dlya-ruk']);
+  const photo=(await content('photo','add',{item:{image:'/images/journal-final/magnesium-cover-v1.jpg',caption:'Фото'}})).body.content.photos[0];
+  assert.equal((await call('/api/site')).body.content.photos[0].caption,'Фото');
+  assert.equal((await content('photo','update',{id:photo.id,item:{image:photo.image,caption:'Новая подпись'}})).body.content.photos[0].caption,'Новая подпись');
+  await content('photo','delete',{id:photo.id});
+  assert.equal((await call('/api/site')).body.content.photos.length,0);
+
   const article = (await content('article', 'add', { item: { title: 'Витамин D зимой', body: 'Зимой солнца мало, и витамин D нужен с едой.', products: ['alfalfa', 'unknown'] } })).body.content.articles[0];
   assert.deepEqual([article.path, article.custom, article.data.products], ['/blog/vitamin-d-zimoy/', true, ['alfalfa']]);
+  const articleEdited=(await content('article','update',{id:article.contentId,item:{title:'Витамин D зимой',lead:'Новый вводный абзац.',body:'Проверяем обновление полной статьи через редактор.',products:['krem-dlya-ruk']}})).body.content.articles[0];
+  assert.deepEqual(articleEdited.related,['/product/krem-dlya-ruk/'],'a new article can link to a newly created product');
+  assert.match(articleEdited.html,/Новый вводный абзац/);
+
   assert.equal((await content('article', 'add', { item: { title: 'Витамин D зимой', body: 'Ещё одна статья с тем же заголовком.' } })).body.content.articles[0].path, '/blog/vitamin-d-zimoy-2/', 'the same title gets its own address');
   assert.deepEqual((await content('video', 'hide', { key: 'bNT7e_FykCE' })).body.hiddenContent.video, ['bNT7e_FykCE']);
   assert.deepEqual((await content('video', 'show', { key: 'bNT7e_FykCE' })).body.hiddenContent.video, []);
@@ -264,6 +399,22 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.deepEqual(card.content.documents, [file]);
   assert.equal(card.content.properties['Применение'], 'По одной капсуле.');
   assert.deepEqual((await call('/api/site')).body.cards.alfalfa, { name: 'Люцерна новая', image: file.url });
+  // Media edits are independent of the description and support intentional empty lists.
+  assert.equal((await call('/api/admin/content','PUT',{productId:'alfalfa',content:{photos:[file.url],videos:[{url:'https://youtu.be/bNT7e_FykCE',title:'О продукте'}]}})).status,200);
+  const withMedia=(await call('/api/product-content?id=alfalfa')).body.content;
+  assert.deepEqual(withMedia.photos,[file.url]);
+  assert.equal(withMedia.videos[0].title,'О продукте');
+  assert.equal(withMedia.name,'Люцерна новая');
+  assert.deepEqual(withMedia.documents,[file]);
+  assert.equal((await call('/api/admin/content','PUT',{productId:'alfalfa',content:{photos:[file.url],documents:[],videos:[]}})).status,200);
+  const withoutMedia=(await call('/api/product-content?id=alfalfa')).body.content;
+  assert.deepEqual(withoutMedia.photos,[file.url]);assert.deepEqual(withoutMedia.documents,[]);assert.deepEqual(withoutMedia.videos,[]);
+  assert.equal(withoutMedia.image,file.url);
+  assert.deepEqual(withoutMedia.about,['Первый абзац.']);
+  assert.equal((await call('/api/site')).body.cards.alfalfa.image,file.url);
+  assert.equal((await call('/api/admin/content','PUT',{productId:'alfalfa',content:{photos:[]}})).status,400,'a product must retain at least one photo');
+  assert.equal((await call('/api/admin/content','PUT',{productId:'alfalfa',content:{photos:['https://evil.example/x.jpg']}})).status,400);
+  assert.equal((await call('/api/admin/content','PUT',{productId:'alfalfa',content:{videos:[{url:'javascript:alert(1)',title:'Видео'}]}})).status,400);
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', reset: true })).status, 200);
   assert.equal((await call('/api/product-content?id=alfalfa')).body.content, null);
 });
@@ -298,7 +449,7 @@ test('a card\'s own content replaces only what is set and can be taken back', ()
 
 test('admin products: a section as on the site and a search by name or article within it', () => {
   const code = readFileSync(new URL('../src/admin.tsx', import.meta.url), 'utf8');
-  assert.match(code, /const top = data\.categories\.filter\(c => c\.parent === '\/catalog\/'\);/);
+  assert.ok(code.includes("return visit('/catalog/');"));
   assert.match(code, /<option value="">Все разделы<\/option>/);
   assert.match(code, /data\.products\.filter\(p => \(!inSection \|\| inSection\.has\(p\.path\)\) && words\.every\(w => `\$\{p\.name\} \$\{p\.article \?\? ''\}`\.toLowerCase\(\)\.includes\(w\)\)\)/);
 });

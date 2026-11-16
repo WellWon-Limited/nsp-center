@@ -12,7 +12,9 @@ const byArticle = article => content.products.find(p => p.article === article);
 test('cosmetics follow what the supplier has: three Bremani Care products in stock, Tropical Mists hidden', () => {
   for (const article of stock.inStock) assert.equal(byArticle(article).availability, 'InStock', article);
   const tropical = content.products.filter(p => p.properties?.['Коллекция'] === 'Tropical Mists');
-  assert.deepEqual(tropical.map(p => p.article).sort(), [...stock.discontinued].sort(), 'the whole Tropical Mists line, nothing else');
+  assert.equal(tropical.length,7,'all seven Tropical Mists products remain stored');
+  assert.ok(tropical.every(p=>stock.discontinued.includes(p.article)),'Tropical Mists remains hidden alongside the corrected-price exclusions');
+  for(const article of stock.discontinued)assert.equal(byArticle(article).hidden,true,article);
   for (const p of tropical) assert.deepEqual([p.hidden, p.availability], [true, 'OutOfStock'], p.path);
   for (const article of ['21600', '21602']) {
     const p = byArticle(article);

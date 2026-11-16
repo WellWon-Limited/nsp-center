@@ -1,5 +1,5 @@
 import './auth.css';
-import { useId, useState, type FormEvent, type ReactNode } from 'react';
+import { useId, useLayoutEffect, useState, type FormEvent, type ReactNode } from 'react';
 import { restoreAccountLists, useStore, type Account, type ServerSession } from './store';
 import { Icon } from './ui';
 import { registrationPasswordError } from './auth-password';
@@ -56,6 +56,7 @@ export function PasswordInput({ id, autoComplete, value, onChange, error, onBlur
 
 export function AuthScreen() {
   const [mode, setMode] = useState<Mode>('signin');
+  useLayoutEffect(() => { if (mode === 'register') window.scrollTo({top:0,behavior:'instant'}); }, [mode]);
   const { state, setState, accounts, startSession } = useStore();
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState(false);
@@ -105,7 +106,7 @@ export function AuthScreen() {
   };
   const set = (key: keyof typeof form) => (value: string | boolean) => setForm(f => ({ ...f, [key]: value }));
 
-  return <section className="auth" data-ds-id="profile-auth">
+  return <section className="auth" data-auth-mode={mode} data-ds-id="profile-auth">
     {mode === 'signin' ? <>
       <h1>Вход</h1>
       <p className="auth-switch">Нет аккаунта? <button type="button" className="auth-link" onClick={() => switchTo('register')}>Создать аккаунт</button></p>
@@ -119,15 +120,16 @@ export function AuthScreen() {
       <h1>Создать аккаунт</h1>
       <p className="auth-switch auth-switch--left">Уже есть аккаунт? <button type="button" className="auth-link" onClick={() => switchTo('signin')}>Войти</button></p>
       <form className="auth-form" onSubmit={register}>
+        <p className="auth-hint"><span className="auth-required" aria-hidden="true">*</span> — обязательные поля.</p>
         <div className="auth-row">
           <Field label="Имя" required>{id => <input id={id} className="field" autoComplete="given-name" placeholder="Введите имя" value={form.firstName} onChange={e => set('firstName')(e.target.value)} required />}</Field>
           <Field label="Фамилия" required>{id => <input id={id} className="field" autoComplete="family-name" placeholder="Введите фамилию" value={form.lastName} onChange={e => set('lastName')(e.target.value)} required />}</Field>
         </div>
         <Field label="Email" required>{id => <EmailInput id={id} value={form.email} onChange={set('email')} />}</Field>
-        <Field label="Телефон">{id => <PhoneInput id={id} value={form.phone} onChange={set('phone')} />}</Field>
+        <Field label="Телефон (необязательно)">{id => <PhoneInput id={id} value={form.phone} onChange={set('phone')} />}</Field>
         <Field label="Пароль" required hint="Не меньше 8 символов.">{id => <PasswordInput id={id} autoComplete="new-password" value={password} onChange={setPassword} />}</Field>
         <Field label="Повторите пароль" required>{id => <PasswordInput id={id} autoComplete="new-password" value={confirmPassword} onChange={value => { setConfirmPassword(value); setConfirmationTouched(true); }} onBlur={() => setConfirmationTouched(true)} error={confirmationTouched ? passwordError : undefined} />}</Field>
-        <label className="auth-consent"><input type="checkbox" checked={form.consent} onChange={e => set('consent')(e.target.checked)} required /> <span>Я согласен(на) на обработку персональных данных согласно <a href="/company/consent/">политике конфиденциальности</a></span></label>
+        <label className="auth-consent"><input type="checkbox" checked={form.consent} onChange={e => set('consent')(e.target.checked)} required /> <span><span className="auth-required" aria-hidden="true">* </span>Я согласен(на) на обработку персональных данных согласно <a href="/company/consent/">политике конфиденциальности</a></span></label>
         <button className="btn btn--primary auth-submit" disabled={!accounts || busy || !form.consent || Boolean(passwordError)}>{busy ? 'Создаём…' : 'Создать аккаунт'}</button>
       </form>
     </>}

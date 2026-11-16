@@ -142,7 +142,7 @@ html[data-home-design="d"] body .home-story .story-pickup.story-pickup--forest{b
 html[data-home-design="d"]:has(.home-first-screen){background:var(--color-white)}
 html[data-home-design="d"][data-home-scroll-edge="bottom"]:has(.home-first-screen){background:var(--color-bg)}
 html[data-home-design="d"] body:has(.home-first-screen) .site-header{background:var(--color-white);-webkit-backdrop-filter:none;backdrop-filter:none}
-html[data-home-design="d"] body:has(.home-first-screen) .site-header::before{content:'';position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--color-white);pointer-events:none}
+html[data-home-design="d"] body:has(.home-first-screen) .site-header::before{content:'';position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--header-edge-surface,var(--color-bg));pointer-events:none}
 @media(max-width:639px){
  html[data-home-design="d"][data-home-scroll-edge="bottom"]:has(.home-first-screen){background:#091b16}
 }

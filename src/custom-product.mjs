@@ -1,3 +1,4 @@
+import { readProductBadges, validateProductBadges } from './product-badges.mjs';
 // Product cards an administrator creates in site management (scripts/site-admin.mjs, table custom_products). The server
 // keeps only the essentials — name, article, section, ruble prices and stock; the description, composition, certificates
 // and photo are filled in afterwards in the same editor as every other card (table product_content). This module turns
@@ -39,8 +40,10 @@ export function validateNewProduct(input, categories) {
   const partnerRub = rub(input.partnerRub);
   if (Number.isNaN(partnerRub)) return { error: 'Цена по карте — число больше нуля, или оставьте поле пустым.' };
   if (partnerRub !== null && partnerRub >= retailRub) return { error: 'Цена по карте должна быть ниже розничной.' };
+  const badges = input.badges === undefined ? null : validateProductBadges(input.badges);
+  if (badges?.error) return { error: badges.error };
   const availability = input.availability === 'OutOfStock' ? 'OutOfStock' : 'InStock';
-  return { value: { name, article, categoryPath: category.path, retailRub, partnerRub, availability } };
+  return { value: { name, article, categoryPath: category.path, retailRub, partnerRub, availability, ...(badges ? { badges: badges.value } : {}) } };
 }
 
 /** The sections a card shows up in: its own and the ones above it (not the whole catalog, which lists everything). */
@@ -66,7 +69,7 @@ export function customProduct(id, data, categories, withPartner = false) {
     image: null, images: [], documents: [], microdata_outside_product: [], related: [],
     prices: { retail: data.retailRub, partner: withPartner ? data.partnerRub ?? null : null, source: 'admin' },
     card: { kicker: own?.name ?? '', sub: '', parts: [], more: 0, notes: 0 },
-    custom: true,
+    custom: true, badges: readProductBadges(data.badges),
   };
 }
 
@@ -80,7 +83,7 @@ export function mergeCustom(products, categories, extras) {
   }
   for (const e of extras) {
     if (products.some(p => p.id === e.id || p.path === e.path)) continue;
-    products.push(e);
+    products.unshift(e);
     for (const c of sectionsOf(e.categoryPath, categories)) if (!c.products.includes(e.path)) c.products.unshift(e.path);
   }
 }

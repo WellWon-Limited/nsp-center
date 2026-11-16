@@ -9,7 +9,7 @@ import type { Notice } from './store';
 
 // Header bell with the notifications popover (research 2026-11-10): the bell shows how many are new ("9+" above nine);
 // the panel says "3 новых", groups the list by day with a line between notices, an icon per kind and a short time.
-// Opening the panel reads them all; the ones that were new keep an orange mark and "Новое" while it is open. One notice
+// Opening the panel reads them all; the ones that were new keep a light mint background and "Новое" while it is open. One notice
 // can be deleted, "Очистить всё" can be undone. «Присылать уведомления» at the bottom turns on system notifications, and
 // only in the installed app (research 2026-11-11): on an iPhone a site in Safari cannot send them at all (iOS 16.4+ allows
 // them only to apps added to the Home Screen), and asking a visitor of the site in a computer's browser for permission

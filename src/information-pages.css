@@ -157,3 +157,28 @@ body:has(.information-page) .site-main>.back-link{margin:12px max(24px,calc((100
 
 .information-button>svg,.information-text-link>svg{flex:none}
 .information-contact-grid a>span:last-child,.information-video a,.information-player header>a{display:inline-flex;align-items:center;gap:var(--space-8)}
+
+/* Payment copy follows the full content panel width, like delivery information. */
+.information-page--payments .information-content>.rich-content{max-width:none;margin-inline:0}
+
+/* Review names and their text start near the top of the shared glass panel. */
+html[data-catalog-design] body .site-main .information-content:has(>.information-reviews){padding-top:var(--space-24)!important}
+html[data-catalog-design] body .site-main .information-reviews>.information-review:first-child{padding-top:0!important}
+html[data-catalog-design] body .site-main .information-review>header{padding-bottom:0!important}
+html[data-catalog-design] body .site-main .information-review>header h2{margin:0!important}
+html[data-catalog-design] body .site-main .information-review blockquote{margin-top:var(--space-12)}
+
+/* Match the hours heading to the pickup heading after its 12px/1.6 city label and 18px gap. */
+@media(min-width:640px){.information-address>div:nth-child(2){padding-top:calc(var(--text-12) * 1.6 + var(--space-18))}}
+
+/* Informational cards start with content, without the former 52px empty inset. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){padding-top:24px!important}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content>.rich-content>:first-child{margin-top:0!important}
+@media(max-width:959px){
+ html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){padding-top:20px!important}
+}
+
+/* Keep the pickup details near the phone and email cards. */
+html body #root .information-contact-grid{margin-bottom:24px}
+html body #root .information-content .information-address{padding-block:24px}
+@media(max-width:639px){html body #root .information-contact-grid{margin-bottom:20px}}

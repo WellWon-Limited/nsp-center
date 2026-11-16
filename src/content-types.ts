@@ -1,3 +1,5 @@
+import type {ProductKnowledge} from './product-knowledge-types';
+import type { ProductBadges } from './product-badges.mjs';
 export type Breadcrumb = { name: string; url: string | null };
 export type DocumentLink = { name: string; size: string; url: string | null };
 export type SiteLink = { text: string | null; url: string };
@@ -19,6 +21,8 @@ export type Product = {
   availability_text: string | null;
   /** Not shown to customers: a line no longer supplied (src/product-stock.json) or hidden by an administrator. */
   hidden?: boolean;
+  badges?: ProductBadges;
+  knowledge?: ProductKnowledge;
   brand: string | null;
   category: string | null;
   categoryPath: string | null;
@@ -45,6 +49,10 @@ export type Product = {
   stars?: { value: number; count: number; sum: number };
   /** A photo the administrator uploaded in place of the built one (src/site.ts). */
   adminImage?: string;
+  adminPhotos?: string[];
+  adminVideos?: {url:string;title:string}[];
+  adminPackage?: string;
+  adminProperties?: Record<string,string>;
   /** Created in site management (src/custom-product.mjs), not built. */
   custom?: boolean;
   /** A set's products (src/set-contents.json). */

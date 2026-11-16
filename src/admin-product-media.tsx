@@ -1,0 +1,29 @@
+import {useUnsavedProduct} from './admin-form';
+import {useEffect,useState,useRef,type FormEvent} from 'react';
+import type {Product} from './content-types';
+import type {ProductContent} from './site';
+import {ImageField} from './admin-content';
+import {productGalleryImages} from './product-media.mjs';
+import {videoSections} from './information-content.mjs';
+import {videoOf} from './site-content.mjs';
+
+export type ProductAssets={photos:string[];documents:{url:string;name:string}[];videos:{url:string;title:string}[]};
+type MediaTab='photo'|'docs'|'videos';
+export function ProductAssetFields({tab,value,onChange}:{tab:MediaTab;value:ProductAssets;onChange:(v:ProductAssets)=>void}){
+ const [video,setVideo]=useState({url:'',title:''}),[error,setError]=useState('');
+ if(tab==='videos')return <div><h2>Видео товара</h2><p className="admin-hint-muted">На сайте: вкладка «Видеообзоры» в карточке товара. Ролики добавляются ссылкой. Для добавления ролика заполните оба поля ниже.</p><ul className="admin-product-assets">{value.videos.map((v,i)=><li key={i}><a href={v.url} target="_blank" rel="noopener noreferrer">{v.title}</a><button type="button" className="btn btn--secondary" onClick={()=>onChange({...value,videos:value.videos.filter((_,n)=>n!==i)})}>Убрать видео</button></li>)}</ul>{!value.videos.length&&<p className="ds-muted">Видео нет.</p>}<label>Название видео<input className="field" value={video.title} onChange={e=>setVideo({...video,title:e.target.value})}/></label><label>Ссылка на VK Видео, Rutube или YouTube<input className="field" type="url" value={video.url} onChange={e=>setVideo({...video,url:e.target.value})}/></label>{error&&<p role="alert" className="admin-error">{error}</p>}<button type="button" className="btn btn--secondary" disabled={value.videos.length>=20} onClick={()=>{const info=videoOf(video.url);if(!info||!video.title.trim()){setError('Укажите название и ссылку на VK Видео, Rutube или YouTube.');return}onChange({...value,videos:[...value.videos,{url:info.href,title:video.title.trim()}]});setVideo({url:'',title:''});setError('')}}>Добавить видео</button></div>;
+ const docs=tab==='docs',items=docs?value.documents.map(d=>d.url):value.photos;
+ const remove=(i:number)=>onChange(docs?{...value,documents:value.documents.filter((_,n)=>n!==i)}:{...value,photos:value.photos.filter((_,n)=>n!==i)});
+ return <div><h2>{docs?'Сертификаты':'Фотографии товара'}</h2><p className="admin-hint-muted">{docs?'На сайте: вкладка «Сертификаты». Если убрать все сканы, вкладка скрывается.':'Первое фото — обложка в каталоге и подборках. Остальные — переключаемые фотографии в карточке товара.'}</p><div className="admin-product-asset-grid">{items.map((url,i)=><figure key={`${url}-${i}`}><img src={url} alt={docs?`Сертификат ${i+1}`:`Фото ${i+1}`} loading="lazy"/><figcaption>{docs?value.documents[i].name:i===0?'Главное фото':`Фото ${i+1}`}</figcaption><div>{!docs&&i>0&&<button type="button" className="btn btn--secondary" onClick={()=>onChange({...value,photos:[url,...value.photos.filter((_,n)=>n!==i)]})}>Сделать главным</button>}<button type="button" className="btn btn--secondary" onClick={()=>remove(i)}>{docs?'Убрать сертификат':'Убрать фото'}</button></div></figure>)}</div>{!items.length&&<p className="ds-muted">{docs?'Сертификатов нет.':'Фотографий пока нет.'}</p>}{items.length<(docs?30:20)&&<ImageField required={!docs&&!items.length} label={docs?'Добавить скан сертификата':'Добавить фото товара'} value="" onChange={url=>{if(!url)return;onChange(docs?{...value,documents:[...value.documents,{url,name:`Сертификат ${value.documents.length+1}`}]}:{...value,photos:[...new Set([...value.photos,url])]})}}/>}</div>;
+}
+
+export function ProductMediaEditor({product:p,tab,run}:{product:Product;tab:MediaTab;run:(url:string,body:unknown,message:string)=>Promise<boolean>}){
+ const saved=useRef('');
+ const [value,setValue]=useState<ProductAssets|null>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);
+ useUnsavedProduct(value!==null&&JSON.stringify(value)!==saved.current);
+ useEffect(()=>{let off=false;setValue(null);setError('');fetch(`/api/product-content?id=${encodeURIComponent(p.id)}`).then(r=>{if(!r.ok)throw Error();return r.json()}).then((b:{content:ProductContent|null;base:{documents:ProductAssets['documents']}})=>{if(off)return;const c=b.content??{};const initial={photos:c.photos??productGalleryImages(p),documents:c.documents??b.base.documents,videos:c.videos??videoSections(p.sectionsHtml['Видеообзоры']||'').map((v:{href:string;title:string})=>({url:v.href,title:v.title}))};saved.current=JSON.stringify(initial);setValue(initial)}).catch(()=>{if(!off)setError('Не удалось загрузить материалы. Обновите страницу.');});return()=>{off=true}},[p.id]);
+ const save=async(e:FormEvent)=>{e.preventDefault();if(!value||busy)return;if(!value.photos.length){setError('Добавьте хотя бы одно фото товара.');return}setBusy(true);try{if(await run('/api/admin/content',{productId:p.id,content:{...value,image:value.photos[0]||''}},'Фотографии, сертификаты и видео сохранены.'))saved.current=JSON.stringify(value)}finally{setBusy(false)}};
+ if(error&&!value)return <p role="alert" className="admin-error">{error}</p>;
+ if(!value)return <p className="ds-muted">Загружаем материалы…</p>;
+ return <form className="admin-product-media knowledge-paper" onSubmit={save}><ProductAssetFields tab={tab} value={value} onChange={v=>{setValue(v);setError('')}}/>{error&&<p role="alert" className="admin-error">{error}</p>}<p className="admin-hint-muted">Добавление и удаление появятся на сайте после сохранения. Исходные файлы остаются в хранилище.</p><button className="btn btn--primary" disabled={busy}>{busy?'Сохраняем…':'Сохранить'}</button></form>;
+}

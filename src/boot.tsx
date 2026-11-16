@@ -13,7 +13,7 @@ trackProducts([pageData.product]);
 // Returning with "Назад" puts the visitor where they left off: the scroll position (saved in main.tsx when leaving a
 // page) is restored after the page has rendered (the catalog may render client-side, after the browser's own restore attempt).
 const scrollKey=()=>`nsp-scroll:${location.pathname}${location.search}`;
-if(root.hasChildNodes()&&root.dataset.route===url)hydrateRoot(root,<App url={url} pageData={pageData}/>);else createRoot(root).render(<App url={url} pageData={pageData}/>);
+if(root.hasChildNodes()&&(root.dataset.route===url||(location.pathname==='/'&&root.dataset.route==='/')))hydrateRoot(root,<App url={url} pageData={pageData}/>);else createRoot(root).render(<App url={url} pageData={pageData}/>);
 const homeReturn=installHomeScrollReturn(window,document);
 installWarmup(window,document);
 const navigation=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;

@@ -1,0 +1,20 @@
+/* Keep the approved 1470px composition proportional on larger desktop viewports.
+   Zoom participates in layout, preserving text, controls and packshot aspect ratios together. */
+@supports (zoom:calc(100vw / 1470px)){
+ @media(min-width:1471px){
+  :root{--content-width-scale:calc(100vw / 1470px);--content-scale:max(1,min(var(--content-width-scale),calc(100svh / 919px)));--content-stretch:calc(var(--content-width-scale) / var(--content-scale));--content-viewport-width:calc(100vw / var(--content-scale));--content-viewport-height:calc(100svh / var(--content-scale))}
+  html body #root .site-main:not(:has(.home-first-screen)){zoom:var(--content-scale);width:auto;--web-max:calc(1280px * var(--content-stretch))}
+  html body #root .site-footer{zoom:var(--content-scale);--web-max:calc(1280px * var(--content-stretch))}
+  html body #root .information-heading{padding-inline:max(28px,calc((var(--content-viewport-width) - 1280px * var(--content-stretch))/2))!important}
+  html body:has(.information-page) #root .site-main>.back-link{margin-inline:max(28px,calc((var(--content-viewport-width) - 1280px * var(--content-stretch))/2))!important}
+  html body #root .admin-shell{zoom:var(--content-scale);width:auto!important;--web-max:calc(1280px * var(--content-stretch))}
+  html body #root .site-main :is(.information-content,.delivery-content){max-width:calc(1280px * var(--content-stretch))!important}
+  html body #root .site-main .company-page--paper>.company-concept--paper{max-width:calc(1224px * var(--content-stretch))!important;width:min(calc(100% - 56px),calc(1224px * var(--content-stretch)))!important}
+  html body #root .company-concept--paper>#about{max-width:none!important}
+  html body #root .site-main:has(>.theme-page--paper,>.recommend--paper){width:min(calc(100% - 56px),calc(1000px * var(--content-stretch)))!important;max-width:calc(1000px * var(--content-stretch))!important}
+  html body #root .site-main .consult-page{width:min(calc(100% - 56px),calc(1040px * var(--content-stretch)));height:calc(var(--content-viewport-height) - var(--site-header-height,119px) / var(--content-scale) - 24px);max-height:none}
+  /* The homepage photograph retains its full-viewport framing; lower sections grow with the site. */
+  html body #root .site-main:has(.home-first-screen){max-width:calc(1280px * var(--content-width-scale))!important;padding-inline:calc(28px * var(--content-width-scale))!important}
+  html body #root .site-main:has(.home-first-screen)>:not(.home-first-screen):not(.home-member):not(.member-to-top){zoom:var(--content-scale)}
+ }
+}

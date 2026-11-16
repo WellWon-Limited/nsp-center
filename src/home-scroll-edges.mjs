@@ -1,4 +1,4 @@
-// The browser paints the root canvas during rubber-band scrolling. Keep it white near the header,
+// The browser paints the root canvas during rubber-band scrolling. Continue the shared glass header near the top,
 // and continue the page/footer surface only at the bottom of the selected home design and of the restyled catalog.
 export function installHomeScrollEdges(win, doc) {
  const root = doc.documentElement;

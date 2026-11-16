@@ -169,3 +169,18 @@
 @media(max-width:639px){.home-story--selected.home-story--open .home-story-heading h2{font-size:var(--text-22)}}
 
 .story-reviews{border-bottom:1px solid var(--color-ink-line)}
+/* The pickup point with the mint contact card on its right (owner, 2026-11-13; src/contact-card.tsx): the address on
+   the left, under it the office phone and «Как нас найти»; the card carries the mail. A phone keeps the block as it was. */
+@media(min-width:640px){
+ .home-story--selected .story-pickup--forest{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);grid-template-areas:"address card" "info card";align-items:start;row-gap:var(--space-24)}
+ .story-pickup--forest .story-pickup-address{grid-area:address}
+ .story-pickup--forest .story-pickup-info{grid-area:info;flex-direction:row;flex-wrap:wrap;align-items:center;gap:var(--space-12) var(--space-24);border-left:0;padding-left:0}
+ .story-pickup--forest .story-pickup-info .btn{margin-top:0}
+ .story-pickup--forest .story-pickup-info a[href^="mailto:"]{display:none}
+ .story-pickup-card{grid-area:card;align-self:stretch}
+}
+@media(max-width:639px){.story-pickup-card{display:none}}
+@media(min-width:640px) and (max-width:959px){
+ /* A tablet: too narrow for two columns with the card's large phone number — the card stands under the address. */
+ .home-story--selected .story-pickup--forest{grid-template-columns:minmax(0,1fr);grid-template-areas:"address" "info" "card"}
+}

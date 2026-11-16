@@ -1,0 +1,3874 @@
+{
+  "5-htp-power": {
+    "scene": "",
+    "package": "60 капсул по 590 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/5-htp-power-1.jpg",
+        "mask": "/images/products/package-clips/5-htp-power-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "5-Эйч-Ти-Пи Пауер (5-HTP-Power) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "achieve-with-yohimbe": {
+    "scene": "",
+    "package": "50 капсул по 500 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/achieve-with-yohimbe-1.jpg",
+        "mask": "/images/products/package-clips/achieve-with-yohimbe-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Ачив с Йохимбе (Achieve with Yohimbe) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "ag-x": {
+    "scene": "",
+    "package": "100 капсул по 590 мг Годен до 10/2030",
+    "images": [
+      {
+        "image": "/images/products/russian-source/ag-x-1.jpg",
+        "mask": "/images/products/package-clips/ag-x-1.svg",
+        "bounds": {
+          "height": 0.8975,
+          "left": 0.25595238095238093,
+          "top": 0.07,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "АГ-Икс (AG-X) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "alfalfa": {
+    "scene": "",
+    "package": "100 капсул по 440 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/alfalfa-1.jpg",
+        "mask": "/images/products/package-clips/alfalfa-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Люцерна (Alfalfa) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "almond-apricot-anti-stress-moisturizing-lotion": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/almond-apricot-anti-stress-moisturizing-lotion.jpg",
+        "bounds": {
+          "height": 0.84,
+          "left": 0.33,
+          "top": 0.08,
+          "width": 0.28
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Лосьон миндально-абрикосовый для ног (Almond-Apricot Anti Stress Moisturizing Lotion) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/almond-apricot-anti-stress-moisturizing-lotion-detail-clean.svg"
+      }
+    ]
+  },
+  "aloe-vera-juice": {
+    "scene": "",
+    "package": "473 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/aloe-vera-juice-1.jpg",
+        "kind": "studio",
+        "bounds": {
+          "height": 0.8625,
+          "left": 0.31845238095238093,
+          "top": 0.035,
+          "width": 0.3630952380952381
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Сок Алоэ Вера НСП, 473 мл — российская упаковка на белом фоне",
+        "mask": "/images/products/russian-source/aloe-vera-juice-clip.svg"
+      }
+    ]
+  },
+  "antioxidant": {
+    "scene": "",
+    "package": "60 капсул по 630 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/antioxidant-1.jpg",
+        "mask": "/images/products/package-clips/antioxidant-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Антиоксидант (Antioxidant) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "antistress-kit": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/antistress-kit-1.jpg",
+        "mask": "/images/products/package-clips/antistress-kit-1.svg",
+        "bounds": {
+          "height": 0.8228571428571428,
+          "left": 0.0475,
+          "top": 0.12571428571428572,
+          "width": 0.895
+        },
+        "natural": [
+          900,
+          394
+        ],
+        "label": "Набор «Антистресс» (Antistress Kit) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "antivozrastnaya-wow-syvorotka-s-ekstraktom-kashtana-wow-serum-anti-age-lifting": {
+    "scene": "",
+    "package": "50 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/antivozrastnaya-wow-syvorotka-s-ekstraktom-kashtana-wow-serum-anti-age-lifting-1.jpg",
+        "mask": "/images/products/package-clips/antivozrastnaya-wow-syvorotka-s-ekstraktom-kashtana-wow-serum-anti-age-lifting-1.svg",
+        "bounds": {
+          "height": 0.955,
+          "left": 0.30405405405405406,
+          "top": 0.025,
+          "width": 0.3952702702702703
+        },
+        "natural": [
+          445,
+          600
+        ],
+        "label": "Антивозрастная Wow-сыворотка с экстрактом каштана (WOW-Serum anti-age & lifting) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "antivozrastnoy-krem-dlya-kozhi-vokrug-glaz-spf15-anti-age-eye-contour-cream-spf-15": {
+    "scene": "",
+    "package": "15 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/antivozrastnoy-krem-dlya-kozhi-vokrug-glaz-spf15-anti-age-eye-contour-cream-spf-15-1.png",
+        "mask": "/images/products/package-clips/antivozrastnoy-krem-dlya-kozhi-vokrug-glaz-spf15-anti-age-eye-contour-cream-spf-15-1.svg",
+        "bounds": {
+          "height": 0.41,
+          "left": 0.28,
+          "top": 0.295,
+          "width": 0.44
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Антивозрастной крем для кожи вокруг глаз SPF15 (Anti-age Eye Contour Cream SPF 15) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "astragalus": {
+    "scene": "",
+    "package": "150 капсул по 520 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/astragalus-1.jpg",
+        "mask": "/images/products/package-clips/astragalus-1.svg",
+        "bounds": {
+          "height": 0.9075,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Астрагал (Astragalus) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "balzam-dlya-gub-spf15-prirodnaya-zabota-lip-balm-spf-15-natural-care": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/balzam-dlya-gub-spf15-prirodnaya-zabota-lip-balm-spf-15-natural-care.jpg",
+        "bounds": {
+          "height": 0.8775,
+          "left": 0.395,
+          "top": 0.06,
+          "width": 0.2125
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": " Бальзам для губ SPF15 «Природная забота» (Lip Balm SPF 15 Natural Care) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/balzam-dlya-gub-spf15-prirodnaya-zabota-lip-balm-spf-15-natural-care-detail-clean.svg"
+      }
+    ]
+  },
+  "balzam-rasslablyayushchiy-s-maslom-chaynogo-dereva-tropical-mists-relaxing-tt-oil": {
+    "scene": "",
+    "package": "110 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/balzam-rasslablyayushchiy-s-maslom-chaynogo-dereva-tropical-mists-relaxing-tt-oil-1.png",
+        "mask": "/images/products/package-clips/balzam-rasslablyayushchiy-s-maslom-chaynogo-dereva-tropical-mists-relaxing-tt-oil-1.svg",
+        "bounds": {
+          "height": 0.6925,
+          "left": 0.0275,
+          "top": 0.1675,
+          "width": 0.95
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Бальзам расслабляющий с маслом чайного дерева Tropical Mists (Relaxing TT Oil) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "bee-pollen": {
+    "scene": "",
+    "package": "100 капсул по 450 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/bee-pollen-1.jpg",
+        "mask": "/images/products/package-clips/bee-pollen-1.svg",
+        "bounds": {
+          "height": 0.8975,
+          "left": 0.25595238095238093,
+          "top": 0.07,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Пчелиная пыльца (Bee Pollen) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "bifidophilus-chewable-for-kids-herbasaurs": {
+    "scene": "",
+    "package": "90 таблеток по 1250 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/bifidophilus-chewable-for-kids-herbasaurs-1.jpg",
+        "mask": "/images/products/package-clips/bifidophilus-chewable-for-kids-herbasaurs-1.svg",
+        "bounds": {
+          "height": 0.885,
+          "left": 0.23809523809523808,
+          "top": 0.0625,
+          "width": 0.5476190476190477
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "«Бифидозаврики» жевательные таблетки для детей с бифидобактериями (Bifidophilus Chewable for Kids «Bifidosaurs») — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "bifidophilus-flora-force": {
+    "scene": "",
+    "package": "90 капсул по 610 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/bifidophilus-flora-force-1.jpg",
+        "mask": "/images/products/package-clips/bifidophilus-flora-force-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Бифидофилус Флора Форс (Bifidophilus Flora Force) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "black-walnut": {
+    "scene": "",
+    "package": "100 капсул по 620 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/black-walnut-1.jpg",
+        "mask": "/images/products/package-clips/black-walnut-1.svg",
+        "bounds": {
+          "height": 0.8775,
+          "left": 0.23809523809523808,
+          "top": 0.0625,
+          "width": 0.7559523809523809
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Грецкий черный орех (Black Walnut) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "blesk-dlya-gub-mango-s-plastikovym-applikatorom-lip-gloss-mango": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/blesk-dlya-gub-mango-s-plastikovym-applikatorom-lip-gloss-mango.jpg",
+        "bounds": {
+          "height": 0.735,
+          "left": 0.19,
+          "top": 0.0825,
+          "width": 0.51
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Блеск для губ «Манго» с пластиковым аппликатором (Lip Gloss Mango) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/blesk-dlya-gub-mango-s-plastikovym-applikatorom-lip-gloss-mango-detail-clean.svg"
+      }
+    ]
+  },
+  "bon-c": {
+    "scene": "",
+    "package": "100 капсул по 530 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/bon-c-1.jpg",
+        "mask": "/images/products/package-clips/bon-c-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Бон-Си (Bon-C) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "boswellia-plus": {
+    "scene": "",
+    "package": "100 капсул по 500 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/boswellia-plus-1.jpg",
+        "mask": "/images/products/package-clips/boswellia-plus-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Босвеллия Плюс (Boswellia Plus) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "bp-c": {
+    "scene": "",
+    "package": "100 капсул по 570 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/bp-c-1.jpg",
+        "mask": "/images/products/package-clips/bp-c-1.svg",
+        "bounds": {
+          "height": 0.8975,
+          "left": 0.25595238095238093,
+          "top": 0.07,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Би Пи-Си (BP-C) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "breast-assured": {
+    "scene": "",
+    "package": "60 капсул по 600 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/breast-assured-1.jpg",
+        "mask": "/images/products/package-clips/breast-assured-1.svg",
+        "bounds": {
+          "height": 0.9025,
+          "left": 0.24107142857142858,
+          "top": 0.06,
+          "width": 0.7589285714285714
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Брест комплекс (Breast Assured) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "breath-ease": {
+    "scene": "",
+    "package": "100 капсул по 540 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/breath-ease-1.jpg",
+        "mask": "/images/products/package-clips/breath-ease-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Брэс Из (Breath Ease) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "buplerum-plus": {
+    "scene": "",
+    "package": "100 капсул по 585 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/buplerum-plus-1.jpg",
+        "mask": "/images/products/package-clips/buplerum-plus-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Буплерум Плюс (Buplerum Plus) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "burdock": {
+    "scene": "",
+    "package": "100 капсул по 545,6 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/burdock-1.jpg",
+        "mask": "/images/products/package-clips/burdock-1.svg",
+        "bounds": {
+          "height": 0.89,
+          "left": 0.24702380952380953,
+          "top": 0.0525,
+          "width": 0.7529761904761905
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Репейник (Burdock) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "c-x": {
+    "scene": "",
+    "package": "100 капсул по 520 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/c-x-1.jpg",
+        "mask": "/images/products/package-clips/c-x-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Си-Экс (C-X) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "calcium-magnesium-chelate": {
+    "scene": "",
+    "package": "150 таблеток по 1400 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/calcium-magnesium-chelate-1.jpg",
+        "mask": "/images/products/package-clips/calcium-magnesium-chelate-1.svg",
+        "bounds": {
+          "height": 0.92,
+          "left": 0.2261904761904762,
+          "top": 0.0375,
+          "width": 0.5625
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Кальций Магний Хелат (Calcium Magnesium Chelate) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "caprylic-acid-combination": {
+    "scene": "",
+    "package": "90 капсул по 505 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/caprylic-acid-combination-1.jpg",
+        "mask": "/images/products/package-clips/caprylic-acid-combination-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Комплекс с Каприловой Кислотой (Caprylic Acid Combination) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "capsicum-garlic-with-parsley": {
+    "scene": "",
+    "package": "100 капсул по 600 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/capsicum-garlic-with-parsley-1.jpg",
+        "mask": "/images/products/package-clips/capsicum-garlic-with-parsley-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Перец, Чеснок, Петрушка (Capsicum & Garlic with Parsley) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "carbo-grabbers": {
+    "scene": "",
+    "package": "60 капсул по 528 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/carbo-grabbers-1.jpg",
+        "mask": "/images/products/package-clips/carbo-grabbers-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Карбо Грабберз (Carbo Grabbers) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "cascara-sagrada": {
+    "scene": "",
+    "package": "100 капсул по 490 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/cascara-sagrada-1.jpg",
+        "mask": "/images/products/package-clips/cascara-sagrada-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25,
+          "top": 0.0775,
+          "width": 0.7380952380952381
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Каскара Саграда (Cascara Sagrada) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "cc-a": {
+    "scene": "",
+    "package": "100 капсул по 500 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/cc-a-1.jpg",
+        "mask": "/images/products/package-clips/cc-a-1.svg",
+        "bounds": {
+          "height": 0.8975,
+          "left": 0.25595238095238093,
+          "top": 0.07,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Си Си-Эй (CC-A) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "children-s-chewable-multiple-vitamins-plus-iron-herbasaurs": {
+    "scene": "",
+    "package": "120 таблеток по 1173,8 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/children-s-chewable-multiple-vitamins-plus-iron-herbasaurs-1.jpg",
+        "mask": "/images/products/package-clips/children-s-chewable-multiple-vitamins-plus-iron-herbasaurs-1.svg",
+        "bounds": {
+          "height": 0.8875,
+          "left": 0.23809523809523808,
+          "top": 0.0625,
+          "width": 0.5476190476190477
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "«Витазаврики» жевательные витамины с железом (Herbasaurs Chewable Vitamins Plus Iron) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "chondroitin": {
+    "scene": "",
+    "package": "60 капсул по 630 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/chondroitin-1.jpg",
+        "mask": "/images/products/package-clips/chondroitin-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Хондроитин (Chondroitin) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "chromium-chelate": {
+    "scene": "",
+    "package": "90 таблеток по 620 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/chromium-chelate-1.jpg",
+        "mask": "/images/products/package-clips/chromium-chelate-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Хром Хелат (Chromium Chelate) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "cleansing-micellar-gel-blooming-skin": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/cleansing-micellar-gel-blooming-skin.jpg",
+        "bounds": {
+          "height": 0.865,
+          "left": 0.332,
+          "top": 0.095,
+          "width": 0.344
+        },
+        "natural": [
+          750,
+          1200
+        ],
+        "label": "Очищающий мицеллярный гель «Цветущая кожа» (Cleansing Micellar Gel \"Blooming Skin\") — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/cleansing-micellar-gel-blooming-skin-detail-clean.svg"
+      }
+    ]
+  },
+  "colloidal-minerals-with-acai-juice": {
+    "scene": "",
+    "package": "473мл Годен до 11/2027",
+    "images": [
+      {
+        "image": "/images/products/russian-source/colloidal-minerals-with-acai-juice-1.jpg",
+        "mask": "/images/products/package-clips/colloidal-minerals-with-acai-juice-1.svg",
+        "bounds": {
+          "height": 0.8575,
+          "left": 0.31845238095238093,
+          "top": 0.035,
+          "width": 0.3630952380952381
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Коллоидные минералы с соком Асаи (Colloidal Minerals with Acai Juice) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "colloidal-silver-forte": {
+    "scene": "",
+    "package": "118мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/colloidal-silver-forte-1.png",
+        "mask": "/images/products/package-clips/colloidal-silver-forte-1.svg",
+        "bounds": {
+          "height": 0.56,
+          "left": 0.3258426966292135,
+          "top": 0.3525,
+          "width": 0.34831460674157305
+        },
+        "natural": [
+          3740,
+          5600
+        ],
+        "label": "Коллоидное серебро Форте (Colloidal Silver Forte) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "colostrum": {
+    "scene": "",
+    "package": "60 капсул по 510 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/colostrum-1.jpg",
+        "mask": "/images/products/package-clips/colostrum-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Колострум - Молозиво (Colostrum) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "compact-blusher-rosy-musk": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/compact-blusher-rosy-musk.jpg",
+        "bounds": {
+          "height": 0.955,
+          "left": 0.0925,
+          "top": 0.025,
+          "width": 0.815
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Румяна «Розовый мускус» (Compact Blusher Rosy Musk) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/compact-blusher-rosy-musk-detail-clean.svg"
+      }
+    ]
+  },
+  "compact-powder-almond-cake": {
+    "scene": "",
+    "package": "100 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/compact-powder-almond-cake-1.jpg",
+        "mask": "/images/products/package-clips/compact-powder-almond-cake-1.svg",
+        "bounds": {
+          "height": 0.8425,
+          "left": 0.0675,
+          "top": 0.0475,
+          "width": 0.6925
+        },
+        "natural": [
+          450,
+          450
+        ],
+        "label": "Компактная пудра «Миндальное пирожное» (Compact Powder Almond Cake) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "compact-powder-powdered-sugar": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/compact-powder-powdered-sugar.jpg",
+        "bounds": {
+          "height": 0.97,
+          "left": 0.0875,
+          "top": 0.01,
+          "width": 0.8225
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Компактная пудра «Сахарная пудра» (Compact Powder Powdered Sugar) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/compact-powder-powdered-sugar-detail-clean.svg"
+      }
+    ]
+  },
+  "concealer-ivory": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/concealer-ivory.jpg",
+        "bounds": {
+          "height": 0.9525,
+          "left": 0.24,
+          "top": 0.0125,
+          "width": 0.52
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Консилер «Слоновая кость» (Concealer Ivory) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/concealer-ivory-detail-clean.svg"
+      }
+    ]
+  },
+  "coral-calcium": {
+    "scene": "",
+    "package": "75 гр",
+    "images": [
+      {
+        "image": "/images/products/russian-source/coral-calcium-1.jpg",
+        "mask": "/images/products/package-clips/coral-calcium-1.svg",
+        "bounds": {
+          "height": 0.6125,
+          "left": 0.13988095238095238,
+          "top": 0.24,
+          "width": 0.6904761904761905
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Коралловый кальций (Coral Calcium) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "cordyceps": {
+    "scene": "",
+    "package": "90 капсул по 678 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/cordyceps-1.jpg",
+        "mask": "/images/products/package-clips/cordyceps-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Кордицепс (Cordyceps) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "defense-maintenance": {
+    "scene": "",
+    "package": "120 капсул по 600 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/defense-maintenance-1.jpg",
+        "mask": "/images/products/package-clips/defense-maintenance-1.svg",
+        "bounds": {
+          "height": 0.9075,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Защитная формула (Defense Maintenance) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "dikiy-yams-wild-yam": {
+    "scene": "",
+    "package": "100 капсул по 519 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/dikiy-yams-wild-yam-1.jpg",
+        "mask": "/images/products/package-clips/dikiy-yams-wild-yam-1.svg",
+        "bounds": {
+          "height": 0.8625,
+          "left": 0.25297619047619047,
+          "top": 0.0675,
+          "width": 0.48214285714285715
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Дикий Ямс (Wild Yam) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "e-tea": {
+    "scene": "",
+    "package": "100 капсул по 534 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/e-tea-1.jpg",
+        "mask": "/images/products/package-clips/e-tea-1.svg",
+        "bounds": {
+          "height": 0.87,
+          "left": 0.25297619047619047,
+          "top": 0.065,
+          "width": 0.7470238095238095
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Е-чай (E-Tea) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "eight": {
+    "scene": "",
+    "package": "100 капсул по 525 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/eight-1.jpg",
+        "mask": "/images/products/package-clips/eight-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Восьмерка (Eight) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "energy-shampoo": {
+    "scene": "",
+    "package": "200мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/energy-shampoo-1.jpg",
+        "mask": "/images/products/package-clips/energy-shampoo-1.svg",
+        "bounds": {
+          "height": 0.7625,
+          "left": 0.3560606060606061,
+          "top": 0.12,
+          "width": 0.2878787878787879
+        },
+        "natural": [
+          568,
+          859
+        ],
+        "label": "Шампунь «Энергия, восстановление и здоровье. Баланс кожи головы» (Energy Shampoo) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "everflex-sream": {
+    "scene": "",
+    "package": "57 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/everflex-sream-1.jpg",
+        "mask": "/images/products/package-clips/everflex-sream-1.svg",
+        "bounds": {
+          "height": 0.7,
+          "left": 0.0475,
+          "top": 0.17,
+          "width": 0.9075
+        },
+        "natural": [
+          800,
+          800
+        ],
+        "label": "EverFlex крем массажный (EverFlex Сream) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "eye-pencil-cocoa": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/eye-pencil-cocoa.jpg",
+        "bounds": {
+          "height": 0.875,
+          "left": 0.26,
+          "top": 0.0175,
+          "width": 0.4975
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Карандаш для глаз «Какао» (Eye Pencil Cocoa) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/eye-pencil-cocoa-detail-clean.svg"
+      }
+    ]
+  },
+  "eye-shadow-deep-grey": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/eye-shadow-deep-grey.jpg",
+        "bounds": {
+          "height": 0.975,
+          "left": 0.3275,
+          "top": 0.0125,
+          "width": 0.3425
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Тени для век «Глубокий серый» (Eye Shadow Deep Grey) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/eye-shadow-deep-grey-detail-clean.svg"
+      }
+    ]
+  },
+  "eye-shadow-white-pearl": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/eye-shadow-white-pearl.jpg",
+        "bounds": {
+          "height": 0.8,
+          "left": 0.2,
+          "top": 0.045,
+          "width": 0.5575
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Тени для век «Жемчужно-белый» (Eye Shadow White Pearl) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/eye-shadow-white-pearl-detail-clean.svg"
+      }
+    ]
+  },
+  "fat-grabbers": {
+    "scene": "",
+    "package": "120 капсул по 625 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/fat-grabbers-1.jpg",
+        "mask": "/images/products/package-clips/fat-grabbers-1.svg",
+        "bounds": {
+          "height": 0.905,
+          "left": 0.23809523809523808,
+          "top": 0.0425,
+          "width": 0.5535714285714286
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Фэт Грабберз (Fat Grabbers) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "fc-with-dong-quai": {
+    "scene": "",
+    "package": "100 капсул по 500 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/fc-with-dong-quai-1.jpg",
+        "mask": "/images/products/package-clips/fc-with-dong-quai-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Эф Си С Донг Ква (FC with Dong Quai) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "fizz-active-immune": {
+    "scene": "",
+    "package": "20 таблеток по 1876 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/fizz-active-immune-1.jpg",
+        "mask": "/images/products/package-clips/fizz-active-immune-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Физ Актив (Fizz Active) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "food-enzymes": {
+    "scene": "",
+    "package": "120 капсул по 644 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/food-enzymes-1.jpg",
+        "mask": "/images/products/package-clips/food-enzymes-1.svg",
+        "bounds": {
+          "height": 0.93,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Пищеварительные ферменты (Food Enzymes) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "foundation-ivory": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/foundation-ivory.jpg",
+        "bounds": {
+          "height": 0.8325,
+          "left": 0.2125,
+          "top": 0.065,
+          "width": 0.545
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Тональный крем-флюид «Слоновая кость» (Foundation Ivory) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/foundation-ivory-detail-clean.svg"
+      }
+    ]
+  },
+  "garcinia-combination": {
+    "scene": "",
+    "package": "100 капсул по 525 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/garcinia-combination-1.jpg",
+        "mask": "/images/products/package-clips/garcinia-combination-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Комплекс с гарцинией (Garcinia Combination) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "gel-dlya-dusha-ocharovanie-magnolii-magnolia-charm-shower-gel": {
+    "scene": "",
+    "package": "200мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/gel-dlya-dusha-ocharovanie-magnolii-magnolia-charm-shower-gel-1.jpg",
+        "mask": "/images/products/package-clips/gel-dlya-dusha-ocharovanie-magnolii-magnolia-charm-shower-gel-1.svg",
+        "bounds": {
+          "height": 0.765,
+          "left": 0.3560606060606061,
+          "top": 0.1175,
+          "width": 0.2878787878787879
+        },
+        "natural": [
+          568,
+          859
+        ],
+        "label": "Гель для душа «Очарование магнолии» (Magnolia Charm Shower Gel) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "gel-posle-britya-riptide-cool-comfort-aftershave-gel": {
+    "scene": "",
+    "package": "118,3 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/gel-posle-britya-riptide-cool-comfort-aftershave-gel-1.png",
+        "mask": "/images/products/package-clips/gel-posle-britya-riptide-cool-comfort-aftershave-gel-1.svg",
+        "bounds": {
+          "height": 0.865,
+          "left": 0.14457831325301204,
+          "top": 0.0625,
+          "width": 0.7108433734939759
+        },
+        "natural": [
+          500,
+          1200
+        ],
+        "label": "Гель после бритья Riptide (Cool Comfort Aftershave Gel) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "gel-uvlazhnyayushchiy-s-aloe-vera-tropical-mists-witch-vera-gel": {
+    "scene": "",
+    "package": "135 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/gel-uvlazhnyayushchiy-s-aloe-vera-tropical-mists-witch-vera-gel-1.png",
+        "mask": "/images/products/package-clips/gel-uvlazhnyayushchiy-s-aloe-vera-tropical-mists-witch-vera-gel-1.svg",
+        "bounds": {
+          "height": 0.87,
+          "left": 0.365,
+          "top": 0.0575,
+          "width": 0.27
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Гель увлажняющий с алоэ вера Tropical Mists (Witch-Vera Gel) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "gentle-make-up-remover-bremani-care": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/gentle-make-up-remover-bremani-care.jpg",
+        "bounds": {
+          "height": 0.91,
+          "left": 0.345,
+          "top": 0.045,
+          "width": 0.305
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Cредство для снятия макияжа на основе мицеллярной воды (Gentle Make-up Remover Bremani Care) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/gentle-make-up-remover-bremani-care-detail-clean.svg"
+      }
+    ]
+  },
+  "ginkgo-gotu-kola": {
+    "scene": "",
+    "package": "60 таблеток по 585 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/ginkgo-gotu-kola-1.jpg",
+        "mask": "/images/products/package-clips/ginkgo-gotu-kola-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Гинкго/Готу Кола (Ginkgo/Gotu Kola) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "glucosamine": {
+    "scene": "",
+    "package": "60 капсул по 657 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/glucosamine-1.jpg",
+        "mask": "/images/products/package-clips/glucosamine-1.svg",
+        "bounds": {
+          "height": 0.9175,
+          "left": 0.23511904761904762,
+          "top": 0.0525,
+          "width": 0.7648809523809523
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Глюкозамин (Glucosamine) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "gotu-kola": {
+    "scene": "",
+    "package": "100 капсул по 495 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/gotu-kola-1.jpg",
+        "mask": "/images/products/package-clips/gotu-kola-1.svg",
+        "bounds": {
+          "height": 0.8975,
+          "left": 0.25595238095238093,
+          "top": 0.07,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Готу Кола (Gotu Kola) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "grapine-w-protectors": {
+    "scene": "",
+    "package": "90 таблеток по 627 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/grapine-w-protectors-1.jpg",
+        "mask": "/images/products/package-clips/grapine-w-protectors-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Грэпайн с Протекторами (Grapine with Protectors) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "hair-body-baby-wash-oh-my-baby": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/hair-body-baby-wash-oh-my-baby.jpg",
+        "bounds": {
+          "height": 0.87,
+          "left": 0.308,
+          "top": 0.0925,
+          "width": 0.38
+        },
+        "natural": [
+          875,
+          1400
+        ],
+        "label": "Детский гель для тела и волос «Мой малыш» (Hair & Body Baby Wash «Oh, my Baby!») — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/hair-body-baby-wash-oh-my-baby-detail-clean.svg"
+      }
+    ]
+  },
+  "hand-cream-deep-hydration-bremani-care": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/hand-cream-deep-hydration-bremani-care.jpg",
+        "bounds": {
+          "height": 0.885,
+          "left": 0.3025,
+          "top": 0.0625,
+          "width": 0.41
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Крем для рук ежедневный, глубокое увлажнение (Hand Cream Deep Hydration Bremani Care) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/hand-cream-deep-hydration-bremani-care-detail-clean.svg"
+      }
+    ]
+  },
+  "hawthorn-plus": {
+    "scene": "",
+    "package": "100 капсул по 560 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/hawthorn-plus-1.png",
+        "mask": "/images/products/package-clips/hawthorn-plus-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.575
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Боярышник Плюс (Hawthorn Plus) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "herbal-h-p-fighter": {
+    "scene": "",
+    "package": "60 капсул по 524 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/herbal-h-p-fighter-1.jpg",
+        "mask": "/images/products/package-clips/herbal-h-p-fighter-1.svg",
+        "bounds": {
+          "height": 0.8825,
+          "left": 0.24702380952380953,
+          "top": 0.065,
+          "width": 0.7529761904761905
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Эйч-Пи Файтер (Herbal H-p Fighter) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "hista-block": {
+    "scene": "",
+    "package": "90 капсул по 585 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/hista-block-1.png",
+        "mask": "/images/products/package-clips/hista-block-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.575
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Гиста Блок (Hista Block) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "hp-garlic": {
+    "scene": "",
+    "package": "60 таблеток по 745 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/hp-garlic-1.jpg",
+        "mask": "/images/products/package-clips/hp-garlic-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Чеснок (HP Garlic) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "hsn-w": {
+    "scene": "",
+    "package": "100 капсул по 510 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/hsn-w-1.jpg",
+        "mask": "/images/products/package-clips/hsn-w-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25595238095238093,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Эйч Эс Эн (HSN-W) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "hvp": {
+    "scene": "",
+    "package": "100 капсул по 490 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/hvp-1.png",
+        "mask": "/images/products/package-clips/hvp-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.575
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Комплекс с валерианой (HVP) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "indole-3-carbinol": {
+    "scene": "",
+    "package": "60 капсул по 605 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/indole-3-carbinol-1.jpg",
+        "mask": "/images/products/package-clips/indole-3-carbinol-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Индол-3-Карбинол (Indole-3-Carbinol) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "intense-foot-cream": {
+    "scene": "",
+    "package": "100 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/intense-foot-cream-1.png",
+        "mask": "/images/products/package-clips/intense-foot-cream-1.svg",
+        "bounds": {
+          "height": 0.805,
+          "left": 0.4025,
+          "top": 0.0975,
+          "width": 0.195
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Интенсивный крем для ног (Intense Foot Cream) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "iron-chelate": {
+    "scene": "",
+    "package": "180 таблеток по 614 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/iron-chelate-1.png",
+        "mask": "/images/products/package-clips/iron-chelate-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.575
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Железо Хелат (Iron Chelate) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "kelp": {
+    "scene": "",
+    "package": "100 капсул по 630 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/kelp-1.jpg",
+        "mask": "/images/products/package-clips/kelp-1.svg",
+        "bounds": {
+          "height": 0.8525,
+          "left": 0.24702380952380953,
+          "top": 0.085,
+          "width": 0.7351190476190477
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Келп (Kelp) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "khlorofill-zhidkiy-chlorophyll-liquid": {
+    "scene": "",
+    "package": "475 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/khlorofill-zhidkiy-chlorophyll-liquid-1.jpg",
+        "mask": "/images/products/package-clips/khlorofill-zhidkiy-chlorophyll-liquid-1.svg",
+        "bounds": {
+          "height": 0.8625,
+          "left": 0.31845238095238093,
+          "top": 0.035,
+          "width": 0.3630952380952381
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Хлорофилл жидкий (Chlorophyll Liquid) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "kit-health-with-nsp-year-round": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/kit-health-with-nsp-year-round.jpg",
+        "bounds": {
+          "height": 0.7163636363636363,
+          "left": 0.0725,
+          "top": 0.16363636363636364,
+          "width": 0.8825
+        },
+        "natural": [
+          1400,
+          963
+        ],
+        "label": "Набор «Здоровье с NSP круглый год» — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/kit-health-with-nsp-year-round-detail-clean.svg"
+      }
+    ]
+  },
+  "kojenzim-q10": {
+    "scene": "",
+    "package": "60 капсул по 400мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/kojenzim-q10-1.jpg",
+        "mask": "/images/products/package-clips/kojenzim-q10-1.svg",
+        "bounds": {
+          "height": 0.88,
+          "left": 0.23809523809523808,
+          "top": 0.06,
+          "width": 0.7559523809523809
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Коэнзим Q10 – 100 мг (Co Q10 – 100 mg) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "konditsioner-energiya-vosstanovlenie-i-zdorove-balans-kozhi-golovy-energy-conditioner-oily-normal-ha": {
+    "scene": "",
+    "package": "200мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/konditsioner-energiya-vosstanovlenie-i-zdorove-balans-kozhi-golovy-energy-conditioner-oily-normal-ha-1.jpg",
+        "mask": "/images/products/package-clips/konditsioner-energiya-vosstanovlenie-i-zdorove-balans-kozhi-golovy-energy-conditioner-oily-normal-ha-1.svg",
+        "bounds": {
+          "height": 0.765,
+          "left": 0.3560606060606061,
+          "top": 0.1175,
+          "width": 0.2878787878787879
+        },
+        "natural": [
+          568,
+          859
+        ],
+        "label": "Кондиционер «Энергия, восстановление и здоровье. Баланс кожи головы» (Energy Conditioner. Oily & Normal Hair) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "konditsioner-perevoploshchenie-volos-sila-siyanie-i-gladkost-makeover-conditioner-normal-damaged-hai": {
+    "scene": "",
+    "package": "200мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/konditsioner-perevoploshchenie-volos-sila-siyanie-i-gladkost-makeover-conditioner-normal-damaged-hai-1.jpg",
+        "mask": "/images/products/package-clips/konditsioner-perevoploshchenie-volos-sila-siyanie-i-gladkost-makeover-conditioner-normal-damaged-hai-1.svg",
+        "bounds": {
+          "height": 0.765,
+          "left": 0.3560606060606061,
+          "top": 0.1175,
+          "width": 0.2878787878787879
+        },
+        "natural": [
+          568,
+          859
+        ],
+        "label": "Кондиционер «Перевоплощение волос. Сила, сияние и гладкость» (Makeover Conditioner. Normal & Damaged Hair) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "konsiler-kremovyy-concealer-cream": {
+    "scene": "",
+    "package": "2.55 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/konsiler-kremovyy-concealer-cream-1.jpg",
+        "mask": "/images/products/package-clips/konsiler-kremovyy-concealer-cream-1.svg",
+        "bounds": {
+          "height": 0.815,
+          "left": 0.3875,
+          "top": 0.0925,
+          "width": 0.4425
+        },
+        "natural": [
+          1100,
+          1100
+        ],
+        "label": "Консилер «Кремовый» (Concealer Cream) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "krem-dlya-tela-s-maslom-kakao-tropical-mists-conditioning-sream-with-socoa-butter": {
+    "scene": "",
+    "package": "120 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/krem-dlya-tela-s-maslom-kakao-tropical-mists-conditioning-sream-with-socoa-butter-1.png",
+        "mask": "/images/products/package-clips/krem-dlya-tela-s-maslom-kakao-tropical-mists-conditioning-sream-with-socoa-butter-1.svg",
+        "bounds": {
+          "height": 0.706766917293233,
+          "left": 0.03007518796992481,
+          "top": 0.17293233082706766,
+          "width": 0.9699248120300752
+        },
+        "natural": [
+          674,
+          674
+        ],
+        "label": "Крем для тела с маслом какао Tropical Mists (Conditioning Сream with Сocoa Butter) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "lecithin": {
+    "scene": "",
+    "package": "170 капсул по 880 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/lecithin-1.jpg",
+        "mask": "/images/products/package-clips/lecithin-1.svg",
+        "bounds": {
+          "height": 0.8425,
+          "left": 0.2925,
+          "top": 0.0425,
+          "width": 0.6625
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Лецитин (Lecithin) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "lip-pencil-magic-stick-color-of-your-lips": {
+    "scene": "",
+    "package": "1.14",
+    "images": [
+      {
+        "image": "/images/products/russian-source/lip-pencil-magic-stick-color-of-your-lips-1.jpg",
+        "mask": "/images/products/package-clips/lip-pencil-magic-stick-color-of-your-lips-1.svg",
+        "bounds": {
+          "height": 0.8922305764411027,
+          "left": 0.3620689655172414,
+          "top": 0.06015037593984962,
+          "width": 0.27586206896551724
+        },
+        "natural": [
+          1071,
+          2461
+        ],
+        "label": "Карандаш для губ «Цвет ваших губ» (Lip Pencil Magic Stick Color Of Your Lips) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "lipstick-bremani-milano-merilyn": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/lipstick-bremani-milano-merilyn.jpg",
+        "bounds": {
+          "height": 0.6475,
+          "left": 0.3,
+          "top": 0.1525,
+          "width": 0.4075
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Помада «Мерилин» (Lipstick Bremani Milano Merilyn) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/lipstick-bremani-milano-merilyn-detail-clean.svg"
+      }
+    ]
+  },
+  "liquid-eyeliner-mystical-eye": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/liquid-eyeliner-mystical-eye.jpg",
+        "bounds": {
+          "height": 0.8375,
+          "left": 0.415,
+          "top": 0.0825,
+          "width": 0.1675
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Фломастер-подводка «Мистический Взгляд» (Liquid Eyeliner Mystical Eye) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/liquid-eyeliner-mystical-eye-detail-clean.svg"
+      }
+    ]
+  },
+  "liv-guard": {
+    "scene": "",
+    "package": "50 таблеток по 1046,5 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/liv-guard-1.jpg",
+        "mask": "/images/products/package-clips/liv-guard-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Лив - Гард (Liv - Guard) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "loclo": {
+    "scene": "",
+    "package": "344 гр",
+    "images": [
+      {
+        "image": "/images/products/russian-source/loclo-1.png",
+        "mask": "/images/products/package-clips/loclo-1.svg",
+        "bounds": {
+          "height": 0.6975,
+          "left": 0.1325,
+          "top": 0.1825,
+          "width": 0.7525
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Локло (Loclo) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "lymphatic-drainage": {
+    "scene": "",
+    "package": "59мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/lymphatic-drainage-1.jpg",
+        "mask": "/images/products/package-clips/lymphatic-drainage-1.svg",
+        "bounds": {
+          "height": 0.745,
+          "left": 0.3475,
+          "top": 0.13,
+          "width": 0.5025
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Лимфатик Дренаж (Lymphatic Drainage) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "magnesium-complex": {
+    "scene": "",
+    "package": "100 капсул по 830 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/magnesium-complex-1.jpg",
+        "mask": "/images/products/package-clips/magnesium-complex-1.svg",
+        "bounds": {
+          "height": 0.8925,
+          "left": 0.25595238095238093,
+          "top": 0.07,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Магний Хелат (Magnesium complex) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "makeover-shampoo": {
+    "scene": "",
+    "package": "200мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/makeover-shampoo-1.jpg",
+        "mask": "/images/products/package-clips/makeover-shampoo-1.svg",
+        "bounds": {
+          "height": 0.765,
+          "left": 0.3560606060606061,
+          "top": 0.1175,
+          "width": 0.2878787878787879
+        },
+        "natural": [
+          568,
+          859
+        ],
+        "label": "Шампунь «Перевоплощение волос. Сила, сияние и гладкость» (Makeover Shampoo) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "maska-dlya-siyaniya-litsa-effekt-zolushki-radiance-face-mask-cinderella-effect": {
+    "scene": "",
+    "package": "50 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/maska-dlya-siyaniya-litsa-effekt-zolushki-radiance-face-mask-cinderella-effect-1.png",
+        "mask": "/images/products/package-clips/maska-dlya-siyaniya-litsa-effekt-zolushki-radiance-face-mask-cinderella-effect-1.svg",
+        "bounds": {
+          "height": 0.465,
+          "left": 0.2425,
+          "top": 0.2675,
+          "width": 0.5175
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Маска для сияния лица «Эффект Золушки» (Radiance Face Mask Cinderella Effect) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "milk-thistle": {
+    "scene": "",
+    "package": "60 капсул по 595 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/milk-thistle-1.jpg",
+        "mask": "/images/products/package-clips/milk-thistle-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Молочный Чертополох (Milk Thistle) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "mind-max": {
+    "scene": "",
+    "package": "90 капсул по 576 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/mind-max-1.png",
+        "mask": "/images/products/package-clips/mind-max-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.575
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Майнд-Макс (Mind-Max) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "molochko-dlya-tela-ocharovanie-magnolii-magnolia-charm-body-lotion": {
+    "scene": "",
+    "package": "200мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/molochko-dlya-tela-ocharovanie-magnolii-magnolia-charm-body-lotion-1.jpg",
+        "mask": "/images/products/package-clips/molochko-dlya-tela-ocharovanie-magnolii-magnolia-charm-body-lotion-1.svg",
+        "bounds": {
+          "height": 0.765,
+          "left": 0.3560606060606061,
+          "top": 0.1175,
+          "width": 0.2878787878787879
+        },
+        "natural": [
+          568,
+          859
+        ],
+        "label": "Молочко для тела «Очарование магнолии» (Magnolia Charm Body Lotion) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "morinda": {
+    "scene": "",
+    "package": "150 капсул по 526 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/morinda-1.jpg",
+        "mask": "/images/products/package-clips/morinda-1.svg",
+        "bounds": {
+          "height": 0.9075,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Моринда (Morinda) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "msm": {
+    "scene": "",
+    "package": "90 таблеток по 1,17 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/msm-1.jpg",
+        "mask": "/images/products/package-clips/msm-1.svg",
+        "bounds": {
+          "height": 0.9075,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "МСМ (Метилсульфонилметан) (MSM) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-aktivnoe-dolgoletie": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-aktivnoe-dolgoletie-1.jpg",
+        "mask": "/images/products/package-clips/nabor-aktivnoe-dolgoletie-1.svg",
+        "bounds": {
+          "height": 0.8485915492957746,
+          "left": 0.015,
+          "top": 0.1056338028169014,
+          "width": 0.9425
+        },
+        "natural": [
+          1496,
+          1063
+        ],
+        "label": "Набор «Активное долголетие» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-brosayushchim-kurit": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-brosayushchim-kurit-1.jpg",
+        "mask": "/images/products/package-clips/nabor-brosayushchim-kurit-1.svg",
+        "bounds": {
+          "height": 0.9663461538461539,
+          "left": 0.095,
+          "top": 0.02403846153846154,
+          "width": 0.8225
+        },
+        "natural": [
+          900,
+          468
+        ],
+        "label": "Набор «Бросающим курить» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-detoks": {
+    "scene": "",
+    "package": "Набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-detoks-1.jpg",
+        "mask": "/images/products/package-clips/nabor-detoks-1.svg",
+        "bounds": {
+          "height": 0.8863636363636364,
+          "left": 0.1525,
+          "top": 0.056818181818181816,
+          "width": 0.66
+        },
+        "natural": [
+          900,
+          596
+        ],
+        "label": "Набор «Детокс» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-fitnes-1": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/nabor-fitnes-1.jpg",
+        "bounds": {
+          "height": 0.6025,
+          "left": 0.0325,
+          "top": 0.2,
+          "width": 0.9375
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Набор «Фитнес Ӏ» — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/nabor-fitnes-1-detail-clean.svg"
+      }
+    ]
+  },
+  "nabor-fitnes-2": {
+    "scene": "",
+    "package": "Набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-fitnes-2-1.jpg",
+        "mask": "/images/products/package-clips/nabor-fitnes-2-1.svg",
+        "bounds": {
+          "height": 0.9808306709265175,
+          "left": 0.05,
+          "top": 0,
+          "width": 0.95
+        },
+        "natural": [
+          682,
+          534
+        ],
+        "label": "Набор «Фитнес ӀӀ» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-kozha-volosy-nogti": {
+    "scene": "",
+    "package": "Набор есть ограниченном количестве, уточняйте у менеджеров",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-kozha-volosy-nogti-1.jpg",
+        "mask": "/images/products/package-clips/nabor-kozha-volosy-nogti-1.svg",
+        "bounds": {
+          "height": 0.7777777777777778,
+          "left": 0.04,
+          "top": 0.1693121693121693,
+          "width": 0.9175
+        },
+        "natural": [
+          1117,
+          530
+        ],
+        "label": "Набор «Кожа, волосы, ногти» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-protivoparazitarnyy": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-protivoparazitarnyy-1.jpg",
+        "mask": "/images/products/package-clips/nabor-protivoparazitarnyy-1.svg",
+        "bounds": {
+          "height": 0.9638888888888889,
+          "left": 0.145,
+          "top": 0.016666666666666666,
+          "width": 0.7175
+        },
+        "natural": [
+          900,
+          811
+        ],
+        "label": "Набор «Противопаразитарный» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-reabilitatsii-posle-covid-19": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/nabor-reabilitatsii-posle-covid-19.jpg",
+        "bounds": {
+          "height": 0.8223684210526315,
+          "left": 0.0475,
+          "top": 0.07236842105263158,
+          "width": 0.9025
+        },
+        "natural": [
+          1400,
+          533
+        ],
+        "label": "Набор «Реабилитации после COVID-19» — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/nabor-reabilitatsii-posle-covid-19-detail-clean.svg"
+      }
+    ]
+  },
+  "nabor-silnyy-immunitet": {
+    "scene": "",
+    "package": "Набор есть ограниченном количестве, уточняйте у менеджеров",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-silnyy-immunitet-1.jpg",
+        "mask": "/images/products/package-clips/nabor-silnyy-immunitet-1.svg",
+        "bounds": {
+          "height": 0.7222222222222222,
+          "left": 0.0175,
+          "top": 0.18803418803418803,
+          "width": 0.96
+        },
+        "natural": [
+          2288,
+          1340
+        ],
+        "label": "Набор «Сильный иммунитет» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-stop-otek": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-stop-otek-1.jpg",
+        "mask": "/images/products/package-clips/nabor-stop-otek-1.svg",
+        "bounds": {
+          "height": 0.9145299145299145,
+          "left": 0.125,
+          "top": 0.04700854700854701,
+          "width": 0.7275
+        },
+        "natural": [
+          900,
+          528
+        ],
+        "label": "Набор «Стоп отек» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-yasnaya-golova": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-yasnaya-golova-1.jpg",
+        "mask": "/images/products/package-clips/nabor-yasnaya-golova-1.svg",
+        "bounds": {
+          "height": 0.8395061728395061,
+          "left": 0.04,
+          "top": 0.09259259259259259,
+          "width": 0.9125
+        },
+        "natural": [
+          900,
+          365
+        ],
+        "label": "Набор «Ясная голова» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zashchita-sosudov": {
+    "scene": "",
+    "package": "Набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zashchita-sosudov-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zashchita-sosudov-1.svg",
+        "bounds": {
+          "height": 0.9016393442622951,
+          "left": 0.045,
+          "top": 0.04371584699453552,
+          "width": 0.905
+        },
+        "natural": [
+          900,
+          413
+        ],
+        "label": "Набор «Защита сосудов» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-dykhatelnoy-sistemy": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-dykhatelnoy-sistemy-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-dykhatelnoy-sistemy-1.svg",
+        "bounds": {
+          "height": 0.8142076502732241,
+          "left": 0.05,
+          "top": 0.12021857923497267,
+          "width": 0.9025
+        },
+        "natural": [
+          1417,
+          650
+        ],
+        "label": "Набор «Здоровье дыхательной системы» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-soedinitelnoy-tkani": {
+    "scene": "",
+    "package": "Набор есть ограниченном количестве, уточняйте у менеджеров",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-soedinitelnoy-tkani-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-soedinitelnoy-tkani-1.svg",
+        "bounds": {
+          "height": 0.8360655737704918,
+          "left": 0.06,
+          "top": 0.07650273224043716,
+          "width": 0.9175
+        },
+        "natural": [
+          900,
+          413
+        ],
+        "label": "Набор «Здоровье соединительной ткани» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-vashey-pecheni": {
+    "scene": "",
+    "package": "Набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-vashey-pecheni-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-vashey-pecheni-1.svg",
+        "bounds": {
+          "height": 0.8833333333333333,
+          "left": 0.0475,
+          "top": 0.06666666666666667,
+          "width": 0.905
+        },
+        "natural": [
+          900,
+          406
+        ],
+        "label": "Набор «Здоровье вашей печени» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-vashikh-glaz": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-vashikh-glaz-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-vashikh-glaz-1.svg",
+        "bounds": {
+          "height": 0.9710144927536232,
+          "left": 0.045,
+          "top": 0.01932367149758454,
+          "width": 0.905
+        },
+        "natural": [
+          1590,
+          826
+        ],
+        "label": "Набор «Здоровье ваших глаз» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-vashikh-kostey": {
+    "scene": "",
+    "package": "Набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-vashikh-kostey-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-vashikh-kostey-1.svg",
+        "bounds": {
+          "height": 0.9040404040404041,
+          "left": 0.08,
+          "top": 0.06060606060606061,
+          "width": 0.8475
+        },
+        "natural": [
+          900,
+          447
+        ],
+        "label": "Набор «Здоровье ваших костей» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-vashikh-sustavov": {
+    "scene": "",
+    "package": "Набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-vashikh-sustavov-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-vashikh-sustavov-1.svg",
+        "bounds": {
+          "height": 0.8557692307692307,
+          "left": 0.0325,
+          "top": 0.08173076923076923,
+          "width": 0.8725
+        },
+        "natural": [
+          900,
+          468
+        ],
+        "label": "Набор «Здоровье ваших суставов» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorove-zhkt-kak-osnova": {
+    "scene": "",
+    "package": "набор",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorove-zhkt-kak-osnova-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorove-zhkt-kak-osnova-1.svg",
+        "bounds": {
+          "height": 0.9295774647887324,
+          "left": 0.02,
+          "top": 0.03286384976525822,
+          "width": 0.9625
+        },
+        "natural": [
+          900,
+          481
+        ],
+        "label": "Набор «Здоровье ЖКТ как ОСНОВА» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorovoe-serdtse": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nabor-zdorovoe-serdtse-1.jpg",
+        "mask": "/images/products/package-clips/nabor-zdorovoe-serdtse-1.svg",
+        "bounds": {
+          "height": 0.873015873015873,
+          "left": 0.0525,
+          "top": 0.06878306878306878,
+          "width": 0.895
+        },
+        "natural": [
+          900,
+          427
+        ],
+        "label": "Набор «Здоровое сердце» — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nabor-zdorovyy-rebenok": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/nabor-zdorovyy-rebenok.jpg",
+        "bounds": {
+          "height": 0.881578947368421,
+          "left": 0.1775,
+          "top": 0.05921052631578947,
+          "width": 0.6625
+        },
+        "natural": [
+          1400,
+          533
+        ],
+        "label": "Набор «Здоровый ребенок» — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/nabor-zdorovyy-rebenok-detail-clean.svg"
+      }
+    ]
+  },
+  "nature-lax": {
+    "scene": "",
+    "package": "100 капсул по 525 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nature-lax-1.jpg",
+        "mask": "/images/products/package-clips/nature-lax-1.svg",
+        "bounds": {
+          "height": 0.9125,
+          "left": 0.24107142857142858,
+          "top": 0.0525,
+          "width": 0.7589285714285714
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Нейче Лакс (Nature Lax) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "natures-noni-juice": {
+    "scene": "",
+    "package": "473 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/natures-noni-juice-1.jpg",
+        "mask": "/images/products/package-clips/natures-noni-juice-1.svg",
+        "bounds": {
+          "height": 0.8525,
+          "left": 0.31845238095238093,
+          "top": 0.04,
+          "width": 0.3601190476190476
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Сок Нони (Nature's noni juice) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "nutri-burn": {
+    "scene": "",
+    "package": "порошок 564 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/nutri-burn-1.png",
+        "mask": "/images/products/package-clips/nutri-burn-1.svg",
+        "bounds": {
+          "height": 0.895,
+          "left": 0.1,
+          "top": 0.0725,
+          "width": 0.775
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Нутри - Берн (Nutri - Burn) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "olive-leaf": {
+    "scene": "",
+    "package": "60 капсул по 585 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/olive-leaf-1.jpg",
+        "mask": "/images/products/package-clips/olive-leaf-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Листья Оливы (Olive Leaf) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "omega-3-epa": {
+    "scene": "",
+    "package": "60 капсул по 1638 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/omega-3-epa-1.jpg",
+        "mask": "/images/products/package-clips/omega-3-epa-1.svg",
+        "bounds": {
+          "height": 0.9075,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Омега 3 ПНЖК (Omega 3 EPA) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "osteo-plus": {
+    "scene": "",
+    "package": "150 таблеток по 1385 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/osteo-plus-1.jpg",
+        "mask": "/images/products/package-clips/osteo-plus-1.svg",
+        "bounds": {
+          "height": 0.93,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Остео Плюс (Osteo Plus) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "pau-d-arco": {
+    "scene": "",
+    "package": "100 капсул по 620 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/pau-d-arco-1.jpg",
+        "mask": "/images/products/package-clips/pau-d-arco-1.svg",
+        "bounds": {
+          "height": 0.8625,
+          "left": 0.25297619047619047,
+          "top": 0.0675,
+          "width": 0.48214285714285715
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "По Д'Арко (Pau D`Arco) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "paw-paw": {
+    "scene": "",
+    "package": "180 капсул по 500 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/paw-paw-1.jpg",
+        "mask": "/images/products/package-clips/paw-paw-1.svg",
+        "bounds": {
+          "height": 0.905,
+          "left": 0.23809523809523808,
+          "top": 0.0425,
+          "width": 0.5535714285714286
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Пaу Пау (Paw Paw Cell Reg) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "peptovit": {
+    "scene": "",
+    "package": "60 таблеток по 1204 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/peptovit-1.jpg",
+        "mask": "/images/products/package-clips/peptovit-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25595238095238093,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Пептовит с L-карнитином и магнием (Peptovit with Magnesium & L-Carnitine) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "perfect-eyes": {
+    "scene": "",
+    "package": "60 капсул по 695 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/perfect-eyes-1.jpg",
+        "mask": "/images/products/package-clips/perfect-eyes-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Перфект Айз (Perfect Eyes) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "pomada-kameliya-s-plastikovym-applikatorom-lipstick-camellia": {
+    "scene": "",
+    "package": "2.55 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/pomada-kameliya-s-plastikovym-applikatorom-lipstick-camellia-1.jpg",
+        "mask": "/images/products/package-clips/pomada-kameliya-s-plastikovym-applikatorom-lipstick-camellia-1.svg",
+        "bounds": {
+          "height": 0.99,
+          "left": 0.31645569620253167,
+          "top": 0.01,
+          "width": 0.6455696202531646
+        },
+        "natural": [
+          380,
+          480
+        ],
+        "label": "Помада «Камелия» с пластиковым аппликатором (Lipstick Camellia) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "pomada-karamel-s-plastikovym-applikatorom-lipstick-caramel": {
+    "scene": "",
+    "package": "2.55 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/pomada-karamel-s-plastikovym-applikatorom-lipstick-caramel-1.jpg",
+        "mask": "/images/products/package-clips/pomada-karamel-s-plastikovym-applikatorom-lipstick-caramel-1.svg",
+        "bounds": {
+          "height": 0.99,
+          "left": 0.31645569620253167,
+          "top": 0.01,
+          "width": 0.6487341772151899
+        },
+        "natural": [
+          380,
+          480
+        ],
+        "label": "Помада «Карамель» с пластиковым аппликатором (Lipstick Caramel) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "pomada-pion-s-fibrovym-applikatorom-lipstick-peony": {
+    "scene": "",
+    "package": "2.55 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/pomada-pion-s-fibrovym-applikatorom-lipstick-peony-1.jpg",
+        "mask": "/images/products/package-clips/pomada-pion-s-fibrovym-applikatorom-lipstick-peony-1.svg",
+        "bounds": {
+          "height": 0.99,
+          "left": 0.31645569620253167,
+          "top": 0.01,
+          "width": 0.6487341772151899
+        },
+        "natural": [
+          380,
+          480
+        ],
+        "label": "Помада «Пион» с фибровым аппликатором (Lipstick Peony) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "pro-formula": {
+    "scene": "",
+    "package": "60 капсул по 600 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/pro-formula-1.jpg",
+        "mask": "/images/products/package-clips/pro-formula-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.58
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Про Формула (Pro Formula) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "protease-plus": {
+    "scene": "",
+    "package": "90 капсул по 600 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/protease-plus-1.jpg",
+        "mask": "/images/products/package-clips/protease-plus-1.svg",
+        "bounds": {
+          "height": 0.85,
+          "left": 0.24702380952380953,
+          "top": 0.0775,
+          "width": 0.7321428571428571
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Протеаза Плюс (Protease Plus) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "red-clover": {
+    "scene": "",
+    "package": "100 капсул по 490 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/red-clover-1.jpg",
+        "mask": "/images/products/package-clips/red-clover-1.svg",
+        "bounds": {
+          "height": 0.8625,
+          "left": 0.25595238095238093,
+          "top": 0.0725,
+          "width": 0.4851190476190476
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Красный клевер (Red Clover) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "saw-palmetto": {
+    "scene": "",
+    "package": "100 капсул по 650 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/saw-palmetto-1.jpg",
+        "mask": "/images/products/package-clips/saw-palmetto-1.svg",
+        "bounds": {
+          "height": 0.8725,
+          "left": 0.23809523809523808,
+          "top": 0.065,
+          "width": 0.7529761904761905
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Со Пальметто (Saw Palmetto) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "sc-formula": {
+    "scene": "",
+    "package": "100 капсул по 685 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/sc-formula-1.jpg",
+        "mask": "/images/products/package-clips/sc-formula-1.svg",
+        "bounds": {
+          "height": 0.91,
+          "left": 0.24107142857142858,
+          "top": 0.0525,
+          "width": 0.7589285714285714
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Шарк Рей Формула (Shark Rei Formula) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "sharikovyy-antiperspirant-dezodorant-sea-salt-roll-on-antiperspirant-deodorant": {
+    "scene": "",
+    "package": "60 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/sharikovyy-antiperspirant-dezodorant-sea-salt-roll-on-antiperspirant-deodorant-1.png",
+        "mask": "/images/products/package-clips/sharikovyy-antiperspirant-dezodorant-sea-salt-roll-on-antiperspirant-deodorant-1.svg",
+        "bounds": {
+          "height": 0.705,
+          "left": 0.305,
+          "top": 0.15,
+          "width": 0.3975
+        },
+        "natural": [
+          1024,
+          1024
+        ],
+        "label": "Шариковый антиперспирант  дезодорант (Sea Salt Roll-On Antiperspirant Deodorant) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "silver-shield-gel": {
+    "scene": "",
+    "package": "гель 85г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/silver-shield-gel-1.jpg",
+        "mask": "/images/products/package-clips/silver-shield-gel-1.svg",
+        "bounds": {
+          "height": 0.8775,
+          "left": 0.205,
+          "top": 0.0475,
+          "width": 0.705
+        },
+        "natural": [
+          500,
+          500
+        ],
+        "label": "Гель-антисептик «Серебряный Щит» (Silver Shield Gel) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "skrab-abrikosovyy-dlya-litsa-i-tela-tropical-mists-light-apricot-cleanser-apri-cleanse-": {
+    "scene": "",
+    "package": "135 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/skrab-abrikosovyy-dlya-litsa-i-tela-tropical-mists-light-apricot-cleanser-apri-cleanse--1.png",
+        "mask": "/images/products/package-clips/skrab-abrikosovyy-dlya-litsa-i-tela-tropical-mists-light-apricot-cleanser-apri-cleanse--1.svg",
+        "bounds": {
+          "height": 0.87,
+          "left": 0.365,
+          "top": 0.0575,
+          "width": 0.27
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Скраб абрикосовый для лица и тела Tropical Mists (Light Apricot Cleanser «Apri-Cleanse») — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "smartmeal-vanila-shake": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/smartmeal-vanila-shake.jpg",
+        "bounds": {
+          "height": 0.7475,
+          "left": 0.16666666666666666,
+          "top": 0.125,
+          "width": 0.6577380952380952
+        },
+        "natural": [
+          1178,
+          1400
+        ],
+        "label": "СмартМил / Ванильный коктейль (SMARTMEAL / VANILA SHAKE) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/smartmeal-vanila-shake-detail-clean.svg"
+      }
+    ]
+  },
+  "solstic-energy": {
+    "scene": "",
+    "package": "30 пакетиков по 3,77 г каждый",
+    "images": [
+      {
+        "image": "/images/products/russian-source/solstic-energy-1.jpg",
+        "mask": "/images/products/package-clips/solstic-energy-1.svg",
+        "bounds": {
+          "height": 0.5425,
+          "left": 0.08333333333333333,
+          "top": 0.2275,
+          "width": 0.8363095238095238
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Солстик Энерджи (Solstic Energy) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "solstic-revive": {
+    "scene": "",
+    "package": "30 пакетиков по 7,5г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/solstic-revive-1.jpg",
+        "mask": "/images/products/package-clips/solstic-revive-1.svg",
+        "bounds": {
+          "height": 0.64,
+          "left": 0.08035714285714286,
+          "top": 0.1725,
+          "width": 0.7976190476190477
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Солстик Ревайв (Solstic Revive) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "solstik-slim": {
+    "scene": "",
+    "package": "30 пакетиков по 3,75 г каждый",
+    "images": [
+      {
+        "image": "/images/products/russian-source/solstik-slim-1.png",
+        "mask": "/images/products/package-clips/solstik-slim-1.svg",
+        "bounds": {
+          "height": 0.6725,
+          "left": 0.05,
+          "top": 0.155,
+          "width": 0.865
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Солстик Слим (Solstic Slim) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "stevia": {
+    "scene": "",
+    "package": "порошок 36 гр",
+    "images": [
+      {
+        "image": "/images/products/russian-source/stevia-1.jpg",
+        "mask": "/images/products/package-clips/stevia-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Стевия (Stevia) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "stomach-comfort": {
+    "scene": "",
+    "package": "60 таблеток по 1762 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/stomach-comfort-1.jpg",
+        "mask": "/images/products/package-clips/stomach-comfort-1.svg",
+        "bounds": {
+          "height": 0.905,
+          "left": 0.23809523809523808,
+          "top": 0.0425,
+          "width": 0.5535714285714286
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Стомак Комфорт (Stomach Comfort) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "stop-allergy-kit": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/russian-source/stop-allergy-kit-1.jpg",
+        "mask": "/images/products/package-clips/stop-allergy-kit-1.svg",
+        "bounds": {
+          "height": 0.9,
+          "left": 0.0425,
+          "top": 0.06111111111111111,
+          "width": 0.9025
+        },
+        "natural": [
+          900,
+          406
+        ],
+        "label": "Набор «Стоп аллергия» (Stop Allergy Kit) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "sunshine-brite-toothpaste": {
+    "scene": "",
+    "package": "100 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/sunshine-brite-toothpaste-1.jpg",
+        "mask": "/images/products/package-clips/sunshine-brite-toothpaste-1.svg",
+        "bounds": {
+          "height": 0.8125,
+          "left": 0.30654761904761907,
+          "top": 0.0825,
+          "width": 0.37797619047619047
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Зубная паста с экстрактом листьев зеленого чая (Sunshine Brite with green tea leaf extract) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "super-complex": {
+    "scene": "",
+    "package": "60 таблеток по 1165 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/super-complex-1.jpg",
+        "mask": "/images/products/package-clips/super-complex-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.07,
+          "width": 0.48214285714285715
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Супер Комплекс (Super Complex) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "tea-tree-oil": {
+    "scene": "",
+    "package": "15 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/tea-tree-oil-1.jpg",
+        "mask": "/images/products/package-clips/tea-tree-oil-1.svg",
+        "bounds": {
+          "height": 0.8375,
+          "left": 0.05555555555555555,
+          "top": 0.085,
+          "width": 0.9027777777777778
+        },
+        "natural": [
+          433,
+          800
+        ],
+        "label": "Масло косметическое «Чайное дерево» (Tea Tree Oil) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "tei-fu-massage-lotion": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/tei-fu-massage-lotion.jpg",
+        "bounds": {
+          "height": 0.87,
+          "left": 0.3325,
+          "top": 0.05,
+          "width": 0.3325
+        },
+        "natural": [
+          1400,
+          1400
+        ],
+        "label": "Обезболивающий лосьон «Тэй-Фу» для мышц и суставов (Tei-Fu Massage Lotion) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/tei-fu-massage-lotion-detail-clean.svg"
+      }
+    ]
+  },
+  "total-nutrition-today": {
+    "scene": "",
+    "package": "",
+    "images": [
+      {
+        "image": "/images/products/white-v2/total-nutrition-today.jpg",
+        "bounds": {
+          "height": 0.7825,
+          "left": 0.17117117117117117,
+          "top": 0.12,
+          "width": 0.6546546546546547
+        },
+        "natural": [
+          1166,
+          1400
+        ],
+        "label": "Ти Эн Ти - все необходимое на каждый день (TNT - Total nutrition today) — оригинальная российская упаковка",
+        "kind": "studio",
+        "mask": "/images/products/package-clips/total-nutrition-today-detail-clean.svg"
+      }
+    ]
+  },
+  "una-de-gato": {
+    "scene": "",
+    "package": "100 капсул по 495 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/una-de-gato-1.jpg",
+        "mask": "/images/products/package-clips/una-de-gato-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Уна де Гато Кошачий коготь (Una de Gato) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "uro-lax": {
+    "scene": "",
+    "package": "120 капсул по 567,8 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/uro-lax-1.jpg",
+        "mask": "/images/products/package-clips/uro-lax-1.svg",
+        "bounds": {
+          "height": 0.9075,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Уро Лакс (Uro Lax) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "uvlazhnyayushchiy-krem-dlya-litsa-spf15-moisturizing-face-cream-intensive-hydration-48-hours-spf15": {
+    "scene": "",
+    "package": "50 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/uvlazhnyayushchiy-krem-dlya-litsa-spf15-moisturizing-face-cream-intensive-hydration-48-hours-spf15-1.png",
+        "mask": "/images/products/package-clips/uvlazhnyayushchiy-krem-dlya-litsa-spf15-moisturizing-face-cream-intensive-hydration-48-hours-spf15-1.svg",
+        "bounds": {
+          "height": 0.465,
+          "left": 0.2425,
+          "top": 0.2675,
+          "width": 0.5175
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Увлажняющий крем для лица SPF15 (Moisturizing Face Cream. Intensive Hydration 48 Hours. SPF15) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "veri-gon-vari-gone": {
+    "scene": "",
+    "package": "90 капсул по 608 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/veri-gon-vari-gone-1.png",
+        "mask": "/images/products/package-clips/veri-gon-vari-gone-1.svg",
+        "bounds": {
+          "height": 0.8025,
+          "left": 0.3225,
+          "top": 0.08,
+          "width": 0.575
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Вэри - Гон (Vari - Gone) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "vitamin-c-long": {
+    "scene": "",
+    "package": "60 таблеток по 1280 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/vitamin-c-long-1.jpg",
+        "mask": "/images/products/package-clips/vitamin-c-long-1.svg",
+        "bounds": {
+          "height": 0.865,
+          "left": 0.25595238095238093,
+          "top": 0.065,
+          "width": 0.7410714285714286
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Витамин С (Vitamin C Long) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "vitamin-d3": {
+    "scene": "",
+    "package": "180 таблеток по 355 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/vitamin-d3-1.jpg",
+        "mask": "/images/products/package-clips/vitamin-d3-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25297619047619047,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Витамин D3 (Vitamin D3) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "vitamin-e": {
+    "scene": "",
+    "package": "180 капсул по 260 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/vitamin-e-1.jpg",
+        "mask": "/images/products/package-clips/vitamin-e-1.svg",
+        "bounds": {
+          "height": 0.86,
+          "left": 0.25595238095238093,
+          "top": 0.0725,
+          "width": 0.4791666666666667
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Витамин Е (Vitamin E) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "vosstanavlivajuschij-krem-dlja-kozhi-vokrug-glaz-s-spf15": {
+    "scene": "",
+    "package": "15 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/vosstanavlivajuschij-krem-dlja-kozhi-vokrug-glaz-s-spf15-1.png",
+        "mask": "/images/products/package-clips/vosstanavlivajuschij-krem-dlja-kozhi-vokrug-glaz-s-spf15-1.svg",
+        "bounds": {
+          "height": 0.41,
+          "left": 0.28,
+          "top": 0.295,
+          "width": 0.44
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Восстанавливающий крем для кожи вокруг глаз с SPF15 (Revitalizing Eye Contour Cream SPF15) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "zambroza": {
+    "scene": "",
+    "package": "458мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/zambroza-1.jpg",
+        "mask": "/images/products/package-clips/zambroza-1.svg",
+        "bounds": {
+          "height": 0.845,
+          "left": 0.3273809523809524,
+          "top": 0.055,
+          "width": 0.34523809523809523
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Замброза (Zambroza) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "zinc-lozenge": {
+    "scene": "",
+    "package": "96 пастилок по 1350 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/zinc-lozenge-1.jpg",
+        "mask": "/images/products/package-clips/zinc-lozenge-1.svg",
+        "bounds": {
+          "height": 0.905,
+          "left": 0.23511904761904762,
+          "top": 0.0425,
+          "width": 0.5565476190476191
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Пастилки с цинком (Zinc Lozenge) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "enzimozavriki-whole-food-papayazyme": {
+    "scene": "",
+    "package": "90 таблеток по 1231 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/enzimozavriki-whole-food-papayazyme-1.png",
+        "mask": "/images/products/package-clips/enzimozavriki-whole-food-papayazyme-1.svg",
+        "bounds": {
+          "height": 0.825,
+          "left": 0.2925,
+          "top": 0.065,
+          "width": 0.685
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Энзимозаврики (Whole Food Papayazyme) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "l-carnitine": {
+    "scene": "",
+    "package": "60 капсул по 540 мг",
+    "images": [
+      {
+        "image": "/images/products/russian-source/l-carnitine-1.jpg",
+        "mask": "/images/products/package-clips/l-carnitine-1.svg",
+        "bounds": {
+          "height": 0.9,
+          "left": 0.25595238095238093,
+          "top": 0.0325,
+          "width": 0.7172619047619048
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "L-карнитин (L-Carnitine) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "night-anti-age-face-cream-40": {
+    "scene": "",
+    "package": "50 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/night-anti-age-face-cream-40-1.png",
+        "mask": "/images/products/package-clips/night-anti-age-face-cream-40-1.svg",
+        "bounds": {
+          "height": 0.4675,
+          "left": 0.2425,
+          "top": 0.265,
+          "width": 0.5175
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Интенсивный ночной антивозрастной крем для лица 40+ (Night Anti-age Face Cream 40+) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "purifying-mattifying-toner": {
+    "scene": "",
+    "package": "125 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/purifying-mattifying-toner-1.jpg",
+        "mask": "/images/products/package-clips/purifying-mattifying-toner-1.svg",
+        "bounds": {
+          "height": 0.82,
+          "left": 0.4,
+          "top": 0.09,
+          "width": 0.2025
+        },
+        "natural": [
+          1024,
+          1024
+        ],
+        "label": "Очищающий и матирующий тоник для лица (Purifying and Mattifying Toner) — оригинальная российская упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "tnt-nsp": {
+    "scene": "",
+    "package": "480 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/tnt-nsp.png",
+        "mask": "/images/products/package-clips/tnt-nsp-supplier-clean.svg",
+        "bounds": {
+          "left": 0.14,
+          "top": 0.093,
+          "width": 0.695,
+          "height": 0.796
+        },
+        "natural": [
+          3436,
+          3926
+        ],
+        "label": "ТНТ (TNT NSP) — оригинальная упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "collagen-plus": {
+    "scene": "",
+    "package": "516 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/collagen-plus.jpg",
+        "mask": "/images/products/package-clips/collagen-plus-supplier-clean.svg",
+        "bounds": {
+          "left": 0.18,
+          "top": 0.169,
+          "width": 0.653,
+          "height": 0.707
+        },
+        "natural": [
+          800,
+          950
+        ],
+        "label": "Коллаген Плюс (Collagen Plus) — оригинальная упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "turmeric-curcumin": {
+    "scene": "",
+    "package": "90 капсул",
+    "images": [
+      {
+        "image": "/images/products/russian-source/turmeric-curcumin.png",
+        "mask": "/images/products/package-clips/turmeric-curcumin-supplier-clean.svg",
+        "bounds": {
+          "left": 0.324,
+          "top": 0.067,
+          "width": 0.375,
+          "height": 0.819
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Куркумин НСП (Turmeric Curcumin) — оригинальная упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "chlorophyll-lime": {
+    "scene": "",
+    "package": "30 стик-пакетов по 2,25 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/chlorophyll-lime.jpg",
+        "mask": "/images/products/package-clips/chlorophyll-lime-supplier-clean.svg",
+        "bounds": {
+          "left": 0.04,
+          "top": 0.2,
+          "width": 0.887,
+          "height": 0.587
+        },
+        "natural": [
+          1600,
+          1900
+        ],
+        "label": "Хлорофилл Лайм (Chlorophyll Lime) — оригинальная упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "smart-meal": {
+    "scene": "",
+    "package": "510 г",
+    "images": [
+      {
+        "image": "/images/products/russian-source/smart-meal.png",
+        "mask": "/images/products/package-clips/smart-meal-supplier-clean.svg",
+        "bounds": {
+          "left": 0.19,
+          "top": 0.073,
+          "width": 0.615,
+          "height": 0.854
+        },
+        "natural": [
+          1200,
+          1200
+        ],
+        "label": "Смарт Мил (Smart Meal) — оригинальная упаковка",
+        "kind": "studio"
+      }
+    ]
+  },
+  "day-anti-age-face-cream-40": {
+    "scene": "",
+    "package": "50 мл",
+    "images": [
+      {
+        "image": "/images/products/russian-source/day-anti-age-face-cream-40.png",
+        "mask": "/images/products/package-clips/day-anti-age-face-cream-40-supplier-clean.svg",
+        "bounds": {
+          "left": 0.244,
+          "top": 0.266,
+          "width": 0.514,
+          "height": 0.468
+        },
+        "natural": [
+          1201,
+          1201
+        ],
+        "label": "Дневной антивозрастной крем для лица SPF15 40+ — оригинальная упаковка",
+        "kind": "studio"
+      }
+    ]
+  }
+}

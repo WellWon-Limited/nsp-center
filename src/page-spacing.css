@@ -1,0 +1,9 @@
+/* Top-level destinations share the payment page's gap below the fixed header. */
+html[data-catalog-design]{--page-start-gap:var(--space-20)}
+@media(max-width:959px){html[data-catalog-design]{--page-start-gap:var(--space-16)}}
+html[data-catalog-design] body .site-main:has(>.journal-page-heading,>.plan-page,>.catalog-page){padding-top:var(--page-start-gap)!important}
+html[data-catalog-design] body .site-main :is(.journal-page-heading,.plan-page,.catalog-page)>.page-heading{margin-top:0!important;padding-top:0!important}
+html[data-catalog-design] body .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){padding-top:var(--page-start-gap)!important}
+html[data-catalog-design] body .site-main :is(.company-page,.certificates-page)>.company-concept{padding-top:var(--page-start-gap)!important}
+html[data-catalog-design] body .site-main .journal-article-page .av-document--ivory{padding-top:var(--page-start-gap)!important}
+@media(min-width:960px){html[data-catalog-design] body .site-main .consult-page{padding-top:var(--page-start-gap)}}

@@ -290,3 +290,13 @@
 
 /* A staff account typed into the customer sign-in: the way to site management's sign-in. */
 .auth-staff-link { width: 100%; min-height: 48px; margin-top: var(--space-12); justify-content: center; gap: var(--space-8); }
+
+/* Auto margins centre a short form; an overflowing registration starts safely below the header. */
+@layer typography-reference{
+html body #root .site-main.site-main--account-route:has(>[data-ds-id="profile-auth"]){justify-content:flex-start!important;flex:1 0 auto!important;padding-block:16px!important;overflow-anchor:none}
+html body #root .site-main.site-main--account-route>[data-ds-id="profile-auth"]{margin-block:auto!important;flex:none!important;transform:none!important;position:relative;top:auto}
+}
+@layer typography-reference{
+ html body #root .auth[data-auth-mode="register"] h1{font-family:var(--font-sans)!important;font-size:28px!important;font-weight:800!important;line-height:1.15!important;letter-spacing:var(--tracking-heading)!important}
+ @media(max-width:639px){html body #root .auth[data-auth-mode="register"] h1{font-size:24px!important}}
+}

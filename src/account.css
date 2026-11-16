@@ -346,3 +346,9 @@
 @media(min-width:640px){
  .discount-card{width:100%;max-width:440px;margin-inline:auto;background-size:cover}
 }
+
+/* The profile label follows the journal's section-label scale and top inset. */
+@layer typography-reference{
+ html body #root .site-main:has(>.account){padding-top:28px!important}
+ html body #root .account-head>.ds-kicker{display:block;font-family:var(--font-sans)!important;font-size:var(--text-14)!important;font-weight:800!important;line-height:21px!important;letter-spacing:normal!important;text-transform:none!important;margin:0!important;color:#3d7a64}
+}
