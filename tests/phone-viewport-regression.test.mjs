@@ -15,7 +15,7 @@ test('new supplier products keep meaningful catalog text and package facts in th
  assert.equal(cardFacts(p,new Map()).sub,'Растительный белок и клетчатка');
 });
 
-test('a keyboard viewport pan never becomes a vertical offset of the header, and closing restores full height',()=>{
+test('a keyboard viewport pan is compensated so the header stays at the visible top, and closing restores full height',()=>{
  const source=fs.readFileSync('src/assistant.tsx','utf8');const start=source.indexOf('    const vv = window.visualViewport;');const end=source.indexOf('\n  }, []);',start);
  const script=ts.transpileModule('(function(){'+source.slice(start,end)+'})()',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
  const listeners=new Map(),properties=new Map(),classes=new Set(),frames=[],timers=[];
@@ -27,6 +27,15 @@ test('a keyboard viewport pan never becomes a vertical offset of the header, and
  const context={window:win,document:doc,localStorage:{getItem:()=>null,setItem:()=>{}},focused,atEnd,log,requestAnimationFrame:fn=>{frames.push(fn);return frames.length},cancelAnimationFrame:()=>{},clearTimeout:()=>{}};
  const cleanup=vm.runInNewContext(script,context);const flush=()=>{while(frames.length)frames.shift()()};
  listeners.get('focusin')({target:{closest:()=>true}});flush();assert.ok(classes.has('chat-kb-open'));assert.equal(properties.get('--chat-top'),'0px');
- for(const top of [0,24,48]){vv.height=440;vv.offsetTop=top;listeners.get('vv:resize')();flush();assert.equal(properties.get('--chat-top'),'0px');assert.equal(properties.get('--chat-vh'),'440px')}
+ for(const top of [0,24,48]){vv.height=440;vv.offsetTop=top;listeners.get('vv:resize')();flush();assert.equal(Number.parseInt(properties.get('--chat-top'))-top,0,'header stays at visual viewport top');assert.equal(properties.get('--chat-vh'),'440px')}
  vv.height=874;vv.offsetTop=0;listeners.get('focusout')({target:{closest:()=>true}});timers.forEach(fn=>fn());flush();assert.equal(properties.has('--chat-vh'),false);assert.equal(classes.has('chat-kb-open'),false);cleanup();
+});
+
+test('launch text and logo positions are fixed before paint and are not recomputed on viewport resize',()=>{
+ const html=fs.readFileSync('index.html','utf8');const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(s=>s.includes('--launch-center-y'));
+ for(const [screenHeight,initialHeight]of [[874,812],[568,568]]){
+  const positions=new Map(),classes=new Set(),theme={content:'#eaf5f1'};
+  const context={screen:{height:screenHeight},innerHeight:initialHeight,matchMedia:()=>({matches:true}),sessionStorage:{getItem:()=>null},document:{documentElement:{style:{setProperty:(k,v)=>positions.set(k,v)},classList:{add:k=>classes.add(k)}},querySelector:()=>theme}};
+  vm.runInNewContext(script,context);assert.ok(classes.has('nsp-splash'));assert.equal(theme.content,'#d3ebe1');const before=[...positions];context.innerHeight=screenHeight;assert.deepEqual([...positions],before);assert.ok(Number.parseInt(positions.get('--launch-center-y'))<initialHeight);assert.ok(Number.parseInt(positions.get('--launch-note-y'))<initialHeight-20);
+ }
 });

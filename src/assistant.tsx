@@ -369,6 +369,8 @@ export function AssistantChat() {
   const [typing, setTyping] = useState(false);
   const end = useRef<HTMLDivElement>(null);
   const log = useRef<HTMLDivElement>(null);
+  const [phoneChat,setPhoneChat]=useState(false);
+  useEffect(()=>{const mq=matchMedia('(max-width:959px)');const update=()=>setPhoneChat(mq.matches);update();mq.addEventListener('change',update);return()=>mq.removeEventListener('change',update)},[]);
   const focused = useRef(false);
   // «↓» appears when the visitor has scrolled up more than a screen's worth from the latest messages.
   const [away, setAway] = useState(false);
@@ -396,7 +398,7 @@ export function AssistantChat() {
     const root = document.documentElement; let frame = 0; let settle = 0;
     const KEY = 'nsp-center:keyboard-height';
     const guess = () => { const saved = Number(localStorage.getItem(KEY)); return saved > 150 ? saved : Math.round(window.innerHeight * 0.42); };
-    const set = (height: number) => { root.style.setProperty('--chat-vh', `${Math.round(height)}px`); root.style.setProperty('--chat-top', '0px'); };
+    const set = (height: number, top=0) => { root.style.setProperty('--chat-vh', `${Math.round(height)}px`); root.style.setProperty('--chat-top', `${Math.round(top)}px`); };
     // The screen's full height without the keyboard, measured while no field has the focus: some iPhones shrink the
     // window itself for the keyboard, so comparing with the window's height now would see no keyboard at all, and the
     // app kept the estimate with an empty band between the input row and the keyboard.
@@ -408,7 +410,7 @@ export function AssistantChat() {
       // shrink the whole window for the keyboard, so the window and the visible part are equal and only the focus tells.
       const open = focused.current || keyboard > 60;
       root.classList.toggle('chat-kb-open', open);
-      if (open && keyboard > 60) { set(vv.height); try { localStorage.setItem(KEY, String(Math.round(keyboard))); } catch { /* next time an estimate */ } }
+      if (open && keyboard > 60) { set(vv.height,vv.offsetTop); try { localStorage.setItem(KEY, String(Math.round(keyboard))); } catch { /* next time an estimate */ } }
       else if (!open) { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
@@ -504,7 +506,8 @@ export function AssistantChat() {
   const lastOfSeries = (i: number) => messages[i + 1]?.from !== messages[i].from;
   const firstOfSeries = (i: number) => messages[i - 1]?.from !== messages[i].from;
   return <div className="chat" data-ds-id="assistant-chat"><h1 className="sr-only">Консультация NSP Center</h1>
-    <div className="chat-log" ref={log} onScroll={onScroll}>
+    <div className="chat-log" ref={phoneChat?undefined:log} onScroll={phoneChat?undefined:onScroll}>
+      <div className="chat-flow" ref={phoneChat?log:undefined} onScroll={phoneChat?onScroll:undefined}>
       <div className="chat-messages" role="log" aria-live="polite" aria-label="Переписка с помощником">
       {messages.map((m, i) => <div className={`chat-msg chat-msg--${m.from}${firstOfSeries(i) ? '' : ' is-cont'}${lastOfSeries(i) ? ' is-last' : ''}${m.emergency ? ' chat-msg--urgent' : ''}`} key={i}>
         {m.emergency && <strong className="chat-urgent-title">Это нужно показать врачу</strong>}
@@ -522,13 +525,13 @@ export function AssistantChat() {
       </div>
       {typing && <div className="chat-msg chat-msg--bot chat-typing" role="status" aria-label="Помощник печатает"><i /><i /><i /></div>}
       {!typing && last?.from === 'bot' && last.chips && <div className="chat-suggest" aria-label="Подсказки">{last.chips.map(c => <button type="button" key={c} onClick={() => send(c)}>{c}</button>)}</div>}
-      {/* The input row ends the conversation (owner, 2026-11-10): it scrolls away with the messages, and the way back to it is
-          down to the end (or the «↓» button). */}
+      <div ref={end} />
+      </div>
+      {/* Phones pin the composer below the scrolling messages; desktop keeps the input at the end of its log. */}
       <div className="chat-composer">
         <form className="chat-input" onSubmit={submit}><input value={draft} onChange={e => setDraft(e.target.value)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить" onPointerDown={e => e.preventDefault()}><Icon name="arrow" size={20} /></button></form>
         <p className="chat-note">Помощник не заменяет консультацию врача.</p>
       </div>
-      <div ref={end} />
     </div>
     {away && <button type="button" className="chat-down" onClick={toBottom} aria-label="К последним сообщениям"><Icon name="chevron" size={22} /></button>}
   </div>;

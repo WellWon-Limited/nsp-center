@@ -31,6 +31,7 @@ export function finishSplash() {
   try { sessionStorage.setItem('nsp-center:splash', '1'); } catch { /* shown again next time */ }
   const started = performance.now();
   const hide = () => setTimeout(() => {
+    document.querySelector('meta[name=theme-color]')?.setAttribute('content','#eaf5f1');
     root.classList.remove('nsp-splash', 'nsp-splash-out'); markReady();
   }, Math.max(0, 700 - (performance.now() - started)));
   if (document.readyState === 'complete') hide(); else addEventListener('load', hide, { once: true });
