@@ -110,7 +110,7 @@ export function AccountPage({ account }: { account: Account }) {
       <PersonalData account={account} />
       <section className="account-card account-card--row" data-ds-id="account-orders">
         <div>
-          <h2>Мои заказы</h2>
+          <h2>Мои покупки</h2>
           {/* The same products as "Мои покупки" (src/purchased-ids.mjs), so the two never disagree. */}
           {bought ? <p className="ds-muted">{bought} {bought % 10 === 1 && bought % 100 !== 11 ? 'товар' : bought % 10 >= 2 && bought % 10 <= 4 && (bought % 100 < 12 || bought % 100 > 14) ? 'товара' : 'товаров'}</p>
             : <p className="ds-muted">Покупок ещё не было</p>}

@@ -123,3 +123,11 @@ html[data-about-design="1"] #root .company-concept--article .co-closing{padding-
  html[data-about-design="1"] #root .company-concept--article :is(.co-story img,.co-research>img){width:min(100%,840px);margin-inline:auto}
  html[data-about-design="1"] #root .company-concept--article .co-story figcaption{width:min(100%,840px);margin-inline:auto}
 }
+@media(min-width:960px){
+ /* The introduction starts at the top of the photo, as on «Условия доставки» (owner, 2026-11-13), not in the middle
+    of its height. */
+ html[data-about-design="1"] #root .company-concept--article>#about{grid-template-rows:auto auto 1fr}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-copy{grid-row:1;align-self:start}
+ html[data-about-design="1"] #root .company-concept--article>#about>.co-article-lead{grid-row:2}
+ html[data-about-design="1"] #root .company-concept--article .co-hero-image{grid-row:1/span 3}
+}

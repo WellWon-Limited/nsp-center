@@ -22,12 +22,12 @@ export function readNewProducts(priceList, categories) {
     products.push({
       url: path, path, id: entry.id, name: entry.name, article: entry.article,
       price: prices.retail, price_base: prices.retail, discount: '', currency: 'RUB',
-      availability: 'InStock', availability_text: 'В наличии', brand: null,
+      availability: entry.availability==='OutOfStock'?'OutOfStock':'InStock', availability_text: entry.availability==='OutOfStock'?'Нет в наличии':'В наличии', brand: null,
       category: entry.category, categoryPath: category.path,
       breadcrumbs: [{ name: 'Главная', url: '/' }, ...names.map(n => { const c = categories.find(x => x.name === n); return { name: c.name, url: c.path }; }), { name: entry.name, url: null }],
       rating: null, review_count: 0,
       properties: { ...entry.properties, pv: String(priceList.items[entry.article].pv).replace('.', ',') },
-      documents: [], images: [entry.image], image: entry.image, microdata_outside_product: [], related: [],
+      documents: entry.documents??[], images: [entry.image], image: entry.image, microdata_outside_product: [], related: [],
       sections: {}, sectionsHtml: {}, description: entry.copy?.about?.join(' ') ?? '', descriptionHtml: '',
       prices, copy: entry.copy, added: true,
     });

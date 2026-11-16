@@ -1,4 +1,5 @@
-import {productGalleryImages} from '../src/product-media.mjs';
+import {productGalleryImages,productCover} from '../src/product-media.mjs';
+import packshotMasks from '../src/product-packshot-masks.json' with {type:'json'};
 import {publicProduct} from './card-prices.mjs';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
@@ -22,9 +23,11 @@ try {
  // Personal and staff pages stay out of search: noindex in the page and not in the sitemap.
  // The home page's first screen photo starts loading with the first line of the page (not after the styles are read).
  // Phones, tablets and computers show the same photo, so it is one file and nothing else is fetched for the first screen.
- const HOME_PRELOAD='<link rel="preload" as="image" href="/images/hero-photo-options/desktop-omega-white-v1.jpg" fetchpriority="high"/>'
-  // The heading's own font comes with the first request too, so the heading and the lines under it do not jump when it arrives.
-  +'<link rel="preload" as="font" type="font/ttf" href="/fonts/hero-options/golos-text-500.ttf" crossorigin/>';
+ const firstScreenIds=['omega-3-epa','uvlazhnyayushchiy-krem-dlya-litsa-spf15-moisturizing-face-cream-intensive-hydration-48-hours-spf15','colloidal-silver-forte','khlorofill-zhidkiy-chlorophyll-liquid'];
+ const firstScreenImages=[...new Set(firstScreenIds.map(id=>data.products.find(p=>p.id===id)).filter(Boolean).map(productCover).filter(Boolean))];
+ const firstScreenMasks=firstScreenImages.map(src=>packshotMasks[src]).filter(Boolean);
+ const HOME_PRELOAD='<link rel="preload" as="image" href="/images/hero-dimensions-2026-11-13/01-mint-woodland-omega-label-v4.png" fetchpriority="high"/>'
+  +[...firstScreenImages,...firstScreenMasks].map(src=>`<link rel="preload" as="image" href="${src}"/>`).join('');
  const PRIVATE=new Set(['/admin/','/profile/purchases/']);
  // A product hidden from customers (a line no longer supplied) keeps its address but leaves search the same way.
  const HIDDEN=new Set(data.products.filter(p=>p.hidden).map(p=>p.path));const unlisted=path=>PRIVATE.has(path)||HIDDEN.has(path);

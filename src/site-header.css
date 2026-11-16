@@ -1,0 +1,111 @@
+/* Shared approved site header. These rules follow page-specific design sheets so changing the page never changes it. */
+.site-header.site-header--shared{
+ background:rgba(255,255,255,.66)!important;
+ border-bottom:1px solid var(--color-glass-border)!important;
+ box-shadow:none!important;
+ -webkit-backdrop-filter:blur(var(--blur-24))!important;
+ backdrop-filter:blur(var(--blur-24))!important;
+}
+.site-search{position:relative;min-width:0;margin:0}
+.site-search input{
+ display:block;width:100%;height:46px;padding:0 20px;
+ border:1.5px solid rgb(29 58 54 / .28);border-radius:25px;
+ background:var(--color-glass-raised);color:var(--color-ink);font:inherit;font-size:15px;outline:none;
+}
+.site-search input:focus{border-color:var(--color-ink)}
+.site-search input:focus-visible{border-color:var(--color-ink);outline:none;box-shadow:none}
+/* Suggestions (owner, 2026-11-13; research: no scrolling inside an autocomplete list): up to 10, the box as tall as the
+   list, white. */
+.site-search-results{
+ position:absolute;top:calc(100% + 10px);left:0;right:0;z-index:2;
+ padding:10px;border:1px solid var(--color-ink-line);
+ border-radius:var(--radius-20);background:var(--color-white);box-shadow:var(--shadow-navigation);
+}
+.site-search-results[hidden]{display:none}
+.site-search-results ul{list-style:none;padding:0;margin:0}
+.site-search-results a{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border-radius:var(--radius-12);color:var(--color-ink);text-decoration:none}
+.site-search-results a:hover,.site-search-results a:focus-visible{background:var(--color-glass-hover)}
+.site-search-results small{flex:none;color:var(--color-muted);font-size:12px}
+.site-search-results p{padding:12px 14px}
+@media(min-width:960px){
+ .site-header--shared{font-family:var(--font-sans)}
+ .site-header--shared .header-inner{
+  display:grid!important;grid-template-columns:230px minmax(280px,1fr) auto!important;
+  align-items:center!important;gap:10px 32px!important;width:100%!important;max-width:none!important;
+  padding:12px 40px 8px!important;
+ }
+ .site-header--shared .brand{grid-column:1;grid-row:1;white-space:nowrap}
+ .site-header--shared .header-inner>.site-search{grid-column:2;grid-row:1}
+ .site-header--shared .header-actions{grid-column:3;grid-row:1;gap:10px!important}
+ .site-header--shared .header-actions .desktop-contact{display:inline-flex!important;align-items:center;padding:0 10px;min-height:46px;font-size:16px;font-weight:700;color:var(--color-link)!important;white-space:nowrap}
+ .site-header--shared .header-actions .icon-btn{
+  padding:0!important;flex:0 0 46px!important;width:46px!important;height:46px!important;border-radius:50%!important;
+  background:var(--color-glass)!important;border:1px solid var(--color-glass-border)!important;
+  box-shadow:none!important;-webkit-backdrop-filter:blur(var(--blur-20))!important;backdrop-filter:blur(var(--blur-20))!important;
+ }
+ .site-header--shared .header-actions .icon-btn:hover{background:var(--color-glass-hover)!important}
+ .site-header--shared .header-actions .menu-toggle{display:none!important}
+ .site-header--shared .desktop-nav{
+  grid-column:1/-1;grid-row:2;display:flex!important;align-items:center;justify-content:space-between!important;
+  width:100%;gap:16px!important;padding-top:8px;border-top:1px solid var(--color-ink-line);
+ }
+ .site-header--shared .desktop-nav a{padding:4px 8px;min-height:30px;font-size:15px;white-space:nowrap}
+ .site-header--shared .desktop-nav a.active{color:var(--color-link)!important;background:transparent!important}
+ .site-header--shared .desktop-nav a.active::after{display:none!important}
+ .site-header--shared .desktop-nav a:focus-visible{outline:2px solid var(--color-ink);outline-offset:3px;border-radius:4px}
+}
+@media(min-width:960px) and (max-width:1199px){
+ .site-header--shared .header-inner{grid-template-columns:200px minmax(240px,1fr) auto!important;gap:10px 20px!important;padding-left:24px!important;padding-right:24px!important}
+ .site-header--shared .brand{font-size:24px!important}
+ .site-header--shared .header-actions{gap:8px!important}
+ .site-header--shared .header-actions .desktop-contact{font-size:14px;padding:0 4px;margin-right:0}
+ .site-header--shared .desktop-nav{gap:10px!important}
+ .site-header--shared .desktop-nav a{font-size:14px;padding-left:4px;padding-right:4px}
+}
+@media(max-width:959px){
+ /* Compact navigation also applies to tablets: the desktop link row cannot fit beside the logo and actions. */
+ .site-header--shared .desktop-nav,.site-header--shared .header-actions .desktop-only,.site-header--shared .header-actions .desktop-contact{display:none!important}
+ .site-header--shared .header-actions .menu-toggle{display:inline-flex!important}
+ .site-header--shared .header-inner{justify-content:space-between;min-width:0}
+ .site-header--shared .header-actions{flex-shrink:0}
+ .site-header--shared .mobile-menu{grid-template-columns:minmax(0,1fr);max-height:calc(100svh - var(--site-header-height,123px) - 24px);overflow-y:auto}
+ .site-header--shared .mobile-menu a{min-height:44px}
+
+ .site-header--shared .header-inner>.site-search{display:none}
+ .site-header--shared .mobile-menu>.site-search--menu{grid-column:1/-1;display:block;width:100%;margin-bottom:8px}
+ .site-header--shared .site-search-results small{display:none}
+}
+
+/* Menu destinations are top-level pages; contextual links still keep their return control. */
+html[data-menu-entry="true"] .site-main :is(.back-link,.information-home){display:none!important}
+/* Match the original prototype: navigation/contact 14 px, search text 13 px. */
+@layer typography-reference{
+ html body #root .site-header :is(.desktop-nav a,.desktop-contact,.admin-header-link,.admin-header-label,.admin-staff-name){font-size:var(--text-14)!important;line-height:var(--leading-relaxed)!important}
+ html body #root .site-header .site-search input{font-size:var(--text-13)!important}
+ @media(max-width:959px){html body #root .site-header .site-search input{font-size:var(--text-12)!important}}
+}
+
+/* Safari's pulled-down canvas continues the glass header's colour, across every site page. */
+html:root:has(.site-header){--header-edge-surface:color-mix(in srgb,var(--color-white) 66%,var(--color-bg));--header-edge-paint:linear-gradient(90deg,#eaf5f1 0%,#f4f9f7 42%,var(--header-edge-surface) 78%)}
+html:root:has(.site-header):not([data-home-scroll-edge="bottom"]){background:var(--header-edge-paint)!important}
+html:root:has(.site-header) body{background-color:transparent!important}
+
+/* One horizontal surface paints the header, its upper extension and the browser canvas.
+   A vertical gradient or translucent header would reveal a different mint shade at their join. */
+html body #root .site-header{background:var(--header-edge-paint)!important}
+html body #root .site-header::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--header-edge-paint)!important;pointer-events:none}
+
+/* WebKit can expose the body / native scroll canvas instead of the document's
+   painted root during a trackpad bounce. Paint both; do not bounce the desktop
+   viewport past its boundary (normal scrolling and horizontal gestures stay native). */
+html:root:has(.site-header):not([data-home-scroll-edge="bottom"]) body{background:var(--header-edge-paint)!important}
+html body #root:has(.site-header){overflow-x:clip;overflow-y:visible}
+@media(hover:hover) and (pointer:fine){
+ html:root:has(.site-header),html:root:has(.site-header) body{overscroll-behavior-y:none!important}
+}
+
+/* Measured in the reference at 1470, 1920, 2560 and 3840px: 46px circles with 18px glyphs. */
+@media(min-width:960px){
+ html body #root .site-header--shared .header-actions .icon-btn{width:46px!important;height:46px!important;padding:0!important;flex:0 0 46px!important}
+ html body #root .site-header--shared .header-actions .icon-btn>svg{width:18px!important;height:18px!important;flex:none}
+}

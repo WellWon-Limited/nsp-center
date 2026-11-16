@@ -13,7 +13,7 @@ const words=text=>text.normalize('NFKC').match(/[\p{L}\p{N}]+/gu)||[];
 
 test('Footer destinations share the editorial page frame and render one title before JavaScript',()=>{
  for(const path of ['/delivery/','/payments/','/company/faq/','/contacts/','/shares/','/company/reviews/','/photo/','/video/','/design-system/','/company/consent/','/company/privacy-policy/','/company/refund/']){
-  const $=read(path);assert.equal(ownsBackLink(path),true,`${path}: shared navigation must defer to the internal back link`);assert.equal($('.information-page').length,1,path);assert.equal($('h1').length,1,path);assert.ok($('h1').text().trim(),path);assert.equal($('.information-heading .information-home[href="/"]').length,1,path);
+  const $=read(path);assert.equal(ownsBackLink(path),true,`${path}: shared navigation must defer to the internal back link`);assert.equal($('.information-page').length,1,path);assert.equal($('h1').length,1,path);assert.ok($('h1').text().trim(),path);{const parent=path.replace(/[^/]+\/$/,'');const deeper=(parent!=='/'||['/photo/','/video/'].includes(path))&&!['/company/faq/','/company/reviews/','/company/consent/','/company/privacy-policy/','/company/refund/'].includes(path);assert.equal($('.information-heading .information-home').length,deeper?1:0,path);if(deeper)assert.equal($('.information-heading .information-home').attr('href'),parent,path);}
   assert.equal($('.site-header,.site-footer,.bottom-nav').length,3,path);
  }
 });
@@ -34,7 +34,7 @@ test('FAQ retains every question and answer; reviews retain authors and complete
 });
 test('Empty offers and photos say so, and all twenty videos retain their destinations and local posters',()=>{
  assert.equal(read('/shares/')('.information-empty-message').text(),'Акций пока нет');
- assert.equal(read('/photo/')('.information-empty-message').text(),'Фото пока нет');assert.equal(read('/photo/')('.information-empty svg').length,0);assert.ok(read('/photo/')('.information-empty').hasClass('information-empty--plain'));assert.equal(read('/video/')('input[type=search]').length,0);
+ assert.equal(read('/photo/')('.information-empty-message').text(),'Фото пока нет');assert.equal(read('/photo/')('.information-empty svg').length,0);assert.ok(read('/photo/')('.information-empty').hasClass('information-empty--plain'));assert.equal(read('/video/')('main input[type=search]').length,0);
  for(const path of ['/photo/','/video/','/shares/','/contacts/','/company/reviews/','/payments/','/delivery/','/company/faq/']){const $=read(path);assert.ok($('.information-heading').hasClass('information-heading--plain'));assert.equal($('.information-heading .information-kicker').length,0);}
  for(const path of ['/photo/','/shares/']){const $=read(path);assert.equal($('.information-empty a,.information-empty svg,.information-empty h2').length,0);}
  for(const path of ['/contacts/','/company/reviews/','/payments/'])assert.equal(read(path)('.information-heading img').length,0);
@@ -55,9 +55,11 @@ test('The care journal keeps its original heading and card-grid structure',()=>{
 });
 
 // Owner, 2026-11-09: every destination from the homepage must provide an explicit way back.
-test('The company page provides a homepage return and the certificates page keeps its company fallback',()=>{
- assert.equal(read('/company/')('.co-home-return .back-link[href="/"]').length,1);
- assert.ok(read('/company/')('.co-home-return').text().includes('На главную'));
+test('Top-level pages have no back link; the certificates page keeps its way back to the company page',()=>{
+ // Research 2026-11-14 (Apple HIG tab bars, Android navigation, GOV.UK back link): pages of the menu and the tab bar have
+ // no back link; pages one step deeper have «‹ Раздел» named after their parent.
+ for(const path of ['/company/','/delivery/','/payments/','/contacts/','/company/faq/','/company/reviews/','/shares/','/catalog/','/blog/','/cart/']) assert.equal(read(path)('.site-main .back-link,.site-main .information-home').length,0,path);
+ for(const path of ['/company/consent/','/company/privacy-policy/','/company/refund/']) assert.equal(read(path)('.information-home,.back-link').length,0,`${path}: the footer's documents have no back link (owner, 2026-11-14)`);
  const $=read('/company/sertifikaty/');assert.equal($('.cert-back .back-link').attr('href'),'/company/');assert.ok($('.cert-back .back-link').text().includes('О компании'));
 });
 
@@ -65,7 +67,10 @@ test('Company article keeps its introduction, six principles, timeline and produ
  const $=read('/company/');
  const intro='NSP-центр помогает выбирать продукты на основе растительных ингредиентов и находить понятную информацию о составе, применении и качестве. Чтобы забота о себе становилась частью повседневной жизни.';
  assert.equal($('h1').length,1);
- assert.equal($('.co-hero p').length,0);
+ assert.equal($('.co-hero-title').length,0);
+ assert.equal($('.co-paper-cover img').attr('src'),'/images/company-concepts/company-fresh-choice-2.png');
+ assert.equal($('#about .information-heading').length,0);
+ assert.equal($('.information-heading h1').text(),'О компании');
  assert.equal($('.co-article-lead').text(),intro);
  assert.equal($('.company-page').text().split(intro).length-1,1);
  assert.ok(!/Nature[’']s Sunshine/i.test($('.company-page').text()));

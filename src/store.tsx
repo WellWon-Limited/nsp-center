@@ -1,3 +1,5 @@
+import {applyCatalogConfig} from './catalog-categories.mjs';
+import { CART_NOTICE_MS, nextCartNotice, type CartNotice } from './cart-notice.mjs';
 import { rollPlan, restorePlans } from './intake-plan';
 import { restoreWaitlist, reconcileWaitlist, type WaitEntry } from './waitlist';
 import { createContext, useContext, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
@@ -90,10 +92,13 @@ export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load
 }
 /** Sign-out of a server account: the device keeps nothing of it (the server has it all). */
 export const closeSession=(s:LocalState):LocalState=>({...s,...pickSynced(initial),intakeDate:today(),account:null,signedIn:false,card:false,saved:null,name:''});
-type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number)=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>;staff:Staff|null;setStaff:(staff:Staff|null)=>void};
+type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number,options?:{notify?:boolean})=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>;staff:Staff|null;setStaff:(staff:Staff|null)=>void};
 const Context = createContext<Store|null>(null);
 export function StoreProvider({children}:{children:ReactNode}) {
   const [state,setState]=useState(initial); const [toast,setToast]=useState(''); const [ready,setReady]=useState(false);
+  const [toastRevision,setToastRevision]=useState(0);
+  const cartNotice=useRef<CartNotice|null>(null),cartSnapshot=useRef(state.cart);cartSnapshot.current=state.cart;
+  const notify=(message:string)=>{cartNotice.current=null;setToast(message);setToastRevision(n=>n+1)};
   // Site settings from the administrator (src/site.ts): the cached ones before the first paint after start, then the
   // server's. No accounts server (503, offline, a static host) leaves the built prices.
   const [site,setSiteState]=useState<SiteSettings|null>(null);
@@ -102,7 +107,7 @@ export function StoreProvider({children}:{children:ReactNode}) {
   const [cardPrices,setCardPricesState]=useState<CardPrices|null>(null);
   const current=useRef<{site:SiteSettings|null;card:CardPrices|null}>({site:null,card:null});
   // Cards created in site management join the catalog first, then every product gets the settings.
-  const apply=()=>{mergeCustom(data.products,data.categories,current.current.site?.extraProducts??[]);mergeArticles(data.articles,current.current.site?.content?.articles??[]);applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);};
+  const apply=()=>{mergeCustom(data.products,data.categories,current.current.site?.extraProducts??[]);mergeArticles(data.articles,current.current.site?.content?.articles??[]);applySite([...data.products,...pageProducts],current.current.site,data.pricing.rubPerUnit,current.current.card);applyCatalogConfig(data.categories,[...data.products,...pageProducts],current.current.site?.catalog);};
   const setSite=(next:SiteSettings|null)=>{current.current.site=next;apply();setSiteState(next);try{if(next)localStorage.setItem(SITE_CACHE,JSON.stringify(withoutCardFields(next)));else localStorage.removeItem(SITE_CACHE);}catch{/* ignore */}};
   const setCardPrices=(next:CardPrices|null)=>{current.current.card=next;apply();setCardPricesState(next);};
   useLayoutEffect(()=>{let cached:SiteSettings|null=null;try{cached=readSite(JSON.parse(localStorage.getItem(SITE_CACHE)||'null'));}catch{/* none */}if(cached)setSite(cached);
@@ -120,10 +125,11 @@ export function StoreProvider({children}:{children:ReactNode}) {
   useEffect(()=>{if(!ready)return;const roll=()=>setState(s=>rollPlan(s,today()));let timer=0;
     const schedule=()=>{const now=new Date();const next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,1);timer=window.setTimeout(()=>{roll();schedule();},next.getTime()-now.getTime());};
     const wake=()=>{if(document.visibilityState==='visible')roll();};schedule();document.addEventListener('visibilitychange',wake);return()=>{clearTimeout(timer);document.removeEventListener('visibilitychange',wake);};},[ready]);
-  useEffect(()=>{if(toast){const t=setTimeout(()=>setToast(''),3200);return()=>clearTimeout(t);}},[toast]);
+  useEffect(()=>{if(toast){const t=setTimeout(()=>{cartNotice.current=null;setToast('')},CART_NOTICE_MS);return()=>clearTimeout(t);}},[toast,toastRevision]);
   const [accounts,setAccounts]=useState<'server'|'local'|null>(null);
   // A cached signed-in account is usable immediately; otherwise wait for the session check before showing guest UI.
   const sessionReady=ready&&(accounts!==null||Boolean(state.signedIn&&state.account));
+  useLayoutEffect(()=>{document.documentElement.classList.toggle('nsp-session-ready',sessionReady);if(sessionReady)document.documentElement.classList.toggle('nsp-signed-in',Boolean(state.signedIn&&state.account));},[sessionReady,state.signedIn,state.account]);
   const synced=useRef<string|null>(null);const pending=useRef<string|null>(null);
   useEffect(()=>{if(!ready)return;let off=false;
     fetch('/api/auth/me',{headers:{Accept:'application/json'}}).then(async r=>{
@@ -142,11 +148,11 @@ export function StoreProvider({children}:{children:ReactNode}) {
   const push=async(payload:string,keepalive=false)=>{
     const r=await fetch('/api/account',{method:'PUT',headers:{'Content-Type':'application/json'},body:payload,keepalive}).catch(()=>null);
     if(!r)return; // offline: stays marked and goes with the next change or page
-    if(r.status===401){synced.current=null;pending.current=null;try{localStorage.removeItem(DIRTY);}catch{/* ignore */}setState(closeSession);setToast('Сеанс закончился. Войдите в аккаунт снова.');return;}
+    if(r.status===401){synced.current=null;pending.current=null;try{localStorage.removeItem(DIRTY);}catch{/* ignore */}setState(closeSession);notify('Сеанс закончился. Войдите в аккаунт снова.');return;}
     if(r.status>=500)return;
     if(pending.current===payload)pending.current=null;
     synced.current=payload;try{localStorage.removeItem(DIRTY);}catch{/* ignore */}
-    if(!r.ok){const body=await r.json().catch(()=>null) as {error?:string}|null;setToast(body?.error||'Не удалось сохранить изменения.');}
+    if(!r.ok){const body=await r.json().catch(()=>null) as {error?:string}|null;notify(body?.error||'Не удалось сохранить изменения.');}
   };
   useEffect(()=>{if(accounts!=='server'||!state.signedIn||!state.account?.server)return;
     const payload=syncPayload(state);if(payload===synced.current)return;
@@ -197,16 +203,25 @@ export function StoreProvider({children}:{children:ReactNode}) {
     const notices=result.arrivals.reduce((list,p)=>addNotice(list,{id:`stock-${p.id}`,kind:'stock',title:'Товар снова в наличии',text:shortName(p.name),at,date:'',url:p.path,read:false}),s.notices);
     return {...s,waitlist:result.entries,notices};
   });},[ready,state.waitlist,site]);
-  const waitFor=(p:Product)=>{if(!state.signedIn&&!state.waitlist.some(x=>x.id===p.id)){setToast('Войдите в аккаунт, чтобы узнать о поступлении товара');return;}setState(s=>{
-    const included=s.waitlist.some(x=>x.id===p.id);
-    if(!included&&p.availability!=='OutOfStock')return s;
-    return {...s,waitlist:included?s.waitlist.filter(x=>x.id!==p.id):[...s.waitlist,{id:p.id,notified:false}]};
-  });};
-  const add=(p:Product,q=1)=>{if(p.availability==='OutOfStock')return;setState(s=>({...s,cart:{...s.cart,[p.id]:Math.min(99,(s.cart[p.id]||0)+q)}}));setToast(`${shortName(p.name)} — в корзине`);};
-  const qty=(id:string,q:number)=>setState(s=>{const cart={...s.cart};if(q<=0)delete cart[id];else cart[id]=Math.min(99,q);return {...s,cart};});
+  const waitFor=(p:Product)=>{
+    const included=state.waitlist.some(x=>x.id===p.id);
+    if(!state.signedIn&&!included){notify('Войдите в аккаунт, чтобы узнать о поступлении товара');return;}
+    if(!included&&p.availability!=='OutOfStock')return;
+    setState(s=>({...s,waitlist:included?s.waitlist.filter(x=>x.id!==p.id):[...s.waitlist,{id:p.id,notified:false}]}));
+    notify(`${shortName(p.name)} — ${included?'убрано из листа ожидания':'добавлено в лист ожидания'}`);
+  };
+  const add=(p:Product,q=1,options?:{notify?:boolean})=>{
+    if(p.availability==='OutOfStock'||!Number.isFinite(q)||q<=0)return;
+    const amount=Math.min(Math.floor(q),Math.max(0,99-(cartSnapshot.current[p.id]||0)));
+    if(!amount){if(options?.notify!==false)notify(`${shortName(p.name)} — в корзине уже 99 шт.`);return;}
+    cartSnapshot.current={...cartSnapshot.current,[p.id]:(cartSnapshot.current[p.id]||0)+amount};
+    setState(s=>({...s,cart:{...s.cart,[p.id]:Math.min(99,(s.cart[p.id]||0)+amount)}}));
+    if(options?.notify!==false){cartNotice.current=nextCartNotice(cartNotice.current,p.id,amount,Date.now());setToast(`${shortName(p.name)} — добавлено в корзину: ${cartNotice.current.quantity} шт.`);setToastRevision(n=>n+1);}
+  };
+  const qty=(id:string,q:number)=>{const cart={...cartSnapshot.current};if(q<=0)delete cart[id];else cart[id]=Math.min(99,q);cartSnapshot.current=cart;setState(s=>{const next={...s.cart};if(q<=0)delete next[id];else next[id]=Math.min(99,q);return {...s,cart:next};});};
   // Favourites and the waiting list belong to an account (owner, 2026-11-12): a guest is asked to sign in at the top of the
   // screen instead; taking a product out still works.
-  const favorite=(id:string)=>{if(!state.signedIn&&!state.favorites.includes(id)){setToast('Войдите в аккаунт, чтобы добавить товар в избранное');return;}setState(s=>({...s,favorites:s.favorites.includes(id)?s.favorites.filter(x=>x!==id):[...s.favorites,id]}));};
-  return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify:setToast,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout,staff,setStaff}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
+  const favorite=(id:string)=>{if(!state.signedIn&&!state.favorites.includes(id)){notify('Войдите в аккаунт, чтобы добавить товар в избранное');return;}setState(s=>({...s,favorites:s.favorites.includes(id)?s.favorites.filter(x=>x!==id):[...s.favorites,id]}));};
+  return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout,staff,setStaff}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
 }
 export function useStore(){const v=useContext(Context);if(!v)throw new Error('Missing StoreProvider');return v;}

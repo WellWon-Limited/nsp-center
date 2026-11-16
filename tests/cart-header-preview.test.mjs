@@ -61,3 +61,16 @@ test('The home plan card is final from the first paint: no loading line; this br
  assert.match(css,/html\.nsp-has-plan :is\(\.hero-daily-create,\.hero-daily-guest\)\{display:none\}/);
  assert.match(css,/html\.nsp-signed-in \.hero-daily-signup\{display:none\}/);
 });
+
+test('Shared customer header has the approved search, consultation link and eight navigation destinations',()=>{
+ for(const path of ['','catalog/','health/','profile/','company/','blog/','delivery/','payments/','company/reviews/','contacts/']){
+  const doc=cheerio.load(readFileSync(`dist/${path}index.html`,'utf8'));
+  assert.equal(doc('.site-header--shared').length,1,path);
+  assert.equal(doc('.site-header .site-search input[type="search"]').length,1,path);
+  assert.equal(doc('.site-header .desktop-contact[href="/consultation/"]').text(),'Есть вопрос?',path);
+  assert.deepEqual(doc('.site-header .desktop-nav a').map((_,x)=>doc(x).attr('href')).get(),['/catalog/','/health/','/blog/','/company/','/delivery/','/payments/','/company/reviews/','/contacts/'],path);
+ }
+ const reviews=cheerio.load(readFileSync('dist/company/reviews/index.html','utf8'));
+ assert.equal(reviews('.desktop-nav [aria-current="page"]').length,1);
+ assert.equal(reviews('.desktop-nav [aria-current="page"]').attr('href'),'/company/reviews/');
+});

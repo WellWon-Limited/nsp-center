@@ -1,0 +1,4 @@
+/* The prototype's typeface across customer pages and site management (owner, 2026-11-13: back to the fonts of the
+   prototype at 127.0.0.1:5200 — Manrope, design/systems/nsp/fonts.css). */
+:root{--font-sans:Manrope,sans-serif}
+body,button,input,select,textarea{font-family:var(--font-sans)}

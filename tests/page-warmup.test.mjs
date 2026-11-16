@@ -61,6 +61,6 @@ test('photos: kept on the device across updates, served from it first, and warme
 });
 
 test('the first row of product photos and the lead article cover load with the page, not lazily', () => {
-  assert.match(read('src/ui.tsx'), /<ProductCard key=\{p\.id\} product=\{p\} eager=\{i<4\}\/>/);
+  assert.match(read('src/ui.tsx'), /<ProductCard key=\{p\.id\} product=\{p\} eager=\{i<4\} compact=\{compact\}\/>/);
   assert.match(read('src/pages.tsx'), /<ArticleCard key=\{a\.id\} article=\{a\} first=\{i===0\}\/>/);
 });

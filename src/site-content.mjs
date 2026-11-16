@@ -66,7 +66,8 @@ export function validateContent(kind, input, { productIds = null } = {}) {
     if (x.image && !localFile(x.image)) return { error: 'Фото акции не загрузилось, загрузите ещё раз.' };
     const link = text(x.link, 300);
     if (link && !sitePath(link)) return { error: 'Ссылка — адрес страницы этого сайта, например /catalog/.' };
-    return { value: { title, text: body, from, to, image: x.image || '', link } };
+    if (x.products !== undefined && (!Array.isArray(x.products) || x.products.length > 24 || x.products.some(id => typeof id !== 'string' || (productIds && !productIds.has(id))))) return { error: 'Выберите до 24 существующих товаров для акции.' };
+    return { value: { title, text: body, from, to, image: x.image || '', link, products: [...new Set(x.products ?? [])] } };
   }
   if (kind === 'faq') {
     const q = text(x.q, 300), a = text(x.a, 4000);

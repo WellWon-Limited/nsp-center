@@ -58,6 +58,41 @@ test('the swipe works only on a screen with a back button, and does what that bu
   assert.match(BACK_BUTTONS, /\.catalog-mobile-back/);
   const { readFileSync } = await import('node:fs');
   const code = readFileSync(new URL('../src/swipe-back.mjs', import.meta.url), 'utf8');
-  assert.match(code, /if \(button\) button\.click\(\);/);
+  assert.match(code, /button\.click\(\);/);
   assert.doesNotMatch(code, /history\.back\(\)/);
+});
+
+test('a disabled or hidden return control cannot capture the edge swipe', async()=>{
+ const {backButton,STEP_BACK}=await import('../src/swipe-back.mjs');
+ const visible={getBoundingClientRect:()=>({width:80,height:44})};
+ const disabled={...visible,disabled:true};
+ const inert={...visible,closest:()=>({})};
+ assert.equal(backButton({querySelectorAll:s=>s===STEP_BACK?[disabled,inert]:[visible]}),visible);
+ assert.equal(backButton({querySelectorAll:()=>[disabled,inert]}),null);
+});
+
+test('a completed app gesture returns exactly once; scroll, cancellation, notifications and cleanup stay safe',async()=>{
+ const {installSwipeBack,OVERLAYS,STEP_BACK}=await import('../src/swipe-back.mjs');
+ const handlers=new Map(),settings=new Map();let clicks=0,prevented=0,overlay=false;
+ const body={nodeType:1},target={nodeType:1,parentElement:body,matches:()=>false,scrollLeft:0,scrollWidth:100,clientWidth:100};
+ const back={getBoundingClientRect:()=>({width:80,height:44}),click:()=>{assert.ok(prevented>clicks,'suppress the synthesized tap before activating Back');clicks++;}};
+ const doc={body,querySelectorAll:s=>s===OVERLAYS?(overlay?[back]:[]):s===STEP_BACK?[]:[back],addEventListener:(type,fn,options)=>{handlers.set(type,fn);settings.set(type,options);},removeEventListener:type=>handlers.delete(type)};
+ const win={navigator:{standalone:true},innerWidth:402,getComputedStyle:()=>({overflowX:'visible'})};
+ const stop=installSwipeBack(win,doc);
+ const event=(x,y,time,touches=1)=>({target,touches:Array.from({length:touches},()=>({clientX:x,clientY:y})),changedTouches:[{clientX:x,clientY:y}],timeStamp:time,cancelable:true,preventDefault:()=>prevented++});
+ const send=(type,...args)=>handlers.get(type)(event(...args));
+ send('touchstart',8,120,0);send('touchmove',70,122,70);send('touchend',170,124,180,0);
+ assert.equal(clicks,1);assert.equal(prevented,1);
+ assert.equal(settings.get('touchmove').passive,true,'vertical scrolling is never blocked');
+ assert.equal(settings.get('touchend').passive,false,'only a completed gesture suppresses its duplicate tap');
+ send('touchstart',8,120,200);send('touchmove',12,200,250);send('touchend',170,250,400,0);
+ assert.equal(clicks,1,'a vertical scroll never returns');
+ send('touchstart',8,120,500);send('touchmove',160,122,560);send('touchcancel',160,122,570,0);send('touchend',170,122,580,0);
+ assert.equal(clicks,1,'a cancelled touch never returns');
+ send('touchstart',8,120,600);send('touchmove',80,122,650,2);send('touchend',180,122,700,0);
+ assert.equal(clicks,1,'a second finger cancels the gesture');
+ overlay=true;
+ send('touchstart',8,120,800);send('touchmove',100,122,850);send('touchend',180,122,900,0);
+ assert.equal(clicks,1,'notifications and other open layers keep the gesture');
+ stop();assert.equal(handlers.size,0,'unmount removes every gesture handler');
 });

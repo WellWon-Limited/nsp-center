@@ -20,7 +20,7 @@
     "original": "/media/upload/iblock/93c/93c1aa1d9e45ebb6bd8b295315e384df.png"
   },
   "aloe-vera-juice": {
-    "image": "/images/products/white-v2/aloe-vera-juice.jpg",
+    "image": "/images/products/russian-source/aloe-vera-juice-1.jpg",
     "original": "/media/upload/iblock/d4d/d4d4b5ca6018e7d49633e9abb9bc101e.png"
   },
   "antioxidant": {
@@ -678,5 +678,29 @@
   "purifying-mattifying-toner": {
     "image": "/images/products/white-v2/purifying-mattifying-toner.jpg",
     "original": "/images/products/purifying-mattifying-toner.jpg"
+  },
+  "tnt-nsp": {
+    "image": "/images/products/russian-source/tnt-nsp.png",
+    "original": "/images/products/russian-source/tnt-nsp.png"
+  },
+  "smart-meal": {
+    "image": "/images/products/russian-source/smart-meal.png",
+    "original": "/images/products/russian-source/smart-meal.png"
+  },
+  "turmeric-curcumin": {
+    "image": "/images/products/russian-source/turmeric-curcumin.png",
+    "original": "/images/products/russian-source/turmeric-curcumin.png"
+  },
+  "collagen-plus": {
+    "image": "/images/products/russian-source/collagen-plus.jpg",
+    "original": "/images/products/russian-source/collagen-plus.jpg"
+  },
+  "chlorophyll-lime": {
+    "image": "/images/products/russian-source/chlorophyll-lime.jpg",
+    "original": "/images/products/russian-source/chlorophyll-lime.jpg"
+  },
+  "day-anti-age-face-cream-40": {
+    "image": "/images/products/russian-source/day-anti-age-face-cream-40.png",
+    "original": "/images/products/russian-source/day-anti-age-face-cream-40.png"
   }
 }

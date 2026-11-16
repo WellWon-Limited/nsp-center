@@ -2,7 +2,7 @@ import {productCover} from './product-media.mjs';
 import './assistant.css';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { data, money, partnerSignupUrl, priceOf, shortName, useStore } from './store';
-import { Icon, WaitlistButton } from './ui';
+import { Icon, WaitlistButton, ProductCardCartButton } from './ui';
 
 // «Консультация» (/consultation/): a chat with the shop's assistant. Until the AI server exists (an API key cannot live in
 // the site), the assistant answers from the theme pages and expert comments written from the doctors' lecture base: it finds
@@ -355,10 +355,11 @@ function ProductMini({ id, index }: { id: string; index: Index }) {
   if (!p || !full) return null;
   // Price and stock from the site's product (the administrator may have changed them, src/site.ts), not the chat index.
   const price = priceOf(full, state.card); const partner = state.card && full.prices.partner !== null;
-  return <div className="chat-product"><img src={productCover(full)} alt="" width="56" height="56" /><a href={fromChat(p.path)}>{shortName(p.name)}<span>{money(price)}{partner ? ' по карте' : ''}</span></a>{inStock(full.id) ? <button type="button" className="btn card-cart-button" onClick={() => add(full)}>В корзину</button> : <WaitlistButton product={full} />}</div>;
+  return <div className="chat-product"><img src={productCover(full)} alt="" width="56" height="56" /><a href={fromChat(p.path)}>{shortName(p.name)}<span>{money(price)}{partner ? ' по карте' : ''}</span></a>{inStock(full.id) ? <ProductCardCartButton product={full}/> : <WaitlistButton product={full} />}</div>;
 }
 
 export function AssistantChat() {
+  const {site:knowledgeSite}=useStore();
   const [messages, setMessages] = useState<Message[]>([greeting]);
   const [draft, setDraft] = useState('');
   const [index, setIndex] = useState<Index | null>(null);
@@ -433,7 +434,14 @@ export function AssistantChat() {
   // A guest's conversation lasts while they move between the site's pages in this tab and starts anew when the page is
   // reloaded (owner, 2026-11-12); an account's conversation is kept for the account.
   useEffect(() => { if (!whoReady) return; skipSave.current = true; let saved: unknown = null; try { const reloaded = (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload'; if (!who.signedIn && reloaded) sessionStorage.removeItem(storeKey); saved = JSON.parse(sessionStorage.getItem(storeKey) || 'null'); } catch { /* new chat */ } setMessages(Array.isArray(saved) && saved.length ? saved as Message[] : [{ ...greeting, at: now() }]); openedAt.current = performance.now(); }, [storeKey, whoReady]);
-  useEffect(() => { import('./generated/chat-index.json').then(m => setIndex((m.default ?? m) as Index)); }, []);
+  useEffect(() => { let off=false;import('./generated/chat-index.json').then(m => {
+    const base=(m.default??m) as Index;
+    const curated=data.products.filter(p=>!p.hidden&&p.knowledge);
+    const ids=new Set(curated.map(p=>p.id));
+    const products=curated.map(p=>({id:p.id,name:p.name,path:p.path,price:p.prices.retail,partner:null,available:p.availability!=='OutOfStock',expert:null,usage:p.properties['Применение']??'',contra:p.properties['Противопоказания']??'',highlights:p.knowledge!.highlights.length?p.knowledge!.highlights:p.knowledge!.about} as ChatProduct));
+    const themes=curated.map(p=>({path:p.path,h1:p.name,product:p.id,lead:p.knowledge!.about.join(' '),sections:[{h:'Чем полезен',p:p.knowledge!.about.join(' ')}],faq:[],pairs:p.knowledge!.pairs.map(x=>({id:x.productId,why:x.why})),source:p.knowledge!.sources[0]??null} as ChatTheme));
+    if(!off)setIndex({products:[...base.products.filter(p=>!ids.has(p.id)&&data.products.some(x=>x.id===p.id&&!x.hidden)),...products],themes:[...base.themes.filter(t=>!ids.has(t.product)),...themes]});
+  });return()=>{off=true}; }, [knowledgeSite]);
   useEffect(() => { if (messages.some(m => !m.at)) setMessages(ms => ms.map(m => m.at ? m : { ...m, at: now() })); }, [messages]);
   useEffect(() => { if (skipSave.current) skipSave.current = false; else try { sessionStorage.setItem(storeKey, JSON.stringify(messages.slice(-60))); } catch { /* ignore */ }
     // The visitor's own message always shows; an answer shows when the visitor was at the end, and a long answer opens at

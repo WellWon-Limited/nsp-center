@@ -1,0 +1,11 @@
+/* Approved expert reviews: a quiet perimeter, readable copy and a white-on-green badge. */
+.site-main .expert-notes{gap:var(--space-20);font-family:var(--font-sans)}
+.site-main .expert-note{padding:var(--space-24);border:1px solid var(--color-border);border-radius:var(--radius-20);background:transparent;box-shadow:none;min-width:0}
+.site-main .expert-note .expert-badge{background:var(--color-ink);color:var(--color-white);font-size:var(--text-12);font-weight:var(--weight-600);line-height:var(--leading-relaxed)}
+.site-main .expert-note .expert-badge svg{color:inherit}
+.site-main .expert-note .expert-text{margin:var(--space-16) 0 var(--space-20);font-size:var(--text-16);font-weight:var(--weight-400);line-height:var(--leading-relaxed);text-align:left}
+.site-main .expert-note footer{padding-top:var(--space-12);display:grid;gap:var(--space-4)}
+.site-main .expert-note footer strong{font-size:var(--text-14);font-weight:var(--weight-700);line-height:var(--leading-relaxed)}
+.site-main .expert-note footer span{font-size:var(--text-13);color:var(--color-muted);line-height:var(--leading-relaxed)}
+.site-main .expert-note footer small{font-size:var(--text-12);color:var(--color-muted);line-height:var(--leading-relaxed)}
+@media(max-width:639px){.site-main .expert-note{padding:var(--space-18)}}

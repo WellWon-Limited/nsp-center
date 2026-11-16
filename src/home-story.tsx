@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Icon, RichContent } from './ui';
+import { ContactCard } from './contact-card';
 import './home-story.css';
 import { homeStoryLinks } from './home-story-navigation.mjs';
 
@@ -91,6 +92,7 @@ export function HomeStory({html}:{html:string;reviewsHtml?:string}){
    <section id="about-contacts" className="story-section story-pickup story-pickup--forest" data-ds-id="home-about-contacts">
     <div className="story-pickup-address"><div className="story-pickup-heading"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true"><path d="M26 13c0 8-10 16-10 16S6 21 6 13a10 10 0 1 1 20 0Z"/><circle cx="16" cy="13" r="3.5"/></svg><h2>Пункт выдачи заказов</h2></div><p className="story-pickup-city">Санкт-Петербург</p><p className="story-pickup-street">Набережная<br/>Обводного канала, 64</p><p className="story-pickup-details">Корп. 2, лит. А, офис 29/3<br/>2-й этаж</p></div>
     <div className="story-pickup-info"><a href="tel:+78124673585">+7 (812) 467-35-85</a><a href="mailto:sales@nsp-center.ru">sales@nsp-center.ru</a><a className="btn btn--primary" href="/contacts/?from=home-about&section=contacts">Как нас найти<Icon name="chevron" size={20}/></a></div>
+    <ContactCard className="story-pickup-card" address={false} heading="h3"/>
    </section>
   </article>
  </section>;

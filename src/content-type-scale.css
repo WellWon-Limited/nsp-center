@@ -1,0 +1,67 @@
+/* One reading scale, taken from Delivery: body 16, section 26, subsection 18. */
+:root{
+ --reading-font-size:var(--text-16);
+ --reading-line-height:var(--leading-long);
+}
+@media(max-width:639px){:root{--reading-font-size:var(--text-16)}}
+@layer typography-reference{
+ html body #root .site-main :is(.information-page,.company-page,.journal-article-page,.theme-page,.info-body,.av-reading,.product-copy,.properties) :is(p,li,dd,dt,blockquote){
+  font-size:var(--reading-font-size)!important;
+  line-height:var(--reading-line-height)!important;
+ }
+ html body #root .site-main :is(.av-article-copy,.av-lead,.co-article-lead,.information-content>.rich-content,.review-card blockquote){
+  font-size:var(--reading-font-size)!important;
+  line-height:var(--reading-line-height)!important;
+ }
+ html body #root .site-main .product-detail--nature :is(.product-short-section p,.product-purpose,.product-key-facts dd),
+ html body #root .site-main .product-detail--nature~.product-content .product-copy :is(p,li),
+ html body #root .site-main .product-detail--nature~.product-content .properties :is(dt,dd),
+ html body #root .site-main .expert-note .expert-text{
+  font-size:var(--reading-font-size)!important;
+  line-height:var(--reading-line-height)!important;
+ }
+ html body #root .site-main :is(.company-page,.journal-article-page,.information-content,.theme-page,.info-body) h2,
+ html body #root .site-main .company-page .co-hero-title,
+ html body #root .site-main .product-content .product-about-title{
+  font-size:var(--text-26)!important;
+  font-weight:var(--weight-800)!important;
+  line-height:var(--leading-heading)!important;
+ }
+ html body #root .site-main :is(.company-page,.journal-article-page,.information-content,.theme-page,.info-body) h3,
+ html body #root .site-main .information-review>header h2,
+ html body #root .site-main .information-video h2{
+  font-size:var(--text-18)!important;
+  line-height:var(--leading-heading)!important;
+ }
+ /* Introductions and calls to action use Delivery's supporting-text size. */
+ html body #root .site-main :is(.information-heading,.information-closing,.co-closing) p,
+ html body #root .site-main .delivery-rates p:not(.delivery-price){
+  font-size:var(--text-14)!important;
+  line-height:var(--leading-long)!important;
+ }
+ html body #root .site-main .delivery-page .delivery-price{font-size:var(--text-30)!important}
+ html body #root .site-main .delivery-page .delivery-price--text{font-size:var(--text-22)!important}
+ html body #root .site-main .information-empty-message{font-size:var(--text-20)!important}
+}
+/* Long text wraps inside its own section. Headlines and photographs never require a fixed text height. */
+html body #root .site-main :is(.company-page,.journal-article-page,.information-page,.theme-page,.info-body) :is(h1,h2,h3,p,li,dd,dt,blockquote){overflow-wrap:anywhere}
+html body #root .company-page :is(.co-hero-copy,.co-section,.co-research,.co-principle-grid article,.co-timeline article){min-width:0}
+html body #root .company-page :is(.co-button,.co-text-link){max-width:100%;white-space:normal}
+html body #root .company-page .co-closing>div{flex-wrap:wrap}
+html body #root .company-page :is(.co-button,.co-text-link)>svg{flex:none}
+
+/* Every page introduction follows Delivery's own supporting copy. */
+@layer typography-reference{
+ html body #root .site-main :is(.information-heading,.plan-page>.page-heading,.journal-page-heading .page-heading,.consult-heading .page-heading)>div>p{
+  font-family:var(--font-sans)!important;font-size:var(--text-14)!important;font-weight:400!important;line-height:var(--leading-long)!important;letter-spacing:normal!important;color:var(--color-muted)!important;
+ }
+}
+
+/* One section-label treatment for page headers, including the company and consultation pages. */
+@layer typography-reference{
+ html body #root .site-main .information-heading .information-kicker,
+ html body #root .site-main :is(.plan-page,.journal-page-heading,.consult-heading) .page-heading .ds-kicker,
+ html body #root .site-main :is(.plan-page,.journal-page-heading,.consult-heading) .page-heading>div::before{
+  font-family:var(--font-sans)!important;font-size:var(--text-14)!important;font-weight:800!important;line-height:21px!important;letter-spacing:normal!important;text-transform:none!important;
+ }
+}

@@ -1,3 +1,4 @@
+import {RequiredLabel,RequiredHint,RequiredMark} from './admin-form';
 import { useEffect, useState, type FormEvent } from 'react';
 import type { ContentPage } from './content-types';
 import { data, shortName, today, useStore } from './store';
@@ -55,12 +56,12 @@ async function upload(file: File, notify: (s: string) => void): Promise<string |
   } catch { notify('Нет связи с сервером.'); return null; }
 }
 
-function ImageField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+export function ImageField({ label, value, onChange, required=false }: { label: string; value: string; onChange: (url: string) => void; required?:boolean }) {
   const { notify } = useStore();
   const [busy, setBusy] = useState(false);
   return <div className="admin-content-image">
     {value && <img src={value} alt="" />}
-    <label className="admin-file">{busy ? 'Загружаем…' : value ? `${label}: заменить` : label}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async e => { const file = e.target.files?.[0]; e.target.value = ''; if (!file) return; setBusy(true); const url = await upload(file, notify); setBusy(false); if (url) onChange(url); }} /></label>
+    <label className="admin-file">{busy ? 'Загружаем…' : value ? `${label}: заменить` : label}{required&&<RequiredMark/>}<input aria-required={required} type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={async e => { const file = e.target.files?.[0]; e.target.value = ''; if (!file) return; setBusy(true); const url = await upload(file, notify); setBusy(false); if (url) onChange(url); }} /></label>
     {value && <button type="button" className="btn btn--secondary" onClick={() => onChange('')}>Убрать фото</button>}
   </div>;
 }
@@ -76,30 +77,35 @@ function Remove({ onYes, what }: { onYes: () => void; what: string }) {
 }
 
 // ── Акции ──────────────────────────────────────────────────────────────────────────────────────────────────────────
-const noPromo = { title: '', text: '', from: '', to: '', image: '', link: '' };
+const noPromo = { title: '', text: '', from: '', to: '', image: '', link: '', products: [] as string[] };
 export function PromosSection({ site, run }: Section) {
   const promos = (site.content ?? emptyContent).promos;
   const [edit, setEdit] = useState<{ id: number | null; f: typeof noPromo } | null>(null);
+  const [pick, setPick] = useState('');
   const now = today();
   const running = new Set(activePromos(promos, now).map(p => p.id));
   const save = async (e: FormEvent) => { e.preventDefault(); if (!edit) return; if (await call(run, 'promo', edit.id ? 'update' : 'add', { id: edit.id, item: edit.f }, edit.id ? 'Акция сохранена' : 'Акция добавлена')) setEdit(null); };
-  const set = (k: keyof typeof noPromo) => (v: string) => setEdit(x => x && { ...x, f: { ...x.f, [k]: v } });
+  const set = <K extends keyof typeof noPromo>(k: K) => (v: (typeof noPromo)[K]) => setEdit(x => x && { ...x, f: { ...x.f, [k]: v } });
   return <section className="admin-card" data-ds-id="admin-promos">
-    <p className="admin-lead">Акции видны на странице «Акции». Без дат акция идёт, пока её не удалите; с датой окончания — уходит со страницы сама на следующий день.</p>
+    <p className="admin-lead">Выберите товары — на странице «Акции» они появятся карточками каталога под условиями акции. Цены и метки скидки задаются в редакторе товара. С датой окончания акция уходит со страницы сама на следующий день.</p>
     {!edit && <button type="button" className="btn btn--primary admin-new-product-open" onClick={() => setEdit({ id: null, f: noPromo })}><Icon name="plus" size={18} />Новая акция</button>}
-    {edit && <form className="admin-editor admin-content-form" onSubmit={save}>
-      <label>Название<input className="field" value={edit.f.title} onChange={e => set('title')(e.target.value)} placeholder="Например: −15% на омега-3" required /></label>
+    {edit && <form className="admin-editor admin-content-form" onSubmit={save}><RequiredHint/>
+      <label><RequiredLabel>Название</RequiredLabel><input className="field" value={edit.f.title} onChange={e => set('title')(e.target.value)} placeholder="Например: −15% на омега-3" required /></label>
       <label>Условия — абзацы через пустую строку<textarea className="field" rows={5} value={edit.f.text} onChange={e => set('text')(e.target.value)} /></label>
       <div className="admin-editor-grid">
         <label>Начало<input className="field" type="date" value={edit.f.from} onChange={e => set('from')(e.target.value)} /></label>
         <label>Окончание<input className="field" type="date" value={edit.f.to} onChange={e => set('to')(e.target.value)} /></label>
         <label>Ссылка «Подробнее»<input className="field" value={edit.f.link} onChange={e => set('link')(e.target.value)} placeholder="/catalog/ — необязательно" /></label>
       </div>
-      <ImageField label="Фото акции" value={edit.f.image} onChange={set('image')} />
+      <div className="admin-content-products"><span>Товары акции</span>
+        <ul>{edit.f.products.map(id=><li key={id}>{shortName(data.products.find(p=>p.id===id)?.name??id)}<button type="button" aria-label="Убрать товар из акции" onClick={()=>set('products')(edit.f.products.filter(x=>x!==id))}><Icon name="close" size={14}/></button></li>)}</ul>
+        {edit.f.products.length<24&&<div className="admin-picker"><ProductPicker exclude={edit.f.products} value={pick} onChange={id=>{if(id){set('products')([...edit.f.products,id]);setPick('')}}} placeholder="Добавить товар: название или артикул" label="Товар акции"/></div>}
+      </div>
+      <ImageField label="Обложка акции — необязательно" value={edit.f.image} onChange={set('image')} />
       <div className="admin-editor-actions"><button className="btn btn--primary">{edit.id ? 'Сохранить' : 'Добавить акцию'}</button><button type="button" className="btn btn--secondary" onClick={() => setEdit(null)}>Отмена</button></div>
     </form>}
     {promos.length ? <ul className="admin-content-list">{promos.map(p => <Row key={p.id} title={p.title} note={running.has(p.id) ? (p.to ? `Идёт до ${humanDate(p.to)}` : 'Идёт') : p.from > now ? `Начнётся ${humanDate(p.from)}` : 'Закончилась — на сайте не видна'}>
-      <button type="button" className="btn btn--secondary" onClick={() => setEdit({ id: p.id, f: { title: p.title, text: p.text, from: p.from, to: p.to, image: p.image, link: p.link } })}>Изменить</button>
+      <button type="button" className="btn btn--secondary" onClick={() => setEdit({ id: p.id, f: { title: p.title, text: p.text, from: p.from, to: p.to, image: p.image, link: p.link, products: p.products ?? [] } })}>Изменить</button>
       <Remove what="акцию" onYes={() => void call(run, 'promo', 'delete', { id: p.id }, 'Акция удалена')} />
     </Row>)}</ul> : <p className="ds-muted">Акций пока нет — на сайте написано «Акций пока нет».</p>}
   </section>;
@@ -139,10 +145,10 @@ export function VideosSection({ site, run }: Section) {
   const save = async (e: FormEvent) => { e.preventDefault(); if (await call(run, 'video', 'add', { item: f }, 'Видео добавлено')) setF({ url: '', title: '' }); };
   return <section className="admin-card" data-ds-id="admin-videos">
     <p className="admin-lead">Видео не загружается на сайт, а добавляется ссылкой на ролик в VK Видео, Rutube или YouTube: так оно не занимает место и открывается в их плеере. VK Видео и Rutube в России открываются без замедлений.</p>
-    <form className="admin-editor admin-content-form" onSubmit={save}>
+    <form className="admin-editor admin-content-form" onSubmit={save}><RequiredHint/>
       <div className="admin-editor-grid">
-        <label>Ссылка на ролик<input className="field" value={f.url} onChange={e => setF({ ...f, url: e.target.value })} placeholder="https://vkvideo.ru/video-…" required /></label>
-        <label>Название<input className="field" value={f.title} onChange={e => setF({ ...f, title: e.target.value })} required /></label>
+        <label><RequiredLabel>Ссылка на ролик</RequiredLabel><input className="field" value={f.url} onChange={e => setF({ ...f, url: e.target.value })} placeholder="https://vkvideo.ru/video-…" required /></label>
+        <label><RequiredLabel>Название</RequiredLabel><input className="field" value={f.title} onChange={e => setF({ ...f, title: e.target.value })} required /></label>
       </div>
       {f.url && <p className={info ? 'admin-hint-muted' : 'admin-error'}>{info ? `Ролик ${VIDEO_SOURCES[info.source]} — подходит.` : 'Это не ссылка на ролик VK Видео, Rutube или YouTube.'}</p>}
       <div className="admin-editor-actions"><button className="btn btn--primary" disabled={!info}>Добавить видео</button></div>
@@ -169,14 +175,14 @@ export function JournalSection({ site, run }: Section) {
   return <section className="admin-card" data-ds-id="admin-journal">
     <p className="admin-lead">Статья появляется в «Журнале о заботе» и на главной, новые — первыми. Поисковики видят её текст сразу.</p>
     {!edit && <button type="button" className="btn btn--primary admin-new-product-open" onClick={() => setEdit({ id: null, f: { ...noArticle, date: today() } })}><Icon name="plus" size={18} />Новая статья</button>}
-    {edit && <form className="admin-editor admin-content-form" onSubmit={save}>
+    {edit && <form className="admin-editor admin-content-form" onSubmit={save}><RequiredHint/>
       <div className="admin-editor-grid">
-        <label>Заголовок<input className="field" value={edit.f.title} onChange={e => set('title')(e.target.value)} required /></label>
+        <label><RequiredLabel>Заголовок</RequiredLabel><input className="field" value={edit.f.title} onChange={e => set('title')(e.target.value)} required /></label>
         <label>Дата<input className="field" type="date" value={edit.f.date} onChange={e => set('date')(e.target.value)} /></label>
       </div>
       <ImageField label="Обложка" value={edit.f.cover} onChange={set('cover')} />
       <label>Вводный абзац — коротко, о чём статья<textarea className="field" rows={3} value={edit.f.lead} onChange={e => set('lead')(e.target.value)} /></label>
-      <label>Текст статьи<textarea className="field" rows={14} value={edit.f.body} onChange={e => set('body')(e.target.value)} required /></label>
+      <label><RequiredLabel>Текст статьи</RequiredLabel><textarea className="field" rows={14} value={edit.f.body} onChange={e => set('body')(e.target.value)} required /></label>
       <p className="admin-hint-muted">Абзацы разделяйте пустой строкой. Подзаголовок — строка, начинающаяся с «## ». Список — строки, начинающиеся с «- ».</p>
       <div className="admin-content-products"><span>Товары из статьи — карточки под текстом</span>
         <ul>{edit.f.products.map(id => <li key={id}>{shortName(data.products.find(p => p.id === id)?.name ?? id)}<button type="button" aria-label="Убрать товар" onClick={() => set('products')(edit.f.products.filter(x => x !== id))}><Icon name="close" size={14} /></button></li>)}</ul>
@@ -204,9 +210,9 @@ export function FaqSection({ site, run }: Section) {
   return <section className="admin-card" data-ds-id="admin-faq">
     <p className="admin-lead">Вопросы на странице «Частые вопросы». Добавленные здесь стоят первыми; вопросы со старого сайта можно скрыть.</p>
     {!edit && <button type="button" className="btn btn--primary admin-new-product-open" onClick={() => setEdit({ id: null, q: '', a: '' })}><Icon name="plus" size={18} />Новый вопрос</button>}
-    {edit && <form className="admin-editor admin-content-form" onSubmit={save}>
-      <label>Вопрос<input className="field" value={edit.q} onChange={e => setEdit({ ...edit, q: e.target.value })} required /></label>
-      <label>Ответ — абзацы через пустую строку, список строками с «- »<textarea className="field" rows={6} value={edit.a} onChange={e => setEdit({ ...edit, a: e.target.value })} required /></label>
+    {edit && <form className="admin-editor admin-content-form" onSubmit={save}><RequiredHint/>
+      <label><RequiredLabel>Вопрос</RequiredLabel><input className="field" value={edit.q} onChange={e => setEdit({ ...edit, q: e.target.value })} required /></label>
+      <label><RequiredLabel>Ответ — абзацы через пустую строку, список строками с «- »</RequiredLabel><textarea className="field" rows={6} value={edit.a} onChange={e => setEdit({ ...edit, a: e.target.value })} required /></label>
       <div className="admin-editor-actions"><button className="btn btn--primary">{edit.id ? 'Сохранить' : 'Добавить вопрос'}</button><button type="button" className="btn btn--secondary" onClick={() => setEdit(null)}>Отмена</button></div>
     </form>}
     <ul className="admin-content-list">

@@ -6,9 +6,9 @@ import * as cheerio from 'cheerio';
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const css = read('src/app.css');
 
-test('the status bar and the area above the page are white like the header; below the page dark like the tab bar', () => {
-  assert.match(read('index.html'), /<meta name="theme-color" content="#ffffff"\/>/);
-  assert.match(css, /\.site-header::before\{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var\(--color-white\)/);
+test('the browser theme and the upper overscroll strip continue the shared header surface', () => {
+  assert.match(read('index.html'), /<meta name="theme-color" content="#f8fbfa"\/>/);
+  assert.match(css, /\.site-header::before\{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var\(--header-edge-surface,var\(--color-bg\)\)/);
   assert.match(css, /body\{background:linear-gradient\(to top,#fff calc\(var\(--phone-nav-height,52px\) \+ env\(safe-area-inset-bottom\)\),var\(--color-bg\) 0\)\}/);
 });
 
@@ -86,4 +86,32 @@ test('the chat measures the keyboard against the full screen, also when the wind
   assert.match(code, /if \(!focused\.current\) full = Math\.max\(window\.innerHeight, vv\.height \+ vv\.offsetTop\);/);
   assert.match(code, /const keyboard = full - vv\.height - vv\.offsetTop;/);
   assert.match(code, /for \(const ms of \[350, 700, 1100\]\)/);
+});
+
+test('the consultation page is the chat alone, wide and centred; its contact card lives in the home pickup block', () => {
+  assert.doesNotMatch(read('src/App.tsx'), /consult-contact/);
+  const css = read('src/consultation.css');
+  assert.match(css, /\.consult-page\{width:min\(100% - 56px,1040px\)\}\n \.consult-layout\{grid-template-columns:minmax\(0,1fr\)\}\n \.consult-layout>\.chat\{max-width:none\}/);
+  assert.match(read('src/home-story.tsx'), /<ContactCard className="story-pickup-card" address=\{false\} heading="h3"\/>/);
+  assert.match(read('src/home-story.css'), /grid-template-areas:"address card" "info card"/);
+  assert.match(read('src/contact-card.css'), /#root \.contact-card a\.contact-card-phone\{font-size:28px;font-weight:800;color:#2f6f5a/);
+});
+
+test('the plan time is optional: added from a product without a time, listed last, no reminder', async () => {
+  // The product page's «+ Добавить в план приёма» (src/product-overview.tsx).
+  assert.match(read('src/product-overview.tsx'), /\[\.\.\.s\.intake,\{id:p\.id,time:'',done:false\}\]/);
+  assert.match(read('src/personal.tsx'), /time:newTime,done:false\}/);
+  assert.match(read('src/pwa.tsx'), /if \(!it\.time\) return false;/);
+  const { restorePlans } = await import('../src/intake-plan.ts').catch(() => ({}));
+  if (restorePlans) assert.deepEqual(restorePlans({ '2026-11-13': [{ id: 'a', time: '', done: false }, { id: 'b', time: '25:00', done: false }] }, new Set(['a', 'b'])), { '2026-11-13': [{ id: 'a', time: '', done: false }] });
+  else assert.match(read('src/intake-plan.ts'), /x\.time===''\|\|/);
+});
+
+test('the desktop hero fits its three category tiles and extends the unchanged photo with woodland', () => {
+ const css=read('src/home-desktop.css');
+ assert.match(css,/--hero-h:max\(260px,min\(var\(--hero-natural\),var\(--hero-fit\)\)\);/);
+ assert.match(css,/woodland-side-extension-haze-v2\.png/);
+ assert.doesNotMatch(css,/filter:blur\(32px\)/);
+ assert.doesNotMatch(read('src/home-hero-framing.tsx'),/ResizeObserver|setProperty|useLayoutEffect/);
+ assert.match(css,/height:var\(--home-tile-h\)!important/);
 });

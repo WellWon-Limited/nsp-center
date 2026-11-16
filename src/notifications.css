@@ -69,26 +69,36 @@
 .notifications-panel li a:is(:hover,:focus-visible,:active){text-decoration:none}
 
 /* The list (research 2026-11-10): day headings, a line between notices, an icon per kind; the ones that were new when
-   the panel opened have an orange stripe on the left and an orange "Новое" (owner: no dark-green highlight). */
+   the panel opened keep a light mint surface and a quiet green "Новое" label. */
 .notifications-new { font-size: var(--text-12); font-weight: var(--weight-600); color: var(--color-muted); }
 .notifications-list { margin: 0 calc(-1 * var(--space-18)); padding: 0 var(--space-18); overflow-y: auto; overscroll-behavior: contain; min-height: 0; }
 .notifications-day { position: sticky; top: 0; z-index: 1; margin: 0; padding: var(--space-10) 0 var(--space-6); background: var(--color-white); font-size: var(--text-11); font-weight: var(--weight-700); letter-spacing: var(--tracking-kicker); text-transform: uppercase; color: var(--color-muted); }
 .notifications-list ul { list-style: none; margin: 0; padding: 0; }
 .notifications-list li { position: relative; display: flex; align-items: flex-start; border-top: 1px solid var(--color-ink-line); }
 .notifications-list li:last-child { border-bottom: 1px solid var(--color-ink-line); }
-.notifications-list li.is-new { box-shadow: inset 3px 0 0 #ad6338; background: #fdf7f2; }
+.notifications-list li.is-new { box-shadow:none; background:var(--color-mint-status); border-radius:var(--radius-12); }
 .notifications-list li a { flex: 1; min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-12); align-items: start; padding: var(--space-12) var(--space-6) var(--space-12) var(--space-10); color: var(--color-ink); text-decoration: none; }
 .notifications-list li a:is(:hover, :focus-visible, :active) { text-decoration: none; }
-.notification-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: var(--radius-circle); background: #f3f7f5; color: var(--color-ink); }
+.notification-icon { display: grid; place-items: center; width: 32px; height: 32px; border:0; border-radius:0; background:transparent; box-shadow:none; color:var(--color-ink); }
 .notification-icon--stock { color: var(--color-success); }
-.notification-icon--review { color: #ad6338; }
+.notification-icon--review { color: var(--color-success); }
 .notification-body { display: grid; gap: var(--space-2); min-width: 0; }
 .notification-body strong { font-size: var(--text-13); font-weight: var(--weight-600); line-height: 1.35; }
 .notification-text { font-size: var(--text-13); line-height: 1.4; color: var(--color-body); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .notification-body small { font-size: var(--text-11); color: var(--color-muted); }
-.notification-new-tag { margin-right: var(--space-6); font-weight: var(--weight-700); color: #ad6338; }
+.notification-new-tag { margin-right: var(--space-6); font-weight: var(--weight-700); color: var(--color-success); }
 .notification-remove { flex: none; display: grid; place-items: center; width: 28px; height: 28px; margin: var(--space-10) var(--space-2) 0 0; padding: 0; border: 0; border-radius: var(--radius-circle); background: none; color: var(--color-subtle); cursor: pointer; }
 .notification-remove:hover, .notification-remove:focus-visible { color: var(--color-ink); background: var(--color-ink-soft); }
 .notifications-clear { align-self: flex-start; margin-top: var(--space-10); font-size: var(--text-12); color: var(--color-muted); }
 .notifications-undo { display: flex; align-items: center; justify-content: space-between; gap: var(--space-12); margin: var(--space-10) 0 0; font-size: var(--text-12); color: var(--color-muted); }
 .notifications-empty p { margin: 0; }
+
+@layer typography-reference{
+ html body #root .notifications-head h2{font-size:var(--text-18)!important;line-height:1.3!important}
+}
+
+@layer typography-reference{
+ html body #root .notifications-panel .notifications-day{font-size:12px!important;font-weight:600!important;line-height:18px!important;letter-spacing:normal!important;text-transform:none!important;padding:12px 0 8px!important;color:var(--color-muted)!important}
+ html body #root .notifications-panel .notification-icon{background:transparent!important;border:0!important;outline:0!important;box-shadow:none!important;border-radius:0!important}
+ html body #root .notifications-panel .notifications-list li.is-new{background:var(--color-mint-status)!important;box-shadow:none!important}
+}

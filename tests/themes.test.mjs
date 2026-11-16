@@ -1,3 +1,4 @@
+import {recommendationAreas} from '../src/recommendation-areas.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -30,15 +31,21 @@ test('Every theme is a prerendered page with one H1, its products, FAQ markup an
     const $ = cheerio.load(readFileSync(resolve(dist, file), 'utf8'));
     assert.equal($('h1').length, 1, `${theme.slug}: exactly one H1`);
     assert.equal($('h1').text(), theme.h1);
+    assert.equal($('.theme-page--paper > .theme-hero > h1').length, 1, `${theme.slug}: title must sit outside the article panel`);
+    assert.equal($('.theme-paper h1').length, 0, `${theme.slug}: title moved inside the panel`);
+    assert.equal($('.theme-paper .theme-lead').text(), theme.lead, `${theme.slug}: article introduction changed`);
+    assert.equal($('.theme-paper .theme-section').length, theme.sections.length, `${theme.slug}: a section was lost`);
+    assert.equal($('.theme-paper .theme-faq details').length, theme.faq.length, `${theme.slug}: an answer was lost`);
+
     assert.equal($('meta[name="description"]').attr('content'), theme.description);
-    for (const id of ids) assert.ok($(`a[href="${products.get(id).path}"]`).length > 0, `${theme.slug}: no link to ${id}`);
+    for (const id of ids) {const count=$(`a[href="${products.get(id).path}"]`).length;if(products.get(id).hidden)assert.equal(count,0,`${theme.slug}: hidden product must not be offered`);else assert.ok(count>0,`${theme.slug}: no link to ${id}`);}
     const graph = JSON.parse($('script[type="application/ld+json"]').text())['@graph'];
     const faq = graph.find((entry) => entry['@type'] === 'FAQPage');
     assert.equal(faq?.mainEntity.length ?? 0, theme.faq.length, `${theme.slug}: FAQPage markup differs from the FAQ block`);
 
     const main = products.get(theme.mainProductId);
     const $product = cheerio.load(readFileSync(resolve(dist, manifest.get(main.path)), 'utf8'));
-    assert.ok($product(`[data-ds-id="product-theme"] a[href="${theme.path}"]`).length === 1, `${theme.slug}: main product page does not link to the theme`);
+    assert.ok($product(`[data-ds-id="product-theme"] a[href="${theme.path}"]`).length === (main.hidden?0:1), `${theme.slug}: main product page does not link to the theme`);
   }
 });
 
@@ -60,7 +67,7 @@ test('Expert comments are attributed to a named speaker and lecture, contain no 
       assert.ok(note.text.length <= 400, `${product.id}: expert note longer than 400 characters`);
     }
     const $ = cheerio.load(readFileSync(resolve(dist, manifest.get(product.path)), 'utf8'));
-    assert.equal($('#panel-reviews .expert-note').length, product.experts.length, `${product.id}: expert notes not rendered before JavaScript`);
+    assert.equal($('#panel-reviews .expert-note').length, product.hidden?0:product.experts.length, `${product.id}: expert notes not rendered before JavaScript`);
   }
 });
 
@@ -76,8 +83,7 @@ test('A product set shows the expert comments of the products inside it, each ma
 });
 
 test('The recommendation test only suggests catalog products, with reasons free of treatment claims', () => {
-  const source = readFileSync(resolve(root, 'src/recommend.tsx'), 'utf8');
-  const pairs = [...source.matchAll(/\['([a-z0-9-]+)', '([^']{20,})'\]/gu)];
+  const pairs = Object.values(recommendationAreas).flatMap(area=>area.products).map(([id,reason])=>['',id,reason]);
   assert.ok(pairs.length >= 15, 'recommendation areas list too few products');
   for (const [, id, reason] of pairs) {
     assert.ok(products.has(id), `recommend: unknown product ${id}`);

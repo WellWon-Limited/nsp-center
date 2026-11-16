@@ -23,3 +23,7 @@ html.nsp-splash .hero-heading--enter .hero-title-word{animation-play-state:pause
 /* Once per visit (index.html marks html.nsp-hero-played): coming back to the home page, or a page the site itself
    reloaded, shows the heading in place instead of «Забота» appearing a second time. */
 html.nsp-hero-played .hero-heading--enter .hero-title-word{animation:none}
+/* A deliberate return to Products replays the same entrance once the heading is visible. */
+@media(prefers-reduced-motion:no-preference){
+ html.nsp-hero-played .hero-heading--enter.hero-heading--replay .hero-title-word{animation:hero-word-enter 1.5s cubic-bezier(.2,.65,.2,1) both}
+}

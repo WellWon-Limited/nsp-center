@@ -21,7 +21,7 @@ function browser(design = 'd') {
  };
 }
 
-test('rubber-band scrolling continues white above the header and the page surface at its bottom', () => {
+test('rubber-band scrolling selects the header surface above and the page surface below', () => {
  const b = browser(); installHomeScrollEdges(b.win, b.doc);
  assert.equal(b.root.dataset.homeScrollEdge, 'top');
  for (const y of [2099, 2140]) {
@@ -66,7 +66,7 @@ test('the restyled catalog paints its bottom edge too, whatever the home design'
  assert.equal(b.root.dataset.homeScrollEdge, 'bottom');
 });
 
-test('site pages paint their colour as an image, so the pulled-down area above the header stays white on iPhone', async () => {
+test('site pages keep the body transparent so the shared header surface paints the upper iPhone canvas', async () => {
  // Safari (iOS 26) fills the area above the page with body's background-color when it has one; html's colour then
  // follows the scroll edge (white at the top, the page colour at the bottom).
  const { readFileSync } = await import('node:fs');

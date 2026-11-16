@@ -1,0 +1,29 @@
+[
+  {
+    "productId": "l-carnitine",
+    "title": "L-карнитин",
+    "documents": [
+      {
+        "name": "L-карнитин — свидетельство о государственной регистрации",
+        "url": "/images/certificates/products/l-carnitine-registration.jpg",
+        "size": "1638 КБ"
+      },
+      {
+        "name": "L-карнитин — приложение к свидетельству",
+        "url": "/images/certificates/products/l-carnitine-registration-annex.jpg",
+        "size": "1628 КБ"
+      }
+    ]
+  },
+  {
+    "productId": "enzimozavriki-whole-food-papayazyme",
+    "title": "Энзимозаврики",
+    "documents": [
+      {
+        "name": "Энзимозаврики — свидетельство о государственной регистрации от 23.01.2026",
+        "url": "/images/certificates/products/enzimozavriki-registration-2026.jpg",
+        "size": "743 КБ"
+      }
+    ]
+  }
+]

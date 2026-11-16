@@ -387,7 +387,7 @@ const stock = JSON.parse(readFileSync(new URL('../src/product-stock.json', impor
 for (const article of [...stock.inStock, ...stock.discontinued]) if (!products.some(product => product.article === article)) throw new Error(`Product stock: unknown article ${article}`);
 for (const product of products) {
   if (stock.inStock.includes(product.article)) { product.availability = 'InStock'; product.availability_text = 'В наличии'; }
-  if (stock.discontinued.includes(product.article)) { product.availability = 'OutOfStock'; product.availability_text = 'Нет в наличии'; product.hidden = true; }
+  if (stock.discontinued.includes(product.article)||(stock.hiddenIds??[]).includes(product.id)) { product.availability = 'OutOfStock'; product.availability_text = 'Нет в наличии'; product.hidden = true; }
 }
 // The pick-up point closes at 17:30 on Saturdays (checked with the office 2026-11-11); the snapshot's stock block said 18:00.
 for (const product of products) for (const key of ['sections', 'sectionsHtml']) for (const [name, text] of Object.entries(product[key] ?? {})) if (typeof text === 'string') product[key][name] = text.replace(/Сб: с 12:00 до 18:00/g, 'Сб: с 12:00 до 17:30');

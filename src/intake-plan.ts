@@ -1,3 +1,4 @@
+/** A product in the day's plan; `time` is optional (owner, 2026-11-13): '' — no time, no reminder, listed last. */
 export type PlanItem = {id:string;time:string;done:boolean};
 export type PlanState = {intake:PlanItem[];intakeDate:string;intakePlans:Record<string,PlanItem[]>};
 export function planFor(s:PlanState,date:string):PlanItem[]{return date===s.intakeDate?s.intake:s.intakePlans[date]||[];}
@@ -11,5 +12,16 @@ export function rollPlan<T extends PlanState>(s:T,date:string):T{
 }
 export function restorePlans(value:unknown,valid:Set<string>):Record<string,PlanItem[]>{
  if(!value||typeof value!=='object')return {};
- return Object.fromEntries(Object.entries(value).filter(([d,v])=>/^\d{4}-\d{2}-\d{2}$/.test(d)&&Array.isArray(v)).map(([d,v])=>[d,(v as PlanItem[]).filter(x=>x&&valid.has(x.id)&&/^([01]\d|2[0-3]):[0-5]\d$/.test(x.time)).map(x=>({id:x.id,time:x.time,done:x.done===true}))]));
+ return Object.fromEntries(Object.entries(value).filter(([d,v])=>/^\d{4}-\d{2}-\d{2}$/.test(d)&&Array.isArray(v)).map(([d,v])=>[d,(v as PlanItem[]).filter(x=>x&&valid.has(x.id)&&(x.time===''||/^([01]\d|2[0-3]):[0-5]\d$/.test(x.time))).map(x=>({id:x.id,time:x.time,done:x.done===true}))]));
+}
+
+/** Fill three home rows: upcoming items first, completed items fill any remaining places. */
+export function homePlanPreview(items:PlanItem[],valid:Set<string>,limit=3):PlanItem[]{
+ return items.filter(i=>valid.has(i.id)).sort((a,b)=>Number(a.done)-Number(b.done)||(a.time||'99').localeCompare(b.time||'99')).slice(0,limit);
+}
+export function completeHomePlan<T extends PlanState & {intakeLog:Record<string,string[]>}>(s:T,id:string,date:string,done=true):T{
+ if(s.intakeDate!==date||!s.intake.some(i=>i.id===id&&i.done!==done))return s;
+ const next=editPlan(s,date,items=>items.map(i=>i.id===id?{...i,done}:i));
+ const log=new Set(next.intakeLog[date]||[]);if(done)log.add(id);else log.delete(id);
+ return {...next,intakeLog:{...next.intakeLog,[date]:[...log]}};
 }

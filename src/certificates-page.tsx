@@ -4,6 +4,7 @@ import './certificates-page.css';
 import { useState } from 'react';
 import { Arrow } from './company-content';
 import { BackLink, Icon } from './ui';
+import productCertificates from './product-certificates.json';
 
 // «Сертификаты» (/company/sertifikaty/) in the style of the company page: a dark-green hero, what each certificate means in
 // one plain sentence, the note on «FDA certificate», and the scans as a gallery (tap a scan to view it full size). The scans
@@ -26,6 +27,7 @@ const scans = [
   { src: '/media/upload/iblock/7fc/7fc36980b22fb1513f0ad96c3266b6ad.jpg', label: 'Organic, перевод' },
   { src: '/media/upload/iblock/a8c/a8cd5a9483520bd171d8775e6308c77c.jpg', label: 'ISO 9001:2015, на английском' },
   { src: '/media/upload/iblock/eac/eac56da6dd35cdf8dbbda22686c7fd87.jpg', label: 'ISO 9001:2015, перевод' },
+  ...productCertificates.flatMap(product=>product.documents.map(document=>({src:document.url,label:document.name}))),
 ];
 
 export function CertificatesPage() {

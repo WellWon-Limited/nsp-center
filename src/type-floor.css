@@ -34,3 +34,38 @@
  #root .section-heading>a{font-size:13px}
  #root .site-footer span{font-size:12px}
 }
+
+/* Phone reading scale: 16 px for reading, 14 px for secondary copy and compact actions.
+   Native iPhone typography uses a 17 pt body; this web layout keeps its two-column catalog
+   and uses the existing 16/14/12 px design tokens rather than shrinking important text. */
+@layer typography-reference{@media(max-width:959px){
+ html[data-catalog-design] body #root .site-main :is(.rich-content,.av-reading,.product-copy) :is(p,li),
+ html[data-catalog-design] body #root .site-main .delivery-content :is(p:not(.delivery-price),li),
+ html[data-catalog-design] body #root .site-main .company-concept :is(.co-article-lead,.co-story,.co-principle-grid,.co-closing) p{font-size:var(--text-16)!important;line-height:1.65!important}
+ html[data-catalog-design] body #root main.site-main :is(.page-heading,.information-heading,.journal-page-heading,.co-page-heading)>div>p{font-size:var(--text-16)!important;line-height:1.55!important}
+ html[data-catalog-design] body #root .site-main :is(.home-care,.home-consult,.story-intro-card,.story-review) p{font-size:var(--text-16)!important;line-height:1.55!important}
+ html[data-catalog-design] body #root .site-main .home-paths a.home-path p{font-size:var(--text-14)!important;line-height:1.45!important}
+ html[data-catalog-design] body #root .site-main .home-first-screen .hero-daily p{font-size:var(--text-16)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .member-plan li>a,
+ html[data-catalog-design] body #root .site-main .planner-row .planner-name{font-size:var(--text-16)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .member-shortcuts a{font-size:var(--text-14)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .member-plan-link{font-size:var(--text-16)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .member-plan-empty{font-size:var(--text-16)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .member-plan time,
+ html[data-catalog-design] body #root .site-main :is(.member-marathon,.member-test)>span>span{font-size:var(--text-14)!important;line-height:1.45!important}
+ html[data-catalog-design] body #root .site-main .product-card .card-sub{font-size:var(--text-13)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .product-card .card-package{font-size:var(--text-12)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .catalog-cart-count>strong{font-size:var(--text-16)!important}
+ html[data-catalog-design] body #root .site-main .catalog-cart-count>span{font-size:var(--text-12)!important;line-height:1.35!important}
+ html[data-catalog-design] body #root .site-main .product-card .product-meta>:is(.card-cart-button,.waitlist-button),
+ html[data-catalog-design] body #root .site-main .product-card .waitlist-button .waitlist-label{font-size:var(--text-14)!important;line-height:1.4!important}
+ html[data-catalog-design] body #root .site-main .product-meta>:is(.btn,.catalog-cart-control){max-height:none!important;min-height:60px!important;height:auto!important}
+ html[data-catalog-design] body #root .site-main .product-detail--nature .product-purpose{font-size:var(--text-16)!important;line-height:1.6!important}
+ html[data-catalog-design] body #root .site-main .product-detail--nature .product-key-facts dd{font-size:var(--text-16)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .product-detail--nature .product-key-facts dt{font-size:var(--text-14)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .answer-list>.panel{font-size:var(--text-16)!important;line-height:1.5!important;white-space:normal;min-height:48px}
+ html[data-catalog-design] body #root .site-main .chat-bubble :is(p,li){font-size:var(--text-16)!important;line-height:1.6!important}
+ html[data-catalog-design] body #root .site-main :is(.back-link,.information-home,.catalog-mobile-back){font-size:var(--text-14)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root .site-main .fine-print{font-size:var(--text-12)!important;line-height:1.5!important}
+ html[data-catalog-design] body #root :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=submit]):not([type=button]),select,textarea){font-size:var(--text-16)!important}
+}}

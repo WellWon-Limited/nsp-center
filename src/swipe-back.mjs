@@ -29,8 +29,8 @@ export function swipeDirection(dx, dy) {
 /** Touches that start here belong to the element, not to the back swipe. */
 export const OWN_TOUCH = 'input,textarea,select,[contenteditable=""],[contenteditable="true"],[data-no-swipe-back]';
 /** Open layers over the page: the swipe does not leave the page under them. */
-export const OVERLAYS = 'dialog[open],[aria-modal="true"],.mobile-menu,[aria-haspopup][aria-expanded="true"]';
-const shown = a => { const r = a.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+export const OVERLAYS = 'dialog[open],[aria-modal="true"],.mobile-menu,.notifications-panel,[aria-haspopup][aria-expanded="true"]';
+const shown = a => { const r = a.getBoundingClientRect(); return r.width > 0 && r.height > 0 && !a.disabled && a.getAttribute?.('aria-disabled') !== 'true' && !a.closest?.('[hidden],[inert],[aria-hidden="true"]'); };
 /** Whether a touch starting at `target` must not become a back swipe. */
 export function ownsTouch(target, doc, win) {
   if ([...doc.querySelectorAll(OVERLAYS)].some(shown)) return true;
@@ -83,18 +83,23 @@ export function installSwipeBack(win, doc) {
     start = null;
     // The same as tapping the screen's back button (BackLink: the previous page, or its own address when opened directly).
     const button = go ? backButton(doc) : null;
-    if (button) button.click();
+    if (button) {
+      // A completed touch must not also synthesize a tap on the old back button.
+      if (e.cancelable) e.preventDefault();
+      button.click();
+    }
   };
   const cancel = () => { start = null; };
   const options = { passive: true };
   doc.addEventListener('touchstart', down, options);
   doc.addEventListener('touchmove', move, options);
-  doc.addEventListener('touchend', up, options);
+  const endOptions = { passive: false };
+  doc.addEventListener('touchend', up, endOptions);
   doc.addEventListener('touchcancel', cancel, options);
   return () => {
     doc.removeEventListener('touchstart', down, options);
     doc.removeEventListener('touchmove', move, options);
-    doc.removeEventListener('touchend', up, options);
+    doc.removeEventListener('touchend', up, endOptions);
     doc.removeEventListener('touchcancel', cancel, options);
   };
 }
