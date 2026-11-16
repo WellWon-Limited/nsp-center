@@ -219,3 +219,30 @@
   html[data-catalog-design] body #root .site-main .catalog-page .filter-row{padding-top:0!important}
  }
 }
+
+/* The native iPhone status area shares the header surface; keyboard changes only the conversation's room. */
+@layer typography-reference{
+ @media(max-width:959px){
+  html body #root .site-header .mobile-menu a{font-size:18px!important;line-height:1.4!important;min-height:48px!important}
+  html body #root .bottom-nav{bottom:max(8px,env(safe-area-inset-bottom))!important}
+  html:root{--phone-bottom-clearance:calc(76px + env(safe-area-inset-bottom));background-color:#eaf5f1!important}
+  html:root[data-home-scroll-edge="bottom"],html:root[data-home-scroll-edge="bottom"] body{background:var(--color-bg)!important}
+  html body:has(.chat) #root{position:fixed!important;inset:0 0 auto!important;display:flex;flex-direction:column;height:100dvh;min-height:0!important}
+  html.chat-kb-open body:has(.chat) #root{height:var(--chat-vh,100dvh)!important;top:0!important}
+  html body:has(.chat) #root .site-header{position:relative!important;top:0!important;flex:none}
+  html body:has(.chat) #root .site-main{flex:1;min-height:0!important;height:auto!important;box-sizing:border-box;padding-bottom:var(--phone-bottom-clearance)!important}
+  html.chat-kb-open body:has(.chat) #root .site-main{padding-bottom:0!important}
+  html body:has(.chat) #root .consult-page{height:100%!important;min-height:0!important;display:flex;flex-direction:column}
+  html body:has(.chat) #root .consult-layout{flex:1;min-height:0!important;display:flex;flex-direction:column}
+  html body:has(.chat) #root .consult-layout>.chat{flex:1;min-height:0!important;height:100%!important}
+ }
+ @media(max-width:639px){
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-hero.home-hero--forest .hero-copy h1{font-size:clamp(28px,4.4svh,38px)!important;line-height:1.06!important}
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .hero-daily p{font-size:14px!important;line-height:1.4!important}
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .hero-daily{margin-top:10px!important;padding:10px 14px!important}
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .hero-copy .ds-cluster{margin-top:10px!important}
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-paths{margin-top:10px!important}
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-hero .hero-photo{height:clamp(64px,calc(100svh - var(--site-header-height,61px) - var(--phone-bottom-clearance) - 418px),202px)!important;aspect-ratio:auto!important;margin-top:10px!important;background: url('/images/hero-dimensions-2026-11-13/woodland-side-extension-haze-v2.png') center/cover!important}
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-hero .hero-photo img{object-fit:contain!important}
+ }
+}

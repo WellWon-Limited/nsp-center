@@ -396,7 +396,7 @@ export function AssistantChat() {
     const root = document.documentElement; let frame = 0; let settle = 0;
     const KEY = 'nsp-center:keyboard-height';
     const guess = () => { const saved = Number(localStorage.getItem(KEY)); return saved > 150 ? saved : Math.round(window.innerHeight * 0.42); };
-    const set = (height: number, top: number) => { root.style.setProperty('--chat-vh', `${Math.round(height)}px`); root.style.setProperty('--chat-top', `${Math.round(top)}px`); };
+    const set = (height: number) => { root.style.setProperty('--chat-vh', `${Math.round(height)}px`); root.style.setProperty('--chat-top', '0px'); };
     // The screen's full height without the keyboard, measured while no field has the focus: some iPhones shrink the
     // window itself for the keyboard, so comparing with the window's height now would see no keyboard at all, and the
     // app kept the estimate with an empty band between the input row and the keyboard.
@@ -408,14 +408,14 @@ export function AssistantChat() {
       // shrink the whole window for the keyboard, so the window and the visible part are equal and only the focus tells.
       const open = focused.current || keyboard > 60;
       root.classList.toggle('chat-kb-open', open);
-      if (open && keyboard > 60) { set(vv.height, vv.offsetTop); try { localStorage.setItem(KEY, String(Math.round(keyboard))); } catch { /* next time an estimate */ } }
+      if (open && keyboard > 60) { set(vv.height); try { localStorage.setItem(KEY, String(Math.round(keyboard))); } catch { /* next time an estimate */ } }
       else if (!open) { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
       if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
     // At the moment the field gets the focus (not at the touch: moving the field under the finger lost the tap, and the
     // keyboard did not open), before iOS has measured where to slide.
     const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle);
-      if (full - vv.height - vv.offsetTop <= 60) { root.classList.add('chat-kb-open'); set(full - guess(), 0); }
+      if (full - vv.height - vv.offsetTop <= 60) { root.classList.add('chat-kb-open'); set(full - guess()); }
       // The keyboard's own resize may not come (a window that shrank with it): the exact size is taken when it is up.
       for (const ms of [350, 700, 1100]) window.setTimeout(() => { if (focused.current) apply(); }, ms);
       if (log.current) log.current.scrollTop = log.current.scrollHeight; schedule(); };

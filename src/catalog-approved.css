@@ -44,7 +44,7 @@ html[data-catalog-design] body #root .catalog-page .catalog-empty{display:flex;a
  html[data-catalog-design] body #root .catalog-page{display:grid;grid-template-columns:220px minmax(0,1fr);gap:0 28px}
  html[data-catalog-design] body #root .catalog-page>.page-heading{grid-column:2;grid-row:1}
  html[data-catalog-design] body #root .catalog-page>.catalog-layout{display:contents!important}
- html[data-catalog-design] body #root .catalog-page .catalog-sidebar{grid-column:1;grid-row:1 / span 2;position:sticky;top:16px}
+ html[data-catalog-design] body #root .catalog-page .catalog-sidebar{grid-column:1;grid-row:1 / span 2;position:sticky;top:calc(var(--site-header-height,140px) / var(--content-scale,1) + 16px)}
  html[data-catalog-design] body #root .catalog-page>.catalog-layout>div{grid-column:2;grid-row:2;min-width:0}
  html[data-catalog-design] body #root :is(.catalog-page,[data-ds-id="home-products"],.theme-page,.recommend) .product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 }

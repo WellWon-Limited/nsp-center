@@ -43,7 +43,8 @@ export function cardFacts(p, byId) {
   const set = p.setProducts?.length ? p.setProducts.map(id => byId.get(id)).filter(Boolean) : null;
   const form = set ? 'Набор' : supplement ? releaseForm(p.properties['Применение']) : (p.properties['Тип'] ?? '');
   const kicker = supplement ? [form, 'БАД'].filter(Boolean).filter((x, i, all) => all.indexOf(x) === i).join(' · ') : form || (p.category ?? '').split('/').at(-1);
-  const sub = supplement ? supportLine(p.properties['Системы организма'] ?? set?.map(x => x.properties['Системы организма']).filter(Boolean).join(', ')) : capitalize((p.properties['Группы косметики'] ?? '').toLowerCase()) || (p.category ?? '').split('/').at(-1);
+  const support = supplement ? supportLine(p.properties['Системы организма'] ?? set?.map(x => x.properties['Системы организма']).filter(Boolean).join(', ')) : capitalize((p.properties['Группы косметики'] ?? '').toLowerCase());
+  const sub = support || p.copy?.highlights?.[0] || (p.category ?? '').split('/').at(-1) || '';
   const parts = set ? set.map(x => x.name.replace(/\s*\([^)]*\)/gu, '').trim()) : (p.properties['Состав 1 ед. (таблетки, пакетика, порции)'] ? compositionParts(p.properties['Состав 1 ед. (таблетки, пакетика, порции)']) : String(p.properties['Вспомогательные вещества'] ?? '').split(',').map(x => x.trim()).filter(Boolean)).map((s, i) => i ? s.toLowerCase() : capitalize(s));
   // Expert comments count as reviews on the card («5 отзывов»); their stars do not exist, so only customers' count there.
   return { kicker, sub, parts: parts.slice(0, 2), more: Math.max(0, parts.length - 2), notes: p.experts?.length ?? 0 };
