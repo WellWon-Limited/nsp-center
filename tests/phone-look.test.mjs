@@ -7,7 +7,7 @@ const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8'
 const css = read('src/app.css');
 
 test('the browser theme and the upper overscroll strip continue the shared header surface', () => {
-  assert.match(read('index.html'), /<meta name="theme-color" content="#f8fbfa"\/>/);
+  assert.match(read('index.html'), /<meta name="theme-color" content="#eaf5f1"\/>/);
   assert.match(css, /\.site-header::before\{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var\(--header-edge-surface,var\(--color-bg\)\)/);
   assert.match(css, /body\{background:linear-gradient\(to top,#fff calc\(var\(--phone-nav-height,52px\) \+ env\(safe-area-inset-bottom\)\),var\(--color-bg\) 0\)\}/);
 });
@@ -47,7 +47,7 @@ test('with the keyboard open the chat fits the space above it and the header sta
   // The header stays still: room for the keyboard is made when the field gets the focus (no iOS slide), nothing follows
   // the keyboard frame by frame. Not at the touch: moving the field under the finger lost the tap (no keyboard).
   assert.doesNotMatch(code, /addEventListener\('touchstart'/);
-  assert.match(code, /const onFocusIn = [\s\S]*?set\(full - guess\(\), 0\)/);
+  assert.match(code, /const onFocusIn = [\s\S]*?set\(full - guess\(\)\)/);
   assert.doesNotMatch(code, /const track = /);
   assert.match(code, /className="chat-send"[^>]*onPointerDown=\{e => e\.preventDefault\(\)\}/, 'sending keeps the keyboard open, as in messengers');
 });

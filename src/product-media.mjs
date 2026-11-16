@@ -23,3 +23,12 @@ export function productPackageLabel(product){
   .split(/(?:[,;·|]\s*)?(?:годен|годна|годны|годность|срок\s+годности|best\s+before|expiry)/iu)[0]
   .replace(/\s+по\s+.*$/iu,'').replace(/[\s,;·|:—–-]+$/u,'').trim();
 }
+
+/** Compact, factual package information shared by every catalog card. */
+export function productPackagePresentation(product){
+ const quantity=productPackageLabel(product);
+ const raw=String(product.properties?.['Форма выпуска']||'');
+ const form=/^порош/i.test(raw)?'Порошок':raw;
+ const stem=form.toLowerCase().slice(0,5);
+ return [quantity,form&&(!stem||!quantity.toLowerCase().includes(stem))?form:''].filter(Boolean).join(' · ');
+}
