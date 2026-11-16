@@ -1,6 +1,7 @@
+import {layoutScale} from './layout-scale.mjs';
 import {data,shortName,useStore,today} from './store';
 import {Icon} from './ui';
-import {useEffect,useState,type MouseEvent} from 'react';
+import {useEffect,useLayoutEffect,useRef,useState,type MouseEvent} from 'react';
 import {homePlanPreview,completeHomePlan} from './intake-plan';
 import {HOME_PRODUCTS_REPLAY} from './hero-heading';
 
@@ -26,12 +27,14 @@ function MemberBackTop(){
 /** The approved personal first screen reads the same daily plan as «Моё здоровье». */
 export function MobileMemberHome(){
  const {state,setState,sessionReady}=useStore();
+ const sheet=useRef<HTMLElement>(null);
+ useLayoutEffect(()=>{const node=sheet.current;if(!node)return;const measure=()=>{const end=node.querySelector('.member-test');if(end)node.style.setProperty('--member-sheet-height',`${(end.getBoundingClientRect().bottom-node.getBoundingClientRect().top)/layoutScale(node)+16}px`)};measure();const observer=new ResizeObserver(measure);for(const child of node.children)observer.observe(child);window.addEventListener('resize',measure);return()=>{observer.disconnect();window.removeEventListener('resize',measure)}},[sessionReady,state.signedIn]);
  if(!sessionReady)return <section className="home-member home-member--loading" aria-busy="true" aria-label="Загружаем вашу главную страницу"><div className="member-loading-title"/><div className="member-loading-shortcuts"/><div className="member-loading-plan"/><div className="member-loading-shortcuts"/></section>;
  if(!state.signedIn||!state.account)return null;
  const entries=homePlanPreview(state.intake,new Set(data.products.map(p=>p.id)));
  const done=state.intake.filter(i=>i.done).length;
  const complete=(id:string,done:boolean)=>setState(s=>completeHomePlan(s,id,today(),done));
- return <><section className="home-member" data-ds-id="home-member" aria-labelledby="member-greeting">
+ return <><section ref={sheet} className="home-member home-member--sheet" data-ds-id="home-member" aria-labelledby="member-greeting">
   <header><p className="member-date">{new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})}</p><h2 id="member-greeting">Здравствуйте, {state.account.firstName}!</h2></header>
   <nav className="member-shortcuts" aria-label="Главная после входа"><a href="#home-showcase" onClick={scrollToHomeSection}>Продукты</a><a href="#home-journal" onClick={scrollToHomeSection}>Журнал</a><a href="#home-about" onClick={scrollToHomeSection}>Полезное</a></nav>
   <section className="member-plan"><div className="member-plan-title"><h2>Приём на сегодня</h2>{state.intake.length>0&&<span>{done} из {state.intake.length}</span>}</div>
