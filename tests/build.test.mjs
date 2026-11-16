@@ -204,7 +204,8 @@ test('The site is installable and works offline: manifest, icons and a service w
   assert.equal(app.name, 'NSP Center');
   assert.equal(app.display, 'standalone');
   assert.equal(app.start_url, '/');
-  assert.equal(app.background_color, '#faf7ee');
+  assert.equal(app.background_color, '#d3ebe1');
+  assert.equal(app.theme_color, '#eaf5f1');
   for (const size of ['192x192', '512x512']) assert.ok(app.icons.some((icon) => icon.sizes === size && existsSync(resolve(dist, icon.src.slice(1)))), `manifest icon ${size} is missing`);
   assert.ok(app.icons.some((icon) => icon.purpose === 'maskable'), 'manifest needs a maskable icon');
   const sw = readFileSync(resolve(dist, 'sw.js'), 'utf8');

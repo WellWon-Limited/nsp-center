@@ -3,6 +3,7 @@ import './app.css';
 import { installSwipeBack, standaloneIos } from './swipe-back.mjs';
 import { installInstantTap } from './instant-tap.mjs';
 import { installAppHistory } from './app-history.mjs';
+import { installAppResume } from './app-resume.mjs';
 
 // The page arrives fully drawn (prerendered), so it is painted first and the app (React, the catalog data, about a
 // megabyte of script) starts right after that frame: on a phone, switching tabs shows the new page together with the
@@ -12,11 +13,8 @@ import { installAppHistory } from './app-history.mjs';
 // navigation) and the scroll memory are installed at once.
 history.scrollRestoration='manual';
 addEventListener('pagehide',()=>{try{sessionStorage.setItem(`nsp-scroll:${location.pathname}${location.search}`,String(Math.round(scrollY)));}catch{/* no scroll return */}});
-// The page the visitor leaves the app on: iOS may close an app left in the background to free memory, and the next
-// launch starts at the home page; within 30 minutes the app opens this page again (index.html), as apps do.
-const rememberPage=()=>{try{localStorage.setItem('nsp-center:last-page',JSON.stringify({url:location.pathname+location.search,at:Date.now()}));}catch{/* starts at home */}};
-addEventListener('pagehide',rememberPage);
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')rememberPage();});
+// Preserve brief interruptions and start at home after a long absence in the installed phone app.
+installAppResume(window,document);
 installAppHistory(window,document,standaloneIos(window));
 installSwipeBack(window,document);
 installInstantTap(window,document);

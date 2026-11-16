@@ -1,3 +1,4 @@
+import {chatViewportFrame,focusPhoneChatInput} from './chat-viewport.mjs';
 import {productCover} from './product-media.mjs';
 import './assistant.css';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
@@ -384,50 +385,30 @@ export function AssistantChat() {
   const onScroll = () => { const el = log.current; if (!el) return; const left = el.scrollHeight - el.scrollTop - el.clientHeight; atEnd.current = left < 80; setAway(left > 240); };
   const newChat = () => { setMessages([{ ...greeting, at: now() }]); setDraft(''); atEnd.current = true; };
   const toBottom = () => { log.current?.scrollTo({ top: log.current.scrollHeight, behavior: 'smooth' }); };
-  // Phone keyboard, as messengers do it: while the keyboard is open the whole app (header, messages, input row) fits the
-  // part of the screen above it (visualViewport), so the header stays, the input row sits right on the keyboard and the
-  // page itself does not move. Updated once per frame and nothing is measured on the way, so typing stays smooth.
-  // iPhone (research 2026-11-12): the keyboard shrinks only the visible part (visualViewport), never the page, and when
-  // the field it is focusing would end up under the keyboard iOS slides the whole screen up to it — the header shook
-  // while the app tried to follow that slide (owner, 2026-11-12: the header stays still). So the room is made before
-  // the keyboard comes: when the field gets the focus the app already ends where the keyboard will begin (its height as
-  // measured last time, else an estimate), the field sits above it and iOS has nothing to slide; when the keyboard is
-  // up, the app takes the exact visible size once. Nothing follows the keyboard frame by frame.
+  // Keep the shell at the visible top; only the conversation shrinks when the software keyboard opens.
   useEffect(() => {
-    const vv = window.visualViewport; if (!vv) return;
-    const root = document.documentElement; let frame = 0; let settle = 0;
-    const KEY = 'nsp-center:keyboard-height';
-    const guess = () => { const saved = Number(localStorage.getItem(KEY)); return saved > 150 ? saved : Math.round(window.innerHeight * 0.42); };
-    const set = (height: number, top=0) => { root.style.setProperty('--chat-vh', `${Math.round(height)}px`); root.style.setProperty('--chat-top', `${Math.round(top)}px`); };
-    // The screen's full height without the keyboard, measured while no field has the focus: some iPhones shrink the
-    // window itself for the keyboard, so comparing with the window's height now would see no keyboard at all, and the
-    // app kept the estimate with an empty band between the input row and the keyboard.
-    let full = Math.max(window.innerHeight, vv.height);
-    const apply = () => { frame = 0;
-      if (!focused.current) full = Math.max(window.innerHeight, vv.height + vv.offsetTop);
-      const keyboard = full - vv.height - vv.offsetTop;
-      // Open while the input has the focus (the keyboard is up), whatever the phone reports about its size: some iPhones
-      // shrink the whole window for the keyboard, so the window and the visible part are equal and only the focus tells.
-      const open = focused.current || keyboard > 60;
-      root.classList.toggle('chat-kb-open', open);
-      if (open && keyboard > 60) { set(vv.height,vv.offsetTop); try { localStorage.setItem(KEY, String(Math.round(keyboard))); } catch { /* next time an estimate */ } }
-      else if (!open) { root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); }
-      if (log.current && atEnd.current) log.current.scrollTop = log.current.scrollHeight; };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(apply); };
-    // At the moment the field gets the focus (not at the touch: moving the field under the finger lost the tap, and the
-    // keyboard did not open), before iOS has measured where to slide.
-    const onFocusIn = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = true; atEnd.current = true; clearTimeout(settle);
-      if (full - vv.height - vv.offsetTop <= 60) { root.classList.add('chat-kb-open'); set(full - guess()); }
-      // The keyboard's own resize may not come (a window that shrank with it): the exact size is taken when it is up.
-      for (const ms of [350, 700, 1100]) window.setTimeout(() => { if (focused.current) apply(); }, ms);
-      if (log.current) log.current.scrollTop = log.current.scrollHeight; schedule(); };
-    const onFocusOut = (e: FocusEvent) => { if (!(e.target as Element)?.closest?.('.chat-input')) return; focused.current = false; clearTimeout(settle);
-      settle = window.setTimeout(() => { if (!document.activeElement?.closest?.('.chat-input')) schedule(); }, 300); };
-    apply(); vv.addEventListener('resize', schedule); vv.addEventListener('scroll', schedule);
-    document.addEventListener('focusin', onFocusIn); document.addEventListener('focusout', onFocusOut);
-    return () => { cancelAnimationFrame(frame); clearTimeout(settle); vv.removeEventListener('resize', schedule); vv.removeEventListener('scroll', schedule);
-      document.removeEventListener('focusin', onFocusIn); document.removeEventListener('focusout', onFocusOut);
-      root.classList.remove('chat-kb-open'); root.style.removeProperty('--chat-vh'); root.style.removeProperty('--chat-top'); };
+    const vv=window.visualViewport;if(!vv)return;
+    const root=document.documentElement;let frame=0,settle=0;const retries:number[]=[];
+    let full=Math.max(window.innerHeight,vv.height);
+    const set=(height:number,top:number)=>{root.style.setProperty('--chat-vh',`${Math.round(height)}px`);root.style.setProperty('--chat-top',`${Math.round(top)}px`)};
+    const apply=()=>{frame=0;
+      if(!focused.current&&!root.classList.contains('chat-kb-open'))full=Math.max(window.innerHeight,vv.height);
+      const view=chatViewportFrame(vv,full,window.scrollY||0,document.body?.getBoundingClientRect?.().top||0);
+      const open=focused.current||view.keyboard>100;
+      root.classList.toggle('chat-kb-open',open);
+      if(open)set(view.height,view.top);else{root.style.removeProperty('--chat-vh');root.style.removeProperty('--chat-top')}
+      if(log.current&&atEnd.current)log.current.scrollTop=log.current.scrollHeight;
+    };
+    const schedule=()=>{if(!frame)frame=requestAnimationFrame(apply)};
+    const onFocusIn=(event:FocusEvent)=>{if(!(event.target as Element)?.closest?.('.chat-input'))return;
+      if(!root.classList.contains('chat-kb-open'))full=Math.max(window.innerHeight,vv.height);
+      focused.current=true;atEnd.current=true;clearTimeout(settle);root.classList.add('chat-kb-open');apply();
+      for(const ms of [100,350,700])retries.push(window.setTimeout(()=>{if(focused.current)apply()},ms));
+    };
+    const onFocusOut=(event:FocusEvent)=>{if(!(event.target as Element)?.closest?.('.chat-input'))return;focused.current=false;clearTimeout(settle);settle=window.setTimeout(()=>{if(!document.activeElement?.closest?.('.chat-input'))schedule()},300)};
+    apply();vv.addEventListener('resize',schedule);vv.addEventListener('scroll',schedule);
+    document.addEventListener('focusin',onFocusIn);document.addEventListener('focusout',onFocusOut);
+    return()=>{cancelAnimationFrame(frame);clearTimeout(settle);retries.forEach(clearTimeout);vv.removeEventListener('resize',schedule);vv.removeEventListener('scroll',schedule);document.removeEventListener('focusin',onFocusIn);document.removeEventListener('focusout',onFocusOut);root.classList.remove('chat-kb-open');root.style.removeProperty('--chat-vh');root.style.removeProperty('--chat-top')};
   }, []);
   const { state: who, ready: whoReady } = useStore();
   const storeKey = chatKey(who.signedIn ? who.account?.email : null);
@@ -529,7 +510,7 @@ export function AssistantChat() {
       </div>
       {/* Phones pin the composer below the scrolling messages; desktop keeps the input at the end of its log. */}
       <div className="chat-composer">
-        <form className="chat-input" onSubmit={submit}><input value={draft} onChange={e => setDraft(e.target.value)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить" onPointerDown={e => e.preventDefault()}><Icon name="arrow" size={20} /></button></form>
+        <form className="chat-input" onSubmit={submit}><input onPointerDown={event=>focusPhoneChatInput(event,window,document)} value={draft} onChange={e => setDraft(e.target.value)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить" onPointerDown={e => e.preventDefault()}><Icon name="arrow" size={20} /></button></form>
         <p className="chat-note">Помощник не заменяет консультацию врача.</p>
       </div>
     </div>

@@ -252,7 +252,7 @@
  @media(max-width:959px){
   html:root{--header-edge-paint:#eaf5f1!important;--header-edge-surface:#eaf5f1!important}
   html body #root .site-main .home-first-screen .home-hero.home-hero--forest .hero-photo{background:url('/images/hero-dimensions-2026-11-13/woodland-side-extension-haze-v2.png') center/cover!important}
-  html body #root .site-main .home-first-screen .home-hero.home-hero--forest .hero-photo>picture>img{width:auto!important;max-width:none!important;min-width:0!important;height:100%!important;aspect-ratio:2/1!important;left:50%!important;right:auto!important;top:0!important;transform:translateX(-61%)!important;object-fit:contain!important;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent)!important;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent)!important}
+  html body #root .site-main .home-first-screen .home-hero.home-hero--forest .hero-photo>picture>img{width:auto!important;max-width:none!important;min-width:0!important;height:118%!important;aspect-ratio:2/1!important;left:50%!important;right:auto!important;top:-17.2%!important;transform:translateX(-63%)!important;object-fit:contain!important;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent)!important;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent)!important}
   html body:has(.chat) #root .chat>.chat-log{overflow:hidden!important;display:flex!important;flex-direction:column;min-height:0!important;gap:0!important;padding-bottom:0!important}
   html body:has(.chat) #root .chat-flow{display:flex!important;flex:1;min-height:0;flex-direction:column;gap:10px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
   html body:has(.chat) #root .chat-log>.chat-composer{flex:none;margin-top:0!important;display:flex!important;flex-direction:column;padding:8px 0!important}
@@ -261,3 +261,27 @@
  }
 }
 .chat-flow{display:contents}
+
+@layer typography-reference{@media(max-width:959px){
+ html body:has(.chat) #root .site-main{display:flex!important;flex-direction:column!important;padding-left:0!important;padding-right:0!important}
+ html body:has(.chat) #root .consult-layout>.chat{width:calc(100% - 36px)!important;max-width:none!important;margin-left:18px!important;margin-right:18px!important;min-width:0!important;flex:1 1 auto!important}
+}}
+
+/* Approved member home: the single translucent daily sheet, with real plan entries and the original shortcut links. */
+@layer typography-reference{@media(max-width:959px){
+ html[data-home-design="d"] body #root .home-member--sheet{position:relative;isolation:isolate;padding:16px 16px 30px!important;min-height:calc(100svh - var(--site-header-height,123px) - 28px)!important;gap:8px!important}
+ html[data-home-design="d"] body #root .home-member--sheet::before{content:"";position:absolute;inset:0 0 auto;height:var(--member-sheet-height);z-index:-1;background:var(--color-glass);-webkit-backdrop-filter:blur(var(--blur-24));backdrop-filter:blur(var(--blur-24));border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);pointer-events:none}
+ html[data-home-design="d"] body #root .home-member--sheet>header{padding-bottom:0!important}
+ html[data-home-design="d"] body #root .home-member--sheet>header h2{font-size:28px!important;line-height:1.2!important;max-width:100%;overflow-wrap:anywhere}
+ html[data-home-design="d"] body #root .home-member--sheet .member-shortcuts{gap:4px!important;padding-bottom:12px;border-bottom:1px solid var(--color-ink-line)}
+ html[data-home-design="d"] body #root .home-member--sheet .member-shortcuts a{background:var(--color-mint-tint)!important;border:0!important;font-size:14px!important;min-height:46px!important;padding-inline:2px!important}
+ html[data-home-design="d"] body #root .home-member--sheet .member-plan{padding:6px 4px 8px!important;background:transparent!important;border:0!important;border-bottom:1px solid var(--color-ink-line)!important;border-radius:0!important}
+ html[data-home-design="d"] body #root .home-member--sheet .member-plan li{min-height:44px!important;box-sizing:border-box}
+ html[data-home-design="d"] body #root .home-member--sheet .member-plan li>a{font-size:16px!important;line-height:24px!important}
+ html[data-home-design="d"] body #root .home-member--sheet .member-plan .check{background:var(--color-white)!important}
+ html[data-home-design="d"] body #root .home-member--sheet .member-plan-link{min-height:44px!important;margin-top:6px!important;font-size:16px!important;line-height:24px!important}
+ html[data-home-design="d"] body #root .home-member--sheet :is(.member-marathon,.member-test){padding:14px!important;border-radius:var(--radius-panel)!important;border:1px solid var(--color-glass-border)!important;background:var(--color-mint-tint)!important;color:var(--color-ink)!important}
+ html[data-home-design="d"] body #root .home-member--sheet .member-marathon{background:var(--color-sand-tint)!important}
+ html[data-home-design="d"] body #root .home-member--sheet :is(.member-marathon,.member-test)>span{display:grid;gap:6px!important}
+ html[data-home-design="d"] body #root .home-member--sheet :is(.member-marathon,.member-test)>span>span{font-size:14px!important;line-height:1.45!important;color:var(--color-body)!important;opacity:1!important}
+}}

@@ -43,11 +43,10 @@ test('with the keyboard open the chat fits the space above it and the header sta
   const code = read('src/assistant.tsx');
   assert.match(code, /requestAnimationFrame\(apply\)/, 'updated once per frame');
   assert.doesNotMatch(code, /window\.scrollTo\(0, 0\)/, 'the page is not yanked to the top on every keyboard step');
-  assert.match(code, /document\.addEventListener\('focusin', onFocusIn\)/);
-  // The header stays still: room for the keyboard is made when the field gets the focus (no iOS slide), nothing follows
-  // the keyboard frame by frame. Not at the touch: moving the field under the finger lost the tap (no keyboard).
+  assert.match(code, /document\.addEventListener\('focusin',\s*onFocusIn\)/);
+  // Use actual viewport measurements rather than an old keyboard estimate.
   assert.doesNotMatch(code, /addEventListener\('touchstart'/);
-  assert.match(code, /const onFocusIn = [\s\S]*?set\(full - guess\(\)\)/);
+  assert.doesNotMatch(code, /const guess|keyboard-height/, 'a stale keyboard estimate cannot leave an empty band');
   assert.doesNotMatch(code, /const track = /);
   assert.match(code, /className="chat-send"[^>]*onPointerDown=\{e => e\.preventDefault\(\)\}/, 'sending keeps the keyboard open, as in messengers');
 });
@@ -72,21 +71,7 @@ test('the home heading rises once per visit, and the page on screen is not reloa
   assert.doesNotMatch(read('src/pwa.tsx'), /location\.reload\(\)/);
 });
 
-test('an app closed by iOS in the background opens again on the page left, within 30 minutes', () => {
-  const html = read('index.html');
-  assert.match(html, /Date\.now\(\)-lp\.at<18e5\)\{sx\.setItem\("nsp-center:session","1"\);location\.replace\(lp\.url\)\}/);
-  assert.match(html, /!\/\^\\\/\(admin\|api\)\(\\\/\|\$\)\/\.test\(lp\.url\)/);
-  const main = read('src/main.tsx');
-  assert.match(main, /localStorage\.setItem\('nsp-center:last-page',JSON\.stringify\(\{url:location\.pathname\+location\.search,at:Date\.now\(\)\}\)\)/);
-  assert.match(main, /if\(document\.visibilityState==='hidden'\)rememberPage\(\)/);
-});
 
-test('the chat measures the keyboard against the full screen, also when the window itself shrinks with it', () => {
-  const code = read('src/assistant.tsx');
-  assert.match(code, /if \(!focused\.current\) full = Math\.max\(window\.innerHeight, vv\.height \+ vv\.offsetTop\);/);
-  assert.match(code, /const keyboard = full - vv\.height - vv\.offsetTop;/);
-  assert.match(code, /for \(const ms of \[350, 700, 1100\]\)/);
-});
 
 test('the consultation page is the chat alone, wide and centred; its contact card lives in the home pickup block', () => {
   assert.doesNotMatch(read('src/App.tsx'), /consult-contact/);
