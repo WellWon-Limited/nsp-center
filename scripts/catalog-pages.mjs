@@ -1,7 +1,6 @@
 import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {load} from 'cheerio';
-import {catalogAdminState,readManagedCatalog} from './catalog-admin.mjs';
 import {visibleCategories} from '../src/catalog-categories.mjs';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -13,13 +12,11 @@ async function cardFragments(dist,manifest){
  return fragments;
 }
 /** Category URLs created in management work without a build; old addresses redirect after an explicit deletion. */
-export async function managedCatalogPage(pool,content,manifest,dist,path,url){
+export async function managedCatalogPage(data,manifest,dist,path){
  if(!/^\/catalog\/(?:[a-z0-9-]+\/)+$/.test(path))return null;
- const config=await readManagedCatalog(pool,content.categories),entry=config.categories.find(c=>c.path===path);
- if(!entry||config.revision===0)return null;
- if(entry.archived)return {redirect:entry.redirectTo||'/catalog/'};
- const state=await catalogAdminState(pool,content.categories,content.products),category=state.categories.find(c=>c.path===path);
- if(!category)return null;
+ if(data.redirect)return {redirect:data.redirect};
+ if(!data.category)return null;
+ const category=data.category,state={categories:data.categories,products:data.products};
  const base=manifest.routes.find(r=>r.url===path)??manifest.routes.find(r=>r.url==='/catalog/biologicheskie-dobavki-bady/');
  const $=load(await readFile(join(dist,base.file),'utf8'));
  $('title').text(category.name+' | NSP Center');$('meta[name="description"]').attr('content',category.name+' — продукты, составы и цены в NSP Center.');$('link[rel="canonical"]').attr('href','https://nsp-center.ru'+path);

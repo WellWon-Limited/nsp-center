@@ -3,6 +3,7 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { load } from 'cheerio';
+import {publicProduct} from '../packages/domain/card-prices.mjs';
 import { pricesFor, readPriceList } from './pricing.mjs';
 import { readThemes } from './themes.mjs';
 import { readProductCopy } from './product-copy.mjs';
@@ -13,7 +14,7 @@ import { readProductExperts, readSetContents } from './product-experts.mjs';
 // the NSP price list (references/prices/) adds retail and partner prices.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const snapshot = resolve(root, 'references/nsp-center.ru');
-const generated = resolve(root, 'src/generated/content.json');
+const generated = resolve(root, 'packages/catalog/generated/content.json');
 const mediaRoot = resolve(root, 'public/media');
 const origin = 'https://nsp-center.ru';
 const readData = name => JSON.parse(readFileSync(resolve(snapshot, `data/${name}.json`), 'utf8'));
@@ -409,5 +410,6 @@ for (const html of [...products.flatMap(product => Object.values(product.section
 }
 mkdirSync(dirname(generated), { recursive: true });
 writeFileSync(generated, JSON.stringify(content, null, 2) + '\n');
+writeFileSync(resolve(dirname(generated), 'public.json'), JSON.stringify({...content, products:content.products.map(publicProduct)}));
 console.log(`Imported ${products.length} products, ${categories.length} categories, ${articles.length} articles, ${pages.length} pages, ${routes.length} routes and ${copied.size} local media files.`);
 console.log(`Source empty pages: ${content.audit.emptySourcePages.join(', ')}. External media: ${externalMedia.size}.`);

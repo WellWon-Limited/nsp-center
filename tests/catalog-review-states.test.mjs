@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as cheerio from 'cheerio';
 import {ownsBackLink} from '../src/page-navigation.mjs';
-const data=JSON.parse(fs.readFileSync('src/generated/content.json'));
+const data=JSON.parse(fs.readFileSync('packages/catalog/generated/content.json'));
 test('each catalog category owns one mobile return, without a second page-level row above its heading',()=>{
  for(const category of data.categories.filter(c=>c.path!=='/catalog/')){
   assert.equal(ownsBackLink(category.path),true,category.path);

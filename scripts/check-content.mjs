@@ -43,7 +43,7 @@ export function readSource() {
 }
 
 export function readContent() {
-  return readJson(resolve(root, 'src/generated/content.json'));
+  return readJson(resolve(root, 'packages/catalog/generated/content.json'));
 }
 
 function htmlFragments(data) {

@@ -12,3 +12,5 @@ src/generated
 .env.*
 references/nsp-center.ru/.venv
 references/nsp-center.ru/__pycache__
+
+packages/catalog/generated

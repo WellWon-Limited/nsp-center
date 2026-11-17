@@ -2,7 +2,7 @@ import {readFile,writeFile} from 'node:fs/promises';
 import {themeIndex} from './themes.mjs';
 import {cardFacts} from './card-facts.mjs';
 import {publicProduct} from './card-prices.mjs';
-const data=JSON.parse(await readFile('src/generated/content.json','utf8'));
+const data=JSON.parse(await readFile('packages/catalog/generated/content.json','utf8'));
 const byId=new Map(data.products.map(p=>[p.id,p]));
 // The browser bundle carries retail prices only: card prices come from /api/card-prices after sign-in with a card.
 const summary={...data,products:data.products.map(({copy,experts,...p})=>({...publicProduct(p),card:cardFacts({...p,copy,experts},byId),properties:{'Объём':p.properties['Объём']||'','Форма выпуска':p.properties['Форма выпуска']||'','Назначение':p.properties['Назначение']||'','Тип':p.properties['Тип']||''},sections:{},sectionsHtml:{},description:'',descriptionHtml:'',images:[p.image],documents:[],microdata_outside_product:[]})),categories:data.categories.map(c=>({...c,html:'',description:null})),articles:data.articles.map(a=>({...a,html:'',body:'',images:[]})),pages:data.pages.map(p=>({...p,html:'',body:'',media:[]})),site:{...data.site,header_text:'',footer_text:'',homeHtml:'',homeMedia:[]},themes:data.themes.map(themeIndex),audit:{}};

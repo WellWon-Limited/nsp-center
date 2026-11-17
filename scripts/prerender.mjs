@@ -12,7 +12,7 @@ try {
  const {App,metadata,extraRoutes}=await server.ssrLoadModule('/src/App.tsx');
  // Theme pages: Article + FAQPage markup (docs/SEO.md, blog template).
  const themeJsonLd=(theme,href)=>theme?{'@context':'https://schema.org','@graph':[{'@type':'Article',headline:theme.h1,description:theme.description,url:href,dateModified:theme.updated,inLanguage:'ru'},...(theme.faq.length?[{'@type':'FAQPage',mainEntity:theme.faq.map(f=>({'@type':'Question',name:f.question,acceptedAnswer:{'@type':'Answer',text:f.answer}}))}]:[])]}:null;
- const built=JSON.parse(await readFile('src/generated/content.json','utf8'));
+ const built=JSON.parse(await readFile('packages/catalog/generated/content.json','utf8'));
  // Card prices are not public (scripts/card-prices.mjs): the pages and their embedded data carry retail prices only.
  const data={...built,products:built.products.map(publicProduct)};const rawTemplate=await readFile('dist/index.html','utf8');
  // The app's script (src/boot.tsx) starts after the first paint (src/main.tsx); it is fetched together with the page

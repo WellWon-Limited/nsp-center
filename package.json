@@ -17,7 +17,9 @@
     "check:canvas": "node scripts/check-canvas.mjs",
     "db:local": "node scripts/local-db.mjs",
     "db:seed": "node scripts/seed-test-accounts.mjs",
-    "admin:create": "node scripts/create-admin.mjs"
+    "admin:create": "node scripts/create-admin.mjs",
+    "api": "node apps/api/server.mjs",
+    "content:catalog": "node scripts/import-content.mjs"
   },
   "dependencies": {
     "@cdek-it/widget": "^4.1.0",

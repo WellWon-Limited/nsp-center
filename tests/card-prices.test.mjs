@@ -30,7 +30,7 @@ test('the built site carries no card prices: bundle data, page data and scripts'
   const files = [];
   const walk = dir => { for (const f of readdirSync(dir)) { const path = join(dir, f); if (statSync(path).isDirectory()) walk(path); else if (/\.(html|js)$/.test(f)) files.push(path); } };
   walk('dist');
-  const content = JSON.parse(readFileSync('src/generated/content.json', 'utf8'));
+  const content = JSON.parse(readFileSync('packages/catalog/generated/content.json', 'utf8'));
   const sample = content.products.find(p => p.prices.partner && p.prices.partner !== p.prices.retail);
   for (const file of files) {
     const text = readFileSync(file, 'utf8');

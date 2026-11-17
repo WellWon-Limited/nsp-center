@@ -6,7 +6,7 @@ import {resolve} from 'node:path';
 import * as cheerio from 'cheerio';
 import {cleanInfoHtml,videoSections,contactSections} from '../src/information-content.mjs';
 const root=resolve(import.meta.dirname,'..');
-const data=JSON.parse(readFileSync(resolve(root,'src/generated/content.json'),'utf8'));
+const data=JSON.parse(readFileSync(resolve(root,'packages/catalog/generated/content.json'),'utf8'));
 const page=path=>data.pages.find(p=>p.path===path);
 const read=path=>cheerio.load(readFileSync(resolve(root,'dist',path.replace(/^\//,'')+'index.html'),'utf8'));
 const words=text=>text.normalize('NFKC').match(/[\p{L}\p{N}]+/gu)||[];

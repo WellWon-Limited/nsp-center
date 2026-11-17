@@ -18,11 +18,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: docker build -t nsp-center:ci .
+      - run: docker build --target api -t nsp-api:ci .
+      - run: docker build --target web -t nsp-center:ci .
       - name: Smoke-test the image
         run: |
-          docker run -d --name nsp -p 4173:4173 nsp-center:ci
+          docker network create nsp-check
+          docker run -d --name nsp-api --network nsp-check nsp-api:ci
+          docker run -d --name nsp --network nsp-check -e API_ORIGIN=http://nsp-api:8701 -p 4173:4173 nsp-center:ci
           for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:4173/ && break; sleep 1; done
           curl -fsS -o /dev/null http://127.0.0.1:4173/
           curl -fsS -o /dev/null http://127.0.0.1:4173/catalog/
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/nope/)" = 404
+          curl -fsS http://127.0.0.1:4173/api/health
+          curl -fsS -o /dev/null http://127.0.0.1:4173/sitemap.xml
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/api/auth/me)" = 503

@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio';
 import { applySite, listed, readSite } from '../src/site.ts';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
-const content = JSON.parse(read('src/generated/content.json'));
+const content = JSON.parse(read('packages/catalog/generated/content.json'));
 const stock = JSON.parse(read('src/product-stock.json'));
 const byArticle = article => content.products.find(p => p.article === article);
 
@@ -55,6 +55,6 @@ test('site management has the switch and lists hidden products', () => {
 });
 
 test('Saturday hours are 17:30 everywhere', () => {
-  assert.ok(!read('src/generated/content.json').includes('Сб: с 12:00 до 18:00'));
+  assert.ok(!read('packages/catalog/generated/content.json').includes('Сб: с 12:00 до 18:00'));
   assert.match(read('src/assistant.tsx'), /сб с 12:00 до 17:30/);
 });

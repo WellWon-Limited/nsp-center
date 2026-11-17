@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import * as cheerio from 'cheerio';
 test('The catalog mobile entry contains all categories and a separate all-products destination',()=>{
  const $=cheerio.load(readFileSync('dist/catalog/index.html','utf8'));
- const data=JSON.parse(readFileSync('src/generated/content.json','utf8'));
+ const data=JSON.parse(readFileSync('packages/catalog/generated/content.json','utf8'));
  const nav=$('[data-ds-id=catalog-mobile-categories]');
  assert.equal(nav.find('a').first().attr('href'),'/catalog/?view=products');
  const visible=new Set(data.products.filter(p=>!p.hidden).map(p=>p.path));
@@ -40,7 +40,7 @@ test('The homepage full-catalog action opens products directly rather than the m
 
 
 test('Every category exposes the same category-local phone search control',()=>{
- const data=JSON.parse(readFileSync('src/generated/content.json','utf8'));
+ const data=JSON.parse(readFileSync('packages/catalog/generated/content.json','utf8'));
  for(const category of data.categories){
   const $=cheerio.load(readFileSync(`dist/${category.path.slice(1)}index.html`,'utf8'));
   const input=$('.catalog-tools .catalog-phone-search input[type="search"]');

@@ -1,0 +1,27 @@
+services:
+  api:
+    build:
+      context: .
+      target: api
+    environment:
+      # The existing host database requires a reachable host, not container localhost.
+      DATABASE_URL: ${API_DATABASE_URL:-}
+      CDEK_CLIENT_ID: ${CDEK_CLIENT_ID:-}
+      CDEK_CLIENT_SECRET: ${CDEK_CLIENT_SECRET:-}
+      CDEK_API_BASE: ${CDEK_API_BASE:-https://api.cdek.ru/v2}
+      YANDEX_MAPS_KEY: ${YANDEX_MAPS_KEY:-}
+      YANDEX_API_KEY: ${YANDEX_API_KEY:-}
+      YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID:-}
+    restart: unless-stopped
+  web:
+    build:
+      context: .
+      target: web
+    environment:
+      API_ORIGIN: http://api:8701
+    ports:
+      - "127.0.0.1:${WEB_PORT:-5217}:4173"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped

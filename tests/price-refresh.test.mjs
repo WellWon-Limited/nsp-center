@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 const json=path=>JSON.parse(readFileSync(new URL('../'+path,import.meta.url),'utf8'));
 test('Corrected November price hides unlisted stock and uses current TNT article',()=>{
- const price=json('references/prices/nsp-2026-11.json'),content=json('src/generated/content.json'),products=content.products;
+ const price=json('references/prices/nsp-2026-11.json'),content=json('packages/catalog/generated/content.json'),products=content.products;
  assert.equal(Object.keys(price.items).length,124);
  assert.equal(products.filter(p=>!p.hidden).length,111);
  assert.equal(products.filter(p=>p.hidden).length,65);

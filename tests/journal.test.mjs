@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import * as cheerio from 'cheerio';
 
 const root=resolve(import.meta.dirname,'..');
-const content=JSON.parse(readFileSync(resolve(root,'src/generated/content.json'),'utf8'));
+const content=JSON.parse(readFileSync(resolve(root,'packages/catalog/generated/content.json'),'utf8'));
 const images=JSON.parse(readFileSync(resolve(root,'src/journal-images.json'),'utf8'));
 const normalize=value=>String(value).replace(/\s+/gu,' ').trim();
 const read=path=>cheerio.load(readFileSync(resolve(root,'dist',path.replace(/^\//,'')+'index.html'),'utf8'));

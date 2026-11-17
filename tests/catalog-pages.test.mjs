@@ -2,16 +2,17 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {load} from 'cheerio';
+import {storefrontPage} from '../apps/api/storefront.mjs';
 import {managedCatalogPage} from '../scripts/catalog-pages.mjs';
 import {initialCatalogConfig} from '../src/catalog-categories.mjs';
-const content=JSON.parse(readFileSync('src/generated/content.json','utf8'));
+const content=JSON.parse(readFileSync('packages/catalog/generated/content.json','utf8'));
 const manifest=JSON.parse(readFileSync('dist/prerender-manifest.json','utf8'));
 test('New category URLs render the shared catalog without a build, and archived URLs redirect',async()=>{
  const config=initialCatalogConfig(content.categories),product=content.products.find(p=>!p.hidden);
  const path='/catalog/native-category-fixture/';
  config.revision=1;config.categories.push({path,name:'Новая категория',parent:'/catalog/',archived:false,redirectTo:'/catalog/'});config.assignments[product.id]=path;
  const pool={query:async sql=>({rows:sql.includes('site_settings')?[{value:config}]:[]})};
- const page=await managedCatalogPage(pool,content,manifest,'dist',path,new URL('http://localhost'+path));
+ const page=await managedCatalogPage(await storefrontPage(pool,content,path),manifest,'dist',path);
  const $=load(page.html);
  assert.equal($('.catalog-page h1').text(),'Новая категория');
  assert.equal($('.product-grid .product-card').length,1);
@@ -19,5 +20,5 @@ test('New category URLs render the shared catalog without a build, and archived 
  assert.equal(JSON.parse($('#nsp-page-data').text()).category.path,path);
  assert.ok($('.catalog-sidebar').text().includes('Новая категория'));
  config.categories.at(-1).archived=true;
- assert.deepEqual(await managedCatalogPage(pool,content,manifest,'dist',path,new URL('http://localhost'+path)),{redirect:'/catalog/'});
+ assert.deepEqual(await managedCatalogPage(await storefrontPage(pool,content,path),manifest,'dist',path),{redirect:'/catalog/'});
 });

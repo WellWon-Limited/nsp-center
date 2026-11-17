@@ -33,3 +33,15 @@ test('pickup points and prices go through the shop server with its token; unknow
   assert.equal(seen.filter(([u]) => u.endsWith('/oauth/token')).length, 1, 'the token is reused');
   assert.equal((await call(cdek, '/api/cdek?action=orders')).status, 400);
 });
+
+test('pickup rate limits distinguish customers behind the web proxy', async () => {
+  const cdek=createCdek({clientId:'test',clientSecret:'test',yandexKey:'test',fetchImpl:()=>{throw new Error('unexpected outbound request');}});
+  const ask=ip=>new Promise(resolve=>{
+    const req={method:'GET',headers:{'x-forwarded-for':ip},socket:{remoteAddress:'127.0.0.1'}};
+    const res={setHeader(){},writeHead(status){this.status=status;},end(){resolve(this.status);}};
+    cdek.handle(req,res,new URL('http://x/api/cdek?action=unknown'));
+  });
+  for(let i=0;i<120;i++)assert.equal(await ask('192.0.2.1'),400);
+  assert.equal(await ask('192.0.2.1'),429);
+  assert.equal(await ask('192.0.2.2'),400);
+});

@@ -5,7 +5,7 @@ import {resolve} from 'node:path';
 import * as cheerio from 'cheerio';
 import {productCover,productGalleryImages,productPackshotStyle,productPackageLabel} from '../src/product-media.mjs';
 const root=resolve(import.meta.dirname,'..');
-const products=JSON.parse(readFileSync(resolve(root,'src/generated/content.json'),'utf8')).products;
+const products=JSON.parse(readFileSync(resolve(root,'packages/catalog/generated/content.json'),'utf8')).products;
 const galleryEntries=JSON.parse(readFileSync(resolve(root,'src/product-gallery.json'),'utf8'));
 const overrides=JSON.parse(readFileSync(resolve(root,'src/product-images.json'),'utf8'));
 test('Product image replacements stay local and keep every original gallery photograph available',()=>{
