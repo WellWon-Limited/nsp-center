@@ -20,6 +20,7 @@
     "admin:create": "node scripts/create-admin.mjs"
   },
   "dependencies": {
+    "@cdek-it/widget": "^4.1.0",
     "cheerio": "^1.2.0",
     "pg": "^8.23.1",
     "react": "^19.2.0",

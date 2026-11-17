@@ -1,0 +1,19 @@
+{
+  "changedPixelsInside" : 39878,
+  "changedPixelsOutside" : 0,
+  "dimensions" : [
+    1774,
+    887
+  ],
+  "edit" : "Only Omega printed label replaced from owner screenshot",
+  "generated" : false,
+  "output" : "01-mint-woodland-omega-label-v4.png",
+  "regionTopLeftPixels" : [
+    1132,
+    559,
+    211,
+    189
+  ],
+  "source" : "01-mint-woodland-headroom-v3.png",
+  "wholePhotoResized" : false
+}

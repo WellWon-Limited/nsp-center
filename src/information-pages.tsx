@@ -22,7 +22,7 @@ function Photos(){const {site}=useStore();const photos=(site?.content??emptyCont
  return <><InformationHeader title="Фотогалерея" plain kicker="" description="Фотографии и события NSP Center."/><div className="information-content"><div className="information-videos information-photos" data-ds-id="photo-grid">{photos.map((p,i)=><article className="information-video information-photo" key={p.id}><button type="button" onClick={()=>setOpen(p)} aria-label={`Открыть фото${p.caption?`: ${p.caption}`:''}`}><img src={p.image} alt={p.caption||'Фото NSP Center'} width="480" height="270" loading="lazy"/></button><div><span className="information-kicker">ФОТО · {String(i+1).padStart(2,'0')}</span>{p.caption&&<h2>{p.caption}</h2>}<button className="information-media-link" type="button" onClick={()=>setOpen(p)}>Открыть фото <Icon name="chevron" size={18}/></button></div></article>)}</div></div>
  <dialog className="photo-viewer" ref={dialog} onClose={()=>setOpen(null)} onClick={e=>{if(e.target===e.currentTarget)dialog.current?.close();}}>{open&&<figure><img src={open.image} alt={open.caption||'Фото NSP Center'}/>{open.caption&&<figcaption>{open.caption}</figcaption>}<button type="button" autoFocus aria-label="Закрыть фото" onClick={()=>dialog.current?.close()}><Icon name="close"/></button></figure>}</dialog></>;}
 /** «Акции»: offers added in site management that run today; an offer past its last day leaves by itself. */
-function Promos(){const {site}=useStore();const list=activePromos((site?.content??emptyContent).promos,today());
+function Promos({preview=false}:{preview?:boolean}){const {site}=useStore();const list=preview?(site?.content??emptyContent).promos:activePromos((site?.content??emptyContent).promos,today());
  if(!list.length)return <EmptyCollection photo={false}/>;
  return <><InformationHeader title="Акции" plain kicker="" description="Актуальные предложения и специальные условия."/><div className="information-content"><div className="promo-list" data-ds-id="promo-list">{list.map(p=>{const products=(p.products??[]).map(id=>data.products.find(product=>product.id===id)).filter((product):product is NonNullable<typeof product>=>Boolean(product&&listed(product)));return <section className="promo-campaign" key={p.id}><header className="promo-campaign-heading"><div><h2>{p.title}</h2>{(p.from||p.to)&&<p className="promo-dates">{p.from&&p.to?`${humanDate(p.from)} — ${humanDate(p.to)}`:p.to?`До ${humanDate(p.to)}`:`С ${humanDate(p.from)}`}</p>}</div>{p.link&&<a className="information-text-link" href={p.link}>Подробнее <Icon name="chevron" size={18}/></a>}</header>{p.text&&<RichContent html={textToHtml(p.text)}/>} {p.image&&<img className="promo-campaign-cover" src={p.image} alt={p.title} loading="lazy"/>}{products.length>0&&<ProductGrid products={products}/>}</section>})}</div></div></>;}
 
@@ -42,13 +42,13 @@ function Videos({page}:{page:ContentPage}){
  const videos=[...added,...(videoSections(page.html) as Video[]).filter(v=>!isHiddenContent(site,'video',v.id))];
  return <><InformationHeader title="Видеогалерея" plain kicker="" description="Знакомство с продуктами и тематическими наборами NSP."/><div className="information-content"><div className="information-video-tools"><p>{videos.length} видео</p></div><VideoGallery videos={videos}/></div></>;
 }
-export function InformationPage({page}:{page:ContentPage}){
+export function InformationPage({page,preview=false}:{page:ContentPage;preview?:boolean}){
  let content;
  if(page.path==='/company/faq/')content=<Faq page={page}/>;
  else if(page.path==='/company/reviews/')content=<Reviews page={page}/>;
  else if(page.path==='/contacts/')content=<Contacts page={page}/>;
  else if(page.path==='/photo/')content=<Photos/>;
- else if(page.path==='/shares/')content=<Promos/>;
+ else if(page.path==='/shares/')content=<Promos preview={preview}/>;
  else if(page.path==='/video/')content=<Videos page={page}/>;
  else {const legal=legalPaths.has(page.path);content=<><InformationHeader title={page.title} plain={page.path==='/payments/'} kicker={legal?'ИНФОРМАЦИЯ И ДОКУМЕНТЫ':page.path==='/payments/'?'':'ПОКУПАТЕЛЯМ NSP CENTER'} description={page.path==='/payments/'?'Способы оплаты и информация для покупателей.':undefined}/><div className={`information-content${legal?' information-content--legal':''}`}><RichContent html={cleanInfoHtml(page.html)}/></div>{!legal&&<InformationClosing/>}</>;}
  return <div className={`information-page${page.path==='/payments/'?' information-page--payments':''}${legalPaths.has(page.path)?' information-page--legal':''}${page.path==='/video/'?' information-page--video':''}${['/company/reviews/','/contacts/','/payments/'].includes(page.path)?' information-page--compact':''}`} data-ds-id={`information-${page.id}`}>{content}</div>;

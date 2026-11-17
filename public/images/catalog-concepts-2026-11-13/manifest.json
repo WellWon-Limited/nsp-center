@@ -1,0 +1,14 @@
+{
+  "purpose": "Unselected catalog visual concepts only",
+  "assets": [
+    "aloe-v1.png",
+    "alfalfa-v1.png",
+    "turmeric-v1.png"
+  ],
+  "packaging": "Original catalog image pixels and proportions retained; display-only SVG silhouette masks",
+  "research": [
+    "https://baymard.com/research-articles/product-listing-information",
+    "https://www.thorne.com/products/all-products",
+    "https://ritual.com/collections/all"
+  ]
+}

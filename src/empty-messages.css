@@ -1,0 +1,10 @@
+/* One text treatment for an empty collection or an unavailable page. */
+:root{--empty-message-size:18px;--empty-message-leading:1.6}
+@layer typography-reference{
+ html[data-catalog-design] body #root main.site-main :is(.empty-screen,.catalog-empty,.information-empty--plain,.empty-state,.cart-empty,.reviews-empty,.account-waitlist-empty),
+ html[data-catalog-design] body #root main.site-main :is(.empty-screen,.catalog-empty,.information-empty--plain,.empty-state,.reviews-empty)>:is(h1,h2,p),
+ html[data-catalog-design] body #root main.site-main .information-empty-message{
+  font-family:var(--font-sans)!important;font-size:var(--empty-message-size)!important;font-weight:400!important;line-height:var(--empty-message-leading)!important;letter-spacing:normal!important;color:var(--color-muted)!important;text-transform:none!important
+ }
+ html[data-catalog-design] body #root main.site-main :is(.empty-screen,.catalog-empty,.information-empty--plain){background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+}

@@ -7,3 +7,25 @@ html[data-catalog-design] body .site-main .information-heading:not(.information-
 html[data-catalog-design] body .site-main :is(.company-page,.certificates-page)>.company-concept{padding-top:var(--page-start-gap)!important}
 html[data-catalog-design] body .site-main .journal-article-page .av-document--ivory{padding-top:var(--page-start-gap)!important}
 @media(min-width:960px){html[data-catalog-design] body .site-main .consult-page{padding-top:var(--page-start-gap)}}
+
+/* Purchases use the same title offset as the other personal and information pages. */
+@layer typography-reference{
+html[data-catalog-design] body #root main.site-main:has(>.purchases-page,>.customer-orders-page){padding-top:var(--page-start-gap)!important}
+html[data-catalog-design] body #root main.site-main>:is(.purchases-page,.customer-orders-page)>.page-heading{margin-top:0!important;padding-top:0!important}
+@media(max-width:959px){html[data-catalog-design] body #root main.site-main:has(>.purchases-page,>.customer-orders-page):has(>a.back-link[href]){padding-top:0!important}}
+@media(min-width:960px){html[data-catalog-design] body #root main.site-main:has(>.purchases-page,>.customer-orders-page):has(>a.back-link[href]){padding-top:var(--page-start-gap)!important}}
+
+}
+
+@layer typography-reference{
+ html[data-catalog-design] body #root main.site-main>:is(.purchases-page,.customer-orders-page)>.page-heading{padding-top:var(--space-8)!important;margin-top:0!important}
+}
+
+@layer typography-reference{
+ html body #root main.site-main>:is(.purchases-page,.customer-orders-page)>.page-heading h1{font-size:32px!important;line-height:1.2!important}
+ html body #root main.site-main:has(>.order-confirmation){padding-top:40px!important}
+ @media(max-width:959px){
+  html body #root main.site-main>:is(.purchases-page,.customer-orders-page)>.page-heading h1{font-size:24px!important}
+  html body #root main.site-main:has(>.order-confirmation){padding-top:28px!important}
+ }
+}

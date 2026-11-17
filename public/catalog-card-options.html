@@ -1,0 +1,70 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Варианты карточек каталога</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{width:100%;height:100%;border:0;display:block;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/catalog/?view=products" title="Оформление карточек каталога"></iframe><script>
+const v=Math.max(1,Math.min(5,Number(new URLSearchParams(location.search).get('v'))||1));
+const titles=['','01 · Чистые белые','02 · Мягкая мята','03 · Горизонтальные','04 · Открытая витрина','05 · Компактная сетка'];document.title=titles[v];
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+const d=frame.contentDocument;if(!d)return;
+await new Promise(resolve=>{const root=d.querySelector('#root');if(!root||root.dataset.hydrated==='true'){resolve();return}const o=new MutationObserver(()=>{if(root.dataset.hydrated==='true'){o.disconnect();resolve()}});o.observe(root,{attributes:true,attributeFilter:['data-hydrated']})});
+d.documentElement.dataset.cardOption=String(v);
+const rules=[];const prefix='html[data-card-option] body .site-main .catalog-page ';
+const put=(selector,css)=>rules.push(prefix+selector+'{'+css.replace(/;?$/,';').replaceAll(';','!important;')+'}');
+put('.product-card','--card-photo-height:220px');
+put('.product-grid','gap:var(--space-24);align-items:stretch');
+put('.product-card.panel','padding:var(--space-16);border-radius:var(--radius-panel);background:var(--color-white);border:0;box-shadow:none');
+put('.product-visual','height:220px;background:var(--color-white);border-radius:var(--radius-20)');
+put('.product-meta','padding:var(--space-16) var(--space-4) var(--space-4);min-width:0');
+put('.product-meta h3','font-size:var(--text-16);line-height:1.35');
+put('.product-meta .card-title','height:auto;min-height:88px');
+put('.product-meta .card-sub','font-size:var(--text-13);line-height:1.4');
+put('.product-meta .card-parts','font-size:var(--text-12)');
+put('.product-meta .product-bottom','padding-top:var(--space-12)');
+put('.product-meta .product-bottom strong','font-size:var(--text-20)');
+put('.product-meta>.btn','font-size:var(--text-13);min-height:46px;border-radius:var(--radius-control);margin-top:var(--space-12)');
+put('.product-meta>.stock-pill','position:absolute;top:0;left:var(--space-4);transform:translateY(calc(-100% - 4px));align-self:flex-start;margin:0;font-size:var(--text-11);background:var(--color-mint-tint);color:var(--color-ink)');
+if(v===1){
+ put('.product-card.panel','border:1px solid var(--color-ink-line)');
+ put('.product-meta .ds-kicker','margin-bottom:var(--space-8)');
+}
+if(v===2){
+ put('.product-card.panel','padding:var(--space-10)');
+ put('.product-visual','height:240px;background:var(--color-mint-tint)');
+ put('.product-meta','padding:var(--space-20) var(--space-12) var(--space-12)');
+ put('.product-visual>a','background:var(--color-white);margin:var(--space-12);width:calc(100% - 24px);height:calc(100% - 24px);border-radius:var(--radius-14)');
+}
+if(v===3){
+ put('.product-grid','grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-20)');
+ put('.product-card.panel','display:grid;grid-template-columns:minmax(0,38%) minmax(0,1fr);align-items:stretch;padding:var(--space-16);gap:var(--space-14)');
+ put('.product-visual','height:100%;min-height:280px');
+ put('.product-visual>a','padding:var(--space-8)');
+ put('.product-meta','padding:var(--space-4) 0;min-width:0');
+ put('.product-meta .card-title','min-height:88px');
+ put('.product-meta>.btn','font-size:var(--text-12);padding:var(--space-10) var(--space-8)');
+ put('.favorite','top:0;right:0');
+}
+if(v===4){
+ put('.product-card.panel','padding:0;background:transparent;border-radius:0;overflow:visible;backdrop-filter:none');
+ put('.product-visual','height:250px;background:var(--color-white);border-radius:var(--radius-panel)');
+ put('.product-meta','padding:var(--space-18) var(--space-8) var(--space-12);border-bottom:1px solid var(--color-ink-line)');
+ put('.product-meta>.card-cart-button','background:var(--color-glass-raised);color:var(--color-ink);border:1px solid var(--color-ink)');
+}
+if(v===5){
+ put('.product-grid','grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-16)');
+ put('.product-card.panel','padding:var(--space-12);border-radius:var(--radius-20)');
+ put('.product-visual','height:180px');
+ put('.product-visual>a','padding:var(--space-12)');
+ put('.product-meta','padding:var(--space-14) 0 var(--space-4)');
+ put('.product-meta h3','font-size:var(--text-14)');
+ put('.product-meta .card-title','min-height:100px');
+ put('.product-meta .card-sub','font-size:var(--text-12)');
+ put('.product-meta .product-bottom strong','font-size:var(--text-18)');
+ put('.product-meta>.btn','font-size:var(--text-12);padding:var(--space-10) var(--space-4)');
+}
+put('.product-visual>a','padding:var(--space-16)');
+put('.product-visual .product-packshot-frame','width:min(100%,calc((var(--card-photo-height) - 32px) * var(--packshot-ratio)),calc(var(--packshot-target,204px) * var(--packshot-ratio)));height:auto;max-height:none;transform:none');
+put('.product-visual>a>img','max-height:100%;max-width:100%;width:100%;height:100%;object-fit:contain;transform:none');
+if(v===2)put('.product-card','--card-photo-height:216px');
+if(v===3)put('.product-card','--card-photo-height:280px');
+if(v===4)put('.product-card','--card-photo-height:250px');
+if(v===5)put('.product-card','--card-photo-height:180px');
+const style=d.createElement('style');style.textContent=rules.join('\n');d.head.append(style);frame.classList.add('ready');
+});
+</script></html>

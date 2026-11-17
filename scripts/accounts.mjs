@@ -227,6 +227,14 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
     if (method !== 'GET' && !sameOrigin(req, path === '/api/admin/upload')) return send(res, 403, { error: 'Запрос отклонён.' });
     if (path.startsWith('/api/admin/') && await staffAuth(req, res, path)) return;
     if (await siteRoute({ pool, send, readJson, sessionUser, staffUser, hashPassword, productIds, productBase, cardProducts, buildRate, cbr, categories, productPaths, articlePaths: new Set(articlePaths) }, req, res, path, url)) return;
+    if (path === '/api/account/orders') {
+      const user = await sessionUser(req);
+      if (!user) return send(res, 401, { error: 'Вы не вошли в аккаунт.' });
+      if (method !== 'GET') return send(res, 405, { error: 'Доступно только чтение заказов.' });
+      // Never accept an email or customer id from the browser; staff notes are private.
+      const {rows} = await pool.query('select id, items, total, status, created_at, updated_at from shop_orders where user_id = $1 order by created_at desc, id desc', [user.id]);
+      return send(res, 200, {orders: rows.map(r => ({id:String(r.id),items:r.items,total:r.total,status:r.status,createdAt:r.created_at,updatedAt:r.updated_at}))});
+    }
     if (path === '/api/auth/me' && method === 'GET') {
       const user = await sessionUser(req);
       return user ? send(res, 200, await accountWithData(user)) : send(res, 401, { error: 'Вы не вошли в аккаунт.' });
@@ -239,7 +247,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
       const v = checked.value;
       registrations.hit(ip);
       try {
-        const { rows } = await pool.query('insert into users (email, phone, phone_key, first_name, last_name, partner_id, password_hash, consent_at, role) values ($1, $2, $3, $4, $5, $6, $7, now(), $8) returning *', [v.email, v.phone, v.phoneKey, v.firstName, v.lastName, v.partnerId, await hashPassword(v.password), 'customer']);
+        const { rows } = await pool.query('insert into users (email, phone, phone_key, first_name, last_name, partner_id, password_hash, consent_at, role) values ($1, $2, $3, $4, $5, $6, $7, now(), $8) returning *', [v.email, v.phone, v.phoneKey, v.firstName, v.lastName, '', await hashPassword(v.password), 'customer']);
         return send(res, 201, await accountWithData(rows[0]), { 'Set-Cookie': await startSession(req, rows[0].id) });
       } catch (error) { const message = taken(error); if (message) return send(res, 409, { error: message }); throw error; }
     }
@@ -255,7 +263,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
       const ok = await verifyPassword(password, user?.password_hash ?? decoyHash) && Boolean(user);
       if (!ok || user.role === 'removed') { signIns.hit(key); return send(res, 401, { error: 'Неверный email или пароль.' }); }
       signIns.reset(key);
-      if (user.role === 'admin') return send(res, 403, { error: 'Это служебный аккаунт. Войдите в управление сайтом: nsp-center.ru/admin/', staff: true });
+      if (user.role === 'admin') return send(res, 403, { error: 'Это служебный аккаунт. Используйте отдельный адрес входа в управление сайтом.', staff: true });
       return send(res, 200, await accountWithData(user), { 'Set-Cookie': await startSession(req, user.id) });
     }
     if (path === '/api/auth/logout' && method === 'POST') {
@@ -271,7 +279,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
         const checked = validateProfile(body.profile);
         if (checked.error) return send(res, 400, { error: checked.error });
         const v = checked.value;
-        try { await pool.query('update users set first_name = $2, last_name = $3, phone = $4, phone_key = $5, partner_id = $6 where id = $1', [user.id, v.firstName, v.lastName, v.phone, v.phoneKey, v.partnerId]); }
+        try { await pool.query("update users set first_name = $2, last_name = $3, phone = $4, phone_key = $5, partner_id = case when $6='' and not exists(select 1 from card_applications where user_id=users.id) then '' else users.partner_id end where id = $1", [user.id, v.firstName, v.lastName, v.phone, v.phoneKey, v.partnerId]); }
         catch (error) { const message = taken(error); if (message) return send(res, 409, { error: message }); throw error; }
       }
       let updatedAt = null;

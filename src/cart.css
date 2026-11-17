@@ -99,3 +99,5 @@
 .cart-layout--market .order-summary > a svg { flex: none; }
 /* While the total bar is shown, the page ends with room for it, so it never covers the footer's last line. */
 @media (max-width: 959px) { body:has(.cart-bar) .site-footer { padding-bottom: 96px; } }
+/* «Перейти к оформлению» across the whole order card, like the button it replaced (owner, 2026-11-17). */
+.cart-layout--market .order-summary > a.cart-checkout { align-self: stretch; justify-content: center; gap: 8px; }

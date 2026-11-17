@@ -1,0 +1,40 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Метки товаров</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{border:0;width:100%;height:100%;display:block;opacity:0}iframe.ready{opacity:1}</style></head><body><iframe title="Каталог — варианты меток"></iframe><script>
+(()=>{
+const v=Math.max(1,Math.min(5,Number(new URLSearchParams(location.search).get('variant'))||1));
+const names=['Принятый вариант — метки снизу','Метки над наличием','Компактная строка','Единая стеклянная плашка','Спокойные ярлыки'];document.title=v+'. '+names[v-1];
+const f=document.querySelector('iframe');
+f.onload=async()=>{
+ const d=f.contentDocument,w=f.contentWindow;for(let i=0;i<250&&!d.querySelector('.catalog-page .product-card');i++)await new Promise(r=>setTimeout(r,20));
+ await d.fonts.ready;await new Promise(r=>setTimeout(r,150));d.querySelector('.install-banner-close')?.click();
+ d.documentElement.dataset.badgePreview=String(v);
+ const style=d.createElement('style');style.textContent=`
+ @layer typography-reference{
+ html[data-badge-preview] body #root .catalog-page .badge-rack{position:absolute!important;left:10px!important;top:10px!important;z-index:3!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:5px!important;max-width:calc(100% - 60px)!important;pointer-events:none!important}
+ html[data-badge-preview] body #root .catalog-page .preview-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:28px!important;box-sizing:border-box!important;padding:5px 11px!important;border-radius:999px!important;font:700 11px/1.35 Manrope,sans-serif!important;letter-spacing:0!important;white-space:nowrap!important;color:var(--color-ink)!important;background:var(--color-mint,#9fdcc6)!important;border:0!important;box-shadow:none!important}
+ html[data-badge-preview] body #root .catalog-page .preview-badge.sale{background:var(--color-ink)!important;color:var(--color-white)!important}
+ html[data-badge-preview] body #root .catalog-page .preview-badge.new{background:var(--color-blue,#b9d4f5)!important}
+ html[data-badge-preview] body #root .catalog-page .preview-badge.hit{background:var(--color-mint,#9fdcc6)!important}
+ html[data-badge-preview="2"] body #root .catalog-page .badge-rack{top:auto!important;bottom:10px!important;max-width:calc(100% - 20px)!important}
+ html[data-badge-preview="2"] body #root .catalog-page .product-visual:has(.stock-pill) .badge-rack{bottom:49px!important}
+ html[data-badge-preview="2"] body #root .catalog-page .preview-badge{min-height:26px!important;padding:5px 10px!important}
+ html[data-badge-preview="3"] body #root .catalog-page .badge-rack{flex-direction:row!important;flex-wrap:wrap!important;max-width:calc(100% - 60px)!important;gap:4px!important}
+ html[data-badge-preview="3"] body #root .catalog-page .preview-badge{padding:5px 9px!important;min-height:26px!important}
+ html[data-badge-preview="4"] body #root .catalog-page .badge-rack{gap:0!important;padding:4px 9px!important;border-radius:14px!important;background:rgba(255,255,255,.88)!important;backdrop-filter:blur(14px)!important}
+ html[data-badge-preview="4"] body #root .catalog-page .preview-badge{justify-content:flex-start!important;min-height:27px!important;width:100%!important;background:transparent!important;color:var(--color-ink)!important;padding:5px 3px!important;border-radius:0!important}
+ html[data-badge-preview="4"] body #root .catalog-page .preview-badge+.preview-badge{border-top:1px solid rgba(29,58,54,.12)!important}
+ html[data-badge-preview="4"] body #root .catalog-page .preview-badge.sale{color:var(--color-link)!important}
+ html[data-badge-preview="5"] body #root .catalog-page .preview-badge{border-radius:7px!important;background:#e3eeea!important;color:var(--color-ink)!important;padding:5px 10px!important;min-height:27px!important}
+ html[data-badge-preview="5"] body #root .catalog-page .preview-badge.sale{background:var(--color-ink)!important;color:white!important}
+ }
+ `;d.head.append(style);
+ if(v===1){const chosen=d.createElement('style');chosen.textContent=`@layer typography-reference{html[data-badge-preview="1"] body #root .catalog-page .badge-rack{top:auto!important;bottom:10px!important;max-width:calc(100% - 20px)!important}html[data-badge-preview="1"] body #root .catalog-page .product-visual:has(.stock-pill) .badge-rack{bottom:10px!important}html[data-badge-preview="1"] body #root .catalog-page .badge-rack .stock-pill{position:static!important;margin:0!important;max-width:100%!important}}`;d.head.append(chosen);}
+ const cards=[...d.querySelectorAll('.catalog-page .product-card')];
+ const unavailable=cards.find(c=>c.querySelector('.stock-pill'));
+ if(unavailable&&cards.indexOf(unavailable)>3)cards[2].before(unavailable);
+ const ordered=[...d.querySelectorAll('.catalog-page .product-card')];
+ const sets=[['sale','hit'],['sale','new'],['sale','new','hit'],['sale'],['sale','hit'],['sale','new'],['new'],['hit']];
+ ordered.slice(0,8).forEach((card,i)=>{const rack=d.createElement('div');rack.className='badge-rack';const labels={sale:'−'+[5,10,15,20,30,50,10,15][i]+'%',new:'Новинка',hit:'Хит продаж'};for(const type of sets[i]){const el=d.createElement('span');el.className='preview-badge '+type;el.textContent=labels[type];rack.append(el)}if(v===1){const stock=card.querySelector('.stock-pill');if(stock)rack.append(stock)}card.querySelector('.product-visual').append(rack)});
+ w.scrollTo({top:0,behavior:'instant'});f.classList.add('ready');window.previewReady=true;
+};f.src='/catalog/?view=products&badge-preview='+v;
+})();
+</script></body></html>

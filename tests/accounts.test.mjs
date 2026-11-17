@@ -67,6 +67,10 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/card-prices')).status, 403, 'no card number, no card prices');
 
   assert.equal((await call('/api/account', 'PUT', { profile: { firstName: 'Анна', lastName: 'Петрова', phone: '+7 900 111-22-33', partnerId: '446621' }, data: { cart: { 'bee-pollen': 2 }, signedIn: true } })).status, 200);
+  assert.equal((await call('/api/auth/me')).body.account.partnerId, '', 'a profile update cannot verify a self-entered card');
+  assert.equal((await call('/api/card-prices')).status, 403);
+  // Existing cards imported by staff remain valid; new claims use the approval flow tested separately.
+  await accounts.pool.query("update users set partner_id='446621' where email='anna@example.ru'");
   const me = await call('/api/auth/me');
   assert.equal(me.body.account.lastName, 'Петрова');
   const cardPrices = await call('/api/card-prices');
@@ -359,6 +363,20 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   await accounts.pool.query('insert into account_data(user_id,data) values ($1,$2) on conflict(user_id) do update set data=excluded.data', [customerRows[0].id, JSON.stringify({orders:[{id:'LOCAL-1',total:100,items:1,date:'01.01.2026'}]})]);
   assert.equal((await call('/api/admin/orders')).body.total, 0);
   const { rows: orderRows } = await accounts.pool.query('insert into shop_orders(user_id,customer,items,total) values ($1,$2,$3,$4) returning id', [customerRows[0].id, JSON.stringify({name:'Анна Петрова',phone:'+7 900 111-22-33',email:'anna@example.ru'}), JSON.stringify([{name:'Люцерна',quantity:2,price:500}]), 1000]);
+  const buyerLogin=await fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({login:'anna@example.ru',password:'password-1'})});
+  const customerCookie=buyerLogin.headers.get('set-cookie').split(';')[0];
+  const ownOrders=await fetch(base+'/api/account/orders?user_id=99999',{headers:{Cookie:customerCookie}});
+  assert.equal(ownOrders.status,200);
+  const owned=await ownOrders.json();
+  assert.equal(owned.orders.length,1);
+  assert.equal(owned.orders[0].status,'new');
+  assert.equal('note' in owned.orders[0],false,'staff notes are never exposed to customers');
+  assert.equal('customer' in owned.orders[0],false,'no other customer details in this endpoint');
+  assert.equal((await fetch(base+'/api/account/orders')).status,401);
+  const another=await fetch(base+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({firstName:'Другой',lastName:'Покупатель',email:'another-orders@example.ru',password:'password-2',consent:true})});
+  const otherCookie=another.headers.get('set-cookie').split(';')[0];
+  assert.deepEqual((await(await fetch(base+'/api/account/orders',{headers:{Cookie:otherCookie}})).json()).orders,[],'a different customer cannot see this order');
+
   const orderId = String(orderRows[0].id);
   const orders = (await call('/api/admin/orders')).body;
   assert.equal(orders.total, 1); assert.equal(orders.summary.new, 1);

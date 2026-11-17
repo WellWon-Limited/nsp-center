@@ -2,6 +2,11 @@
 export function runningAsApp(env){
  return env.navigator.standalone===true||['standalone','minimal-ui'].some(mode=>env.matchMedia(`(display-mode: ${mode})`).matches);
 }
+/** Handsets only: narrowing a desktop browser must not enable installation offers. */
+export function installationOnPhone(nav){
+ const ua=nav.userAgent||'';
+ return /iphone/i.test(ua)||/android/i.test(ua)&&/mobile/i.test(ua);
+}
 export function installationPlatform(nav){
  const ua=nav.userAgent||'';
  if(/iphone|ipad|ipod/i.test(ua)||(nav.platform==='MacIntel'&&nav.maxTouchPoints>1))return 'ios';

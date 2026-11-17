@@ -1,4 +1,6 @@
 import test from 'node:test';
+import vm from 'node:vm';
+import {ADMIN_PATH} from '../src/admin-path.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { pageOf, roomy } from '../src/page-warmup.mjs';
@@ -27,7 +29,7 @@ test('pages open from the service worker copy at once and refresh in the backgro
   const sw = read('scripts/sw-template.js');
   assert.match(sw, /if \(hit\) \{ event\.waitUntil\(fresh\); return hit; \}/);
   assert.match(sw, /event\.data\?\.type === 'warm'/);
-  assert.match(sw, /\(admin\|api\)/, 'site management and the API are never kept');
+
   assert.match(sw, /old\.slice\(0, -1\)/, 'the previous version stays until the next update');
   const pwa = read('scripts/pwa.mjs');
   assert.match(pwa, /const pages = \['\/', '\/catalog\/', '\/consultation\/', '\/health\/', '\/profile\/', '\/cart\/'\];/);
@@ -63,4 +65,12 @@ test('photos: kept on the device across updates, served from it first, and warme
 test('the first row of product photos and the lead article cover load with the page, not lazily', () => {
   assert.match(read('src/ui.tsx'), /<ProductCard key=\{p\.id\} product=\{p\} eager=\{i<4\} compact=\{compact\}\/>/);
   assert.match(read('src/pages.tsx'), /<ArticleCard key=\{a\.id\} article=\{a\} first=\{i===0\}\/>/);
+});
+
+test('the service worker never caches or warms the new staff address or its retired alias',async()=>{
+ const handlers=new Map(),lookups=[];let work;
+ const source=read('scripts/sw-template.js').replace('__ADMIN_PATH__',JSON.stringify(ADMIN_PATH)).replace('__PRECACHE__','[]');
+ vm.runInNewContext(source,{URL,self:{location:{origin:'https://nsp-center.ru'},addEventListener:(type,fn)=>handlers.set(type,fn)},caches:{open:async()=>({match:async url=>{lookups.push(url);return null}})},fetch:async()=>{throw Error('Staff page must not be warmed')}});
+ for(const path of [ADMIN_PATH,ADMIN_PATH+'?section=products','/admin/'])handlers.get('fetch')({request:{method:'GET',url:'https://nsp-center.ru'+path,mode:'navigate'},respondWith:()=>assert.fail('Staff navigation intercepted')});
+ handlers.get('message')({data:{type:'warm',urls:[ADMIN_PATH,ADMIN_PATH+'?section=products','/admin/','/api/admin/me']},waitUntil:promise=>work=promise});await work;assert.deepEqual(lookups,[]);
 });

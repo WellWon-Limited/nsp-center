@@ -1,3 +1,4 @@
+import {ADMIN_PATH} from './admin-path.mjs';
 import './back-link-spacing.css';
 import type { Product, Category, Article, ContentPage } from './content-types';
 import { useEffect, useLayoutEffect, useState } from 'react';
@@ -6,6 +7,8 @@ import { Catalog, ProductDetail } from './catalog';
 import { Home, Blog, ArticlePage, InfoPage, DesignSystem } from './pages';
 import { Profile, Health, Diagnostic } from './personal';
 import { Cart } from './cart';
+import { Checkout } from './checkout';
+import {CustomerOrders} from './customer-orders';
 import { Purchases } from './purchases';
 import { AdminApp } from './admin';
 import { installHomeScrollEdges } from './home-scroll-edges.mjs';
@@ -28,6 +31,7 @@ import { SiteSearch } from './site-search';
 import './site-header.css';
 import './catalog-layout.css';
 import './page-spacing.css';
+import './empty-messages.css';
 import './phone-current.css';
 import './typography.css';
 import './home-desktop.css';
@@ -35,7 +39,7 @@ import './typography-prototype.css';
 import './content-type-scale.css';
 import './responsive-desktop.css';
 export type PageData={theme?:Theme;productThemes?:Theme[];product?:Product;category?:Category;article?:Article;page?:ContentPage;homeHtml?:string;homeReviewsHtml?:string};
-export const extraRoutes=[{url:'/consultation/',title:'Консультация'},{url:'/health/',title:'Моё здоровье'},{url:'/profile/',title:'Профиль'},{url:'/cart/',title:'Корзина'},{url:'/profile/purchases/',title:'Мои покупки'},{url:'/admin/',title:'Управление сайтом'},{url:'/design-system/',title:'Дизайн-система NSP'},...themes.map(theme=>({url:theme.path,title:theme.title}))];
+export const extraRoutes=[{url:'/consultation/',title:'Консультация'},{url:'/health/',title:'Моё здоровье'},{url:'/profile/',title:'Профиль'},{url:'/cart/',title:'Корзина'},{url:'/checkout/',title:'Оформление заказа'},{url:'/profile/purchases/',title:'Мои покупки'},{url:'/profile/orders/',title:'Мои заказы'},{url:ADMIN_PATH,title:'Управление сайтом'},{url:'/design-system/',title:'Дизайн-система NSP'},...themes.map(theme=>({url:theme.path,title:theme.title}))];
 export function normalizeUrl(value:string){const u=new URL(value,'http://nsp.local');return u.pathname.replace(/\/{2,}/g,'/').replace(/([^/])$/,'$1/')+u.search;}
 export function metadata(url:string){const u=new URL(url,'http://nsp.local');const route=data.routes.find(r=>r.url===u.pathname+u.search)||data.routes.find(r=>r.path===u.pathname);const extra=extraRoutes.find(r=>r.url===u.pathname);const product=data.products.find(p=>p.path===u.pathname);const article=data.articles.find(a=>a.path===u.pathname);const page=data.pages.find(p=>p.path===u.pathname);const theme=themeByPath(u.pathname);return {title:route?.title||extra?.title||article?.title||product?.name||'Страница не найдена',description:theme?.description||article?.description||page?.description|| (product?`${product.name}. Цена, наличие, состав, применение и сертификаты в NSP Center.`:'NSP Center — натуральные продукты, витамины и уход. Каталог, составы, статьи и информация о доставке.'),product,article};}
 function Header({path}:{path:string}){const {count,ready,state:{signedIn}}=useStore();
@@ -48,7 +52,7 @@ function BottomNav({path}:{path:string}){const items=[['/','home','Главна�
 // Coming from the home page's «Задать вопрос» or story, the way back to that place on the home page.
 function ConsultReturn(){const [back,setBack]=useState<string|null>(null);useEffect(()=>{setBack(homeStoryReturn(location.href));},[]);return back?<BackLink fallback={back}/>:null;}
 function Consultation(){return <div className="consult-page" data-ds-id="consultation"><header className="consult-heading"><ConsultReturn/><Heading level="h2" eyebrow="NSP Center" title="Консультация" description="Спросите об ассортименте, сертификатах или оформлении покупки."/></header><div className="consult-layout"><AssistantChat/></div></div>;}
-function RouteView({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;if(path==='/')return <Home homeHtml={pageData?.homeHtml} homeReviewsHtml={pageData?.homeReviewsHtml}/>;if(path==='/cart/'||path==='/personal/basket/')return <Cart/>;if(path==='/profile/purchases/')return <Purchases/>;if(path==='/profile/'||path==='/personal/profile/')return <Profile/>;if(path==='/consultation/')return <Consultation/>;if(path==='/health/'||path==='/health-marafon/')return <Health marathon={path==='/health-marafon/'}/>;if(path==='/diagnostic-test/')return <Diagnostic/>;if(path==='/design-system/')return <DesignSystem/>;if(path==='/blog/')return <Blog/>;if(themeByPath(path))return pageData?.theme?<ThemePage theme={pageData.theme}/>:<Heading title={themeByPath(path)!.h1}/>;const target=data.redirects[path]||path;const product=pageData?.product||data.products.find(p=>p.path===target);if(product)return <ProductDetail product={product} themes={pageData?.productThemes}/>;const category=pageData?.category||data.categories.find(c=>c.path===path);if(category)return <Catalog category={category} url={url}/>;const article=pageData?.article||data.articles.find(a=>a.path===path);if(article)return <ArticlePage article={article}/>;const page=pageData?.page||data.pages.find(p=>p.path===path);if(page)return <InfoPage page={page}/>;return <section className="not-found empty-screen" data-ds-id="not-found"><h1>Страница не найдена</h1></section>;}
+function RouteView({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;if(path==='/')return <Home homeHtml={pageData?.homeHtml} homeReviewsHtml={pageData?.homeReviewsHtml}/>;if(path==='/cart/'||path==='/personal/basket/')return <Cart/>;if(path==='/checkout/')return <Checkout url={url}/>;if(path==='/profile/purchases/')return <Purchases/>;if(path==='/profile/orders/')return <CustomerOrders/>;if(path==='/profile/'||path==='/personal/profile/')return <Profile/>;if(path==='/consultation/')return <Consultation/>;if(path==='/health/'||path==='/health-marafon/')return <Health marathon={path==='/health-marafon/'}/>;if(path==='/diagnostic-test/')return <Diagnostic/>;if(path==='/design-system/')return <DesignSystem/>;if(path==='/blog/')return <Blog/>;if(themeByPath(path))return pageData?.theme?<ThemePage theme={pageData.theme}/>:<Heading title={themeByPath(path)!.h1}/>;const target=data.redirects[path]||path;const product=pageData?.product||data.products.find(p=>p.path===target);if(product)return <ProductDetail product={product} themes={pageData?.productThemes}/>;const category=pageData?.category||data.categories.find(c=>c.path===path);if(category)return <Catalog category={category} url={url}/>;const article=pageData?.article||data.articles.find(a=>a.path===path);if(article)return <ArticlePage article={article}/>;const page=pageData?.page||data.pages.find(p=>p.path===path);if(page)return <InfoPage page={page}/>;return <section className="not-found empty-screen" data-ds-id="not-found"><h1>Страница не найдена</h1></section>;}
 // Plan reminders run on every page while the app is open (pwa.tsx).
 function Reminders(){useIntakeReminders();return null;}
 // Pages without a back link of their own get one at the top when they were opened from another page of the site (see
@@ -66,12 +70,12 @@ function PageBack({url}:{url:string}){const u=new URL(url,'http://nsp.local');co
  // One step up: a catalog section's own parent section, else the address one level shorter. A page right under the
  // home page shows the link only when the visitor came from a page the site can name (e.g. the test from the plan).
  const section=data.categories.find(c=>c.path===p);const parent=section?.parent??(p.replace(/[^/]+\/$/,'')||'/');
- if(parent==='/'&&!from)return null;return <BackLink fallback={parent} className={p==='/profile/purchases/'?'back-link phone-back-link':'back-link'}/>;}
+ if(parent==='/'&&!from)return null;return <BackLink fallback={parent} className={['/profile/purchases/','/profile/orders/'].includes(p)?'back-link phone-back-link':'back-link'}/>;}
 // The footer (links, contacts, seller, "БАД не является лекарственным средством") is on every page on a computer, as in
 // the first design (owner, 2026-11-12). On a phone the personal app screens — sign-in and profile, «Мои покупки», the
 // plan — and the chat end without it, as in shop apps (owner, 2026-11-10): those get a class that hides it there.
-const PHONE_NO_FOOTER=new Set(['/consultation/','/profile/','/personal/profile/','/profile/purchases/','/health/']);
+const PHONE_NO_FOOTER=new Set(['/consultation/','/profile/','/personal/profile/','/profile/purchases/','/profile/orders/','/health/']);
 export const footerOnPhone=(path:string)=>!PHONE_NO_FOOTER.has(path);
 // The page colour beyond the bottom edge of every page (src/home-scroll-edges.mjs), installed once for the whole site.
 function ScrollEdges(){useEffect(()=>installHomeScrollEdges(window,document),[]);useEffect(()=>installHomeReveal(window,document),[]);return null;}
-export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;if(path==='/admin/')return <StoreProvider><AdminApp/></StoreProvider>;const accountRoute=['/cart/','/personal/basket/','/profile/','/personal/profile/'].includes(path);return <StoreProvider><ScrollEdges/><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><SiteBackdrop/><Header path={path}/><main id="main" className={`site-main${accountRoute?' site-main--account-route':''}`}><PagePath.Provider value={path}><PageBack url={url}/><RouteView url={url} pageData={pageData}/></PagePath.Provider></main><Footer phone={footerOnPhone(path)}/><BottomNav path={path}/></StoreProvider>;}
+export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;if(path===ADMIN_PATH)return <StoreProvider><AdminApp/></StoreProvider>;const accountRoute=['/cart/','/personal/basket/','/profile/','/personal/profile/'].includes(path);return <StoreProvider><ScrollEdges/><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><SiteBackdrop/><Header path={path}/><main id="main" className={`site-main${accountRoute?' site-main--account-route':''}`}><PagePath.Provider value={path}><PageBack url={url}/><RouteView url={url} pageData={pageData}/></PagePath.Provider></main><Footer phone={footerOnPhone(path)}/><BottomNav path={path}/></StoreProvider>;}

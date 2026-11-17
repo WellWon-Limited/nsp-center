@@ -1,3 +1,4 @@
+import {isStaffPage} from '../src/admin-path.mjs';
 import {homedir} from 'node:os';
 import {managedCatalogPage} from './catalog-pages.mjs';
 import {managedCategoryList,catalogAdminState} from './catalog-admin.mjs';
@@ -12,6 +13,7 @@ import { createAccounts } from './accounts.mjs';
 import { productBase, findCustomProduct, customRows, findContentArticle, contentArticlePaths } from './site-admin.mjs';
 import { customProduct } from '../src/custom-product.mjs';
 import { createAi } from './ai-agent.mjs';
+import { createCdek } from './cdek.mjs';
 // Local settings (DATABASE_URL of the local Postgres, scripts/local-db.mjs) live in .env, which git ignores; the dev stand
 // gets them from its environment instead.
 try{process.loadEnvFile('.env');}catch{/* no .env */}
@@ -23,6 +25,7 @@ const accounts=await createAccounts({databaseUrl:process.env.DATABASE_URL,produc
 const productPaths=new Map(content.products.map(p=>[p.id,p.path]));
 // The consultation agent (off until YANDEX_API_KEY and YANDEX_FOLDER_ID are set; scripts/ai-agent.mjs).
 const ai=createAi({content,pool:accounts.enabled?accounts.pool:null});
+const cdek=createCdek();
 // Local-only design reference, never copied into dist: the app prototype adapted for device frames,
 // and the untouched original for comparison.
 const originalPrototype=await readFile(resolve(ORIGINAL_PROTOTYPE));
@@ -30,8 +33,10 @@ const prototypes=new Map([['/app-prototype/',Buffer.from(adaptPrototype(original
 const mime={'.html':'text/html; charset=utf-8','.webmanifest':'application/manifest+json','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif','.webp':'image/webp','.woff2':'font/woff2','.woff':'font/woff','.pdf':'application/pdf','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
 const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');let path=decodeURIComponent(url.pathname);
  // Only the production domain is indexable; every other host (dev stand, local) is blocked.
- const indexable=isIndexableHost(req.headers.host);if(!indexable||/^\/admin(\/|$)/.test(new URL(req.url,'http://x').pathname))res.setHeader('X-Robots-Tag',NOINDEX_HEADER);
+ const indexable=isIndexableHost(req.headers.host);if(!indexable||isStaffPage(path))res.setHeader('X-Robots-Tag',NOINDEX_HEADER);
+ if(/^\/admin(\/|$)/.test(path)){res.writeHead(404,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});res.end(req.method==='HEAD'?undefined:await readFile(resolve(dist,'404/index.html')));return;}
  if(path.startsWith('/api/ai/')){await ai.handle(req,res,url);return;}
+ if(path==='/api/cdek'){await cdek.handle(req,res,url);return;}
  if(path.startsWith('/api/')){await accounts.handle(req,res,url);return;}
  if(!indexable&&path==='/robots.txt'){res.writeHead(200,{'Content-Type':mime['.txt'],'Cache-Control':'no-cache'});res.end(req.method==='HEAD'?undefined:BLOCKED_ROBOTS);return;}
 if(content.redirects[path]){res.writeHead(308,{Location:content.redirects[path]});res.end();return;}if(!path.endsWith('/')&&!extname(path)){res.writeHead(308,{Location:path+'/'+url.search});res.end();return;}

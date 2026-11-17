@@ -1,0 +1,30 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Главная — выбранное оформление</title><style>html,body{height:100%;margin:0;background:#eaf3f1}iframe{display:block;width:100%;height:100%;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/" title="Выбранная главная NSP Center"></iframe><script>
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+ const d=frame.contentDocument;if(!d)return;
+ await new Promise(resolve=>{const root=d.querySelector('#root');if(!root||root.dataset.hydrated==='true'){resolve();return}const o=new MutationObserver(()=>{if(root.dataset.hydrated==='true'){o.disconnect();resolve()}});o.observe(root,{attributes:true,attributeFilter:['data-hydrated']})});
+ const img=d.querySelector('.home-hero .hero-photo img');if(!img)return;
+ img.closest('picture').querySelectorAll('source').forEach(s=>s.remove());img.src='/images/hero-dimensions-2026-11-13/01-mint-woodland-omega-label-v4.png';img.removeAttribute('srcset');img.alt='Хлорофилл и Омега на мшистом камне в мятном лесу';
+ const h='.home-hero.home-hero--banner.home-hero--forest',prefix='html[data-home-design] body ';
+ const rules=[
+ ['.site-main','padding-top:0!important'],
+ ['.home-first-screen','min-height:calc(100svh - var(--site-header-height,124px))!important'],
+ [h,'display:block!important;position:relative!important;width:100vw!important;height:clamp(490px,calc(100svh - var(--site-header-height,124px) - 220px),620px)!important;min-height:0!important;max-height:none!important;margin:0 calc(50% - 50vw)!important;padding:0!important;overflow:visible!important;isolation:isolate'],
+ [h+' .hero-photo','position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;grid-area:auto!important;border-radius:0!important;overflow:hidden!important;z-index:-1!important;box-shadow:none!important;-webkit-mask:none!important;mask:none!important;background:none!important'],
+ [h+' .hero-photo picture','display:block!important;width:100%!important;height:100%!important;background:none!important'],
+ [h+' .hero-photo img','display:block!important;content:normal!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;object-position:50% 80%!important;transform:none!important;-webkit-mask:none!important;mask:none!important;filter:none!important'],
+ [h+' .hero-photo::before,'+h+' .hero-photo::after','display:none!important'],
+ [h+' .hero-copy','position:absolute!important;inset:50% auto auto max(4vw,28px)!important;margin:0!important;transform:translateY(-50%)!important;width:33vw!important;max-width:460px!important;padding:24px!important;border-radius:var(--radius-panel)!important;border:0!important;background:var(--color-glass-raised)!important;box-shadow:0 20px 48px -34px #1d3a3644!important;z-index:2!important;backdrop-filter:blur(var(--blur-24))!important;-webkit-backdrop-filter:blur(var(--blur-24))!important'],
+ [h+' .hero-copy h1','font-family:InterPreview,Inter,sans-serif!important;font-size:clamp(40px,3.35vw,52px)!important;line-height:1.06!important;font-weight:700!important;letter-spacing:-.045em!important'],
+ [h+' .hero-copy .hero-pill','margin-bottom:16px!important;font-size:12px!important'],
+ [h+' .hero-copy>p','font-size:16px!important;line-height:24px!important'],
+ [h+' .hero-copy .ds-cluster','gap:12px 16px!important;flex-wrap:wrap!important'],
+ [h+' .hero-copy .btn--primary','font-size:14px!important;line-height:20px!important;padding:12px 16px!important;min-height:48px!important;border-radius:16px!important'],
+ [h+' .hero-copy .hero-secondary','font-size:14px!important;line-height:20px!important'],
+ [h+' .hero-note','margin-top:18px!important;font-size:12px!important'],
+ [h+'>.hero-daily','display:none!important'],
+ ['.home-first-screen+.section','margin-top:0!important']
+ ];
+ const style=d.createElement('style');style.textContent='@font-face{font-family:InterPreview;src:url(/fonts/inter-variable.woff2) format("woff2");font-weight:100 900;font-style:normal;font-display:swap}html[data-home-design]{--font-sans:InterPreview,Inter,sans-serif}'+rules.map(([s,c])=>s.split(',').map(x=>prefix+x.trim()).join(',')+'{'+c+'}').join('\n');d.head.append(style);
+ await img.decode().catch(()=>{});frame.classList.add('ready');
+});
+</script></html>

@@ -1,3 +1,4 @@
+import {ADMIN_PATH} from '../src/admin-path.mjs';
 import { createHash } from 'node:crypto';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 
@@ -5,7 +6,8 @@ import { readdir, readFile, writeFile } from 'node:fs/promises';
 // JS/CSS, the icons and the tab pages (home, catalog, chat, plan, profile, cart) — so tabs open at once and the plan and
 // the habit marathon (they live in the browser's localStorage) work offline. A page seen before opens from the cache
 // while a fresh copy is fetched for next time (scripts/sw-template.js); the version covers every built page.
-const assets = (await readdir('dist/assets')).map(file => `/assets/${file}`);
+// The CDEK map's script (only for those who choose CDEK at checkout) is not part of the app's offline shell.
+const assets = (await readdir('dist/assets')).filter(file => !file.startsWith('cdek-widget')).map(file => `/assets/${file}`);
 const icons = ['/icons/icon.svg', '/icons/splash.svg', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png', '/manifest.webmanifest'];
 const pages = ['/', '/catalog/', '/consultation/', '/health/', '/profile/', '/cart/'];
 const precache = [...pages, ...assets, ...icons];
@@ -18,5 +20,5 @@ const walk = async dir => [...await html(dir), ...(await Promise.all((await read
 for (const file of (await walk('dist')).sort()) hash.update(file).update(await readFile(file));
 const version = hash.digest('hex').slice(0, 12);
 const template = await readFile('scripts/sw-template.js', 'utf8');
-await writeFile('dist/sw.js', template.replace('__VERSION__', version).replace('__PRECACHE__', JSON.stringify(precache)));
+await writeFile('dist/sw.js', template.replace('__ADMIN_PATH__',JSON.stringify(ADMIN_PATH)).replace('__VERSION__', version).replace('__PRECACHE__', JSON.stringify(precache)));
 console.log(`Service worker ${version}: ${precache.length} files precached.`);

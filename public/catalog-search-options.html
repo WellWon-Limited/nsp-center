@@ -1,0 +1,57 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Каталог — один поиск</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{display:block;width:100%;height:100%;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/catalog/?view=products" title="Вариант каталога с одной поисковой строкой"></iframe><script>
+const v=Math.max(1,Math.min(3,Number(new URLSearchParams(location.search).get('v'))||1));
+document.title=['','01 · Только общий поиск','02 · Одна строка с переключением','03 · Поиск по сайту по кнопке'][v];
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+ const d=frame.contentDocument,w=frame.contentWindow;if(!d)return;
+ await new Promise(resolve=>{const root=d.querySelector('#root');if(!root||root.dataset.hydrated==='true'){resolve();return}const o=new MutationObserver(()=>{if(root.dataset.hydrated==='true'){o.disconnect();resolve()}});o.observe(root,{attributes:true,attributeFilter:['data-hydrated']})});
+ const global=d.querySelector('.header-inner>.site-search'),local=d.querySelector('.catalog-tools .search-field'),globalInput=global?.querySelector('input'),localInput=local?.querySelector('input');if(!global||!local||!globalInput||!localInput){frame.classList.add('ready');return}
+ d.documentElement.dataset.catalogSearchOption=String(v);
+ const rules=[];
+ if(v===1||v===2)rules.push(
+ ['.catalog-tools .search-field','display:none!important'],
+ ['.catalog-page .catalog-tools','padding:0!important;gap:0!important;background:transparent!important;border:0!important;box-shadow:none!important;margin-bottom:20px!important'],
+ ['.catalog-page .catalog-tools .filter-row','margin-top:0!important']
+ );
+ if(v===2){
+  d.documentElement.dataset.searchScope='catalog';
+  rules.push(
+   ['.header-inner>.site-search','display:flex!important;align-items:center!important;gap:12px!important;padding:5px 14px 5px 5px!important;border:1.5px solid rgb(29 58 54 / .28)!important;border-radius:25px!important;background:var(--color-glass-raised)!important'],
+   ['.header-inner>.site-search>input','flex:1!important;min-width:0!important;width:0!important;height:34px!important;padding:0!important;border:0!important;background:transparent!important;border-radius:0!important;font-size:14px!important;outline:none!important'],
+   ['.catalog-search-scope','display:flex;align-items:center;gap:3px;flex:none'],
+   ['.catalog-search-scope button','border:0;border-radius:var(--radius-control);background:transparent;color:var(--color-muted);font:inherit;font-size:13px;font-weight:700;padding:8px 11px;line-height:18px;white-space:nowrap;cursor:pointer'],
+   ['.catalog-search-scope button[aria-pressed="true"]','background:var(--color-ink);color:var(--color-white)'],
+   ['html[data-search-scope="catalog"] .site-header .site-search-results','display:none!important']
+  );
+  const scope=d.createElement('div');scope.className='catalog-search-scope';scope.setAttribute('role','group');scope.setAttribute('aria-label','Область поиска');
+  const setLocal=value=>{const set=Object.getOwnPropertyDescriptor(w.HTMLInputElement.prototype,'value').set;set.call(localInput,value);localInput.dispatchEvent(new w.Event('input',{bubbles:true}));};
+  const choose=mode=>{d.documentElement.dataset.searchScope=mode;scope.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scope===mode)));globalInput.placeholder=mode==='catalog'?'Название или артикул':'Поиск по сайту';setLocal(mode==='catalog'?globalInput.value:'');globalInput.focus();globalInput.setAttribute('aria-expanded',String(mode==='site'&&Boolean(globalInput.value.trim())));};
+  for(const [mode,label]of [['catalog','В каталоге'],['site','По сайту']]){const b=d.createElement('button');b.type='button';b.dataset.scope=mode;b.textContent=label;b.setAttribute('aria-pressed',String(mode==='catalog'));b.addEventListener('click',()=>choose(mode));scope.append(b)}
+  global.prepend(scope);globalInput.placeholder='Название или артикул';
+  globalInput.addEventListener('input',()=>{if(d.documentElement.dataset.searchScope==='catalog'){setLocal(globalInput.value);w.queueMicrotask(()=>globalInput.setAttribute('aria-expanded','false'));}});
+  global.addEventListener('submit',e=>{if(d.documentElement.dataset.searchScope==='catalog'){e.preventDefault();e.stopPropagation();setLocal(globalInput.value);}},true);
+  global.addEventListener('keydown',e=>{if(d.documentElement.dataset.searchScope==='catalog'&&e.key==='ArrowDown'){e.preventDefault();e.stopPropagation();}},true);
+ }
+ if(v===3){
+  const inner=d.querySelector('.header-inner'),actions=d.querySelector('.header-actions'),root=d.querySelector('#root');
+  const trigger=d.createElement('button');trigger.type='button';trigger.className='catalog-global-trigger';trigger.textContent='Поиск по сайту';trigger.setAttribute('aria-haspopup','dialog');trigger.setAttribute('aria-expanded','false');actions.prepend(trigger);
+  const dialog=d.createElement('dialog');dialog.className='catalog-global-dialog';dialog.setAttribute('aria-label','Поиск по сайту');dialog.innerHTML='<div class="catalog-global-dialog-heading"><h2>Поиск по сайту</h2><button type="button" class="icon-btn" aria-label="Закрыть поиск">×</button></div>';root.append(dialog);
+  trigger.addEventListener('click',()=>{dialog.append(global);d.documentElement.dataset.catalogGlobalOpen='true';dialog.showModal();trigger.setAttribute('aria-expanded','true');globalInput.focus();});dialog.querySelector('button').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>{delete d.documentElement.dataset.catalogGlobalOpen;inner.insertBefore(global,actions);trigger.setAttribute('aria-expanded','false');trigger.focus();});
+  dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+  rules.push(
+   ['.site-header .header-inner','grid-template-columns:230px minmax(0,1fr)!important'],
+   ['.site-header .header-inner>.site-search','display:none!important'],
+   ['.site-header .header-actions','grid-column:2!important;justify-self:end!important'],
+   ['html[data-catalog-global-open="true"] .catalog-tools .search-field','visibility:hidden!important'],
+   ['.catalog-global-trigger','border:0;background:transparent;color:var(--color-ink);font:inherit;font-size:14px;font-weight:700;padding:10px 12px;min-height:46px;white-space:nowrap;cursor:pointer'],
+   ['.catalog-global-dialog','width:min(640px,calc(100vw - 48px));max-height:75svh;padding:24px;border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-bg);color:var(--color-ink);box-shadow:var(--shadow-navigation)'],
+   ['.catalog-global-dialog::backdrop','background:var(--color-overlay);backdrop-filter:blur(var(--blur-20))'],
+   ['.catalog-global-dialog-heading','display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:18px'],
+   ['.catalog-global-dialog-heading h2','font-size:24px;margin:0'],
+   ['.catalog-global-dialog .site-search','display:block!important;width:100%!important'],
+   ['.catalog-global-dialog .site-search-results','position:static!important;box-shadow:none!important;border:0!important;padding:0!important;margin-top:14px!important;max-height:45svh']
+  );
+ }
+ const style=d.createElement('style');style.textContent=rules.map(([selector,css])=>selector+'{'+css+'}').join('\n');d.head.append(style);frame.classList.add('ready');
+});
+</script></html>

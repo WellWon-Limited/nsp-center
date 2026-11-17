@@ -1,0 +1,70 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Описание алоэ — варианты</title><style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#eaf3f1;color:#1d3a36;font:13px Manrope,Arial,sans-serif}.preview-bar{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:#f4f8f6;border-bottom:1px solid #d5e3de;gap:12px}.preview-bar small{color:#4f6d68}iframe{display:block;width:100%;height:calc(100% - 42px);border:0;visibility:hidden}iframe.ready{visibility:visible}</style><div class="preview-bar"><strong id="label"></strong><small>Предпросмотр · окно оплаты демонстрационное</small></div><iframe title="Вариант описания алоэ" src="/product-detail-selected.html?info-base=20261113-v16"></iframe><script>
+const option=Math.min(5,Math.max(1,Number(new URLSearchParams(location.search).get('v'))||1)),titles=['Чёткая иерархия','Характеристики в карточках','Светлый блок покупки','Цена рядом с названием','Зелёный блок покупки'];
+document.title=(option)+' · '+titles[option-1];document.querySelector('#label').textContent=option+' / 5 · '+titles[option-1];
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+ const shell=frame.contentDocument,inner=shell?.querySelector('iframe');if(!inner)return;
+ await new Promise(resolve=>{const poll=()=>{const doc=inner.contentDocument;if(inner.classList.contains('ready')&&doc?.querySelector('.detail-price-group')&&doc?.querySelector('.detail-gallery-stage'))resolve();else setTimeout(poll,50)};poll()});
+ const d=inner.contentDocument,info=d.querySelector('.product-purchase'),box=info.querySelector('.purchase-box'),actions=info.querySelector('.purchase-actions'),title=info.querySelector('.product-title-row'),purpose=info.querySelector('.detail-purpose'),stock=info.querySelector('.detail-stock'),facts=info.querySelector('.detail-key-facts'),composition=info.querySelector('.detail-composition-link'),price=info.querySelector('.detail-price-group');
+ d.documentElement.dataset.infoOption=String(option);
+ const head=d.createElement('section');head.className='info-top';info.prepend(head);head.append(title,purpose,stock);
+ const details=d.createElement('section');details.className='info-details';head.after(details);details.append(facts,composition);
+ if(option===4){const nameRow=d.createElement('div');nameRow.className='info-title-price';head.prepend(nameRow);nameRow.append(title,price)}
+ const buy=d.createElement('button');buy.type='button';buy.className='btn info-buy-now';buy.textContent='Купить сейчас';actions.append(buy);
+ const dialog=d.createElement('dialog');dialog.className='info-checkout';dialog.setAttribute('aria-labelledby','quick-checkout-title');dialog.innerHTML='<form method="dialog"><button class="checkout-close" aria-label="Закрыть окно оплаты" value="close">×</button></form><span class="checkout-eyebrow">БЫСТРАЯ ПОКУПКА</span><h2 id="quick-checkout-title">Оплата заказа</h2><div class="checkout-product"><span>Сок Алоэ Вера · 473 мл</span><strong></strong></div><div class="checkout-amount"><span>Количество</span><b></b></div><label class="checkout-label">Способ оплаты</label><div class="checkout-methods"><label><input type="radio" name="demo-payment" value="card" checked> Банковской картой</label><label><input type="radio" name="demo-payment" value="sbp"> СБП</label></div><div class="checkout-amount checkout-total"><span>Итого</span><strong></strong></div><button class="btn checkout-pay" type="button" disabled>Оплатить</button><p class="checkout-demo">Это макет окна оплаты. Платёжный сервис пока не подключён, деньги не списываются.</p>';d.body.append(dialog);
+ buy.addEventListener('click',()=>{const quantity=Number(actions.querySelector('output')?.textContent)||1,unit=Number(price.querySelector('strong').textContent.replace(/[^\d,.]/g,'').replace(',','.')),money=n=>new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:2}).format(n);dialog.querySelector('.checkout-product strong').textContent=money(unit);dialog.querySelector('.checkout-amount b').textContent=quantity+' шт.';dialog.querySelector('.checkout-total strong').textContent=money(unit*quantity);dialog.querySelector('.checkout-pay').textContent='Оплатить '+money(unit*quantity);dialog.showModal()});
+ dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
+ const style=d.createElement('style');style.textContent=`
+ html[data-info-option] body #root .product-purchase{display:flex!important;flex-direction:column!important;align-self:stretch!important;justify-content:space-between!important;gap:14px!important;padding:20px!important}
+ html[data-info-option] body #root .info-top{display:flex;flex-direction:column;gap:12px}
+ html[data-info-option] body #root .info-details{display:flex;flex-direction:column;gap:0}
+ html[data-info-option] body #root .detail-purpose{margin:0!important;max-width:none!important}
+ html[data-info-option] body #root .detail-key-facts{margin:0!important;padding:12px 0!important}
+ html[data-info-option] body #root .detail-composition-link{min-height:48px!important}
+ html[data-info-option] body #root .purchase-actions{display:grid!important;grid-template-columns:112px minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;align-items:center!important}
+ html[data-info-option] body #root .purchase-actions>.product-order-quantity{width:112px!important;min-width:0!important;max-width:100%!important}
+ html[data-info-option] body #root .purchase-actions>.btn{width:100%!important;min-width:0!important;min-height:54px!important;height:54px!important;padding:0 10px!important;border-radius:var(--radius-control)!important;font:800 14px/1.25 Manrope,sans-serif!important;white-space:nowrap!important}
+ html[data-info-option] body #root .info-buy-now{background:var(--color-ink)!important;color:var(--color-white)!important;border:1px solid var(--color-ink)!important;cursor:pointer}
+ html[data-info-option] body #root .purchase-actions>.cart-action{background:var(--color-glass)!important;color:var(--color-ink)!important;border:1px solid var(--color-ink-control)!important}
+ html[data-info-option] body #root .product-purchase>.text-button{align-self:flex-start!important}
+ html[data-info-option="1"] body #root .info-details{padding:0 14px;background:var(--color-glass);border:1px solid var(--color-glass-border);border-radius:var(--radius-20)}
+ html[data-info-option="1"] body #root .info-details .detail-key-facts{border-top:0!important}
+ html[data-info-option="1"] body #root .info-details .detail-composition-link{border-bottom:0!important}
+ html[data-info-option="2"] body #root .detail-key-facts{gap:10px!important;border:0!important;padding:0 0 12px!important}
+ html[data-info-option="2"] body #root .detail-key-facts>div{padding:16px;border-radius:var(--radius-16);background:var(--color-mint-tint)}
+ html[data-info-option="2"] body #root .detail-key-facts>div:nth-child(2){background:var(--color-glass)}
+ html[data-info-option="2"] body #root .detail-key-facts dd{margin-top:8px!important}
+ html[data-info-option="3"] body #root .product-purchase .purchase-box.panel{padding:20px!important;background:var(--color-glass-raised)!important;border:1px solid var(--color-glass-border)!important;border-radius:var(--radius-20)!important}
+ html[data-info-option="3"] body #root .purchase-actions{grid-template-columns:1fr 1fr!important}
+ html[data-info-option="3"] body #root .purchase-actions>.product-order-quantity{grid-column:1/-1;justify-self:start}
+ html[data-info-option="4"] body #root .info-title-price{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:16px}
+ html[data-info-option="4"] body #root .info-title-price .detail-price-group{align-items:flex-end!important;padding-top:2px!important}
+ html[data-info-option="4"] body #root .detail-key-facts{grid-template-columns:1fr!important;gap:12px!important}
+ html[data-info-option="4"] body #root .detail-key-facts>div{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+ html[data-info-option="4"] body #root .detail-key-facts dt{margin:0!important}
+ html[data-info-option="4"] body #root .detail-key-facts dd{text-align:right}
+ html[data-info-option="5"] body #root .product-purchase .purchase-box.panel{padding:20px!important;background:var(--color-ink)!important;border:0!important;border-radius:var(--radius-20)!important;color:var(--color-white)!important}
+ html[data-info-option="5"] body #root .purchase-box :is(.detail-price-group>strong,.quantity,.quantity button,.quantity output){color:var(--color-white)!important}
+ html[data-info-option="5"] body #root .purchase-box .card-offer{background:var(--color-glass-highlight)!important;color:var(--color-white)!important}
+ html[data-info-option="5"] body #root .purchase-box .card-offer :is(p,a){color:var(--color-white)!important}
+ html[data-info-option="5"] body #root .purchase-actions{grid-template-columns:1fr 1fr!important}
+ html[data-info-option="5"] body #root .purchase-actions>.product-order-quantity{grid-column:1/-1;justify-self:start}
+ html[data-info-option="5"] body #root .purchase-actions>.cart-action{background:transparent!important;border-color:var(--color-glass-border)!important;color:var(--color-white)!important}
+ html[data-info-option="5"] body #root .purchase-actions>.info-buy-now{background:var(--color-white)!important;border-color:var(--color-white)!important;color:var(--color-ink)!important}
+ .info-checkout{box-sizing:border-box;width:min(480px,calc(100vw - 32px));max-height:calc(100svh - 48px);overflow:auto;padding:32px;border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-bg);color:var(--color-ink);font:14px/1.5 Manrope,sans-serif;box-shadow:var(--shadow-navigation)}
+ .info-checkout::backdrop{background:rgb(29 58 54 / .35);backdrop-filter:blur(6px)}
+ .info-checkout .checkout-close{position:absolute;right:12px;top:10px;display:grid;place-items:center;width:36px;height:36px;border:0;border-radius:50%;background:var(--color-glass);color:var(--color-ink);font:24px/1 Manrope,sans-serif;cursor:pointer}
+ .info-checkout h2{margin:8px 0 24px;font:800 28px/1.15 Manrope,sans-serif;letter-spacing:-.02em}
+ .checkout-eyebrow{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--color-muted)}
+ .checkout-product,.checkout-amount{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:16px}
+ .checkout-product{padding:14px;border-radius:16px;background:var(--color-glass);align-items:flex-start}
+ .checkout-product strong{white-space:nowrap}
+ .checkout-label{display:block;margin:24px 0 10px;font-weight:700}
+ .checkout-methods{display:grid;gap:10px}.checkout-methods label{display:flex;align-items:center;gap:8px;min-height:44px;padding:10px 12px;border:1px solid var(--color-border);border-radius:14px;background:var(--color-glass)}
+ .checkout-methods input{accent-color:var(--color-ink)}
+ .checkout-total{padding-top:20px;border-top:1px solid var(--color-border);margin-top:24px;font-size:18px}.checkout-total strong{font-size:24px}
+ .info-checkout .checkout-pay{width:100%;min-height:50px;background:var(--color-ink);color:var(--color-white);border-radius:16px;opacity:.55;cursor:not-allowed}
+ .checkout-demo{font-size:12px;line-height:1.5;color:var(--color-muted);margin:12px 0 0}
+ @media(max-width:959px){html[data-info-option] body #root .product-purchase{height:auto!important;padding:12px!important}html[data-info-option] body #root .purchase-actions{grid-template-columns:1fr 1fr!important}html[data-info-option] body #root .purchase-actions>.product-order-quantity{grid-column:1/-1}html[data-info-option="4"] body #root .info-title-price{grid-template-columns:1fr}html[data-info-option="4"] body #root .info-title-price .detail-price-group{align-items:flex-start!important}}
+ `;d.head.append(style);await d.fonts.ready;frame.classList.add('ready');
+});
+</script></html>

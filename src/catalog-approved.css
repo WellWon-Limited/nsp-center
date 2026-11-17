@@ -121,3 +121,5 @@ html[data-catalog-design] body #root .product-badge--sale{background:var(--color
 html[data-catalog-design] body #root .product-badge--new{background:var(--color-blue,#b9d4f5)!important}
 html[data-catalog-design] body #root .product-badge--hit{background:var(--color-mint,#9fdcc6)!important}
 }
+
+/* Guest card invitation shares the card rhythm and never flashes over a restored signed-in account. */

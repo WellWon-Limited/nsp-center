@@ -1,3 +1,4 @@
+import {ADMIN_PATH} from '../src/admin-path.mjs';
 // Creates (or resets) a site administrator: a separate staff account that opens only site management (/admin/), not a
 // customer's cabinet. Usage: npm run admin:create -- <email> [--name "Имя Фамилия"]. The password is taken from
 // ADMIN_PASSWORD or generated, printed once and never stored anywhere but as its scrypt hash in the database; the
@@ -29,4 +30,4 @@ const { rows: [user] } = await pool.query(`insert into users (email, phone, phon
 await pool.query('delete from sessions where user_id = $1', [user.id]);
 await pool.query("insert into admin_log (user_id, action, detail) values ($1, 'admin-created', $2)", [user.id, JSON.stringify({ email, by: 'npm run admin:create' })]).catch(() => {});
 await pool.end();
-console.log(`Администратор: ${email}\nПароль: ${password}\nВход: /admin/ (пароль показан один раз; смените его, если он попал в переписку)`);
+console.log(`Администратор: ${email}\nПароль: ${password}\nВход: ${ADMIN_PATH} (пароль показан один раз; смените его, если он попал в переписку)`);

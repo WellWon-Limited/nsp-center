@@ -18,12 +18,13 @@ export function ProductOverview({product:p,notes,onDetails}:{product:Product;not
  const root=useRef<HTMLDivElement>(null);
  useLayoutEffect(()=>{
   const el=root.current;if(!el)return;let disposed=false,frame=0;
-  const fit=()=>{if(!disposed)fitProductOverview(el,window)};
+  const view=el.ownerDocument.defaultView??window;
+  const fit=()=>{if(!disposed)fitProductOverview(el,view)};
   const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(fit)};
-  fit();document.fonts.ready.then(schedule);window.addEventListener('resize',schedule);
+  fit();el.ownerDocument.fonts.ready.then(schedule);view.addEventListener('resize',schedule);
   const observer=new ResizeObserver(schedule);
   for(const child of el.querySelectorAll('.product-title-row,.purchase-box,.product-key-facts'))observer.observe(child);
-  return()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('resize',schedule)};
+  return()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();view.removeEventListener('resize',schedule)};
  },[p.id]);
  const {state,setState,notify}=useStore(),available=p.availability!=='OutOfStock';
  const card=p.card||data.products.find(x=>x.id===p.id)?.card;
@@ -35,7 +36,7 @@ export function ProductOverview({product:p,notes,onDetails}:{product:Product;not
   <div className="product-purchase">
    <div className="product-title-row"><h1>{shortName(p.name)}</h1><div className="product-heading-meta"><div className="rating product-rating"><ReviewLine product={p} notes={notes} separator={false}/></div>{p.article&&<><span className="product-meta-divider" aria-hidden="true">|</span><span className="product-article">Арт. {p.article}</span></>}</div></div>
    <span className={`product-stock product-stock--standalone${available?'':' product-stock--unavailable'}`}><span aria-hidden="true"/>{available?'В наличии':'Нет в наличии'}</span>
-   <div className="purchase-box panel"><div className="purchase-prices purchase-prices--plain" data-ds-id="purchase-prices"><div className={`price-row current${hasCardPrice?' price-row--partner':''}`}><strong aria-label={hasCardPrice?'Цена по дисконтной карте':undefined}>{money(current)}</strong>{hasCardPrice&&current<p.prices.retail&&<s className="price-was">{money(p.prices.retail)}</s>}</div>{!hasCardPrice&&p.prices.source==='price-list'&&<CardOffer/>}</div><div className="purchase-actions">{available?<CartButton product={p} buyNow/>:<WaitlistButton product={p}/>}</div></div>
+   <div className="purchase-box panel"><div className="purchase-prices purchase-prices--plain" data-ds-id="purchase-prices"><div className={`price-row current${hasCardPrice?' price-row--partner':''}`}><strong aria-label={hasCardPrice?'Цена по дисконтной карте':undefined}>{money(current)}</strong>{hasCardPrice&&current<p.prices.retail&&<s className="price-was">{money(p.prices.retail)}</s>}</div>{!hasCardPrice&&<CardOffer/>}</div><div className="purchase-actions">{available?<CartButton product={p} buyNow/>:<WaitlistButton product={p}/>}</div></div>
    {card?.sub&&<p className="product-purpose">{card.sub.replace(/\n/g,' ')}</p>}
    {facts.length>0&&<dl className="product-key-facts">{facts.map(([label,value])=><div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}
    {composition&&<ShortFact title="Состав" text={composition} onDetails={()=>onDetails('properties')}/>}

@@ -62,20 +62,18 @@ export function AuthScreen() {
   const [notice, setNotice] = useState(false);
   const [error, setError] = useState('');
   // A staff account typed into the customer sign-in: point to site management's own sign-in, with the email filled in.
-  const [staffLogin, setStaffLogin] = useState('');
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmationTouched, setConfirmationTouched] = useState(false);
   const passwordError = registrationPasswordError(password, confirmPassword);
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', partnerId: '', consent: false });
-  const switchTo = (next: Mode) => { setMode(next); setNotice(false); setError(''); setStaffLogin(''); setPassword(''); setConfirmPassword(''); setConfirmationTouched(false); };
+  const switchTo = (next: Mode) => { setMode(next); setNotice(false); setError(''); setPassword(''); setConfirmPassword(''); setConfirmationTouched(false); };
   const signIn = async (e: FormEvent) => {
     e.preventDefault(); setNotice(false);
     if (customerEmailError(login)) { setError(customerEmailError(login)); return; }
     if (accounts === 'server') {
       setBusy(true); const { session, error, staff } = await callAccounts('/api/auth/login', { login, password }); setBusy(false);
-      setStaffLogin(staff ? login.trim() : '');
       if (!session) { setError(staff ? 'Это служебный аккаунт сотрудника. Он входит не здесь, а в управление сайтом.' : error!); return; }
       setPassword(''); setError(''); startSession(session); return;
     }
@@ -134,7 +132,6 @@ export function AuthScreen() {
       </form>
     </>}
     {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
-    {staffLogin && <a className="btn btn--primary auth-staff-link" href={`/admin/?email=${encodeURIComponent(staffLogin)}`}>Перейти в управление сайтом <Icon name="chevron" size={18} /></a>}
     {notice && <div className="auth-notice" role="status"><Icon name="clock" size={20} /><p><strong>Скоро заработает.</strong> Восстановление пароля появится позже.</p></div>}
     <a className="auth-guest" href="/">Продолжить без входа <Icon name="chevron" size={16} /></a>
   </section>;

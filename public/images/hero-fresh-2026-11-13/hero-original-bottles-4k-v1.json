@@ -1,0 +1,33 @@
+{
+  "backgroundNativePixels" : [
+    1774,
+    887
+  ],
+  "chlorophyll" : {
+    "heightPx" : 1182.72,
+    "originalCropPixels" : [
+      196,
+      571
+    ],
+    "realHeightCm" : 19.699999999999999,
+    "visibleWidthPx" : 405.97744308231171
+  },
+  "method" : "Original screenshot cutouts over generated background; uniform scaling only",
+  "omega" : {
+    "heightPx" : 705.42944162436561,
+    "originalCropPixels" : [
+      246,
+      487
+    ],
+    "realHeightCm" : 11.75,
+    "visibleWidthPx" : 356.33602184721548
+  },
+  "omegaHeightToChlorophyll" : 0.59644670050761428,
+  "outputPixels" : [
+    3840,
+    1536
+  ],
+  "packagingColorsAndLabels" : "Preserved from original screenshots; no generative redraw, no anisotropic scaling",
+  "sourceDetails" : "4K export dimensions; background and screenshot details are upscaled, not native 4K generation",
+  "topGapPx" : 122.87999999999988
+}

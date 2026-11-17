@@ -11,6 +11,9 @@
 | [SEO.md](SEO.md) | SEO под Яндекс: принципы, шаблон статьи блога, задачи |
 | [DEVELOPMENT.md](DEVELOPMENT.md) | Установка, запуск, проверки, тестовый сервер |
 | [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md) | Дизайн-система: токены, компоненты, адаптация |
+| [ORDERS.md](ORDERS.md) | Оформление заказов и оплата: ЮKassa, чеки, «Честный знак», СДЭК, план |
+| [ALOE-PRODUCT-CARD.md](ALOE-PRODUCT-CARD.md) | Выбранная карточка алоэ: компоновка, шрифты, кнопки, галерея и состояния |
+| [ALOE-PHOTO-PROMPTS.md](ALOE-PHOTO-PROMPTS.md) | Фотографии алоэ: используемые файлы, референсы упаковки и промпты |
 | [PROTOTYPE.md](PROTOTYPE.md) | Прототип мобильного приложения и его рабочая версия |
 | [CONTENT-AUDIT.md](CONTENT-AUDIT.md) | Сверка содержимого сайта со снимком nsp-center.ru |
 | [VERIFICATION.md](VERIFICATION.md) | Что проверено и чем; снимки экранов — в `verification/` |

@@ -4,7 +4,7 @@ import type { Product } from './content-types';
 import { data, money, priceOf, shortName, useStore } from './store';
 import { LoyaltyStatus } from './loyalty';
 import { cartSummary, FREE_COURIER_FROM } from './cart-summary.mjs';
-import { CardOffer, Empty, Heading, Icon, ProductImage } from './ui';
+import { CardOffer, Heading, Icon, ProductImage } from './ui';
 
 // Cart with the marketplace logic (owner, 2026-11-10: "как на WB и Ozon", the look stays):
 // - every product has a tick; the order is made of the ticked ones, "Выбрать все" and "Удалить выбранные" act on all;
@@ -31,7 +31,6 @@ type Removed = { items: Record<string, number>; label: string };
 
 export function Cart() {
   const { state, qty, setState, ready, favorite } = useStore();
-  const [saved, setSaved] = useState(false);
   const [unselected, setUnselected] = useUnselected();
   const [removed, setRemoved] = useState<Removed | null>(null);
   const summary = useRef<HTMLElement>(null);
@@ -41,7 +40,7 @@ export function Cart() {
     const el = summary.current; if (!el || typeof IntersectionObserver === 'undefined') return;
     const io = new IntersectionObserver(([e]) => setSummaryVisible(e.isIntersecting), { threshold: 0.15 });
     io.observe(el); return () => io.disconnect();
-  }, [ready, saved, Object.keys(state.cart).length > 0]);
+  }, [ready, Object.keys(state.cart).length > 0]);
 
   const rows = data.products.filter(p => state.cart[p.id]);
   const available = rows.filter(inStock), missing = rows.filter(p => !inStock(p));
@@ -58,15 +57,9 @@ export function Cart() {
     setRemoved({ items, label: one ? `«${shortName(one.name)}» удалён из корзины` : `Удалено: ${pieces(ids.length)}` });
   };
   const undo = () => { if (!removed) return; setState(s => ({ ...s, cart: { ...s.cart, ...removed.items } })); setRemoved(null); };
-  function save() {
-    if (!count) return;
-    setState(s => { const cart = { ...s.cart }; for (const p of chosen) delete cart[p.id]; return { ...s, orders: [{ id: `LOCAL-${Date.now()}`, total, items: count, date: new Date().toLocaleDateString('ru-RU'), products: Object.fromEntries(chosen.map(p => [p.id, s.cart[p.id]])) }, ...s.orders], cart }; });
-    setSaved(true);
-  }
 
   const heading = <Heading title="Корзина" description="Отметьте продукты для заказа и проверьте количество." />;
   if (!ready) return <>{heading}<div className="account-route-loading" aria-busy="true" aria-label="Загрузка" /></>;
-  if (saved) return <>{heading}<Empty title="Черновик заказа сохранён" icon="check"><p>Заказ пока не отправлен в магазин: оформление на сайте ещё не подключено. Чтобы купить, свяжитесь с NSP Center — черновик виден в профиле.</p><a className="btn btn--primary" href="/contacts/">Контакты магазина</a><a href="/profile/">Посмотреть черновики</a></Empty></>;
   if (!rows.length) return <>{heading}<p className="cart-empty empty-screen" data-ds-id="cart-empty">Ваша корзина пока пуста</p>{removed && <UndoBar removed={removed} onUndo={undo} />}</>;
 
   return <>{heading}
@@ -107,12 +100,13 @@ export function Cart() {
         <hr />
         <div className="total"><span>Итого</span><strong>{money(total)}</strong></div>
         {state.card && saving > 0 && <p className="cart-saving">Вы экономите {money(saving)}</p>}
-        <button className="btn btn--primary" disabled={!count} onClick={save}>{count ? 'Сохранить черновик заказа' : 'Выберите товары'} {count > 0 && <Icon name="chevron" size={18} />}</button>
-        <p className="fine-print">Оформление и оплата на сайте пока не подключены: заказ не уйдёт в магазин. Черновик сохранится в профиле, а купить можно, связавшись с нами.</p>
+        {/* The next step is the checkout page (owner, 2026-11-17; research: one dominant action, the marketplaces' «Перейти к оформлению»). */}
+        {count ? <a className="btn btn--primary cart-checkout" href="/checkout/">Перейти к оформлению <Icon name="chevron" size={18} /></a> : <button type="button" className="btn btn--primary" disabled>Выберите товары</button>}
+        <p className="fine-print">Способ получения и оплату выберете на следующем шаге.</p>
         <a href="/contacts/">Связаться для покупки <Icon name="chevron" size={18} /></a>
       </aside>
     </div>
-    {!summaryVisible && count > 0 && <div className="cart-bar" data-ds-id="cart-bar"><div><span>{pieces(count)}</span><strong>{money(total)}</strong></div><button type="button" className="btn btn--primary" onClick={() => summary.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>К заказу</button></div>}
+    {!summaryVisible && count > 0 && <div className="cart-bar" data-ds-id="cart-bar"><div><span>{pieces(count)}</span><strong>{money(total)}</strong></div><a className="btn btn--primary" href="/checkout/">Оформить</a></div>}
     {removed && <UndoBar removed={removed} onUndo={undo} />}
   </>;
 }

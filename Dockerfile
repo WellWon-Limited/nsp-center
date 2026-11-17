@@ -15,9 +15,9 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts --no-audit --no-fund
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/src/generated/content.json ./src/generated/content.json
-COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs /app/scripts/accounts.mjs /app/scripts/site-admin.mjs /app/scripts/order-admin.mjs /app/scripts/ai-agent.mjs /app/scripts/card-prices.mjs /app/scripts/product-knowledge.mjs /app/scripts/catalog-admin.mjs /app/scripts/catalog-pages.mjs ./scripts/
+COPY --from=build /app/scripts/serve.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs /app/scripts/accounts.mjs /app/scripts/site-admin.mjs /app/scripts/order-admin.mjs /app/scripts/card-applications.mjs /app/scripts/ai-agent.mjs /app/scripts/cdek.mjs /app/scripts/card-prices.mjs /app/scripts/product-knowledge.mjs /app/scripts/catalog-admin.mjs /app/scripts/catalog-pages.mjs ./scripts/
 # Rules shared by the browser and the server (email and phone checks); tests/docker-runtime.test.mjs keeps this list complete.
-COPY --from=build /app/src/contact-fields.mjs /app/src/custom-product.mjs /app/src/site-content.mjs /app/src/product-badges.mjs /app/src/recommendation-areas.mjs /app/src/catalog-categories.mjs ./src/
+COPY --from=build /app/src/admin-path.mjs /app/src/contact-fields.mjs /app/src/custom-product.mjs /app/src/site-content.mjs /app/src/product-badges.mjs /app/src/recommendation-areas.mjs /app/src/catalog-categories.mjs ./src/
 COPY --from=build ["/app/assets/NSP App Prototype.html", "./assets/"]
 USER node
 EXPOSE 4173

@@ -1,0 +1,51 @@
+{
+  "mode": "built-in imagegen",
+  "intent": "Пять новых фотографий с нуля по двум референсам упаковок",
+  "referenceGeometry": {
+    "chlorophyll": {
+      "heightCm": 19.7,
+      "diameterCm": 7,
+      "capPercent": 9,
+      "collarPercent": 8,
+      "ribbedNeckPercent": 15,
+      "shoulderPercent": 11,
+      "bodyWithBasePercent": 57
+    },
+    "omega": {
+      "heightCm": 11.75,
+      "diameterCm": 6.3,
+      "capPercent": 18,
+      "neckPercent": 4,
+      "shoulderPercent": 8,
+      "bodyWithBasePercent": 70
+    }
+  },
+  "commonPrompt": "REFERENCE ROLE: Image 1 is the exact Chlorophyll product packaging reference. Image 2 is the exact Omega product packaging reference. Neither reference is a background. Create an entirely NEW photograph, not a repaint of an earlier hero.\nMOST IMPORTANT CONSTRAINT: accurate rigid bottle silhouettes and RELATIVE PHYSICAL SCALE. Both stand together on ONE LEVEL surface, same camera distance, same ground baseline. White Chlorophyll is 19.7cm tall and 7cm in base diameter; amber Omega is 11.75cm tall and 6.3cm in base diameter. The height ratio is 1.6766 to 1, diameter ratio 1.111 to 1. Omega height =59.6% of Chlorophyll; Omega width =90% of Chlorophyll. Do not turn them into similarly tall bottles. Do not squash, widen or overstretch either package.\nCHLOROPHYLL INTERNAL GEOMETRY from reference image1: cap about9% of total height, broad neck collar about8%, ribbed neck about15%, sloped shoulders about11%, straight cylindrical body with base about57%. Thus the top cap+collar+neck+shoulder region is about43%, NOT 25% or60%. Label about46% total height, rounded white bottom about9%. Reference silhouette is authoritative, with physical proportions height/base diameter about2.81. Long ribbed tapered neck, natural shoulder, cylindrical bottle. White body diameter only11% larger than amber body diameter.\nOMEGA INTERNAL GEOMETRY from image2: black cap about18% total height, short neck4%, rounded shoulders8%, amber body and base70%. Height/base diameter about1.865. Precisely keep the reference label, black ribbed cap, amber volume, muted salmon band, Ukrainian label 'Омега 3 EPA / Омега 3 (Натуральний риб’ячий жир)'. Do not copy checkerboard or studio cast shadow from reference.\nCOMPOSITION: panoramic landscape 2:1, highest native quality, ideally3840x1920. Two whole bottles in right half, tall white center x58%, amber center x71%, close together without overlap, same baseline at84% image height. Tall white bottle height approximately66% image height; white cap at18% from top. Amber height39.4%, cap at44.6%, base84%. At 2000x1000 virtual canvas white bottle dimensions234x660, amber211x394. Use these proportions instead of perspective tricks. Left43% is calm photographic negative space for dark text on a white glass card. Leave natural headroom, no cropped caps/bases.\nSTYLE: premium photoreal botanical product photography for a restrained sage mint wellness website, white coneflower, delicate fern and leaf, subtle distant woodland bokeh, realistic moss and rock texture, crisp accurate packaging, labels legible, round 3D reflections. Subdued greens, mint, muted sage, soft neutral stone, restrained white. Real photographic light. No UI, no overlay text, no watermark, no orange ribbon, no extra bottles, no checkerboard, no collage borders, no glitter, no fantasy plants. Everything behind the packaging is newly photographed-looking, consistent tasteful site visual system.",
+  "variants": [
+    {
+      "n": 1,
+      "name": "mint-forest",
+      "scene": "A misty mint woodland clearing. Bottles on a broad grey mossy rock; one white echinacea flower lies beside the amber bottle, a natural fern at the base. Soft diffuse morning light from upper left, airy quiet background. Classic balanced composition, beautiful but restrained."
+    },
+    {
+      "n": 2,
+      "name": "fern-stream",
+      "scene": "A calm fern grove near a barely visible woodland stream, bottles on a flat dry stone with very sparse moss. Pale mint water bokeh in far distance, one small white echinacea and a few fern fronds low on the sides. Soft overcast natural daylight; no clutter or dramatic splashes."
+    },
+    {
+      "n": 3,
+      "name": "sage-garden",
+      "scene": "A refined botanical garden with out-of-focus pale sage foliage behind bottles on neutral limestone with tiny moss patches. One white echinacea flower nearby and a subtle fern edge. Diffuse soft side light and quiet silvery green tones; real garden depth, no plain studio background."
+    },
+    {
+      "n": 4,
+      "name": "birch-light",
+      "scene": "An airy birch woodland with blurred silver-grey tree trunks and desaturated mint foliage, bottles on a level mossy stone. A white coneflower and a delicate fern in the lower-right foreground, dappled light extremely soft and subtle. Open natural atmosphere and rich believable textures."
+    },
+    {
+      "n": 5,
+      "name": "soft-morning",
+      "scene": "A serene early morning botanical woodland, soft sun filtered by leaves, bottles on a pale broad stone surrounded by fine moss, one white coneflower resting to the right and sparse fern. Background is a continuous calm sage mint woodland haze with warm-neutral highlights, no bright beams or hotspots behind text."
+    }
+  ]
+}

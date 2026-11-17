@@ -352,3 +352,20 @@
  html body #root .site-main:has(>.account){padding-top:28px!important}
  html body #root .account-head>.ds-kicker{display:block;font-family:var(--font-sans)!important;font-size:var(--text-14)!important;font-weight:800!important;line-height:21px!important;letter-spacing:normal!important;text-transform:none!important;margin:0!important;color:#3d7a64}
 }
+
+/* The card scales as one printed surface. Entry controls remain outside at their normal touch size. */
+.discount-card-scale{container-type:inline-size;width:100%;max-width:440px;margin:var(--space-20) auto 0}
+html body #root .discount-card-scale>.discount-card{width:100%;max-width:none;height:calc(100cqw / 1.586);min-height:0;margin:0;padding:calc(100cqw * 22 / 440) calc(100cqw * 24 / 440);border-radius:calc(100cqw * 24 / 440);gap:calc(100cqw * 12 / 440);align-content:space-between;box-sizing:border-box}
+html body #root .discount-card-scale .discount-card-top{font-size:calc(100cqw * 13 / 440)!important;line-height:1.5!important;gap:calc(100cqw * 12 / 440)}
+html body #root .discount-card-scale .discount-card-main{gap:calc(100cqw * 12 / 440)}
+html body #root .discount-card-scale .discount-card-main strong{font-size:calc(100cqw * 26 / 440)!important;line-height:1.15!important}
+html body #root .discount-card-scale .discount-card-rate{font-size:calc(100cqw * 28 / 440)!important;line-height:1.15!important}
+html body #root .discount-card-scale .discount-card-text{font-size:calc(100cqw * 14 / 440)!important;line-height:1.5!important}
+html body #root .discount-card-scale .discount-card-code{gap:calc(100cqw * 4 / 440);padding:calc(100cqw * 12 / 440) calc(100cqw * 16 / 440) calc(100cqw * 8 / 440);border-radius:calc(100cqw * 14 / 440)}
+html body #root .discount-card-scale .discount-barcode{width:82%;height:calc(100cqw * 54 / 440)}
+html body #root .discount-card-scale .discount-card-code span{font-size:calc(100cqw * 13 / 440)!important;line-height:1.3!important}
+html body #root .discount-card-scale .discount-card-foot{font-size:calc(100cqw * 13 / 440)!important;line-height:1.5!important;gap:calc(100cqw * 12 / 440)}
+html body #root .discount-card-scale .card-application-preview>p{font-size:calc(100cqw * 14 / 440)!important;line-height:1.5!important;max-width:calc(100cqw * 260 / 440)}
+.card-application-layout aside>.discount-card-scale{margin:0 auto 24px}
+.account-card--application .discount-card-form{margin:8px 0;max-width:100%}
+.account-card--application .discount-card-form .field{min-height:46px;font-size:16px}

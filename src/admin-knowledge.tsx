@@ -1,6 +1,6 @@
 import {RequiredLabel,useUnsavedProduct} from './admin-form';
 import {productPackageLabel} from './product-media.mjs';
-import {useEffect,useRef,useState,type FormEvent,type SetStateAction} from 'react';
+import {useEffect,useRef,useState,type FormEvent,type SetStateAction,type ReactNode} from 'react';
 import type {Product} from './content-types';
 import type {ProductKnowledge,KnowledgeSource} from './product-knowledge-types';
 import type {ProductContent} from './site';
@@ -46,7 +46,7 @@ export function LectureSearchPanel({defaultQuery,count,sources,experts,attach,ad
   {result?.hasMore&&<button type="button" className="btn btn--secondary knowledge-more" disabled={busy} onClick={()=>setPage(n=>n+1)}>Показать ещё</button>}
  </aside>;
 }
-export function KnowledgeEditor({product:p,run,mode='about',loadingMinHeight=0,draftValue,onDraftChange,contentValue,onContentChange}:{product:Product;run:Run;mode?:'about'|'facts';loadingMinHeight?:number;draftValue?:ProductKnowledge;onDraftChange?:(value:ProductKnowledge)=>void;contentValue?:ContentDraft;onContentChange?:(value:ContentDraft)=>void}){
+export function KnowledgeEditor({product:p,run,mode='about',loadingMinHeight=0,draftValue,onDraftChange,contentValue,onContentChange,onPreviewChange,preview}:{product:Product;run:Run;mode?:'about'|'facts';loadingMinHeight?:number;draftValue?:ProductKnowledge;onDraftChange?:(value:ProductKnowledge)=>void;contentValue?:ContentDraft;onContentChange?:(value:ContentDraft)=>void;onPreviewChange?:(value:{knowledge:ProductKnowledge;content:ProductContent})=>void;preview?:ReactNode}){
  const {notify}=useStore();
  const [localDraft,setLocalDraft]=useState<ProductKnowledge>(empty),[localContent,setLocalContent]=useState<ContentDraft>({name:p.name,properties:p.properties});
  const draft=draftValue??localDraft,content=contentValue??localContent;
@@ -71,6 +71,7 @@ setDraft(value);setContent(fields);setSourceId(value.sourceProductId??'');saved.
  useUnsavedProduct(loaded&&!onDraftChange&&JSON.stringify([draft,content])!==saved.current);
  const hasKnowledge=Boolean(draft.about.some(t=>t.trim())||draft.sources.length||draft.recommendations.length||draft.pairs.length||draft.experts?.length);
  const save=async(e:FormEvent)=>{e.preventDefault();if(saving||sourceBusy)return;setSaving(true);setError('');try{const fields:ProductContent={name:content.name,summary:draft.benefit,properties:content.properties};if(await run('/api/admin/product-knowledge',{productId:p.id,knowledge:hasKnowledge?draft:null,content:fields},'Сведения товара сохранены')){saved.current=JSON.stringify([draft,content]);setStatus('Сведения товара сохранены.')}else setError('Сохранение не выполнено. Проверьте сообщение об ошибке.')}catch{setError('Не удалось сохранить. Повторите попытку.')}finally{setSaving(false)}};
+ useEffect(()=>{if(loaded)onPreviewChange?.({knowledge:draft,content:{name:content.name,about:draft.about,highlights:draft.highlights,summary:draft.benefit,properties:content.properties}})},[loaded,draft,content,onPreviewChange]);
  if(!loaded)return <div className="knowledge-loading" aria-busy={!error} style={{minHeight:Math.max(loadingMinHeight,480)}}><p className={error?'admin-error':'ds-muted'} role={error?'alert':'status'}>{error||'Загружаем сведения товара…'}</p></div>;
  const EditorRoot=onDraftChange?'div':'form';
  return <EditorRoot className="admin-knowledge-split" onSubmit={onDraftChange?undefined:save} data-ds-id="admin-product-knowledge">
@@ -93,6 +94,6 @@ setDraft(value);setContent(fields);setSourceId(value.sourceProductId??'');saved.
    <div className="knowledge-divider"/><h3 className="knowledge-sources-title">Прикреплённые источники<span>{draft.sources.length}</span></h3><p className="knowledge-placement knowledge-placement--section">Сохраняются в базе для проверки сведений. Полные лекции покупателям не показываются.</p>
    {draft.sources.length===0?<p className="knowledge-hint">Выберите фрагмент справа и нажмите «Прикрепить».</p>:<ul className="knowledge-sources">{draft.sources.map(source=><li key={source.id}><div><strong>{source.lecture}</strong><small>{[source.speaker,source.course].filter(Boolean).join(' · ')}</small><SourceContext source={source}/></div><button type="button" className="knowledge-remove" disabled={draft.experts?.some(e=>e.sourceId===source.id)} title={draft.experts?.some(e=>e.sourceId===source.id)?'Сначала уберите отзыв эксперта из этой лекции':undefined} aria-label="Убрать источник" onClick={()=>setDraft({...draft,sources:draft.sources.filter(x=>x.id!==source.id)})}><Icon name="close" size={16}/></button></li>)}</ul>}
   </section><LectureSearchPanel defaultQuery={shortName(content.name)} count={list?.counts.lectures??0} sources={draft.sources} experts={draft.experts} attach={attach} addExpert={mode==='about'?addExpert:undefined}/></div>
-  {!onDraftChange&&<footer className="knowledge-savebar"><div><p role="status">{status||(JSON.stringify([draft,content])!==saved.current?'Есть несохранённые изменения':p.hidden?'Товар скрыт. Сведения появятся после публикации.':'Изменения появятся на сайте после сохранения.')}</p>{error&&<p className="admin-error" role="alert">{error}</p>}</div><button className="btn btn--primary" disabled={saving||sourceBusy}>{saving?'Сохраняем…':'Сохранить сведения'}</button></footer>}
+  {!onDraftChange&&<footer className="knowledge-savebar"><div><p role="status">{status||(JSON.stringify([draft,content])!==saved.current?'Есть несохранённые изменения':p.hidden?'Товар скрыт. Сведения появятся после публикации.':'Изменения появятся на сайте после сохранения.')}</p>{error&&<p className="admin-error" role="alert">{error}</p>}</div><div className="admin-editor-actions">{preview}<button className="btn btn--primary" disabled={saving||sourceBusy}>{saving?'Сохраняем…':'Сохранить сведения'}</button></div></footer>}
  </EditorRoot>;
 }

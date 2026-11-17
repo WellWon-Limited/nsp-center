@@ -35,3 +35,10 @@
  html[data-catalog-design] body #root .site-main .information-content:has(>.information-empty--plain){position:static!important}
  html[data-catalog-design] body #root .site-main :is(.purchases-empty,.information-empty--plain){min-height:0!important}
 }
+
+@layer typography-reference{
+ html[data-catalog-design] body #root .purchases-search{margin:0 0 var(--space-24)!important}
+ html[data-catalog-design] body #root .purchases-search .search-field{background:var(--color-white)!important;border:1px solid var(--color-glass-border-strong)!important;border-radius:var(--radius-control)!important;box-shadow:none!important}
+ html[data-catalog-design] body #root .purchases-search .search-field:focus-within{border-color:var(--color-ink)!important;outline:none!important;box-shadow:none!important}
+ html[data-catalog-design] body #root .purchases-search input{font:inherit;color:var(--color-ink);min-height:48px}
+}

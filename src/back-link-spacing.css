@@ -86,3 +86,8 @@
  html[data-catalog-design] body #root main.site-main:has(>.recommend){padding-top:var(--return-top-gap)!important}
  html[data-catalog-design] body #root main.site-main .recommend>.back-link[href]{margin:0 0 var(--return-bottom-gap)!important}
 }
+@layer typography-reference{
+ /* The checkout's «‹ Корзина» / «‹ Товар»: the same distances as on the other pages. */
+ html[data-catalog-design] body #root main.site-main .checkout>a.back-link[href]{margin:var(--return-top-gap) 0 var(--return-bottom-gap)!important}
+ html[data-catalog-design] body #root main.site-main:has(>.checkout>a.back-link[href]){padding-top:0!important}
+}

@@ -1,11 +1,15 @@
+import {Barcode} from './discount-barcode';
+import {CardApplicationPage,CardApplicationStatus,useCardApplication} from './card-application';
 import './account.css';
 import { ConfirmDialog } from './admin';
 import { useEffect, useState, type FormEvent } from 'react';
-import { data, partnerSignupUrl, useStore, type Account } from './store';
+import { data, useStore, type Account } from './store';
 import { Icon, ProductGrid } from './ui';
 import { InstallAppCard } from './pwa';
 import { PhoneInput } from './contact-inputs';
 import { phoneError } from './contact-fields.mjs';
+import {useCustomerOrders} from './customer-orders';
+import {completedPurchases,activeOrder} from './customer-order-status.mjs';
 import { purchasedIds } from './purchased-ids.mjs';
 
 // Signed-in profile of the demo account (see auth.tsx): the discount card under the greeting, then personal data,
@@ -39,57 +43,52 @@ function PersonalData({ account }: { account: Account }) {
   </section>;
 }
 
-// Code 128 (set B) bars for the card number, so the barcode on the card encodes the real number.
-const code128 = '212222 222122 222221 121223 121322 131222 122213 122312 132212 221213 221312 231212 112232 122132 122231 113222 123122 123221 223211 221132 221231 213212 223112 312131 311222 321122 321221 312212 322112 322211 212123 212321 232121 111323 131123 131321 112313 132113 132311 211313 231113 231311 112133 112331 132131 113123 113321 133121 313121 211331 231131 213113 213311 213131 311123 311321 331121 312113 312311 332111 314111 221411 431111 111224 111422 121124 121421 141122 141221 112214 112412 122114 122411 142112 142211 241211 221114 413111 241112 134111 111242 121142 121241 114212 124112 124211 411212 421112 421211 212141 214121 412121 111143 111341 131141 114113 114311 411113 411311 113141 114131 311141 411131 211412 211214 211232 2331112'.split(' ');
-function Barcode({ value }: { value: string }) {
-  const codes = [...value].map(ch => ch.charCodeAt(0) - 32);
-  const check = codes.reduce((sum, c, i) => sum + c * (i + 1), 104) % 103;
-  const widths = [104, ...codes, check, 106].flatMap(c => [...code128[c]].map(Number));
-  let x = 10; const bars: [number, number][] = [];
-  widths.forEach((w, i) => { if (i % 2 === 0) bars.push([x, w]); x += w; });
-  return <svg className="discount-barcode" viewBox={`0 0 ${x + 10} 40`} preserveAspectRatio="none" role="img" aria-label={`Штрихкод карты ${value}`}>{bars.map(([bx, w]) => <rect key={bx} x={bx} y="0" width={w} height="40" />)}</svg>;
-}
 const DEMO_POINTS = 100;
 const groupDigits = (id: string) => id.replace(/\B(?=(\d{3})+$)/g, ' ');
 
 // The discount card right under the greeting: with a number — the card itself (discount, barcode, number); without —
 // the same card shape with a field for the number and a link to get a card.
 function DiscountCard({ account }: { account: Account }) {
-  const { setState, notify } = useStore();
+  const { setState, notify,accounts } = useStore();
+  const [busy,setBusy]=useState(false),[attachError,setAttachError]=useState('');
   const [id, setId] = useState('');
-  const attach = (e: FormEvent) => {
-    e.preventDefault();
-    const partnerId = id.replace(/\D/g, '');
-    if (!partnerId) return;
-    setState(s => s.account ? { ...s, card: true, account: { ...s.account, partnerId } } : s);
-    setId(''); notify('Дисконтная карта подключена');
+  const {application,setApplication,loaded,error:applicationError}=useCardApplication();
+  const attach = async(e: FormEvent) => {
+    e.preventDefault();if(busy)return;
+    const partnerId=id.replace(/\D/g,'');if(!/^\d{6,12}$/.test(partnerId)){setAttachError('Введите номер карты: от 6 до 12 цифр.');return}
+    if(accounts!=='server'){setAttachError('Войдите в аккаунт, чтобы отправить номер администратору на проверку.');return}
+    setBusy(true);setAttachError('');
+    try{const response=await fetch('/api/card-application',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'attach',requestedPartnerId:partnerId})});const body=await response.json();if(body.application)setApplication(body.application);if(!response.ok)throw Error(body.error||'Не удалось отправить номер.');setId('');notify('Номер карты отправлен на проверку. Скидка появится после подтверждения.')}catch(e){setAttachError(e instanceof Error?e.message:'Нет связи с сервером. Повторите попытку.')}finally{setBusy(false)}
   };
   const remove = () => {
     setState(s => s.account ? { ...s, card: false, account: { ...s.account, partnerId: '' } } : s);
     notify('Дисконтная карта удалена');
   };
-  return <section className="discount-card" data-ds-id="account-card">
+  return <div className="discount-card-area"><div className="discount-card-scale"><section className={`discount-card${application&&application.status!=='rejected'?' discount-card--requested':''}`} data-ds-id="account-card">
     <div className="discount-card-top"><span>Дисконтная карта</span><span>Nature’s Sunshine</span></div>
     {account.partnerId ? <>
       {/* The card shows the points balance, not the owner's name (it is their own cabinet). A fixed 100 until the partner
-          system is connected and accrues points (owner, 2026-11-06). */}<div className="discount-card-main"><strong className="discount-card-points">{DEMO_POINTS} <span>баллов</span></strong><span className="discount-card-rate">−30%</span></div>
+          system is connected and accrues points (owner, 2026-11-06). */}<div className="discount-card-main">{account.server||application?.status==='approved'?<strong>Ваша карта NSP</strong>:<strong className="discount-card-points">{DEMO_POINTS} <span>баллов</span></strong>}<span className="discount-card-rate">−30%</span></div>
       <div className="discount-card-code"><Barcode value={account.partnerId} /><span>{groupDigits(account.partnerId)}</span></div>
-      <div className="discount-card-foot"><span>Скидка до 30% на все товары в каталоге и корзине</span><button type="button" onClick={remove}>Удалить</button></div>
+      <div className="discount-card-foot"><span>Скидка до 30% на все товары в каталоге и корзине</span>{application?.status!=='approved'&&<button type="button" onClick={remove}>Удалить</button>}</div>
     </> : <>
       <div className="discount-card-main"><strong>Скидка до 30%</strong></div>
-      <p className="discount-card-text">Добавьте номер карты (ID партнёра NSP) — в каталоге и корзине появятся цены по карте.</p>
-      <form className="discount-card-form" onSubmit={attach}>
-        <input className="field" inputMode="numeric" placeholder="Номер карты" aria-label="Номер дисконтной карты" value={id} onChange={e => setId(e.target.value)} />
-        <button className="btn">Добавить</button>
-      </form>
-      <a className="discount-card-link" href={partnerSignupUrl} target="_blank" rel="noopener">Оформить дисконтную карту <Icon name="chevron" size={18}/></a>
+      <p className="discount-card-text">Добавьте номер карты (ID партнёра NSP). Цены по карте появятся после проверки администратором.</p>
+      <div className="discount-card-code"><Barcode value={account.partnerId||'0000000'}/><span>{account.partnerId?groupDigits(account.partnerId):'Номер после подтверждения'}</span></div>
+
+
     </>}
-  </section>;
+  </section></div>{attachError&&<p role="alert" className="contact-error">{attachError}</p>}{(!account.partnerId||application)&&<section className="account-card account-card--application" data-ds-id="account-card-application">{application?<CardApplicationStatus application={application}/>:<><h2>Оформить дисконтную карту</h2><p>Заполните заявку — после оформления и проверки номер карты появится в личном кабинете.</p></>}      {(!application||application.status==='rejected'&&application.data.mode==='attach')&&loaded&&!applicationError&&<form className="discount-card-form" onSubmit={attach}>
+        <input className="field" inputMode="numeric" placeholder="Номер карты" aria-label="Номер дисконтной карты" value={id} onChange={e => setId(e.target.value)} />
+        <button className="btn" disabled={busy}>{busy?'Отправляем…':'Проверить'}</button>
+      </form>}<a className="discount-card-link" href="/profile/?card=apply">{application?'Посмотреть заявку':'Оформить карту'} <Icon name="chevron" size={18}/></a></section>}</div>;
 }
 
 export function AccountPage({ account }: { account: Account }) {
   const { state, logout, notify } = useStore();
-  const bought = purchasedIds(state.orders, new Set(data.products.map(p => p.id))).length;
+  const {orders}=useCustomerOrders();
+  const active=orders.filter(activeOrder).length;
+  const bought = purchasedIds(completedPurchases(orders), new Set(data.products.map(p => p.id))).length;
   const [leaving, setLeaving] = useState(false);
   const favorites = data.products.filter(p => state.favorites.includes(p.id));
   const waiting = data.products.filter(p => state.waitlist.some(x => x.id === p.id));
@@ -97,6 +96,7 @@ export function AccountPage({ account }: { account: Account }) {
   const created = russianDate(account.createdAt);
   // Entering the account (after sign-in or registration) starts at the top of the page.
   useEffect(() => { window.scrollTo({ top: 0 }); }, []);
+  if(new URLSearchParams(location.search).get('card')==='apply')return <CardApplicationPage account={account}/>;
   return <div className="account" data-ds-id="account">
     <header className="account-head">
       <span className="ds-kicker">Личный кабинет</span>
@@ -108,6 +108,7 @@ export function AccountPage({ account }: { account: Account }) {
 
     <div className="account-stack">
       <PersonalData account={account} />
+      <section className="account-card account-card--row" data-ds-id="account-active-orders"><div><h2>Мои заказы</h2><p className="ds-muted">{active?`Активных заказов: ${active}`:'Активных заказов пока нет'}</p></div><a className="account-link" href="/profile/orders/">Перейти к заказам <Icon name="chevron" size={16}/></a></section>
       <section className="account-card account-card--row" data-ds-id="account-orders">
         <div>
           <h2>Мои покупки</h2>

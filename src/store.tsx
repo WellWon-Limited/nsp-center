@@ -1,3 +1,4 @@
+import {ADMIN_PATH} from './admin-path.mjs';
 import {applyCatalogConfig} from './catalog-categories.mjs';
 import { CART_NOTICE_MS, nextCartNotice, type CartNotice } from './cart-notice.mjs';
 import { rollPlan, restorePlans } from './intake-plan';
@@ -20,7 +21,7 @@ export const money = (n: number | null) => new Intl.NumberFormat('ru-RU', {style
 export const shortName = (name:string) => name.replace(/\s*\([^)]*\)/g,'').trim();
 // The price a visitor pays: partner price with a discount card when the product has one, otherwise retail.
 export const priceOf = (p:Product, card:boolean) => card && p.prices.partner !== null ? p.prices.partner : p.prices.retail;
-export const partnerSignupUrl = 'https://nsp25.com/signup?sid=446621';
+export const partnerSignupUrl = '/profile/?card=apply';
 export type Intake = {id:string; time:string; done:boolean};
 /** The visitor's account. `server`: it lives on the accounts server (scripts/accounts.mjs) and `passwordHash` is empty;
  *  otherwise it is the in-browser demo account (no server connected), with the password kept as a salted SHA-256 hash. */
@@ -186,7 +187,7 @@ export function StoreProvider({children}:{children:ReactNode}) {
     fetch('/api/admin/pending',{headers:{Accept:'application/json'}}).then(r=>r.ok?r.json():null).then(b=>{if(off||typeof b?.reviews!=='number')return;const count=b.reviews as number;setPendingReviews(count);
       let seen=0;try{seen=Number(localStorage.getItem('nsp-center:admin-pending'))||0;localStorage.setItem('nsp-center:admin-pending',String(count));}catch{/* ignore */}
       // One line for reviews waiting, updated with the count (src/notices.mjs).
-      if(count>seen)setState(s=>({...s,notices:addNotice(s.notices,{id:'reviews-pending',kind:'review',title:'Новый отзыв на проверку',text:`Ждут проверки: ${count}`,at:new Date().toISOString(),date:'',url:'/admin/?section=reviews',read:false})}));
+      if(count>seen)setState(s=>({...s,notices:addNotice(s.notices,{id:'reviews-pending',kind:'review',title:'Новый отзыв на проверку',text:`Ждут проверки: ${count}`,at:new Date().toISOString(),date:'',url:ADMIN_PATH+'?section=reviews',read:false})}));
     }).catch(()=>{/* none */});return()=>{off=true;};},[isAdmin]);
   const startSession=(session:ServerSession)=>{synced.current=null;setState(s=>openSession(s,session,'signin'));};
   const logout=async()=>{
@@ -225,3 +226,9 @@ export function StoreProvider({children}:{children:ReactNode}) {
   return <Context.Provider value={{state,setState,add,qty,favorite,waitFor,toast,notify,count:Object.values(state.cart).reduce((a,b)=>a+b,0),ready,sessionReady,pendingReviews,site,setSite,accounts,startSession,logout,staff,setStaff}}>{children}<div className={`toast ${toast?'visible':''}`} role="status" aria-live="polite">{toast}</div></Context.Provider>;
 }
 export function useStore(){const v=useContext(Context);if(!v)throw new Error('Missing StoreProvider');return v;}
+
+/** Read-only customer view for an administrator's unpublished preview; never writes account or site state. */
+export function AdminPreviewScope({site,children}:{site?:SiteSettings;children:ReactNode}){
+ const parent=useStore(),noop=()=>{};
+ return <Context.Provider value={{...parent,site:site??parent.site,state:{...parent.state,signedIn:false,account:null,card:false,cart:{},favorites:[],waitlist:[]},accounts:'local',staff:null,count:0,setState:noop,setSite:noop,setStaff:noop,add:noop,qty:noop,favorite:noop,waitFor:noop,notify:noop,startSession:noop,logout:async()=>{}}}>{children}</Context.Provider>;
+}

@@ -1,3 +1,4 @@
+import {CARD_APPLICATION_SCHEMA,cardApplicationRoute} from './card-applications.mjs';
 import { KNOWLEDGE_SCHEMA, inheritedKnowledge, checkKnowledge, searchLectures, lectureContext, saveProductKnowledge } from './product-knowledge.mjs';
 import {readManagedCatalog,managedCategoryList,catalogAdminState,saveManagedCatalog} from './catalog-admin.mjs';
 import { validateProductBadges } from '../src/product-badges.mjs';
@@ -121,7 +122,7 @@ create table if not exists admin_log (
   action text not null,
   detail jsonb not null default '{}',
   at timestamptz not null default now()
-);` + ORDER_SCHEMA + KNOWLEDGE_SCHEMA;
+);` + ORDER_SCHEMA + KNOWLEDGE_SCHEMA + CARD_APPLICATION_SCHEMA;
 
 const AVAILABILITY = new Set(['InStock', 'OutOfStock']);
 // Uploads: photos and certificate scans only, as images (no SVG — it can carry scripts).
@@ -247,6 +248,7 @@ const chatLogRate = new Map();
 export async function siteRoute(ctx, req, res, path, url) {
   const { pool, send, readJson, sessionUser, staffUser, productIds } = ctx;
   const method = req.method;
+  if(await cardApplicationRoute(ctx,req,res,path,url))return true;
   const builtProduct = id => typeof id === 'string' && (!productIds || productIds.has(id));
   // A product of the build, or a card created in site management.
   const knownProduct = async id => builtProduct(id) || (typeof id === 'string' && (await pool.query('select 1 from custom_products where product_id = $1', [id])).rowCount > 0);
@@ -399,6 +401,7 @@ export async function siteRoute(ctx, req, res, path, url) {
       rateHistory: history.map(h => ({ rubPerUnit: Number(h.detail.rubPerUnit), from: h.detail.from === null || h.detail.from === undefined ? null : Number(h.detail.from), at: h.at, by: h.email })),
       reviews: reviews.map(r => ({ id: Number(r.id), productId: r.product_id, rating: r.rating, text: r.text, status: r.status, date: r.created_at, author: authorName(r), email: r.email })),
       staff: users.map(u => ({ email: u.email, name: `${u.first_name} ${u.last_name}`.trim(), createdAt: u.created_at, lastLogin: u.last_login })),
+      cardApplications: (await pool.query("select count(*)::int as n from card_applications where status in ('pending','processing')")).rows[0].n,
       customers: Number((await pool.query("select count(*)::int as n from users where role = 'customer'")).rows[0].n),
     });
     return true;

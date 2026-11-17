@@ -94,6 +94,7 @@ function ProductGone({product:p}:{product:Product}){
  return <section className="not-found empty-screen product-gone" data-ds-id="product-gone"><h1>«{shortName(p.name)}» сейчас нет в продаже</h1><a className="btn btn--primary" href={p.categoryPath||'/catalog/'}>Перейти в каталог</a></section>;
 }
 function ProductPage({product,themes=[]}:{product:Product;themes?:Theme[]}) {
+ const information=useRef<HTMLElement>(null);
  const p=withProductImages(product);
  const videos=p.adminVideos!==undefined?p.adminVideos.flatMap(v=>{const info=videoOf(v.url);return info?[{...info,title:v.title}]:[]}):videoSections(p.sectionsHtml['Видеообзоры']||'');
 // «Отзывы · 5»: expert comments shown plus published customer reviews.
@@ -111,8 +112,8 @@ function ProductPage({product,themes=[]}:{product:Product;themes?:Theme[]}) {
   return()=>cancelAnimationFrame(frame);
  },[p.id]);
  const related=data.products.filter(x=>x.id!==p.id&&listed(x)&&(p.related.includes(x.path)||x.category===p.category)).slice(0,4);
- return <><BackLink fallback={p.categoryPath||'/catalog/'}/><ProductOverview product={p} notes={visibleNotes(p.id,p.experts,siteForCount).length} onDetails={next=>{setTab(next);requestAnimationFrame(()=>document.querySelector('[data-ds-id="product-information"]')?.scrollIntoView({behavior:'smooth',block:'start'}));}}/>
- <section id="product-information" className="product-content product-content--plain" data-ds-id="product-information"><div className="tabs" role="tablist" aria-label="Информация о продукте">{tabs.map(([id,label])=><button key={id} role="tab" id={`tab-${id}`} aria-selected={tab===id} aria-controls={`panel-${id}`} tabIndex={tab===id?0:-1} className={tab===id?'active':''} onClick={()=>setTab(id)} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const index=tabs.findIndex(x=>x[0]===id);const next=tabs[(index+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length][0];setTab(next);document.getElementById(`tab-${next}`)?.focus();}}}>{label}</button>)}</div>
+ return <><BackLink fallback={p.categoryPath||'/catalog/'}/><ProductOverview product={p} notes={visibleNotes(p.id,p.experts,siteForCount).length} onDetails={next=>{setTab(next);requestAnimationFrame(()=>information.current?.scrollIntoView({behavior:'smooth',block:'start'}));}}/>
+ <section ref={information} id="product-information" className="product-content product-content--plain" data-ds-id="product-information"><div className="tabs" role="tablist" aria-label="Информация о продукте">{tabs.map(([id,label])=><button key={id} role="tab" id={`tab-${id}`} aria-selected={tab===id} aria-controls={`panel-${id}`} tabIndex={tab===id?0:-1} className={tab===id?'active':''} onClick={()=>setTab(id)} onKeyDown={e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const index=tabs.findIndex(x=>x[0]===id);const next=tabs[(index+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length][0];setTab(next);document.getElementById(`tab-${next}`)?.focus();}}}>{label}</button>)}</div>
  {hasDescription(p)&&<div id="panel-description" role="tabpanel" aria-labelledby="tab-description" hidden={tab!=='description'}><ProductDescription product={p}/></div>}
  <div id="panel-properties" role="tabpanel" aria-labelledby="tab-properties" hidden={tab!=='properties'}><dl className="properties properties--v2">{productFacts(p).map(([key,value])=><div key={key}><dt>{key}</dt><dd>{value}</dd></div>)}</dl></div>
  {p.documents.length>0&&<div id="panel-documents" role="tabpanel" aria-labelledby="tab-documents" hidden={tab!=='documents'}><Certificates product={p}/></div>}

@@ -1,0 +1,16 @@
+{
+  "mode": "built-in imagegen edit",
+  "source": "03-sage-garden.png",
+  "output": "selected-sage-swapped-v1.png",
+  "requestedResolution": [
+    3840,
+    1920
+  ],
+  "actualResolution": [
+    1774,
+    887
+  ],
+  "native4K": false,
+  "prompt": "Use case: precise-object-edit / compositing. Image1 is the SELECTED hero photograph to edit. Images2 and3 are authoritative Chlorophyll and Omega bottle shape references.\nREQUEST EXACTLY THESE CHANGES:\n1. SWAP POSITIONS OF THE TWO BOTTLES: amber Omega on the LEFT, tall white Chlorophyll on the RIGHT. Keep them close together on the same level stone, same camera distance, both whole, caps and bases fully visible. Do not mirror labels or the whole photo.\n2. The white coneflower that stands to the LEFT of the pair must turn its head to the RIGHT, toward the bottles: a natural right-facing three-quarter/profile bloom, with a clearly rightward-facing golden cone and delicate white petals, not facing left or directly at camera. Keep it on its natural stem in the same general area.\n3. Match the site's design palette: calm soft MINT and desaturated SAGE woodland, pale airy #eaf3f1 highlights, subtle #9fdcc6 mint foliage notes, restrained #1d3a36 dark accents. Remove the current yellow/olive cast in background foliage. Preserve realistic photographic gradients and botanical textures; no flat recoloring, no neon green. Keep product packaging label colors accurate.\nPROPORTIONS ARE CRITICAL. White Chlorophyll real height19.7cm and diameter7cm; Omega height11.75cm and diameter6.3cm. Omega total height59.6% of white, diameter90% of white. White top cap9%, collar8%, ribbed neck15%, shoulders11%, body/base57% of white total height, matching reference2. Do not make the white neck excessively long or squat. Keep rounded 3D volume and cylindrical bodies; avoid flattening or stretching. Preserve exact original reference labels, Russian/English Chlorophyll and Ukrainian Omega3EPA label from image3. Labels unmirrored, clean and sharp.\nKeep selected photograph's limestone and moss, delicate fern along the upper right, quiet botanical garden bokeh, broad calm negative space on the LEFT for website copy. Keep whole pair in the right half; new white bottle in former amber position and new amber bottle in former white position. Do not move the composition to the center or add UI.\nOUTPUT REQUIREMENT: native 4K panorama 3840 x 1920 pixels, aspect2:1. Render genuinely at 4K resolution with readable crisp label typography, detailed fern, flower, stone and natural reflections. Do not deliver a lower-resolution image labelled4K. Do not add any caption, frame or watermark. Photoreal premium botanical product photography.",
+  "status": "Показано отдельно; на главной не заменено"
+}

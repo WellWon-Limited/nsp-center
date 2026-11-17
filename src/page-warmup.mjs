@@ -1,3 +1,4 @@
+import {isStaffPage} from './admin-path.mjs';
 // Fast page switches: the service worker opens a page it already keeps at once (scripts/sw-template.js). This module asks
 // it to keep, ahead of time, the pages a visitor is about to open: the tabs once the page has settled, the link under a
 // finger the moment it touches, and the catalog's sections and the products in view (a few at a time, never on a data
@@ -10,7 +11,7 @@ export function pageOf(href, base) {
   if (!href) return null;
   try {
     const u = new URL(href, base);
-    if (u.origin !== new URL(base).origin || /^\/(admin|api)(\/|$)/.test(u.pathname) || /\.[a-z0-9]+$/i.test(u.pathname)) return null;
+    if (u.origin !== new URL(base).origin || (isStaffPage(u.pathname)||/^\/api(\/|$)/.test(u.pathname)) || /\.[a-z0-9]+$/i.test(u.pathname)) return null;
     return u.pathname + u.search;
   } catch { return null; }
 }

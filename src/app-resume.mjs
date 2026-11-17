@@ -1,3 +1,4 @@
+import {isStaffPage} from './admin-path.mjs';
 import {runningAsApp} from './install-state.mjs';
 
 // Product policy, not an OS timeout: keep a brief interruption continuous, start a new visit after 30 minutes away.
@@ -6,7 +7,7 @@ export const RESUME_PAGE_KEY='nsp-center:last-page';
 export function readResumePage(storage){
  try{
   const item=JSON.parse(storage.getItem(RESUME_PAGE_KEY)||'null');
-  if(!item||typeof item.url!=='string'||!item.url.startsWith('/')||item.url.startsWith('//')||item.url.includes('\\')||/^\/(admin|api)([/?#]|$)/.test(item.url)||!Number.isFinite(item.at)||item.at<=0)return null;
+  if(!item||typeof item.url!=='string'||!item.url.startsWith('/')||item.url.startsWith('//')||item.url.includes('\\')||(isStaffPage(item.url)||/^\/api([/?#]|$)/.test(item.url))||!Number.isFinite(item.at)||item.at<=0)return null;
   return {url:item.url,at:item.at,scroll:Number.isFinite(item.scroll)&&item.scroll>=0?item.scroll:0};
  }catch{return null;}
 }
@@ -22,7 +23,7 @@ export function resetResumeNavigation(storage){
 
 /** Use elapsed time at foregrounding: hidden/frozen pages cannot run a reliable background countdown. */
 export function installAppResume(win,doc,{now=()=>Date.now(),timeoutMs=APP_RESUME_TIMEOUT_MS}={}){
- if(!runningAsApp(win)||!win.matchMedia('(max-width:959px)').matches||/^\/(admin|api)(\/|$)/.test(win.location.pathname))return()=>{};
+ if(!runningAsApp(win)||!win.matchMedia('(max-width:959px)').matches||(isStaffPage(win.location.pathname)||/^\/api(\/|$)/.test(win.location.pathname)))return()=>{};
  let hiddenAt=0,pending=0,navigating=false,returningHome=false;
  const baseline=new WeakMap(),edited=new Set();
  const value=el=>el.type==='checkbox'||el.type==='radio'?String(el.checked):String(el.value??'');

@@ -100,3 +100,16 @@ test('the desktop hero fits its three category tiles and extends the unchanged p
  assert.doesNotMatch(read('src/home-hero-framing.tsx'),/ResizeObserver|setProperty|useLayoutEffect/);
  assert.match(css,/height:var\(--home-tile-h\)!important/);
 });
+
+test('courier days and windows: Monday to Saturday, 10–14 and 14–18, five days, a started window of today is not offered', async () => {
+  const { deliveryDays, earliestSlot } = await import('../src/delivery-slots.mjs');
+  // Tuesday 17 November 2026, 12:30 in Saint Petersburg: today only 14–18 is left.
+  const tue = deliveryDays(new Date('2026-11-17T09:30:00Z'));
+  assert.equal(tue.length, 5);
+  assert.deepEqual(tue[0].windows.map(w => w.free), [false, true]);
+  assert.deepEqual(earliestSlot(tue), { date: '2026-11-17', window: '14-18' });
+  // After 14:00 the next working day comes first; Sunday is skipped.
+  const sat = deliveryDays(new Date('2026-11-21T12:00:00Z'));
+  assert.equal(sat[0].date, '2026-11-23');
+  assert.ok(sat.every(d => new Date(d.date + 'T12:00:00Z').getUTCDay() !== 0));
+});

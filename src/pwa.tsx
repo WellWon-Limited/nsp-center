@@ -1,4 +1,4 @@
-import {installationPlatform,relatedAppInstalled,runningAsApp,type InstallPlatform} from './install-state.mjs';
+import {installationOnPhone,installationPlatform,relatedAppInstalled,runningAsApp,type InstallPlatform} from './install-state.mjs';
 import './pwa.css';
 import { useEffect, useState } from 'react';
 import { data, shortName, today, useStore } from './store';
@@ -72,8 +72,8 @@ export function useInstall() {
     return()=>{installListeners.delete(update);modes.forEach(mode=>mode.removeEventListener('change',update));removeEventListener('pageshow',update);};
   }, []);
   const platform:InstallPlatform=mounted?installationPlatform(navigator):'other';
-  const phone=platform==='ios'||platform==='android';
-  const available=mounted&&installationChecked&&!installed&&!standalone();
+  const phone=mounted&&installationOnPhone(navigator);
+  const available=mounted&&phone&&installationChecked&&!installed&&!standalone();
   const install=async()=>{
     if(!available||!deferred)return false;
     const offer=deferred;deferred=null;

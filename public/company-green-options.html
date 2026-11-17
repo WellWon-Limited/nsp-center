@@ -1,0 +1,51 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>О компании — варианты фото</title><style>*{box-sizing:border-box}body{margin:0;background:#eaf3f1;color:#1d3a36;font:14px Manrope,sans-serif}.variant-bar{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:#f8fbfa}iframe{width:100%;height:calc(100svh - 44px);display:block;border:0;visibility:hidden}iframe.ready{visibility:visible}</style></head><body><header class="variant-bar"><strong id="variant-name"></strong><span>О компании · предпросмотр</span></header><iframe sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" title="Вариант страницы О компании"></iframe><script>
+const v=Math.max(1,Math.min(3,Number(new URLSearchParams(location.search).get('v'))||1));
+const names=['','01 · Листья лекарственных растений','02 · Ботаническая оранжерея','03 · Работа с растительным сырьём'];
+document.querySelector('#variant-name').textContent=names[v];document.title=names[v];
+const frame=document.querySelector('iframe');
+frame.onload=async()=>{
+ const d=frame.contentDocument,w=frame.contentWindow;
+ Object.assign(d.documentElement.dataset,{homeDesign:'d',catalogDesign:'1',aboutDesign:'1',phoneDesign:'1',homeLook:'8',revealDesign:'2'});
+ const article=d.querySelector('.company-concept'),about=article.querySelector('#about');
+ const originalIntro=about.querySelector('.co-article-lead')?.textContent?.trim()||'NSP-центр помогает выбирать продукты на основе растительных ингредиентов и находить понятную информацию о составе, применении и качестве. Чтобы забота о себе становилась частью повседневной жизни.';
+ article.querySelector('.co-page-heading')?.remove();about.querySelector('.co-hero')?.remove();about.querySelector('.co-article-lead')?.remove();
+ const top=d.createElement('section');top.className='company-proposal-top';top.innerHTML='<a class="back-link" href="/company/"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 5 7 7-7 7"/></svg>К текущей странице</a><h1>О компании</h1><h2>Вдохновлены природой.<br>Движимы наукой.</h2><p></p><figure><img width="1536" height="1024" fetchpriority="high"></figure>';
+ const pageHeading=d.createElement('header');pageHeading.className='information-heading information-heading--plain proposal-page-heading';const headingInner=d.createElement('div'),back=top.querySelector('.back-link'),kicker=d.createElement('span');back.className='information-home';kicker.className='information-kicker';kicker.textContent='NSP Center';headingInner.append(back,kicker,top.querySelector('h1'));pageHeading.append(headingInner);article.before(pageHeading);top.querySelector('h2').remove();top.classList.add('company-proposal-top--1');top.querySelector('p').textContent=originalIntro;const img=top.querySelector('img');img.src='/images/company-concepts/company-fresh-choice-'+v+'.png';img.alt=names[v].slice(5);about.prepend(top);d.documentElement.classList.add('company-proposal');
+ const style=d.createElement('style');style.textContent=`@layer typography-reference{
+html.company-proposal body #root .site-main{padding:0!important;max-width:none!important}
+html.company-proposal body #root .company-page>.company-concept,html.company-proposal body #root .company-concept>#about{display:block!important;width:100%!important;max-width:1224px!important;margin:0 auto!important;padding:0!important;background:transparent!important}
+html.company-proposal body #root .company-concept::before{display:none!important}
+html.company-proposal body #root .company-proposal-top{padding:12px 56px 40px!important}
+html.company-proposal body #root .company-proposal-top>.back-link{margin:0 0 20px!important}
+html.company-proposal body #root .company-proposal-top h1{font-size:40px!important;line-height:1.15!important;letter-spacing:-.03em!important;margin:0 0 22px!important;color:var(--color-ink)!important;font-weight:800!important}
+html.company-proposal body #root .company-proposal-top h2{font-size:26px!important;line-height:1.2!important;letter-spacing:-.02em!important;margin:0 0 14px!important;color:var(--color-ink)!important;font-weight:800!important}
+html.company-proposal body #root .company-proposal-top>p{font-size:16px!important;line-height:1.65!important;margin:0 0 24px!important;color:var(--color-body)!important;max-width:100%!important}
+html.company-proposal body #root .company-proposal-top figure{margin:0!important;display:block!important;width:100%!important}
+html.company-proposal body #root .company-proposal-top figure>img{display:block!important;width:100%!important;height:var(--proposal-cover-height,400px)!important;object-fit:cover!important;object-position:50% 50%;border-radius:24px!important}
+@media(max-width:959px){html.company-proposal body #root .company-proposal-top{padding:12px 20px 28px!important}html.company-proposal body #root .company-proposal-top h1{font-size:28px!important;margin-bottom:18px!important}html.company-proposal body #root .company-proposal-top h2{font-size:22px!important}html.company-proposal body #root .company-proposal-top>p{font-size:15px!important}html.company-proposal body #root .company-proposal-top figure>img{border-radius:18px!important}}
+ 
+html.company-proposal body #root .company-page>.company-concept{border:0!important;border-radius:0!important;box-shadow:none!important;backdrop-filter:none!important}
+html.company-proposal body #root .proposal-page-heading{padding:12px 56px 24px!important;background:transparent!important;border:0!important}
+html.company-proposal body #root .proposal-page-heading>.back-link{margin:0 0 20px!important}
+html.company-proposal body #root .proposal-page-heading>h1{font-size:40px!important;line-height:1.15!important;letter-spacing:-.03em!important;font-weight:800!important;margin:0!important;color:var(--color-ink)!important}
+html.company-proposal body #root .company-concept>#about{background:var(--color-glass-raised)!important;border:1px solid var(--color-glass-border)!important;border-radius:32px!important;overflow:hidden}
+html.company-proposal body #root .company-proposal-top{padding:32px 56px 32px!important}
+html.company-proposal body #root .company-proposal-top--2>p{margin:24px 0 0!important}
+html.company-proposal body #root .company-proposal-top--3{display:grid!important;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center;gap:36px}
+html.company-proposal body #root .company-proposal-top--3>p{margin:0!important}
+html.company-proposal body #root .company-proposal-top--3 figure>img{max-height:470px}
+@media(max-width:959px){html.company-proposal body #root .proposal-page-heading{padding:12px 20px 24px!important}html.company-proposal body #root .proposal-page-heading>h1{font-size:28px!important}html.company-proposal body #root .company-proposal-top{padding:24px 20px!important}html.company-proposal body #root .company-proposal-top--3{grid-template-columns:1fr!important;gap:24px}}
+ 
+html.company-proposal body #root .proposal-page-heading{padding:12px max(28px,calc((100vw - 1224px)/2)) 24px!important}
+html.company-proposal body #root .proposal-page-heading>div{max-width:1224px;margin:auto;display:flex;flex-direction:column;align-items:flex-start}
+html.company-proposal body #root .proposal-page-heading .information-home{margin:0 0 20px!important}
+html.company-proposal body #root .proposal-page-heading .information-kicker{font-size:14px!important;line-height:21px!important;margin:0 0 8px!important}
+html.company-proposal body #root .proposal-page-heading h1{font-size:40px!important;line-height:1.15!important;letter-spacing:-.03em!important;font-weight:800!important;margin:0!important}
+html.company-proposal body #root .company-proposal-top{display:block!important}
+@media(max-width:959px){html.company-proposal body #root .proposal-page-heading{padding:12px 20px 24px!important}html.company-proposal body #root .proposal-page-heading h1{font-size:28px!important}}
+}`;d.head.append(style);
+ const fit=()=>{const pos=img.getBoundingClientRect().top+w.scrollY;img.style.setProperty('--proposal-cover-height',Math.max(140,Math.min(w.innerWidth<960?300:620,w.innerHeight-pos-24))+'px')};
+ await d.fonts.ready;img.onload=fit;fit();w.addEventListener('resize',fit);frame.classList.add('ready');window.companyPreview={ready:true,variant:v,document:d};
+};
+fetch('/company/?preview-source='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(h=>{const d=new DOMParser().parseFromString(h,'text/html');d.querySelectorAll('script').forEach(s=>s.remove());frame.srcdoc=d.documentElement.outerHTML});
+</script></body></html>

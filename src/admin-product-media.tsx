@@ -1,5 +1,5 @@
 import {useUnsavedProduct} from './admin-form';
-import {useEffect,useState,useRef,type FormEvent} from 'react';
+import {useEffect,useState,useRef,type FormEvent,type ReactNode} from 'react';
 import type {Product} from './content-types';
 import type {ProductContent} from './site';
 import {ImageField} from './admin-content';
@@ -17,13 +17,14 @@ export function ProductAssetFields({tab,value,onChange}:{tab:MediaTab;value:Prod
  return <div><h2>{docs?'Сертификаты':'Фотографии товара'}</h2><p className="admin-hint-muted">{docs?'На сайте: вкладка «Сертификаты». Если убрать все сканы, вкладка скрывается.':'Первое фото — обложка в каталоге и подборках. Остальные — переключаемые фотографии в карточке товара.'}</p><div className="admin-product-asset-grid">{items.map((url,i)=><figure key={`${url}-${i}`}><img src={url} alt={docs?`Сертификат ${i+1}`:`Фото ${i+1}`} loading="lazy"/><figcaption>{docs?value.documents[i].name:i===0?'Главное фото':`Фото ${i+1}`}</figcaption><div>{!docs&&i>0&&<button type="button" className="btn btn--secondary" onClick={()=>onChange({...value,photos:[url,...value.photos.filter((_,n)=>n!==i)]})}>Сделать главным</button>}<button type="button" className="btn btn--secondary" onClick={()=>remove(i)}>{docs?'Убрать сертификат':'Убрать фото'}</button></div></figure>)}</div>{!items.length&&<p className="ds-muted">{docs?'Сертификатов нет.':'Фотографий пока нет.'}</p>}{items.length<(docs?30:20)&&<ImageField required={!docs&&!items.length} label={docs?'Добавить скан сертификата':'Добавить фото товара'} value="" onChange={url=>{if(!url)return;onChange(docs?{...value,documents:[...value.documents,{url,name:`Сертификат ${value.documents.length+1}`}]}:{...value,photos:[...new Set([...value.photos,url])]})}}/>}</div>;
 }
 
-export function ProductMediaEditor({product:p,tab,run}:{product:Product;tab:MediaTab;run:(url:string,body:unknown,message:string)=>Promise<boolean>}){
+export function ProductMediaEditor({product:p,tab,run,onPreviewChange,preview}:{product:Product;tab:MediaTab;preview?:ReactNode;onPreviewChange:(content:ProductContent)=>void;run:(url:string,body:unknown,message:string)=>Promise<boolean>}){
  const saved=useRef('');
  const [value,setValue]=useState<ProductAssets|null>(null),[error,setError]=useState(''),[busy,setBusy]=useState(false);
  useUnsavedProduct(value!==null&&JSON.stringify(value)!==saved.current);
  useEffect(()=>{let off=false;setValue(null);setError('');fetch(`/api/product-content?id=${encodeURIComponent(p.id)}`).then(r=>{if(!r.ok)throw Error();return r.json()}).then((b:{content:ProductContent|null;base:{documents:ProductAssets['documents']}})=>{if(off)return;const c=b.content??{};const initial={photos:c.photos??productGalleryImages(p),documents:c.documents??b.base.documents,videos:c.videos??videoSections(p.sectionsHtml['Видеообзоры']||'').map((v:{href:string;title:string})=>({url:v.href,title:v.title}))};saved.current=JSON.stringify(initial);setValue(initial)}).catch(()=>{if(!off)setError('Не удалось загрузить материалы. Обновите страницу.');});return()=>{off=true}},[p.id]);
  const save=async(e:FormEvent)=>{e.preventDefault();if(!value||busy)return;if(!value.photos.length){setError('Добавьте хотя бы одно фото товара.');return}setBusy(true);try{if(await run('/api/admin/content',{productId:p.id,content:{...value,image:value.photos[0]||''}},'Фотографии, сертификаты и видео сохранены.'))saved.current=JSON.stringify(value)}finally{setBusy(false)}};
+ useEffect(()=>{if(value)onPreviewChange({...value,image:value.photos[0]||''})},[value,onPreviewChange]);
  if(error&&!value)return <p role="alert" className="admin-error">{error}</p>;
  if(!value)return <p className="ds-muted">Загружаем материалы…</p>;
- return <form className="admin-product-media knowledge-paper" onSubmit={save}><ProductAssetFields tab={tab} value={value} onChange={v=>{setValue(v);setError('')}}/>{error&&<p role="alert" className="admin-error">{error}</p>}<p className="admin-hint-muted">Добавление и удаление появятся на сайте после сохранения. Исходные файлы остаются в хранилище.</p><button className="btn btn--primary" disabled={busy}>{busy?'Сохраняем…':'Сохранить'}</button></form>;
+ return <form className="admin-product-media knowledge-paper" onSubmit={save}><ProductAssetFields tab={tab} value={value} onChange={v=>{setValue(v);setError('')}}/>{error&&<p role="alert" className="admin-error">{error}</p>}<p className="admin-hint-muted">Добавление и удаление появятся на сайте после сохранения. Исходные файлы остаются в хранилище.</p><div className="admin-editor-actions">{preview}<button className="btn btn--primary" disabled={busy}>{busy?'Сохраняем…':'Сохранить'}</button></div></form>;
 }

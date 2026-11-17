@@ -1,0 +1,10 @@
+{
+  "mode": "built-in imagegen edit",
+  "source": "01-mint-woodland.png",
+  "output": "01-mint-woodland-headroom-v3.png",
+  "actual_dimensions": [
+    1774,
+    887
+  ],
+  "prompt": "Use case: precise-object-edit. Edit target: attached selected hero photograph. OUTPAINT UPWARD, expand the canvas vertically, do not squeeze the existing image to make room. Produce a wider-than-tall landscape photograph with aspect ratio 2:1, instead of the original 2.5:1. Add a seamless continuation of the softly defocused mint sage woodland ABOVE the current top edge. The empty headroom above the white Chlorophyll cap must be approximately 15–18% of the final image height. Keep the original lower scene intact: rock, fern, flower, leaves, identical labels and cylindrical rounded bottles. Do not change bottle aspect ratios, do not shorten or widen them. Chlorophyll height to diameter is 19.7 to 7; Omega height to diameter is 11.75 to 6.3. Chlorophyll about 1.68 times taller than Omega, Omega about .90 of Chlorophyll width. Preserve full bottle bases. Natural crisp commercial photography; no UI, no extra text, no stripe, no mirrored patch. Preserve existing lighting, depth and mint forest palette. The only requested composition change is more woodland space above the tallest cap."
+}
