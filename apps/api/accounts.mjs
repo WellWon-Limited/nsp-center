@@ -261,9 +261,8 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
       const { rows } = await pool.query('select * from users where lower(email) = $1', [login]);
       const user = rows[0];
       const ok = await verifyPassword(password, user?.password_hash ?? decoyHash) && Boolean(user);
-      if (!ok || user.role === 'removed') { signIns.hit(key); return send(res, 401, { error: 'Неверный email или пароль.' }); }
+      if (!ok || user.role !== 'customer') { signIns.hit(key); return send(res, 401, { error: 'Неверный логин или пароль.' }); }
       signIns.reset(key);
-      if (user.role === 'admin') return send(res, 403, { error: 'Это служебный аккаунт. Используйте отдельный адрес входа в управление сайтом.', staff: true });
       return send(res, 200, await accountWithData(user), { 'Set-Cookie': await startSession(req, user.id) });
     }
     if (path === '/api/auth/logout' && method === 'POST') {

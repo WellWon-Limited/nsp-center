@@ -28,11 +28,11 @@ const demoAccount = async (): Promise<Account> => ({ firstName: 'Анна', last
 type Mode = 'signin' | 'register';
 
 /** A request to the accounts server; `error` is a sentence for the visitor. */
-async function callAccounts(path: string, body: unknown): Promise<{ session?: ServerSession; error?: string; staff?: boolean }> {
+async function callAccounts(path: string, body: unknown): Promise<{ session?: ServerSession; error?: string }> {
   try {
     const r = await fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(body) });
     const answer = await r.json().catch(() => null);
-    return r.ok && answer?.account ? { session: answer } : { error: answer?.error || 'Что-то пошло не так. Попробуйте ещё раз.', staff: answer?.staff === true };
+    return r.ok && answer?.account ? { session: answer } : { error: answer?.error || 'Что-то пошло не так. Попробуйте ещё раз.' };
   } catch { return { error: 'Нет связи с сервером. Проверьте интернет и попробуйте ещё раз.' }; }
 }
 
@@ -47,7 +47,6 @@ export function AuthScreen() {
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState(false);
   const [error, setError] = useState('');
-  // A staff account typed into the customer sign-in: point to site management's own sign-in, with the email filled in.
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -59,8 +58,8 @@ export function AuthScreen() {
     e.preventDefault(); setNotice(false);
     if (customerEmailError(login)) { setError(customerEmailError(login)); return; }
     if (accounts === 'server') {
-      setBusy(true); const { session, error, staff } = await callAccounts('/api/auth/login', { login, password }); setBusy(false);
-      if (!session) { setError(staff ? 'Это служебный аккаунт сотрудника. Он входит не здесь, а в управление сайтом.' : error!); return; }
+      setBusy(true); const { session, error } = await callAccounts('/api/auth/login', { login, password }); setBusy(false);
+      if (!session) { setError(error!); return; }
       setPassword(''); setError(''); startSession(session); return;
     }
     if (login.trim().toLowerCase() === DEMO_LOGIN && password === DEMO_PASSWORD) {

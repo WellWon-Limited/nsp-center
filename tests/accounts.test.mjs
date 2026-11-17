@@ -130,7 +130,11 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = '';
   await accounts.pool.query("insert into users (email, first_name, last_name, password_hash, consent_at, role) values ('boss@example.ru', 'Марина', 'Админ', $1, now(), 'admin')", [await hashPassword('password-3-staff')]);
   const asCustomer = await call('/api/auth/login', 'POST', { login: 'boss@example.ru', password: 'password-3-staff' });
-  assert.deepEqual([asCustomer.status, asCustomer.body.staff], [403, true], 'a staff account does not sign in as a customer');
+  assert.deepEqual(asCustomer, {status:401,body:{error:'Неверный логин или пароль.'},cookie:null}, 'staff credentials get the ordinary failed customer login response without a session');
+  const wrongStaffPassword = await call('/api/auth/login', 'POST', {login:'boss@example.ru',password:'wrong-password'});
+  const unknownCustomer = await call('/api/auth/login', 'POST', {login:'unknown@example.ru',password:'wrong-password'});
+  assert.deepEqual(wrongStaffPassword, asCustomer, 'the response does not disclose whether the staff password was correct');
+  assert.deepEqual(unknownCustomer, asCustomer, 'the response does not disclose the account role or existence');
   assert.equal((await call('/api/admin/me')).status, 401);
   assert.equal((await call('/api/admin/login', 'POST', { login: 'anna@example.ru', password: 'password-1' })).status, 401, 'a customer does not sign in to site management');
   const boss = await call('/api/admin/login', 'POST', { login: 'boss@example.ru', password: 'password-3-staff' });
