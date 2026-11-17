@@ -4,7 +4,7 @@ import sharp from 'sharp';
 import {readFileSync,existsSync,readdirSync} from 'node:fs';
 import {webpUrl,webpReferences} from '../packages/domain/webp.mjs';
 import {encodeWebp} from '../apps/api/image-format.mjs';
-import {productCover} from '../src/product-media.mjs';
+import {productCover} from '../packages/presentation/product-media.mjs';
 
 test('WebP URLs are idempotent, preserve source URLs and leave external images and vectors alone',()=>{
  const source='/images/photo.png';const result='/webp/images/photo.webp';

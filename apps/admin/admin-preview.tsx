@@ -1,12 +1,12 @@
-import {observeLayout} from '../../src/observe-layout.mjs';
-import {previewProduct} from '../../src/admin-preview-data.mjs';
+import {observeLayout} from '../../packages/presentation/observe-layout.mjs';
+import {previewProduct} from '../../packages/presentation/admin-preview-data.mjs';
 import {useEffect,useLayoutEffect,useMemo,useRef,useState,type ReactNode} from 'react';
 import {createPortal} from 'react-dom';
-import {data,useStore} from '../../src/store';
+import {data,useStore} from '../../packages/presentation/store';
 import {AdminPreviewScope,Header,Icon,PagePath,ProductCard,SiteBackdrop,ProductDetail,InformationPage,ArticlePage} from '../../packages/presentation';
-import {emptyContent,type SiteSettings,type ProductContent} from '../../src/site';
-import type {Product,ContentPage} from '../../src/content-types';
-import {articleOf} from '../../src/site-content.mjs';
+import {emptyContent,type SiteSettings,type ProductContent} from '../../packages/presentation/site';
+import type {Product,ContentPage} from '../../packages/presentation/content-types';
+import {articleOf} from '../../packages/presentation/site-content.mjs';
 import './admin-preview.css';
 
 export function AdminPreviewButton({children,site,path='/',label='Посмотреть на сайте'}:{children:ReactNode;site?:SiteSettings;path?:string;label?:string}){

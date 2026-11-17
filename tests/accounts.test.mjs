@@ -5,7 +5,7 @@ import { createServer } from 'node:http';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { applyContent, applySite, noteKey, visibleNotes } from '../src/site.ts';
+import { applyContent, applySite, noteKey, visibleNotes } from '../packages/presentation/site.ts';
 import { createAccounts, hashPassword, verifyPassword, validateRegistration, phoneKey, pickData, parseCookies } from '../scripts/accounts.mjs';
 
 test('passwords are salted scrypt hashes and verify only with the same password', async () => {

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { cardFacts, compositionParts, releaseForm, supportLine } from '../scripts/card-facts.mjs';
-import { applySite, reviewSummary } from '../src/site.ts';
+import { applySite, reviewSummary } from '../packages/presentation/site.ts';
 import { readContent } from '../scripts/check-content.mjs';
 
 test('card lines: what it supports comes from body systems, never from the disease list', () => {

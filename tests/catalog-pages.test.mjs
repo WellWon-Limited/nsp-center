@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {load} from 'cheerio';
 import {storefrontPage} from '../apps/api/storefront.mjs';
 import {managedCatalogPage} from '../scripts/catalog-pages.mjs';
-import {initialCatalogConfig} from '../src/catalog-categories.mjs';
+import {initialCatalogConfig} from '../packages/presentation/catalog-categories.mjs';
 const content=JSON.parse(readFileSync('packages/catalog/generated/content.json','utf8'));
 const manifest=JSON.parse(readFileSync('dist/prerender-manifest.json','utf8'));
 test('New category URLs render the shared catalog without a build, and archived URLs redirect',async()=>{

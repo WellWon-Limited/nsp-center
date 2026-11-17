@@ -1,1 +1,1 @@
-import '../../src/presentation-styles';
+import './presentation-styles';

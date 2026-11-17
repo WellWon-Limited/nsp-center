@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {catalogPagination} from '../src/catalog-pagination.mjs';
+import {catalogPagination} from '../packages/presentation/catalog-pagination.mjs';
 
 test('every non-final catalog page has full rows at all grid widths, without duplicates or gaps',()=>{
  for(let total=0;total<=400;total++)for(const requested of [0,1,2,3,4,6,10]){

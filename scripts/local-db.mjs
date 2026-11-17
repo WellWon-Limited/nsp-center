@@ -1,7 +1,7 @@
 // Local Postgres for the accounts API (scripts/accounts.mjs), without installing Postgres: the embedded-postgres package
 // carries the server binaries. The data lives outside the repository (NSP_PG_DIR, by default
 // ~/.local/state/nsp-center/postgres) and survives restarts. On the first run it creates the cluster with a random
-// password and writes DATABASE_URL into .env (git ignores it), which scripts/serve.mjs reads. The process keeps running;
+// password and writes DATABASE_URL into .env (git ignores it), which apps/api/server.mjs reads. The process keeps running;
 // stopping it (Ctrl+C or the service stop) shuts Postgres down cleanly.
 import EmbeddedPostgres from 'embedded-postgres';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';

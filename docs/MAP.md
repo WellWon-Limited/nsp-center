@@ -42,13 +42,17 @@ Factory узнаёт сайт как прототип проекта по фай
 
 | Что | Где | Описание |
 |---|---|---|
-| Код сайта | `src/` | React 19 + TypeScript; страницы, каталог, темы, корзина (`cart.tsx`), кабинет и «Мои покупки», вход и регистрация (`auth.tsx`), управление сайтом (`admin.tsx`), чат-помощник (`assistant.tsx`), уведомления |
+| Сайт покупателя | `apps/web/` | Страницы, корзина, кабинет, вход, чат; отдельные сервер и сборка |
+| Админка | `apps/admin/` | Редакторы и самостоятельный предпросмотр; отдельные сервер и сборка |
+| Бэкенд | `apps/api/` | Авторизация, заказы, контент, PostgreSQL и интеграции |
+| Общий интерфейс | `packages/presentation/` | Реализации карточек, шапки, статей, общие стили и состояние |
+| Общие правила и каталог | `packages/domain/`, `packages/catalog/` | Правила, авторские данные и производные файлы каталога |
 | Сборка, сервер и импорт | `scripts/` | Импорт снимка, сборка страниц, локальный сервер (`serve.mjs`), аккаунты (`accounts.mjs`), управление сайтом (`site-admin.mjs`, `order-admin.mjs`), цены по карте (`card-prices.mjs`), нейросеть по ключу (`ai-agent.mjs`), создание сотрудника (`create-admin.mjs`) |
 | Тесты | `tests/` | 42 файла, 159 проверок: содержимое, сборка, HTTP-адреса, аккаунты и сотрудники, цены по карте, корзина, уведомления, состав образа dev-стенда, прототип |
-| Дизайн-система | `design/systems/nsp/`, `src/design-system.css` | 187 токенов, шрифты, лицензии; описание — [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md) |
+| Дизайн-система | `design/systems/nsp/`, `packages/presentation/design-system.css` | 187 токенов, шрифты, лицензии; описание — [DESIGN-SYSTEM.md](DESIGN-SYSTEM.md) |
 | Прототип приложения | `assets/NSP App Prototype.html` | Исходник из Claude Design, не меняется; описание — [PROTOTYPE.md](PROTOTYPE.md) |
 | Снимок сайта nsp-center.ru | `references/nsp-center.ru/` | 227 страниц, 166 товаров, фото и документы; источник содержимого сайта (192 МБ) |
-| Выкладка на dev-стенд | `Dockerfile`, `.dockerignore` | Образ собирает сайт и запускает `scripts/serve.mjs` |
+| Выкладка на dev-стенд | `Dockerfile`, `.dockerignore` | Образ собирает сайт и запускает `apps/web/server.mjs` |
 | Автопроверка на GitHub | `.github/workflows/check.yml` | `check` (`npm run check`) и `docker-build` (образ dev-стенда) на каждую отправку; без двух зелёных проверок запрос не вливается |
 | Проверки и аудит | [VERIFICATION.md](VERIFICATION.md), [CONTENT-AUDIT.md](CONTENT-AUDIT.md), `docs/verification/` | Что проверено и чем, снимки экранов |
 | Цель, границы, план | [PASSPORT.md](PASSPORT.md), [PLAN.md](PLAN.md) | Продуктовое направление, ближайший результат |

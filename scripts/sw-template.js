@@ -86,7 +86,7 @@ self.addEventListener('notificationclick', event => {
 });
 
 // Warming up: the page asks for the pages a visitor is about to open (the tabs, the link under a finger, sections and
-// products in view; src/page-warmup.mjs), so they open at once. Only same-site pages, never site management or the API.
+// products in view; apps/web/src/page-warmup.mjs), so they open at once. Only same-site pages, never site management or the API.
 // With each page come the photos of its first screen (the ones it does not load lazily), for the visitor's screen width,
 // so the page opens with its photos already on the device.
 const firstScreenPhotos = (html, width) => {

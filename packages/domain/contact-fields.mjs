@@ -1,4 +1,4 @@
-// Email and phone rules shared by the registration form, the profile form (src/auth.tsx, src/account.tsx) and the
+// Email and phone rules shared by the registration form, the profile form (apps/web/src/auth.tsx, apps/web/src/account.tsx) and the
 // accounts server (scripts/accounts.mjs), so the browser and the server accept and reject the same addresses.
 
 /** Russian numbers: "+7" and ten digits. The form shows "+7" in front of the field, and the field holds the rest,

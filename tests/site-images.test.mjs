@@ -1,4 +1,4 @@
-import {videoSections} from '../src/information-content.mjs';
+import {videoSections} from '../packages/presentation/information-content.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';

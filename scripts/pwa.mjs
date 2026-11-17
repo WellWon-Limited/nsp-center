@@ -1,4 +1,4 @@
-import {ADMIN_PATH} from '../src/admin-path.mjs';
+import {ADMIN_PATH} from '../packages/presentation/admin-path.mjs';
 import { createHash } from 'node:crypto';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {installationOnPhone,installationPlatform,relatedAppInstalled,runningAsApp} from '../src/install-state.mjs';
+import {installationOnPhone,installationPlatform,relatedAppInstalled,runningAsApp} from '../packages/presentation/install-state.mjs';
 const environment=({mode='browser',standalone=false,apps}={})=>({navigator:{standalone,...(apps?{getInstalledRelatedApps:apps}:{})},matchMedia:query=>({matches:query===`(display-mode: ${mode})`}),location:{href:'https://nsp.example/profile/'}});
 test('Installed launch modes suppress installation on both desktop and iPhone; browser launches do not',()=>{
  for(const mode of ['standalone','minimal-ui'])assert.equal(runningAsApp(environment({mode})),true);

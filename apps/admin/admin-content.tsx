@@ -3,18 +3,18 @@ import {AdminBackButton} from './admin-form';
 import {ContentPreviewButton} from './admin-preview';
 import {RequiredLabel,RequiredHint,RequiredMark} from './admin-form';
 import { useEffect, useState, type FormEvent } from 'react';
-import type { ContentPage } from '../../src/content-types';
-import { data, shortName, today, useStore } from '../../src/store';
-import { emptyContent, type SiteSettings } from '../../src/site';
-import { activePromos, faqKey, humanDate, videoOf, VIDEO_SOURCES } from '../../src/site-content.mjs';
-import { faqSections, videoSections } from '../../src/information-content.mjs';
-import { ProductPicker } from '../../src/personal';
-import { Icon } from '../../src/ui';
+import type { ContentPage } from '../../packages/presentation/content-types';
+import { data, shortName, today, useStore } from '../../packages/presentation/store';
+import { emptyContent, type SiteSettings } from '../../packages/presentation/site';
+import { activePromos, faqKey, humanDate, videoOf, VIDEO_SOURCES } from '../../packages/presentation/site-content.mjs';
+import { faqSections, videoSections } from '../../packages/presentation/information-content.mjs';
+import { ProductPicker } from '../../packages/presentation/product-picker';
+import { Icon } from '../../packages/presentation/ui';
 
 // «Контент» in site management (research 2026-11-11: shops let staff publish offers, photos, videos, articles and FAQ
 // themselves, as short forms of plain fields). Each section lists what is on the site and has one form to add or change
 // an entry; the old site's videos, articles and answers can be hidden and brought back. Saved through
-// /api/admin/site-content (scripts/site-admin.mjs), shown by the pages from the site settings (src/site-content.mjs).
+// /api/admin/site-content (scripts/site-admin.mjs), shown by the pages from the site settings (packages/presentation/site-content.mjs).
 
 type Run = (path: string, body: unknown, done: string) => Promise<boolean>;
 type Section = { site: SiteSettings; run: Run };

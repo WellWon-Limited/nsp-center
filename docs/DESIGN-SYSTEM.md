@@ -57,7 +57,7 @@ Base64 decode и ограниченную gzip распаковку, прове�
 всех перечисленных страниц; это отдельный уровень от основного текста
 внутри белого блока (16 px на компьютере и 15 px на телефоне).
 
-Правила находятся в `src/content-type-scale.css` и `src/back-link-spacing.css`;
+Правила находятся в `packages/presentation/content-type-scale.css` и `packages/presentation/back-link-spacing.css`;
 страница «О компании» использует тот же `InformationHeader`, что доставка.
 
 ## Foundations
@@ -103,7 +103,7 @@ spacing, radii, shadows, blur, breakpoints, motion, focus, layers и controls.
 
 ## Общая верхняя панель сайта
 
-Согласовано 13 ноября 2026: общий `Header` и `src/site-header.css` задают
+Согласовано 13 ноября 2026: общий `Header` и `packages/presentation/site-header.css` задают
 одинаковую панель на всех пользовательских страницах. Фон — белый 66%, как у
 блока «Вопросы — это хорошее начало», с матовым размытием 24 px. На компьютере
 сверху стоят логотип, общая поисковая строка, «Есть вопрос?» и три круглых
@@ -112,14 +112,14 @@ spacing, radii, shadows, blur, breakpoints, motion, focus, layers и controls.
 SIL OFL в `public/fonts/inter-LICENSE.txt`; это согласованное расширение системы.
 
 На телефоне сохраняется компактная панель, поиск находится в раскрываемом
-меню. Общий поиск (`src/site-search.tsx`) находит публичные товары по названию,
+меню. Общий поиск (`packages/presentation/site-search.tsx`) находит публичные товары по названию,
 описанию и артикулу, статьи, тематические страницы, категории и информацию о
 магазине. Скрытые товары и статьи исключены; данные аккаунта не индексируются.
-Логика сопоставления слов — `src/site-search-match.mjs`.
+Логика сопоставления слов — `packages/presentation/site-search-match.mjs`.
 
 ## API компонентов
 
-Сначала импортируется `src/design-system.css`, затем CSS приложения. Примитивы
+Сначала импортируется `packages/presentation/design-system.css`, затем CSS приложения. Примитивы
 не зависят от React: подходят для semantic HTML и компонентов любого framework.
 
 | Примитив | API | Состояния |
@@ -226,8 +226,8 @@ toast 200 ms, ease-out, сдвиг 24 px. Loading spinner — web extension;
   администратор задаёт их в редакторе товара, после чего сайт использует
   единые актуальные данные во всех разделах.
 
-Реализация: `src/admin-content.tsx`, `src/information-pages.tsx`,
-`src/site-content.css`, `src/site-content.mjs`.
+Реализация: `src/admin-content.tsx`, `packages/presentation/information-pages.tsx`,
+`packages/presentation/site-content.css`, `packages/presentation/site-content.mjs`.
 
 ## Обновление системы
 

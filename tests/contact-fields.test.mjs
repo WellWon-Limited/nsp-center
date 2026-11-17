@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { customerEmailError, emailError, emailSuggestion, formatPhone, maskPhone, phoneError } from '../src/contact-fields.mjs';
+import { customerEmailError, emailError, emailSuggestion, formatPhone, maskPhone, phoneError } from '../packages/presentation/contact-fields.mjs';
 import { normalEmail, validateRegistration } from '../scripts/accounts.mjs';
 
 test('the phone field shows +7 and the rest as "(900) 111-22-33", whatever prefix the visitor types or pastes', () => {

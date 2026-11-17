@@ -1,14 +1,14 @@
 import {webpReferences,webpContent} from '../packages/domain/webp.mjs';
-import {ADMIN_PATH} from '../src/admin-path.mjs';
-import {productGalleryImages,productCover} from '../src/product-media.mjs';
-import packshotMasks from '../src/product-packshot-masks.json' with {type:'json'};
+import {ADMIN_PATH} from '../packages/presentation/admin-path.mjs';
+import {productGalleryImages,productCover} from '../packages/presentation/product-media.mjs';
+import packshotMasks from '../packages/catalog/source/product-packshot-masks.json' with {type:'json'};
 import {publicProduct} from './card-prices.mjs';
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import { createServer } from 'vite';
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-const server=await createServer({server:{middlewareMode:true},appType:'custom'});
+const server=await createServer({configFile:'apps/web/vite.config.ts',server:{middlewareMode:true},appType:'custom'});
 try {
  const {App,metadata,extraRoutes}=await server.ssrLoadModule('/src/App.tsx');
  // Theme pages: Article + FAQPage markup (docs/SEO.md, blog template).
@@ -16,7 +16,7 @@ try {
  const built=JSON.parse(await readFile('packages/catalog/generated/content.json','utf8'));
  // Card prices are not public (scripts/card-prices.mjs): the pages and their embedded data carry retail prices only.
  const data=webpContent({...built,products:built.products.map(publicProduct)});const rawTemplate=await readFile('dist/index.html','utf8');
- // The app's script (src/boot.tsx) starts after the first paint (src/main.tsx); it is fetched together with the page
+ // The app's script (apps/web/src/boot.tsx) starts after the first paint (apps/web/src/main.tsx); it is fetched together with the page
  // so it is ready by then.
  const bootChunk=(await readdir('dist/assets')).find(f=>/^boot-.*\.js$/.test(f));
  const template=bootChunk?rawTemplate.replace('</head>',`<link rel="modulepreload" crossorigin href="/assets/${bootChunk}"/></head>`):rawTemplate;

@@ -139,7 +139,7 @@ const tokenLines = Object.entries(tokenFile.tokens).map(([name, token]) => {
   return `  --${name}: ${token.value};`;
 });
 output.set('design/systems/nsp/tokens.css', `/* Generated from tokens.json by scripts/extract-prototype.mjs. */\n:root {\n${tokenLines.join('\n')}\n}\n`);
-const primitiveCss = await readFile(resolve(root, 'src/design-system.css'), 'utf8');
+const primitiveCss = await readFile(resolve(root, 'packages/presentation/design-system.css'), 'utf8');
 for (const match of primitiveCss.matchAll(/var\(--([a-z\d-]+)\)/g)) {
   assert(tokenFile.tokens[match[1]], `Primitive CSS references undefined --${match[1]}`);
 }

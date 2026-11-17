@@ -14,7 +14,7 @@ test('Corrected November price hides unlisted stock and uses current TNT article
  assert.equal(products.some(p=>p.article==='23496'&&!p.hidden),false);
 });
 test('New certificate scans are local and deduplicated across the shared manifest',()=>{
- const certificates=json('src/product-certificates.json'),urls=certificates.flatMap(p=>p.documents.map(d=>d.url));
+ const certificates=json('packages/catalog/source/product-certificates.json'),urls=certificates.flatMap(p=>p.documents.map(d=>d.url));
  assert.equal(urls.length,3);assert.equal(new Set(urls).size,3);
  for(const url of urls)assert.ok(existsSync(new URL('../public'+url,import.meta.url)),url);
 });

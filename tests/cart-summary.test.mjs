@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cartSummary } from '../src/cart-summary.mjs';
+import { cartSummary } from '../apps/web/src/cart-summary.mjs';
 
 const product = (id, retail, partner, availability = 'InStock') => ({ id, prices: { retail, partner }, availability });
 const a = product('a', 1560, 1170), b = product('b', 1000, null), gone = product('gone', 900, 700, 'OutOfStock');

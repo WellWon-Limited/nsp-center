@@ -16,7 +16,7 @@ export const oneTimePassword = () => Array.from({ length: 16 }, () => 'abcdefghi
 // Site management (the administrator's part of the profile) and customer reviews, on the accounts database
 // (scripts/accounts.mjs routes /api/site, /api/reviews and /api/admin/* here).
 //
-// What an administrator changes is applied in the visitor's browser over the built site (src/site.ts): the warehouse
+// What an administrator changes is applied in the visitor's browser over the built site (packages/presentation/site.ts): the warehouse
 // rate (rubles per у.е.), a product's own prices and stock, hidden expert comments, and customer reviews (they appear
 // only after approval). Every change is written to admin_log: who, what and when.
 export const SITE_SCHEMA = `
@@ -131,7 +131,7 @@ const AVAILABILITY = new Set(['InStock', 'OutOfStock']);
 const UPLOAD_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 const MAX_UPLOAD = 8 * 1024 * 1024;
 
-/** A product's card content as built (scripts/serve.mjs passes content.json products): what the editor starts from. */
+/** A product's card content as built (apps/api/app.mjs passes content.json products): what the editor starts from. */
 export function productBase(p) {
   if (!p) return null;
   return { name: p.name, about: p.copy?.about ?? [], highlights: p.copy?.highlights ?? [], description: p.description ?? '', properties: p.properties ?? {}, documents: (p.documents ?? []).filter(d => d.url).map(d => ({ name: d.name, url: d.url })) };
@@ -219,11 +219,11 @@ export async function siteSettings(pool, categories = [], productPaths = new Map
     products: Object.fromEntries(products.map(p => [p.product_id, { retailUnits: num(p.retail_units), partnerUnits: num(p.partner_units), retailRub: p.retail_rub, partnerRub: p.partner_rub, availability: p.availability, ...(p.badges ? { badges: p.badges } : {}) }])),
     knowledge: Object.fromEntries(knowledge.map(r=>[r.product_id,r.data])),
     hiddenNotes,
-    // Shown or hidden from customers by an administrator; a product not listed here is as built (src/product-stock.json).
+    // Shown or hidden from customers by an administrator; a product not listed here is as built (packages/catalog/source/product-stock.json).
     visibility: Object.fromEntries(visibility.map(v => [v.product_id, v.hidden])),
-    // Cards created in site management, without their card price (src/custom-product.mjs).
+    // Cards created in site management, without their card price (packages/presentation/custom-product.mjs).
     extraProducts: custom.map(r => customProduct(r.product_id, {...r.data,categoryPath:catalog.assignments[r.product_id]??r.data.categoryPath}, catalogCategories)),
-    // «Контент» in site management: offers, photos, videos, articles and FAQ answers (src/site-content.mjs), newest
+    // «Контент» in site management: offers, photos, videos, articles and FAQ answers (packages/presentation/site-content.mjs), newest
     // first, and the old site's videos, articles and answers an administrator hid.
     content: {
       promos: items.filter(i => i.kind === 'promo').map(i => ({ id: Number(i.id), ...i.data })),
@@ -301,7 +301,7 @@ export async function siteRoute(ctx, req, res, path, url) {
     send(res, 200, { reviews: rows.map(r => ({ id: Number(r.id), rating: r.rating, text: r.text, date: r.created_at, author: authorName(r) })) });
     return true;
   }
-  // Every question of the site chat and its answer (src/assistant.tsx), for «Чат-консультант» in site management: no
+  // Every question of the site chat and its answer (apps/web/src/assistant.tsx), for «Чат-консультант» in site management: no
   // name, email or address of the visitor is kept, entries live 90 days, a visitor may log at most 60 questions an hour.
   if (path === '/api/chat-log' && method === 'POST') {
     const body = await readJson(req);

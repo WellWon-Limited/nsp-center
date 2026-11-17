@@ -1,7 +1,7 @@
 import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
 import {load} from 'cheerio';
-import {visibleCategories} from '../src/catalog-categories.mjs';
+import {visibleCategories} from '../packages/domain/catalog-categories.mjs';
 
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let fragments;

@@ -286,7 +286,7 @@
       "bytes": 24015,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/pwa.tsx"
+        "код packages/presentation/pwa.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -536,9 +536,9 @@
         "HTML /profile/",
         "HTML /shares/",
         "HTML /video/",
-        "код src/App.tsx",
+        "код apps/web/src/App.tsx",
         "код src/admin.tsx",
-        "код src/ui.tsx"
+        "код packages/presentation/ui.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -849,7 +849,7 @@
       "bytes": 132098,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/immune-article.tsx"
+        "динамический путь packages/presentation/immune-article.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -869,8 +869,8 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/immunitet-tozhe-nuzhdaetsya-v-zashchite/",
-        "динамический путь src/immune-article.tsx",
-        "код src/journal-images.json"
+        "динамический путь packages/presentation/immune-article.tsx",
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -889,7 +889,7 @@
       "bytes": 132993,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/immune-article.tsx"
+        "динамический путь packages/presentation/immune-article.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -908,7 +908,7 @@
       "bytes": 164575,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/immune-article.tsx"
+        "динамический путь packages/presentation/immune-article.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -927,7 +927,7 @@
       "bytes": 150748,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/immune-article.tsx"
+        "динамический путь packages/presentation/immune-article.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -956,9 +956,9 @@
         "HTML /blog/o-vitamine-e/",
         "HTML /blog/omega-3-i-krasota-nashey-kozhi/",
         "HTML /blog/zachem-nam-nuzhny-bady/",
-        "динамический путь src/immune-article.tsx",
-        "код src/immune-article.tsx",
-        "код src/journal-images.json"
+        "динамический путь packages/presentation/immune-article.tsx",
+        "код packages/presentation/immune-article.tsx",
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -977,7 +977,7 @@
       "bytes": 416938,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/immune-article.tsx"
+        "динамический путь packages/presentation/immune-article.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -996,7 +996,7 @@
       "bytes": 407649,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/immune-article.tsx"
+        "динамический путь packages/presentation/immune-article.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -1075,7 +1075,7 @@
       "bytes": 195270,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/home-care.css"
+        "код apps/web/src/home-care.css"
       ],
       "products": [],
       "generationEvidence": [],
@@ -1092,7 +1092,7 @@
       "bytes": 2256631,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "динамический путь src/company-content.tsx"
+        "динамический путь apps/web/src/company-content.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -1110,8 +1110,8 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/",
-        "динамический путь src/company-content.tsx",
-        "код src/company-content.tsx"
+        "динамический путь apps/web/src/company-content.tsx",
+        "код apps/web/src/company-content.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -1148,7 +1148,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/",
-        "динамический путь src/company-content.tsx"
+        "динамический путь apps/web/src/company-content.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -1167,8 +1167,8 @@
       "references": [
         "HTML /company/",
         "HTML /company/sertifikaty/",
-        "динамический путь src/company-content.tsx",
-        "код src/certificates-page.tsx"
+        "динамический путь apps/web/src/company-content.tsx",
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -1200,7 +1200,7 @@
       "bytes": 312510,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/account.css"
+        "код apps/web/src/account.css"
       ],
       "products": [],
       "generationEvidence": [],
@@ -1405,7 +1405,7 @@
       "bytes": 306936,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/home-hero-forest.css"
+        "код apps/web/src/home-hero-forest.css"
       ],
       "products": [],
       "generationEvidence": [
@@ -1442,8 +1442,8 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /",
-        "код src/home-hero-forest.css",
-        "код src/pages.tsx"
+        "код apps/web/src/home-hero-forest.css",
+        "код apps/web/src/pages.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -1462,7 +1462,7 @@
       "bytes": 308,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/home-hero-forest.css"
+        "код apps/web/src/home-hero-forest.css"
       ],
       "products": [],
       "generationEvidence": [],
@@ -1479,7 +1479,7 @@
       "bytes": 310,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/home-hero-forest.css"
+        "код apps/web/src/home-hero-forest.css"
       ],
       "products": [],
       "generationEvidence": [],
@@ -2210,7 +2210,7 @@
       "bytes": 306390,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/home-hero-forest.css"
+        "код apps/web/src/home-hero-forest.css"
       ],
       "products": [],
       "generationEvidence": [
@@ -2411,8 +2411,8 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /",
-        "код src/home-hero-forest.css",
-        "код src/pages.tsx"
+        "код apps/web/src/home-hero-forest.css",
+        "код apps/web/src/pages.tsx"
       ],
       "products": [],
       "generationEvidence": [
@@ -2511,7 +2511,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /",
-        "код src/home-story.tsx"
+        "код apps/web/src/home-story.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -2561,7 +2561,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /delivery/",
-        "код src/delivery-page.tsx"
+        "код apps/web/src/delivery-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -2951,7 +2951,7 @@
         "HTML /blog/o-vitamine-e/",
         "HTML /blog/omega-3-i-krasota-nashey-kozhi/",
         "HTML /blog/zachem-nam-nuzhny-bady/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -2971,7 +2971,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/interesnye-fakty-pro-magniy/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -2991,7 +2991,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/omega-3-i-krasota-nashey-kozhi/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3012,7 +3012,7 @@
       "references": [
         "HTML /blog/",
         "HTML /blog/omega-3-i-krasota-nashey-kozhi/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3087,7 +3087,7 @@
         "HTML /blog/interesnye-fakty-pro-magniy/",
         "HTML /blog/korrektsiya-vesa-s-nsp/",
         "HTML /blog/letnyaya-perezagruzka/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [],
@@ -3105,7 +3105,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/letnyaya-perezagruzka/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3125,7 +3125,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/letnyaya-perezagruzka/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3145,7 +3145,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/zachem-nam-nuzhny-bady/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3200,7 +3200,7 @@
       "references": [
         "HTML /blog/",
         "HTML /blog/zachem-nam-nuzhny-bady/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3220,7 +3220,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/zachem-nam-nuzhny-bady/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3292,7 +3292,7 @@
       "references": [
         "HTML /blog/",
         "HTML /blog/nauchnyy-konsultant-nsp-o-vitamine-s/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [],
@@ -3327,7 +3327,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/nauchnyy-konsultant-nsp-o-vitamine-s/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3364,7 +3364,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/o-vitamine-e/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3385,7 +3385,7 @@
       "references": [
         "HTML /blog/",
         "HTML /blog/o-vitamine-e/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3405,7 +3405,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /blog/o-vitamine-e/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -3434,7 +3434,7 @@
         "HTML /blog/o-vitamine-e/",
         "HTML /blog/omega-3-i-krasota-nashey-kozhi/",
         "HTML /blog/zachem-nam-nuzhny-bady/",
-        "код src/journal-images.json"
+        "код packages/catalog/source/journal-images.json"
       ],
       "products": [],
       "generationEvidence": [
@@ -10826,7 +10826,7 @@
       "bytes": 385602,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/home-hero.css"
+        "код apps/web/src/home-hero.css"
       ],
       "products": [],
       "generationEvidence": [],
@@ -10964,7 +10964,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/loclo/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -10982,7 +10982,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/garcinia-combination/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11000,7 +11000,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/astragalus/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11018,7 +11018,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/morinda/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11037,7 +11037,7 @@
       "references": [
         "HTML /product/nabor-kozha-volosy-nogti/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11055,7 +11055,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/indole-3-carbinol/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11073,7 +11073,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/hawthorn-plus/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11091,7 +11091,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/osteo-plus/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11109,7 +11109,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/iron-chelate/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11127,7 +11127,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/black-walnut/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11145,7 +11145,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/milk-thistle/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11164,7 +11164,7 @@
       "references": [
         "HTML /product/alfalfa/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11182,7 +11182,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/ag-x/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11200,7 +11200,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/bifidophilus-chewable-for-kids-herbasaurs/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11219,7 +11219,7 @@
       "references": [
         "HTML /product/antistress-kit/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11238,7 +11238,7 @@
       "references": [
         "HTML /product/nabor-detoks/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11256,7 +11256,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/cc-a/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11274,7 +11274,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/lecithin/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11292,7 +11292,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/smartmeal-vanila-shake/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11310,7 +11310,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/coral-calcium/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11328,7 +11328,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/bee-pollen/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11346,7 +11346,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/liv-guard/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11365,7 +11365,7 @@
       "references": [
         "HTML /product/nabor-zashchita-sosudov/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11383,7 +11383,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/defense-maintenance/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11401,7 +11401,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/solstik-slim/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11419,7 +11419,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/caprylic-acid-combination/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11437,7 +11437,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/nature-lax/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11455,7 +11455,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/colloidal-minerals-with-acai-juice/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11473,7 +11473,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/hsn-w/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11491,7 +11491,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/kelp/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11509,7 +11509,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/chondroitin/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11527,7 +11527,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/lymphatic-drainage/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11545,7 +11545,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/solstic-revive/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11563,7 +11563,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/children-s-chewable-multiple-vitamins-plus-iron-herbasaurs/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11581,7 +11581,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/cascara-sagrada/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11600,7 +11600,7 @@
       "references": [
         "HTML /product/nabor-protivoparazitarnyy/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11619,7 +11619,7 @@
       "references": [
         "HTML /product/nabor-zdorovyy-rebenok/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11637,7 +11637,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/khlorofill-zhidkiy-chlorophyll-liquid/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11655,7 +11655,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/food-enzymes/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11673,7 +11673,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/burdock/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11691,7 +11691,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/zambroza/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11709,7 +11709,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/hp-garlic/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11727,7 +11727,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/pau-d-arco/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11746,7 +11746,7 @@
       "references": [
         "HTML /product/saw-palmetto/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11764,7 +11764,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/magnesium-complex/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11783,7 +11783,7 @@
       "references": [
         "HTML /product/zinc-lozenge/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11801,7 +11801,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/boswellia-plus/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11819,7 +11819,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/uro-lax/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11838,7 +11838,7 @@
       "references": [
         "HTML /product/nabor-zdorove-soedinitelnoy-tkani/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11856,7 +11856,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/olive-leaf/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11874,7 +11874,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/perfect-eyes/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11892,7 +11892,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/e-tea/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11910,7 +11910,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/calcium-magnesium-chelate/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11928,7 +11928,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/grapine-w-protectors/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11946,7 +11946,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/peptovit/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11964,7 +11964,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/omega-3-epa/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -11983,7 +11983,7 @@
       "references": [
         "HTML /product/antioxidant/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12001,7 +12001,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/red-clover/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12020,7 +12020,7 @@
       "references": [
         "HTML /product/nabor-zdorove-vashey-pecheni/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12038,7 +12038,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/alfalfa/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12056,7 +12056,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/zinc-lozenge/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12075,7 +12075,7 @@
       "references": [
         "HTML /product/nabor-yasnaya-golova/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12094,7 +12094,7 @@
       "references": [
         "HTML /product/nabor-zdorove-vashikh-glaz/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12112,7 +12112,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/aloe-vera-juice/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12130,7 +12130,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/colostrum/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12148,7 +12148,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/vitamin-c-long/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12166,7 +12166,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/cordyceps/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12184,7 +12184,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/msm/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12203,7 +12203,7 @@
       "references": [
         "HTML /product/bee-pollen/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12221,7 +12221,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/capsicum-garlic-with-parsley/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12239,7 +12239,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/super-complex/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12258,7 +12258,7 @@
       "references": [
         "HTML /product/nabor-zdorove-dykhatelnoy-sistemy/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12276,7 +12276,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/natures-noni-juice/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12294,7 +12294,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/solstic-energy/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12312,7 +12312,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/bifidophilus-flora-force/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12331,7 +12331,7 @@
       "references": [
         "HTML /product/nabor-zdorovoe-serdtse/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12349,7 +12349,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/dikiy-yams-wild-yam/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12367,7 +12367,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/fc-with-dong-quai/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12386,7 +12386,7 @@
       "references": [
         "HTML /product/stop-allergy-kit/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12405,7 +12405,7 @@
       "references": [
         "HTML /product/nabor-zdorove-vashikh-sustavov/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12423,7 +12423,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/vitamin-d3/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12442,7 +12442,7 @@
       "references": [
         "HTML /product/nabor-zdorove-zhkt-kak-osnova/",
         "HTML /video/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12460,7 +12460,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/kojenzim-q10/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -12478,7 +12478,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /product/buplerum-plus/",
-        "динамический путь src/information-content.mjs"
+        "динамический путь packages/presentation/information-content.mjs"
       ],
       "products": [],
       "generationEvidence": [],
@@ -13322,7 +13322,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -18825,7 +18825,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -20758,7 +20758,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -21073,7 +21073,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -22045,7 +22045,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -22684,7 +22684,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -23813,7 +23813,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -24388,7 +24388,7 @@
       "usage": "Изображение в HTML / текущее фото товара",
       "references": [
         "HTML /company/sertifikaty/",
-        "код src/certificates-page.tsx"
+        "код apps/web/src/certificates-page.tsx"
       ],
       "products": [],
       "generationEvidence": [],
@@ -24996,7 +24996,7 @@
       "bytes": 586399,
       "usage": "Ссылка в коде; видимость не подтверждена",
       "references": [
-        "код src/design-system.css"
+        "код packages/presentation/design-system.css"
       ],
       "products": [],
       "generationEvidence": [],

@@ -17,11 +17,11 @@ function graph(entry){
  visit(resolve(entry));return [...seen].map(p=>relative('.',p));
 }
 test('customer application never imports admin screens or styles, and admin never imports website boot or routing',()=>{
- const web=graph('src/main.tsx'),admin=graph('apps/admin/main.tsx');
- assert.ok(web.includes('src/App.tsx'));assert.ok(admin.includes('packages/presentation/index.ts'));
+ const web=graph('apps/web/src/main.tsx'),admin=graph('apps/admin/main.tsx');
+ assert.ok(web.includes('apps/web/src/App.tsx'));assert.ok(admin.includes('packages/presentation/index.ts'));
  assert.ok(!web.some(p=>p.startsWith('apps/admin/')));
- for(const file of ['src/main.tsx','src/boot.tsx','src/App.tsx'])assert.ok(!admin.includes(file),file);
- for(const shared of ['src/catalog.tsx','src/site-header.tsx','src/information-pages.tsx','src/pages.tsx']){
+ for(const file of ['apps/web/src/main.tsx','apps/web/src/boot.tsx','apps/web/src/App.tsx'])assert.ok(!admin.includes(file),file);
+ for(const shared of ['packages/presentation/catalog.tsx','packages/presentation/site-header.tsx','packages/presentation/information-pages.tsx','packages/presentation/article-page.tsx']){
   assert.ok(web.includes(shared),shared);assert.ok(admin.includes(shared),shared);
  }
 });

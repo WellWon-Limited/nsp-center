@@ -1,0 +1,18 @@
+:root{--surface-contact-mint:linear-gradient(140deg,rgb(207 227 216 / .85),rgb(197 220 218 / .8) 55%,rgb(210 225 234 / .8))}
+/* The mint contact card (apps/web/src/contact-card.tsx). #root: its colours win over the home block's own text colours. */
+#root .contact-card{box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;gap:14px;padding:36px 36px 32px;border:0;border-radius:32px;background:var(--surface-contact-mint);color:var(--color-ink)}
+#root .contact-card .contact-card-kicker{color:#3d7a64;font-size:14px;font-weight:800}
+#root .contact-card :is(h2,h3){margin:0;font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.2;color:var(--color-ink)}
+#root .contact-card a.contact-card-phone{font-size:28px;font-weight:800;color:#2f6f5a;text-decoration:none}
+#root .contact-card a.contact-card-mail{font-size:17px;font-weight:400;color:#2f6f5a;text-decoration:none;overflow-wrap:anywhere}
+#root .contact-card p{margin:0;font-size:15px;line-height:1.6;color:#41544e}
+#root .contact-card nav{display:flex;flex-direction:column;align-self:stretch;gap:16px;margin-top:6px;padding-top:20px;border-top:1px solid rgb(29 58 54 / .12)}
+#root .contact-card nav a{display:inline-flex;align-items:center;gap:8px;width:fit-content;font-size:17px;font-weight:800;color:#1f5544;text-decoration:none}
+#root .contact-card nav a svg{color:#1f5544}
+#root .contact-card a:hover{text-decoration:underline}
+@media(max-width:639px){#root .contact-card{padding:24px 22px;border-radius:24px}#root .contact-card :is(h2,h3),#root .contact-card a.contact-card-phone{font-size:23px}}
+
+/* Help bands and contact actions use the pickup point's exact approved green glass gradient. */
+body #root .site-main :is(.information-closing,.co-closing):not(.company-concept--paper .co-closing){background:var(--surface-contact-mint)!important;color:var(--color-ink)}
+/* Phone and email repeat the home vitamins tile, rather than the help-band gradient. */
+body #root .site-main .information-contact-grid>a{background:linear-gradient(120deg,#cfe3d8,#e3eee8)!important;color:var(--color-ink)}

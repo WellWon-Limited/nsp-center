@@ -1,10 +1,10 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { pricesFor } from './pricing.mjs';
 
-// Products added to the catalog after the nsp-center.ru snapshot (src/product-new/<id>.json): the label facts, a
+// Products added to the catalog after the nsp-center.ru snapshot (packages/catalog/source/product-new/<id>.json): the label facts, a
 // rewritten description and an image under public/images/products. They are appended after the snapshot import (its
 // completeness checks stay about the snapshot) and shown first in their category, priced from the NSP price list.
-export const newProductsDirUrl = new URL('../src/product-new/', import.meta.url);
+export const newProductsDirUrl = new URL('../packages/catalog/source/product-new/', import.meta.url);
 
 export function readNewProducts(priceList, categories) {
   const products = [];

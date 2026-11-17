@@ -1,9 +1,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 
-// Rewritten product texts (src/product-copy/<product id>.json): a clear "about" in plain
+// Rewritten product texts (packages/catalog/source/product-copy/<product id>.json): a clear "about" in plain
 // paragraphs plus short highlights, written from the product's own card but without the
 // snapshot's treatment claims. Products without a file keep the snapshot description.
-export const productCopyDirUrl = new URL('../src/product-copy/', import.meta.url);
+export const productCopyDirUrl = new URL('../packages/catalog/source/product-copy/', import.meta.url);
 
 export function readProductCopy() {
   const copy = new Map();

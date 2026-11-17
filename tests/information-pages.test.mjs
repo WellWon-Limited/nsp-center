@@ -1,11 +1,11 @@
 import {webpUrl} from '../packages/domain/webp.mjs';
 import test from 'node:test';
-import {ownsBackLink} from '../src/page-navigation.mjs';
+import {ownsBackLink} from '../packages/presentation/page-navigation.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 import * as cheerio from 'cheerio';
-import {cleanInfoHtml,videoSections,contactSections} from '../src/information-content.mjs';
+import {cleanInfoHtml,videoSections,contactSections} from '../packages/presentation/information-content.mjs';
 const root=resolve(import.meta.dirname,'..');
 const data=JSON.parse(readFileSync(resolve(root,'packages/catalog/generated/content.json'),'utf8'));
 const page=path=>data.pages.find(p=>p.path===path);

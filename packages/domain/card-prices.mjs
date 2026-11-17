@@ -17,7 +17,7 @@ export function publicSiteSettings(settings) {
   return { ...settings, products };
 }
 
-/** Card prices in rubles under the current settings, by the same rule as src/site.ts (pricesUnder): the product's own
+/** Card prices in rubles under the current settings, by the same rule as packages/presentation/site.ts (pricesUnder): the product's own
  *  ruble price, else its own у.е. price × rate, else the price list's у.е. × rate, else the built price. */
 export function cardPricesFor(products, settings, buildRate) {
   const rate = settings?.rate?.rubPerUnit ?? buildRate;

@@ -1,9 +1,9 @@
-// The consultation agent's harness (scripts/serve.mjs routes /api/ai/* here): everything around the language model.
+// The consultation agent's harness (apps/api/app.mjs routes /api/ai/* here): everything around the language model.
 // For each question it finds the fitting fragments of the doctors' material, gives them to the model with the rules,
 // checks the answer, adds sources and products, and keeps the spending in limits. The model only reads and writes text.
 //
 // Off until a key is set: YANDEX_API_KEY + YANDEX_FOLDER_ID (YandexGPT, Yandex AI Studio). Without them /api/ai/status
-// says { enabled: false } and the chat keeps answering from its prepared material (src/assistant.tsx).
+// says { enabled: false } and the chat keeps answering from its prepared material (apps/web/src/assistant.tsx).
 //
 // What the model may use: the theme pages and expert comments written from the lecture base (content.json — retold
 // material with the doctor and lecture of each piece) and, optionally, full lecture fragments from AI_CORPUS_FILE (a

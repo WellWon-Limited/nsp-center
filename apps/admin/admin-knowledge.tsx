@@ -1,14 +1,14 @@
 import {RequiredLabel,useUnsavedProduct} from './admin-form';
-import {productPackageLabel} from '../../src/product-media.mjs';
+import {productPackageLabel} from '../../packages/presentation/product-media.mjs';
 import {useEffect,useRef,useState,type FormEvent,type SetStateAction,type ReactNode} from 'react';
-import type {Product} from '../../src/content-types';
-import type {ProductKnowledge,KnowledgeSource} from '../../src/product-knowledge-types';
-import type {ProductContent} from '../../src/site';
-import {recommendationAreas,type RecommendationArea} from '../../src/recommendation-areas.mjs';
-import {ProductPicker} from '../../src/personal';
-import {factOrder} from '../../src/catalog';
-import {Icon} from '../../src/ui';
-import {data,shortName,useStore} from '../../src/store';
+import type {Product} from '../../packages/presentation/content-types';
+import type {ProductKnowledge,KnowledgeSource} from '../../packages/presentation/product-knowledge-types';
+import type {ProductContent} from '../../packages/presentation/site';
+import {recommendationAreas,type RecommendationArea} from '../../packages/presentation/recommendation-areas.mjs';
+import {ProductPicker} from '../../packages/presentation/product-picker';
+import {factOrder} from '../../packages/presentation/catalog';
+import {Icon} from '../../packages/presentation/ui';
+import {data,shortName,useStore} from '../../packages/presentation/store';
 import './admin-knowledge.css';
 
 type Run=(path:string,body:unknown,done:string)=>Promise<boolean>;

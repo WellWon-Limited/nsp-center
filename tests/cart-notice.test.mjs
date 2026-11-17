@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { CART_NOTICE_MS, nextCartNotice } from '../src/cart-notice.mjs';
+import { CART_NOTICE_MS, nextCartNotice } from '../packages/presentation/cart-notice.mjs';
 
 test('quick clicks accumulate additions only while the same product notification is visible',()=>{
  let n=nextCartNotice(null,'aloe',1,0);

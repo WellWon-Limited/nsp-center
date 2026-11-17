@@ -1,0 +1,54 @@
+/* Content added in site management (packages/presentation/site-content.mjs): the photo gallery, offers and videos without a poster. */
+.photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:var(--space-16)}
+.photo-grid figure{margin:0}
+.photo-grid button{display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;border-radius:var(--radius-16);overflow:hidden;aspect-ratio:4/3}
+.photo-grid img{display:block;width:100%;height:100%;object-fit:cover}
+.photo-grid figcaption{margin-top:var(--space-8);font-size:var(--text-13);line-height:1.5;color:var(--color-muted)}
+.photo-viewer{border:0;padding:0;background:transparent;max-width:min(1100px,94vw);max-height:92vh}
+.photo-viewer::backdrop{background:rgb(9 27 22 / .82)}
+.photo-viewer figure{margin:0;position:relative}
+.photo-viewer img{display:block;max-width:100%;max-height:84vh;border-radius:var(--radius-16);margin:0 auto}
+.photo-viewer figcaption{margin-top:var(--space-10);text-align:center;color:var(--color-white);font-size:var(--text-14)}
+.photo-viewer button{position:absolute;top:var(--space-8);right:var(--space-8);width:40px;height:40px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--color-white);color:var(--color-ink)}
+.promo-list{display:grid;gap:var(--space-18)}
+.promo-card{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:var(--space-20);padding:var(--space-18);border:1px solid var(--color-ink-line);border-radius:var(--radius-20);background:var(--color-white)}
+.promo-card:not(:has(>img)){grid-template-columns:1fr}
+.promo-card>img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius-14)}
+.promo-card h2{margin:0 0 var(--space-8);font-size:var(--text-22)}
+.promo-dates{margin:0 0 var(--space-12);font-size:var(--text-13);color:var(--color-muted)}
+.promo-card .btn{margin-top:var(--space-14);display:inline-flex;align-items:center;gap:var(--space-6)}
+.information-video-blank{display:block;width:100%;aspect-ratio:4/3;background:linear-gradient(135deg,#1d3a36,#2f5a52)}
+@media(max-width:639px){
+ .photo-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-10)}
+ .promo-card{grid-template-columns:1fr;padding:var(--space-14);gap:var(--space-12)}
+ .promo-card h2{font-size:var(--text-18)}
+}
+
+/* Photos and videos use the same grid, preview ratio and caption hierarchy. */
+.information-photos .information-photo>button{cursor:zoom-in}
+.information-media-link{display:inline-flex;align-items:center;gap:8px;padding:0;border:0;background:transparent;color:var(--color-muted);font:inherit;font-size:12px;line-height:1.5;cursor:pointer;text-align:left}
+.information-media-link:hover{color:var(--color-ink)}
+.information-media-link:focus-visible{outline:2px solid var(--color-link);outline-offset:5px;border-radius:4px}
+.information-photo h2{overflow-wrap:anywhere}
+/* A campaign keeps its conditions with real catalog cards; prices, stock and buttons stay shared. */
+.promo-list{gap:24px}
+.promo-campaign{padding:0;border:0;border-radius:0;background:transparent;min-width:0}
+.promo-campaign+.promo-campaign{padding-top:28px;border-top:1px solid var(--color-ink-line)}
+.promo-campaign-heading{display:flex;justify-content:space-between;align-items:start;gap:20px;margin-bottom:12px}
+.promo-campaign-heading>div{min-width:0}
+.promo-campaign-heading h2{margin:0 0 8px;overflow-wrap:anywhere}
+.promo-campaign-heading .promo-dates{margin:0;color:var(--color-muted)}
+.promo-campaign-heading>a{flex:none;font-size:14px}
+.promo-campaign>.rich-content{max-width:850px;margin-bottom:20px}
+.promo-campaign>.rich-content>:last-child{margin-bottom:0}
+.promo-campaign-cover{display:block;width:100%;max-height:260px;object-fit:cover;border-radius:20px;margin:20px 0}
+.promo-campaign>.product-grid{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:20px}
+@media(max-width:959px){.promo-campaign>.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:599px){.promo-campaign-heading{flex-direction:column;gap:10px}.promo-campaign>.product-grid{grid-template-columns:minmax(0,1fr)}}
+
+@layer typography-reference{
+html[data-catalog-design] body #root .site-main .information-content .promo-campaign>.product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+@media(min-width:960px) and (max-width:1199px){html[data-catalog-design] body #root .site-main .information-content .promo-campaign>.product-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:959px){html[data-catalog-design] body #root .site-main .information-content .promo-campaign>.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:599px){html[data-catalog-design] body #root .site-main .information-content .promo-campaign>.product-grid{grid-template-columns:minmax(0,1fr)!important}}
+}

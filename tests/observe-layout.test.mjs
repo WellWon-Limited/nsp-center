@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {observeLayout,observeHeaderHeight} from '../src/observe-layout.mjs';
+import {observeLayout,observeHeaderHeight} from '../packages/presentation/observe-layout.mjs';
 function fixture(){
  let callback,stopped=false,id=0;const frames=new Map(),observed=[];
  const view={requestAnimationFrame(fn){frames.set(++id,fn);return id},cancelAnimationFrame(id){frames.delete(id)},ResizeObserver:class{constructor(fn){callback=fn}observe(node){observed.push(node)}disconnect(){stopped=true}}};

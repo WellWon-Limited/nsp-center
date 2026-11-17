@@ -1,9 +1,9 @@
 import {useEffect,useState,type ReactNode} from 'react';
-import {Context,data,initial,type Staff,type Store} from '../../src/store';
-import {applySite,type SiteSettings,type CardPrices} from '../../src/site';
-import {mergeCustom} from '../../src/custom-product.mjs';
-import {mergeArticles} from '../../src/site-content.mjs';
-import {applyCatalogConfig} from '../../src/catalog-categories.mjs';
+import {Context,data,initial,type Staff,type Store} from '../../packages/presentation/store';
+import {applySite,type SiteSettings,type CardPrices} from '../../packages/presentation/site';
+import {mergeCustom} from '../../packages/presentation/custom-product.mjs';
+import {mergeArticles} from '../../packages/presentation/site-content.mjs';
+import {applyCatalogConfig} from '../../packages/presentation/catalog-categories.mjs';
 
 /** Staff state has no customer session, local-storage restoration or account sync. */
 export function AdminStoreProvider({children}:{children:ReactNode}){

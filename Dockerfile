@@ -43,11 +43,11 @@ ENV HOST=0.0.0.0 PORT=4173
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/packages/catalog/generated/public.json ./packages/catalog/generated/public.json
 COPY --from=build /app/packages/domain ./packages/domain
-COPY --from=build /app/scripts/serve.mjs /app/scripts/api-client.mjs /app/scripts/catalog-pages.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs ./scripts/
-COPY --from=build /app/src/admin-path.mjs /app/src/catalog-categories.mjs ./src/
+COPY --from=build /app/scripts/api-client.mjs /app/scripts/catalog-pages.mjs /app/scripts/prototype-adapter.mjs /app/scripts/indexing.mjs ./scripts/
+COPY --from=build /app/apps/web/server.mjs ./apps/web/server.mjs
 COPY --from=build ["/app/assets/NSP App Prototype.html", "./assets/"]
 USER node
 EXPOSE 4173
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -q -O /dev/null http://127.0.0.1:4173/ || exit 1
-CMD ["node", "scripts/serve.mjs"]
+CMD ["node", "apps/web/server.mjs"]

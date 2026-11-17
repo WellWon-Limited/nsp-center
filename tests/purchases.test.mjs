@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { orderDate, purchased, purchasedIds } from '../src/purchased-ids.mjs';
+import { orderDate, purchased, purchasedIds } from '../apps/web/src/purchased-ids.mjs';
 
 test('"Мои покупки" lists each ordered product once, latest orders first, only products still on the site', () => {
   const orders = [{ date: '01.10.2026', products: { a: 1, c: 3, gone: 1 } }, { date: '10.11.2026', products: { b: 1, a: 2 } }, { id: 'old draft without products', date: '12.11.2026' }];

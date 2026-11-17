@@ -21,7 +21,7 @@ test('API deployment contains its imports and never imports frontend source or r
 });
 test('web deployment has no API implementation, private catalog or database import',()=>{
   const docker=readFileSync('Dockerfile','utf8').split('FROM runtime AS web')[1];
-  for(const file of imports('scripts/serve.mjs')){
+  for(const file of imports('apps/web/server.mjs')){
     assert.doesNotMatch(file,/apps\/api/);
     assert.doesNotMatch(readFileSync(file,'utf8'),/from ['"]pg['"]|DATABASE_URL|accounts\.pool/);
     assert.ok(docker.includes('/app/'+file)||file.startsWith('packages/domain/')&&docker.includes('/app/packages/domain'),file);

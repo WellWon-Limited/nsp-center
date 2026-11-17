@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {previewProduct} from '../src/admin-preview-data.mjs';
+import {previewProduct} from '../packages/presentation/admin-preview-data.mjs';
 const original={id:'aloe',name:'Алоэ',properties:{'Объём':'473 мл','Форма выпуска':'Жидкость'},sectionsHtml:{Описание:'Исходный текст'},sections:{Описание:'Исходный текст'},copy:{about:['Исходное описание'],highlights:[]},documents:[{name:'Исходный',url:'/cert.jpg'}],prices:{retail:1000,partner:null},image:'/original.png',hidden:true};
 const saved={name:'Сохранённое название',about:['Описание из базы'],properties:{Состав:'Алоэ'},photos:['/saved.png','/side.png'],documents:[{name:'Новый сертификат',url:'/saved-cert.jpg'}],videos:[{title:'Видео',url:'https://youtu.be/abcdefghijk'}],summary:'Сохранённое назначение'};
 test('changing just the price preserves all previously saved content, media and certificates',()=>{

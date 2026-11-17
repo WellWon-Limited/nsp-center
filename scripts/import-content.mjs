@@ -354,7 +354,7 @@ const routes = successfulPages.map(record => {
 
 const content = {
   products, categories, articles, pages, site, routes, redirects,
-  // The warehouse rate the rubles were computed with; the administrator may set another one at runtime (src/site.ts).
+  // The warehouse rate the rubles were computed with; the administrator may set another one at runtime (packages/presentation/site.ts).
   pricing: { rubPerUnit: priceList.rubPerUnit },
   themes: readThemes(),
   audit: {
@@ -382,9 +382,9 @@ for (const product of readNewProducts(priceList, categories)) {
     if (firstPage?.products) firstPage.products.unshift(product.path);
   }
 }
-// Stock checked with the NSP office (src/product-stock.json): what the supplier has now, and lines no longer supplied.
+// Stock checked with the NSP office (packages/catalog/source/product-stock.json): what the supplier has now, and lines no longer supplied.
 // A discontinued product keeps its page (its address stays, marked noindex) but is hidden from the catalog, search and chat.
-const stock = JSON.parse(readFileSync(new URL('../src/product-stock.json', import.meta.url), 'utf8'));
+const stock = JSON.parse(readFileSync(new URL('../packages/catalog/source/product-stock.json', import.meta.url), 'utf8'));
 for (const article of [...stock.inStock, ...stock.discontinued]) if (!products.some(product => product.article === article)) throw new Error(`Product stock: unknown article ${article}`);
 for (const product of products) {
   if (stock.inStock.includes(product.article)) { product.availability = 'InStock'; product.availability_text = 'В наличии'; }

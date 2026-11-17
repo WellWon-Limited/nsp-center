@@ -20,7 +20,7 @@ test('The catalog mobile entry contains all categories and a separate all-produc
  assert.equal(category('.catalog-layout .source-description').length,0);
 });
 test('All-products mode survives filters and pagination while category URLs remain intact',()=>{
- const source=readFileSync('src/catalog.tsx','utf8');
+ const source=readFileSync('packages/presentation/catalog.tsx','utf8');
  const start=source.indexOf('function pageUrl('),end=source.indexOf('\n return <div className={`catalog-page',start);
  const fn=source.slice(start,end).replace('n:number','n');
  const pageUrl=vm.runInNewContext(`(${fn})`,{URLSearchParams,params:new URLSearchParams('view=products'),category:{path:'/catalog/'},categoryEntry:false,q:'омега',sort:'price-asc',stock:true,favoriteOnly:false});

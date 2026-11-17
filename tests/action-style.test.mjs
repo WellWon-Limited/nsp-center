@@ -15,9 +15,9 @@ test('Editorial action buttons share the homepage chevron instead of a diagonal 
  }
 });
 test('Editorial buttons use the same rounding token as standard homepage buttons',()=>{
- const core=readFileSync('src/design-system.css','utf8');
+ const core=readFileSync('packages/presentation/design-system.css','utf8');
  assert.match(core,/\.btn\s*\{[^}]*border-radius:\s*var\(--radius-control\)/);
- for(const [file,selector] of [['src/information-pages.css','information-button'],['src/company-variants.css','co-button']]){
+ for(const [file,selector] of [['packages/presentation/information-pages.css','information-button'],['apps/web/src/company-variants.css','co-button']]){
   const css=readFileSync(file,'utf8');const rule=css.match(new RegExp('\\.'+selector+'\\{([^}]+)\\}'))?.[1];
   assert.ok(rule,file);assert.match(rule,/border-radius:var\(--radius-control\)/,file);assert.doesNotMatch(rule,/border-radius:[0-4]px/,file);
  }

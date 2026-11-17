@@ -10,7 +10,7 @@ import {promisify} from 'node:util';
 import {createServer} from 'node:net';
 import pg from 'pg';
 import {hashPassword} from '../apps/api/accounts.mjs';
-import {ADMIN_PATH} from '../src/admin-path.mjs';
+import {ADMIN_PATH} from '../packages/presentation/admin-path.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const exec=promisify(execFile);
@@ -42,7 +42,7 @@ test('API starts without src, dist, frontend tools or .env; disabled integration
   const dir=await fixture(t);
   const socket='/tmp/nsp-api-test-'+process.pid+'.sock';
   const api=await launch('apps/api/server.mjs',dir,{API_SOCKET:socket,AI_CORPUS_FILE:join(dir,'no-corpus')});
-  const web=await launch('scripts/serve.mjs',root,{API_SOCKET:socket});
+  const web=await launch('apps/web/server.mjs',root,{API_SOCKET:socket});
   t.after(async()=>{await web.stop();await api.stop();await rm(dir,{recursive:true,force:true});});
   const get=path=>fetch(web.origin+path);
   assert.deepEqual(await(await get('/api/health')).json(),{service:'nsp-api',databaseConfigured:false});
@@ -67,7 +67,7 @@ test('independent web and API preserve sessions, uploads, catalog pages and oper
   pool=new pg.Pool({connectionString:url});
   api=await launch('apps/api/server.mjs',dir,{DATABASE_URL:url,AI_CORPUS_FILE:join(dir,'no-corpus')});
   const apiPort=new URL(api.origin).port;
-  web=await launch('scripts/serve.mjs',root,{API_ORIGIN:api.origin});
+  web=await launch('apps/web/server.mjs',root,{API_ORIGIN:api.origin});
   const request=(path,{method='GET',body,cookie='',headers={}}={})=>fetch(web.origin+path,{method,headers:{Origin:web.origin,...(cookie?{Cookie:cookie}:{}),...(body?{'Content-Type':'application/json'}:{}),...headers},body:body?JSON.stringify(body):undefined,redirect:'manual'});
   assert.equal((await request('/api/admin/me')).status,401);
   const response=await request('/api/auth/register',{method:'POST',body:{firstName:'Анна',lastName:'Тест',email:'split@example.ru',phone:'',password:'test-password-2026',consent:true}});
@@ -141,7 +141,7 @@ test('independent web and API preserve sessions, uploads, catalog pages and oper
   await api.stop();
   assert.equal((await adminRequest('/')).status,200);
   assert.equal((await adminRequest('/api/admin/overview',{cookie:adminCookie})).status,503);
-  web=await launch('scripts/serve.mjs',root,{API_ORIGIN:api.origin});
+  web=await launch('apps/web/server.mjs',root,{API_ORIGIN:api.origin});
   await api.stop();
   assert.equal((await request('/')).status,200,'static pages survive API downtime');
   assert.equal((await request('/api/auth/me',{cookie:customer})).status,503);

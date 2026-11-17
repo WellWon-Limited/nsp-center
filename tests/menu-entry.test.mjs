@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
-const script=readFileSync(new URL('../index.html',import.meta.url),'utf8').match(/<script data-nav-entry>([\s\S]*?)<\/script>/)[1];
+const script=readFileSync(new URL('../apps/web/index.html',import.meta.url),'utf8').match(/<script data-nav-entry>([\s\S]*?)<\/script>/)[1];
 function enter(marker,state=null){
  const document={documentElement:{dataset:{}}};
  const history={state,replaceState(value){this.state=value;}};

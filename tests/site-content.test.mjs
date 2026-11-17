@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { activePromos, articleOf, articleSlug, faqKey, textToHtml, validateContent, videoOf } from '../src/site-content.mjs';
+import { activePromos, articleOf, articleSlug, faqKey, textToHtml, validateContent, videoOf } from '../packages/presentation/site-content.mjs';
 
 test('a video is added by a link to VK Видео, Rutube or YouTube, and nothing else', () => {
   assert.equal(videoOf('https://youtu.be/bNT7e_FykCE').embed, 'https://www.youtube-nocookie.com/embed/bNT7e_FykCE?autoplay=1');
@@ -47,12 +47,12 @@ test('the chat section of site management shows real questions and says nothing 
   const admin = readFileSync(new URL('../apps/admin/admin.tsx', import.meta.url), 'utf8');
   assert.doesNotMatch(admin, /YandexGPT|Нейросеть пока не подключена|ИИ-консультант/);
   assert.match(admin, /\/api\/admin\/chat-log/);
-  assert.match(readFileSync(new URL('../src/assistant.tsx', import.meta.url), 'utf8'), /fetch\('\/api\/chat-log'/);
+  assert.match(readFileSync(new URL('../apps/web/src/assistant.tsx', import.meta.url), 'utf8'), /fetch\('\/api\/chat-log'/);
 });
 
 test('a «back in stock» notice opens that product\'s card, also when it was saved with another link', async () => {
   const { readFileSync } = await import('node:fs');
-  const code = readFileSync(new URL('../src/notifications.tsx', import.meta.url), 'utf8');
+  const code = readFileSync(new URL('../packages/presentation/notifications.tsx', import.meta.url), 'utf8');
   assert.match(code, /\/\^stock-\(\.\+\)\$\//);
   assert.match(code, /<a href=\{noticeHref\(n\)\}>/);
 });

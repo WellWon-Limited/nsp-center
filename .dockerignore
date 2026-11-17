@@ -3,7 +3,7 @@ node_modules
 dist
 public/media
 public/prototype
-src/generated
+packages/catalog/generated
 .wellwon/canvas
 .wellwon/plugins
 .agent
@@ -12,5 +12,3 @@ src/generated
 .env.*
 references/nsp-center.ru/.venv
 references/nsp-center.ru/__pycache__
-
-packages/catalog/generated

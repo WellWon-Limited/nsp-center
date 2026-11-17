@@ -1,9 +1,9 @@
 import test from 'node:test';
 import vm from 'node:vm';
-import {ADMIN_PATH} from '../src/admin-path.mjs';
+import {ADMIN_PATH} from '../packages/presentation/admin-path.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { pageOf, roomy } from '../src/page-warmup.mjs';
+import { pageOf, roomy } from '../apps/web/src/page-warmup.mjs';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const base = 'https://nsp-center.ru/catalog/';
@@ -37,11 +37,11 @@ test('pages open from the service worker copy at once and refresh in the backgro
 });
 
 test('no animated page transition: it slowed tab switches and washed the header in light green', () => {
-  assert.doesNotMatch(read('src/app.css'), /@view-transition|view-transition-name/);
+  assert.doesNotMatch(read('packages/presentation/app.css'), /@view-transition|view-transition-name/);
 });
 
 test('scrolling the catalog sections lights nothing up; a hover colour only for a real pointer', () => {
-  const css = read('src/catalog-mobile-entry.css');
+  const css = read('packages/presentation/catalog-mobile-entry.css');
   assert.doesNotMatch(css, /\.catalog-entry-link:is\(:hover/);
   assert.match(css, /\(hover:hover\)\{\.catalog-entry-link:hover/);
 });
@@ -56,15 +56,15 @@ test('photos: kept on the device across updates, served from it first, and warme
   const html = '<picture class="x"><source media="(max-width:639px)" srcSet="/images/a-phone.jpg"/><img src="/images/a.jpg" fetchPriority="high"/></picture><img src="/images/b.jpg" loading="lazy"/><img src="/images/c.jpg"/>';
   assert.deepEqual(firstScreenPhotos(html, 390), ['/images/a-phone.jpg', '/images/c.jpg']);
   assert.deepEqual(firstScreenPhotos(html, 1440), ['/images/a.jpg', '/images/c.jpg']);
-  assert.match(read('src/page-warmup.mjs'), /postMessage\(\{ type: 'warm', urls, width: win\.innerWidth, photos \}\)/);
-  const serve = read('scripts/serve.mjs');
+  assert.match(read('apps/web/src/page-warmup.mjs'), /postMessage\(\{ type: 'warm', urls, width: win\.innerWidth, photos \}\)/);
+  const serve = read('apps/web/server.mjs');
   assert.match(serve, /kept\?'public, max-age=604800, stale-while-revalidate=86400'/);
   assert.match(serve, /res\.writeHead\(304,headers\)/);
 });
 
 test('the first row of product photos and the lead article cover load with the page, not lazily', () => {
-  assert.match(read('src/ui.tsx'), /<ProductCard key=\{p\.id\} product=\{p\} eager=\{i<4\} compact=\{compact\}\/>/);
-  assert.match(read('src/pages.tsx'), /<ArticleCard key=\{a\.id\} article=\{a\} first=\{i===0\}\/>/);
+  assert.match(read('packages/presentation/ui.tsx'), /<ProductCard key=\{p\.id\} product=\{p\} eager=\{i<4\} compact=\{compact\}\/>/);
+  assert.match(read('apps/web/src/pages.tsx'), /<ArticleCard key=\{a\.id\} article=\{a\} first=\{i===0\}\/>/);
 });
 
 test('the service worker never caches or warms the new staff address or its retired alias',async()=>{

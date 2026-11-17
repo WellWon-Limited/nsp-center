@@ -15,7 +15,6 @@ AGENTS.override.md
 /dist/
 /public/media/
 /public/prototype/
-/src/generated/
 references/nsp-center.ru/__pycache__/
 references/nsp-center.ru/.venv/
 

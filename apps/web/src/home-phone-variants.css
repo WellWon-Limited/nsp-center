@@ -1,0 +1,80 @@
+/* Home page on a phone (≤639 px) in the computer's design: the light page with soft lights, the small green label, a
+   dark title, the photo as a rounded card, the plan card on the first screen and the three path tiles. */
+@media(max-width:639px){
+/* ── Shared ─────────────────────────────────────────────────────────────────────────────────────────────────────── */
+html[data-home-design="d"][data-phone-design] body .home-first-screen{height:auto;min-height:0;display:block}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner.home-hero--forest{display:flex;flex-direction:column;align-items:stretch;gap:0;width:auto;max-width:none;height:auto;min-height:0;max-height:none;margin:0;padding:14px 0 6px;container-type:normal;color:var(--color-ink);background:none;overflow:visible}
+html[data-home-design="d"][data-phone-design] body .home-hero--forest :is(.hero-backdrop,.hero-note,.hero-note--phone,.hero-upper-twig,.hero-flower-detail,.hero-photo-link){display:none}
+html[data-home-design="d"][data-phone-design] body .home-hero--forest .hero-photo::before{display:none}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-copy{order:1;position:static;width:auto;max-width:none;margin:0;padding:0;transform:none;top:auto;left:auto;text-align:left;color:var(--color-ink)}
+html[data-home-design="d"][data-phone-design] body .home-hero .hero-copy .hero-pill{display:inline-flex;margin:0 0 10px;color:#3d7a64;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-copy h1{width:auto;max-width:none;margin:0;color:var(--color-ink);font-size:34px;font-weight:800;line-height:1.06;letter-spacing:-.04em;text-shadow:none}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-copy h1 :is(span,.hero-title-line){color:inherit;text-shadow:none}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-copy h1 .hero-title-line--end{color:#3d7a64}
+html[data-home-design="d"][data-phone-design] body .home-hero .hero-copy .ds-cluster{display:flex;position:static;inset:auto;transform:none;width:100%;height:auto;max-width:none;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:16px 0 0}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-copy .btn--primary{width:auto;height:48px;gap:8px;min-width:0;min-height:48px;padding:0 16px;border-radius:16px;background:var(--color-ink);border-color:var(--color-ink);color:#fff;font-size:14px;white-space:nowrap}
+html[data-home-design="d"][data-phone-design] body .home-hero .hero-copy .hero-secondary{display:inline-flex;align-items:center;gap:4px;color:#3d7a64;font-size:13px;font-weight:700;white-space:nowrap;text-decoration:none}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-photo{order:2;position:relative;inset:auto;width:100%;height:230px;margin:20px 0 0;border-radius:28px;overflow:hidden;background:#fff;box-shadow:0 24px 44px -34px rgb(29 58 54 / .55)}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-photo picture{display:block;width:100%;height:100%}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--forest .hero-photo img{content:url('/images/hero-photo-options/desktop-omega-white-v1.jpg');position:static;width:100%;height:100%;max-width:none;object-fit:cover;object-position:50% 50%;-webkit-mask-image:none;mask-image:none;transform:none}
+/* The plan card: icon, «Ваш план», two lines about it and «Перейти в план». */
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner>.hero-daily{order:3;position:relative;inset:auto;transform:none;width:auto;max-width:none;margin:14px 0 0;padding:16px 18px;grid-template-columns:48px minmax(0,1fr);column-gap:14px;row-gap:4px;border-radius:24px;background:#fff;box-shadow:0 22px 44px -32px rgb(29 58 54 / .55);z-index:2}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner>.hero-daily .hero-daily-eyebrow{grid-row:1/3;width:48px;height:48px;border-radius:15px}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner>.hero-daily p{white-space:normal;overflow:visible;font-size:13.5px;line-height:1.4}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner>.hero-daily .hero-daily-action{grid-column:2;grid-row:3;justify-self:start;display:inline-flex;align-items:center;gap:4px;margin:6px 0 0;font-size:0;font-weight:800;color:#3d7a64}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner>.hero-daily .hero-daily-action::before{content:"Перейти в план";font-size:14px}
+html[data-home-design="d"][data-phone-design] body .home-hero.home-hero--banner>.hero-daily .hero-daily-action svg{width:16px;height:16px}
+/* Path tiles. */
+html[data-home-design="d"][data-phone-design] body .home-first-screen .home-paths{margin-top:18px}
+html[data-home-design="d"][data-phone-design] body .home-paths>a.home-path{border:0;border-radius:24px;box-shadow:none}
+
+/* ── the plan card sits on the bottom of the photo; the tiles scroll sideways in one row. ─────── */
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--banner>.hero-daily{margin:-16px 12px 0}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--forest .hero-photo{height:220px}
+html[data-home-design="d"][data-phone-design="1"] body .home-first-screen .home-paths{display:flex;gap:10px;margin-right:-18px;padding:0 18px 4px 0;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x mandatory}
+html[data-home-design="d"][data-phone-design="1"] body .home-first-screen .home-paths::-webkit-scrollbar{display:none}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths>a.home-path{flex:0 0 250px;scroll-snap-align:start;min-height:0;padding:14px 16px}
+
+/* Selected phone layout: keep the entire first category above the floating bar. */
+html[data-home-design="d"][data-phone-design="1"] body .home-hero .hero-copy .hero-pill{display:none}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--forest .hero-photo{height:clamp(150px,calc(100svh - 694px),220px);margin-top:16px}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--banner>.hero-daily{padding:12px 16px;column-gap:12px;grid-template-columns:40px minmax(0,1fr)}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--banner>.hero-daily .hero-daily-eyebrow{grid-row:1/4;align-self:center;width:40px;height:40px;border-radius:14px}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--banner>.hero-daily p{font-size:13px;line-height:1.4}
+html[data-home-design="d"][data-phone-design="1"] body .home-first-screen .home-paths{position:relative;width:100vw;max-width:none;gap:0;margin:16px -18px 0;padding:0;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths>a.home-path:nth-child(3n + 1){background:linear-gradient(120deg,#cfe3d8,#e3eee8)}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths>a.home-path:nth-child(3n + 2){background:linear-gradient(120deg,#cbd9f3,#eaeff8)}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths>a.home-path:nth-child(3n){background:linear-gradient(120deg,#eee3cf,#f5efe4)}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path{flex:0 0 calc(100% - 36px);width:calc(100% - 36px);margin:0 18px;box-sizing:border-box;display:flex;align-items:center;gap:18px;min-height:124px;padding:12px 16px;scroll-snap-align:center;scroll-snap-stop:always}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path .home-path-thumb{width:124px;height:100px;flex:0 0 124px;padding:0;justify-content:center;--packshot-target:90px}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path h2{font-size:17px;line-height:1.2}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path p{font-size:12px;line-height:1.4;margin-top:4px}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path .home-path-arrow{margin-left:auto;flex-shrink:0}
+
+html[data-home-design="d"][data-phone-design="1"] body .home-first-screen{min-height:calc(100svh - var(--header-h) - var(--main-pad))}
+html[data-home-design="d"][data-phone-design="1"] body .home-first-screen+.section{margin-top:0}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero.home-hero--forest .hero-copy h1{font-size:38px;line-height:1.12}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero .hero-copy .ds-cluster{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero .hero-copy :is(.btn--primary,.hero-secondary){display:flex;align-items:center;justify-content:center;gap:6px;width:100%;height:48px;padding:0 10px;box-sizing:border-box;background:var(--color-ink);border:1px solid var(--color-ink);border-radius:16px;color:var(--color-white);font-size:12px;font-weight:700;white-space:nowrap;text-decoration:none}
+html[data-home-design="d"][data-phone-design="1"] body .home-hero .hero-copy :is(.btn--primary,.hero-secondary) svg{width:16px;height:16px;flex-shrink:0}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path .home-path-thumb--set{gap:3px;--packshot-target:76px}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path .home-path-thumb--set .product-packshot-frame:nth-child(2){--packshot-target:88px}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path>div{min-width:0;flex:1}
+/* A grid with an auto track collapses percentage-sized packshots to zero.
+   A fixed-size flex container gives single bottles the same sizing as sets. */
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path .home-path-thumb{display:flex;align-items:center}
+html[data-home-design="d"][data-phone-design="1"] body .home-paths a.home-path .home-path-thumb .product-packshot-frame{width:calc(var(--packshot-target) * var(--packshot-ratio));max-width:100%;flex:0 0 auto}
+html[data-home-design="d"][data-home-scroll-edge="bottom"]:has(.home-first-screen){background:var(--color-bg)}
+
+/* The icons keep their established size. Only the navigation surface changes. */
+html[data-home-design="d"] body .bottom-nav{left:14px;right:14px;bottom:max(12px,env(safe-area-inset-bottom));padding:8px 6px;border-radius:999px;background:#fff;border:1px solid #fff;box-shadow:0 8px 28px rgb(29 58 54 / .10);-webkit-backdrop-filter:none;backdrop-filter:none;overflow:hidden}
+html[data-home-design="d"] body .bottom-nav a,html[data-home-design="d"] body .bottom-nav a>span{color:rgb(29 58 54 / .58)}
+html[data-home-design="d"] body .bottom-nav a[aria-current="page"],html[data-home-design="d"] body .bottom-nav a[aria-current="page"]>span{color:var(--color-ink)}
+html[data-home-design="d"] body .bottom-nav::before,html[data-home-design="d"] body .bottom-nav::after{content:none}
+/* While the next tab opens (apps/web/src/instant-tap.mjs marks the tapped one .is-going), the tapped icon takes the current
+   colour and the one being left the quiet colour — in this design's dark ink on the white bar. The older dark bar's
+   white for these states (app.css) made both icons vanish on the white bar for a moment. */
+html[data-home-design="d"] body .bottom-nav a.is-going,html[data-home-design="d"] body .bottom-nav a.is-going>span{color:var(--color-ink)}
+html[data-home-design="d"] body .bottom-nav:has(a.is-going) a[aria-current="page"]:not(.is-going),html[data-home-design="d"] body .bottom-nav:has(a.is-going) a[aria-current="page"]:not(.is-going)>span{color:rgb(29 58 54 / .58)}
+html[data-home-design="d"] body::after{content:none}
+}

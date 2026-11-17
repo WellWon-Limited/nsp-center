@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {editPlan,planFor,rollPlan,restorePlans} from '../src/intake-plan.ts';
+import {editPlan,planFor,rollPlan,restorePlans} from '../packages/presentation/intake-plan.ts';
 const item={id:'a',time:'08:00',done:false};
 const state=()=>({intake:[item],intakeDate:'2026-11-06',intakePlans:{}});
 test('Future date edits remain isolated, persist and become today at rollover',()=>{
@@ -27,7 +27,7 @@ test('Legacy today and completion survive reload; missing days are empty',()=>{
 });
 
 test('Home completion promotes the fourth pending item, persists in both views and survives rollover',async()=>{
- const {homePlanPreview,completeHomePlan}=await import('../src/intake-plan.ts');
+ const {homePlanPreview,completeHomePlan}=await import('../packages/presentation/intake-plan.ts');
  const items=['a','b','c','d','e'].map((id,i)=>({id,time:i===4?'':`${String(8+i).padStart(2,'0')}:00`,done:false}));
  const valid=new Set(items.map(i=>i.id)),date='2026-11-16';
  let s={intake:items,intakeDate:date,intakePlans:{},intakeLog:{}};
@@ -48,7 +48,7 @@ test('Home completion promotes the fourth pending item, persists in both views a
 });
 
 test('Four daily items keep three home rows after two, three or all four completions',async()=>{
- const {homePlanPreview,completeHomePlan}=await import('../src/intake-plan.ts');
+ const {homePlanPreview,completeHomePlan}=await import('../packages/presentation/intake-plan.ts');
  const intake=['a','b','c','d'].map(id=>({id,time:'08:00',done:false})),valid=new Set(intake.map(i=>i.id)),date='2026-11-16';
  let s={intake,intakeDate:date,intakePlans:{},intakeLog:{}};
  s=completeHomePlan(completeHomePlan(s,'a',date),'b',date);

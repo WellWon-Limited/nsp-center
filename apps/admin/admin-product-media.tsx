@@ -1,11 +1,11 @@
 import {useUnsavedProduct} from './admin-form';
 import {useEffect,useState,useRef,type FormEvent,type ReactNode} from 'react';
-import type {Product} from '../../src/content-types';
-import type {ProductContent} from '../../src/site';
+import type {Product} from '../../packages/presentation/content-types';
+import type {ProductContent} from '../../packages/presentation/site';
 import {ImageField} from './admin-content';
-import {productGalleryImages} from '../../src/product-media.mjs';
-import {videoSections} from '../../src/information-content.mjs';
-import {videoOf} from '../../src/site-content.mjs';
+import {productGalleryImages} from '../../packages/presentation/product-media.mjs';
+import {videoSections} from '../../packages/presentation/information-content.mjs';
+import {videoOf} from '../../packages/presentation/site-content.mjs';
 
 export type ProductAssets={photos:string[];documents:{url:string;name:string}[];videos:{url:string;title:string}[]};
 type MediaTab='photo'|'docs'|'videos';

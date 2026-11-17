@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { goBack, installAppHistory, nextStack, openedByBack, previousPage } from '../src/app-history.mjs';
+import { goBack, installAppHistory, nextStack, openedByBack, previousPage } from '../packages/presentation/app-history.mjs';
 
 const fakeWin = (path, stack = []) => {
   const store = new Map([['nsp-center:back-stack', JSON.stringify(stack)]]);

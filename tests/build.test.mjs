@@ -1,4 +1,4 @@
-import {productCover} from '../src/product-media.mjs';
+import {productCover} from '../packages/presentation/product-media.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, statSync } from 'node:fs';
@@ -20,7 +20,7 @@ const pathOf = (value) => {
 const manifestMap = new Map(manifest.routes.map((route) => [pathOf(route.url), route.file]));
 const routeMap = new Map(content.routes.map((route) => [pathOf(route.url ?? route.sourceUrl), route]));
 const productMap = new Map(content.products.map((product) => [product.path, product]));
-// Lines no longer supplied (src/product-stock.json): the page stays at its address, says it is not on sale and leaves search.
+// Lines no longer supplied (packages/catalog/source/product-stock.json): the page stays at its address, says it is not on sale and leaves search.
 const hiddenPaths = new Set(content.products.filter((product) => product.hidden).map((product) => product.path));
 const assertGone = ($, path) => {
   assert.equal($('[data-ds-id="product-gone"]').length, 1, `${path}: a hidden product says it is not on sale`);
@@ -222,7 +222,7 @@ test('The site is installable and works offline: manifest, icons and a service w
 
 test('Products added after the snapshot have a page, price-list prices, a local image and a place on the first category page', () => {
   const added = content.products.filter((product) => product.added);
-  assert.ok(added.length >= 2, 'expected the added products (src/product-new)');
+  assert.ok(added.length >= 2, 'expected the added products (packages/catalog/source/product-new)');
   for (const product of added) {
     assert.ok(manifestMap.has(product.path), `${product.path}: no prerendered page`);
     assert.deepEqual(product.prices, pricesFor(product, priceList), `${product.path}: prices differ from the price list`);

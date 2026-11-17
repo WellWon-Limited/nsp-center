@@ -1,4 +1,4 @@
-import {ADMIN_PATH} from '../src/admin-path.mjs';
+import {ADMIN_PATH} from '../packages/presentation/admin-path.mjs';
 // Creates (or resets) a site administrator: a separate staff account that opens only site management (/admin/), not a
 // customer's cabinet. Usage: npm run admin:create -- <email> [--name "Имя Фамилия"]. The password is taken from
 // ADMIN_PASSWORD or generated, printed once and never stored anywhere but as its scrypt hash in the database; the
@@ -6,7 +6,7 @@ import {ADMIN_PATH} from '../src/admin-path.mjs';
 import pg from 'pg';
 import { SCHEMA, hashPassword } from './accounts.mjs';
 import { SITE_SCHEMA, oneTimePassword } from './site-admin.mjs';
-import { emailError } from '../src/contact-fields.mjs';
+import { emailError } from '../packages/presentation/contact-fields.mjs';
 
 try { process.loadEnvFile('.env'); } catch { /* no .env */ }
 const args = process.argv.slice(2);

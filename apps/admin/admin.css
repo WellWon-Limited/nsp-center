@@ -204,7 +204,7 @@ body:has(.admin-signin, .admin-app) { padding-bottom: 0; }
 .admin-new-product h3 { margin: 0; }
 .admin-new-product select.field { appearance: auto; }
 .admin-delete-confirm { flex-basis: 100%; }
-/* «Контент» (src/admin-content.tsx): lists of what is on the site, the short forms and the photo grid. */
+/* «Контент» (apps/admin/admin-content.tsx): lists of what is on the site, the short forms and the photo grid. */
 .admin-content-form { margin-bottom: var(--space-18); border-radius: var(--radius-14); }
 .admin-content-form textarea.field { resize: vertical; font: inherit; line-height: 1.5; }
 .admin-content-list { list-style: none; margin: var(--space-12) 0 0; padding: 0; display: grid; gap: var(--space-8); }

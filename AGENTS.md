@@ -61,6 +61,16 @@ verify representative images and actual file sizes after conversion.
 This rule covers raster content imagery; SVG icons/masks and platform-required
 app icons keep their appropriate formats. Do not rasterize vectors into WebP.
 
+## Application boundaries
+
+`apps/web/` owns the customer website, its Vite config, HTML entry and server;
+`apps/admin/` owns the staff application; `apps/api/` alone accesses PostgreSQL.
+Shared renderers, styles and browser state live in `packages/presentation/`;
+this package must not import application source. Applications must not import
+one another. Use `packages/domain/` for shared rules and `packages/catalog/`
+for authored (`source/`) and generated (`generated/`) catalog data.
+Run commands from the repository root; keep build outputs in `dist/` and `dist-admin/`.
+
 ## Knowledge map
 
 - `README.md` — entry point for people and the current goal.

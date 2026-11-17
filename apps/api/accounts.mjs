@@ -1,8 +1,8 @@
 import { seedKnowledge } from './product-knowledge.mjs';
-// Accounts API of the site server (scripts/serve.mjs): registration, sign-in, sign-out and the account's own data
+// Accounts API (apps/api/app.mjs): registration, sign-in, sign-out and the account's own data
 // (cart, favourites, waiting list, intake plan, marathon) kept in Postgres, so they follow the visitor to any device.
 // It works only when DATABASE_URL is set; without it every /api/ request answers 503 and the site keeps its
-// in-browser demo account (src/store.tsx decides by that answer).
+// in-browser demo account (packages/presentation/store.tsx decides by that answer).
 //
 // Passwords: scrypt with a random salt per account. Sessions: a random token in an HttpOnly SameSite=Lax cookie; the
 // database keeps only its SHA-256. Requests that change data must be JSON from the site's own origin (CSRF guard).
@@ -20,7 +20,7 @@ const SESSION_DAYS = 30;
 const STAFF_COOKIE = 'nsp_staff', STAFF_HOURS = 12;
 const MAX_BODY = 256 * 1024;
 const MAX_DATA = 200 * 1024;
-/** The parts of the visitor's state that belong to the account (src/store.tsx SYNC_KEYS mirrors this list). */
+/** The parts of the visitor's state that belong to the account (packages/presentation/store.tsx SYNC_KEYS mirrors this list). */
 export const DATA_KEYS = ['cart', 'favorites', 'waitlist', 'intake', 'intakeDate', 'intakePlans', 'intakeLog', 'habits', 'tasks', 'day', 'orders'];
 
 export const SCHEMA = `
@@ -151,7 +151,7 @@ const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, 
  * (site management, /admin/) are created by `npm run admin:create` or in «Сотрудники», never by registration.
  * `cardProducts`, `buildRate`: the built products with their card prices and the build's ruble rate, for GET
  * /api/card-prices (scripts/card-prices.mjs).
- * `categories`: the catalog sections, for cards created in site management (src/custom-product.mjs).
+ * `categories`: the catalog sections, for cards created in site management (packages/presentation/custom-product.mjs).
  * `cbr: false` skips asking cbr.ru for the reference rate (tests). `productBase(id)`: a product's built card content
  * (name, description, properties, certificates, photo), shown in the administrator's editor next to the changes.
  * The schema is created on the first request; a database that is down gives 503 and is retried on the next request.

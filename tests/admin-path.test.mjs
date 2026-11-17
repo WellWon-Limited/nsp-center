@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {ADMIN_PATH,isStaffPage} from '../src/admin-path.mjs';
-import {pageOf} from '../src/page-warmup.mjs';
-import {readResumePage,RESUME_PAGE_KEY} from '../src/app-resume.mjs';
+import {ADMIN_PATH,isStaffPage} from '../packages/presentation/admin-path.mjs';
+import {pageOf} from '../apps/web/src/page-warmup.mjs';
+import {readResumePage,RESUME_PAGE_KEY} from '../apps/web/src/app-resume.mjs';
 
 test('the current staff address stays outside customer offline navigation and resume memory',()=>{
  assert.notEqual(ADMIN_PATH,'/admin/');

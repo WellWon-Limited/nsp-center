@@ -1,27 +1,27 @@
-import {observeHeaderHeight} from '../../src/observe-layout.mjs';
-import {ConfirmDialog} from '../../src/confirm-dialog';
+import {observeHeaderHeight} from '../../packages/presentation/observe-layout.mjs';
+import {ConfirmDialog} from '../../packages/presentation/confirm-dialog';
 import {siteUrl} from './links';
-import {ADMIN_PATH} from '../../src/admin-path.mjs';
+import {ADMIN_PATH} from '../../packages/presentation/admin-path.mjs';
 import {ProductPreviewButton} from './admin-preview';
 import {CardApplicationsSection} from './admin-card-applications';
 import {CategoriesSection} from './admin-categories';
 import {RequiredLabel,RequiredHint,useUnsavedProduct,AdminBackButton} from './admin-form';
 import {ProductMediaEditor, ProductAssetFields, type ProductAssets} from './admin-product-media';
-import {customProduct} from '../../src/custom-product.mjs';
-import type {ProductKnowledge} from '../../src/product-knowledge-types';
+import {customProduct} from '../../packages/presentation/custom-product.mjs';
+import type {ProductKnowledge} from '../../packages/presentation/product-knowledge-types';
 import {KnowledgeEditor} from './admin-knowledge';
-import { DISCOUNT_PERCENTS, readProductBadges, type ProductBadges } from '../../src/product-badges.mjs';
+import { DISCOUNT_PERCENTS, readProductBadges, type ProductBadges } from '../../packages/presentation/product-badges.mjs';
 import { OrdersSection } from './admin-orders';
 import { FaqSection, JournalSection, PhotosSection, PromosSection, VideosSection, type ContentTab } from './admin-content';
 import './admin.css';
 import './admin-design.css';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { installHomeScrollEdges } from '../../src/home-scroll-edges.mjs';
-import type { Product } from '../../src/content-types';
-import { data, money, shortName, useStore } from '../../src/store';
-import { builtHidden, pricesUnder, readSite, type ProductOverride, type ProductContent, type SiteSettings } from '../../src/site';
-import { Icon, SiteBackdrop } from '../../src/ui';
-import { Field, PasswordInput } from '../../src/auth';
+import { installHomeScrollEdges } from '../../packages/presentation/home-scroll-edges.mjs';
+import type { Product } from '../../packages/presentation/content-types';
+import { data, money, shortName, useStore } from '../../packages/presentation/store';
+import { builtHidden, pricesUnder, readSite, type ProductOverride, type ProductContent, type SiteSettings } from '../../packages/presentation/site';
+import { Icon, SiteBackdrop } from '../../packages/presentation/ui';
+import { Field, PasswordInput } from '../../packages/presentation/form-fields';
 
 // Site management (/admin/, research 2026-11-10): a separate staff account with its own sign-in and session, and only
 // management here — no customer cabinet. The server checks the staff session on every request (scripts/site-admin.mjs).
@@ -354,7 +354,7 @@ function ProductTabs({ product: p, override, run, initialTab='price' }: { produc
 
 /** «Новая карточка»: the essentials only — name, article, section, prices and stock. The card is created hidden and
  *  opens in the usual editor below, where its description, composition, certificates and photo are filled in; then
- *  «Показать на сайте» opens it to customers (scripts/site-admin.mjs /api/admin/new-product, src/custom-product.mjs). */
+ *  «Показать на сайте» opens it to customers (scripts/site-admin.mjs /api/admin/new-product, packages/presentation/custom-product.mjs). */
 function BadgeEditor({value,onChange}:{value:ProductBadges;onChange:(value:ProductBadges)=>void}) {
  return <fieldset className="admin-badge-editor"><legend>Метки товара</legend>
   <label>Скидка<select className="field" value={value.discountPercent} onChange={e=>onChange({...value,discountPercent:Number(e.target.value)})}><option value={0}>Без скидки</option>{DISCOUNT_PERCENTS.map(n=><option key={n} value={n}>−{n}%</option>)}</select></label>
@@ -407,7 +407,7 @@ function NewProduct({run,onCreated,onCancel}:{run:Run;onCreated:(id:string)=>voi
  </form>;
 }
 
-/** Shown to customers or hidden: a hidden product leaves the catalog, search, home, theme pages and the chat (src/site.ts);
+/** Shown to customers or hidden: a hidden product leaves the catalog, search, home, theme pages and the chat (packages/presentation/site.ts);
  *  its page stays at its address and says it is not on sale. The switch works at once, nothing else to save. */
 function Visibility({ product: p, run }: { product: Product; run: Run }) {
   const hidden = Boolean(p.hidden);
