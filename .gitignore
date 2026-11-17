@@ -22,3 +22,5 @@ references/nsp-center.ru/.venv/
 /packages/catalog/generated/
 
 /dist-admin/
+
+/public/webp/

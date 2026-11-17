@@ -48,6 +48,19 @@ deploys by hand, edits live data, deletes files or resources, or spends money
 only after an explicit "yes" from its human for that action. Green checks
 allow a merge; they do not replace the yes.
 
+## Image format
+
+Product-card photos, product galleries, editorial photos and banners must be
+stored and delivered as WebP, with clean `.webp` filenames (never `.png.webp`
+or `.jpg.webp`). New admin image uploads must be decoded and
+converted to WebP on the server; changing a filename extension is insufficient.
+Use `npm run images:webp` for existing raster assets; both UI builds use the
+shared URL conversion. Preserve original source files for restoration and
+source-retention checks. Preserve transparency, orientation and readable labels;
+verify representative images and actual file sizes after conversion.
+This rule covers raster content imagery; SVG icons/masks and platform-required
+app icons keep their appropriate formats. Do not rasterize vectors into WebP.
+
 ## Knowledge map
 
 - `README.md` — entry point for people and the current goal.

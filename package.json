@@ -7,7 +7,7 @@
     "node": ">=22.12"
   },
   "scripts": {
-    "content": "node scripts/extract-prototype.mjs && node scripts/import-content.mjs && node scripts/split-content.mjs",
+    "content": "node scripts/extract-prototype.mjs && node scripts/import-content.mjs && node scripts/split-content.mjs && npm run images:webp",
     "dev": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
@@ -21,16 +21,18 @@
     "api": "node apps/api/server.mjs",
     "content:catalog": "node scripts/import-content.mjs",
     "build:web": "npm run content && npm run typecheck && vite build && node scripts/prerender.mjs && node scripts/pwa.mjs",
-    "build:admin": "vite build --config apps/admin/vite.config.ts",
+    "build:admin": "npm run images:webp && vite build --config apps/admin/vite.config.ts",
     "admin": "node apps/admin/server.mjs",
-    "dev:admin": "vite --config apps/admin/vite.config.ts"
+    "dev:admin": "vite --config apps/admin/vite.config.ts",
+    "images:webp": "node scripts/prepare-webp.mjs"
   },
   "dependencies": {
     "@cdek-it/widget": "^4.1.0",
     "cheerio": "^1.2.0",
     "pg": "^8.23.1",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@types/pg": "^8.23.1",

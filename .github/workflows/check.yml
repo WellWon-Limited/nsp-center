@@ -30,6 +30,7 @@ jobs:
           curl -fsS -o /dev/null http://127.0.0.1:4173/
           curl -fsS -o /dev/null http://127.0.0.1:4173/catalog/
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/nope/)" = 404
+          curl -fsSI http://127.0.0.1:4173/webp/images/products/russian-source/tnt-nsp.webp | grep image/webp
           curl -fsS http://127.0.0.1:4173/api/health
           curl -fsS -o /dev/null http://127.0.0.1:4173/sitemap.xml
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/api/auth/me)" = 503
@@ -38,3 +39,4 @@ jobs:
           docker stop nsp
           curl -fsS http://127.0.0.1:4174/ | grep 'Управление сайтом'
           curl -fsS http://127.0.0.1:4174/api/health
+          curl -fsSI http://127.0.0.1:4174/webp/images/products/russian-source/tnt-nsp.webp | grep image/webp

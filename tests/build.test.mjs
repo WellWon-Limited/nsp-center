@@ -151,7 +151,7 @@ test('Every prerendered route uses available local assets and safe internal link
         assert.ok(!/^javascript:/iu.test(value), `${route.url}: unsafe link ${value}`);
         assert.ok(!/(?:mc\.yandex|google-analytics|googletagmanager|doubleclick)/iu.test(value), `${route.url}: legacy tracking ${value}`);
         if (url.origin !== base) continue;
-        if (/^\/(?:assets|media|images)\//u.test(url.pathname) || element.name === 'link' && element.attribs.rel !== 'canonical') {
+        if (/^\/(?:assets|media|images|webp)\//u.test(url.pathname) || element.name === 'link' && element.attribs.rel !== 'canonical') {
           assert.ok(existsSync(mediaFile(value)), `${route.url}: missing built asset ${value}`);
         } else if (element.name === 'a') {
           const canonical = pathOf(value);

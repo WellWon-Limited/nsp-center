@@ -1,3 +1,4 @@
+import {webpUrl} from '../packages/domain/webp.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync, existsSync} from 'node:fs';
@@ -8,7 +9,7 @@ const overrides=JSON.parse(read('src/product-image-overrides.json'));
 const preferred=JSON.parse(read('src/product-images.json'));
 const gallery=JSON.parse(read('src/product-gallery.json'));
 const targets=JSON.parse(read('design/product-shadow-cleanup/targets.json'));
-const products=JSON.parse(read('src/generated/summary.json')).products;
+const products=JSON.parse(read('packages/catalog/generated/content.json')).products;
 test('Cleaned covers preserve imported originals and are used on product pages',()=>{
  for(const target of targets){
   const replacement=overrides[target.image];
@@ -19,6 +20,6 @@ test('Cleaned covers preserve imported originals and are used on product pages',
   assert.equal(p.image,target.image,'Import remains unchanged');
   if(p.hidden)continue; // not on sale: its page shows no photo (src/product-stock.json)
   const html=read('dist'+p.path+'index.html').toString();
-  assert.ok(html.includes('src="'+(preferred[p.id]?.image??replacement)+'"'),p.path);
+  assert.ok(html.includes('src="'+webpUrl(preferred[p.id]?.image??replacement)+'"'),p.path);
  }
 });

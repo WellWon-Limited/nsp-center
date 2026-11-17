@@ -1,3 +1,4 @@
+import sharp from 'sharp';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -187,7 +188,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.ok(complete.id,'new-product form creates the record only on final submit');
   assert.equal(complete.visibility[complete.id],true,'a newly created card stays hidden');
   assert.equal(complete.knowledge[complete.id].experts[0].speaker,'Анна Лекторова','lecture expert can be attached before the product exists');
-  assert.equal(complete.cards[complete.id].image,'/images/journal-final/magnesium-cover-v1.jpg');
+  assert.equal(complete.cards[complete.id].image,'/webp/images/journal-final/magnesium-cover-v1.webp');
   const fullContent=(await call('/api/product-content?id='+complete.id)).body.content;
   assert.equal(fullContent.properties.Состав,'Растительные ингредиенты.');
   assert.deepEqual(fullContent.about,expertKnowledge.about);
@@ -400,16 +401,21 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = adminSession;
 
   // A card's own content: an uploaded certificate scan is served back; name and photo reach every page via /api/site.
-  const png = Buffer.from('89504e470d0a1a0a0000000d4948445200000001000000010806000000', 'hex');
+  const png=await sharp({create:{width:2,height:2,channels:4,background:{r:100,g:150,b:200,alpha:.5}}}).png().toBuffer();
   const up = await fetch(base + '/api/admin/upload?product=alfalfa&kind=document&name=scan.png', { method: 'POST', headers: { 'Content-Type': 'image/png', Origin: base, Cookie: session }, body: png });
   assert.equal(up.status, 201);
   const file = await up.json();
-  assert.match(file.url, /^\/api\/files\/[a-f0-9]{32}$/);
+  assert.match(file.url, /^\/api\/files\/[a-f0-9]{32}\.webp$/);
   assert.equal((await fetch(base + '/api/admin/upload?product=alfalfa&kind=document', { method: 'POST', headers: { 'Content-Type': 'image/svg+xml', Origin: base, Cookie: session }, body: '<svg/>' })).status, 415, 'no SVG uploads');
   assert.equal((await fetch(base + '/api/admin/upload?product=alfalfa&kind=document', { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: session }, body: png })).status, 403, 'an upload needs our Origin');
   const served = await fetch(base + file.url);
-  assert.equal(served.headers.get('content-type'), 'image/png');
-  assert.deepEqual(Buffer.from(await served.arrayBuffer()), png);
+  assert.equal(served.headers.get('content-type'), 'image/webp');
+  const decoded=await sharp(Buffer.from(await served.arrayBuffer())).raw().toBuffer();assert.deepEqual(decoded,await sharp(png).raw().toBuffer());
+  assert.equal((await fetch(base+'/api/admin/upload?product=alfalfa&kind=image',{method:'POST',headers:{'Content-Type':'image/png',Origin:base,Cookie:session},body:'not an image'})).status,400,'decode input instead of trusting extension');
+  const legacyId='d'.repeat(32);
+  await accounts.pool.query('insert into files(id,product_id,kind,name,mime,size,data) values($1,$2,$3,$4,$5,$6,$7)',[legacyId,'alfalfa','image','legacy.png','image/png',png.length,png]);
+  const legacy=await fetch(base+'/api/files/'+legacyId+'.webp');assert.equal(legacy.status,200);assert.equal(legacy.headers.get('content-type'),'image/webp');assert.equal((await sharp(Buffer.from(await legacy.arrayBuffer())).metadata()).format,'webp');
+  assert.equal((await accounts.pool.query('select mime from files where id=$1',[legacyId])).rows[0].mime,'image/png','legacy source retained');
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { name: 'X' } })).status, 400);
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { documents: [{ name: 'evil', url: 'https://evil.example/x.png' }] } })).status, 400);
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { name: 'Люцерна новая', about: ['Первый абзац.'], properties: { 'Применение': 'По одной капсуле.' }, documents: [file], image: file.url } })).body.cards.alfalfa.name, 'Люцерна новая');

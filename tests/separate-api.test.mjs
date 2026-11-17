@@ -1,3 +1,4 @@
+import sharp from 'sharp';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,cp,mkdir,symlink,rm,readFile} from 'node:fs/promises';
@@ -80,10 +81,10 @@ test('independent web and API preserve sessions, uploads, catalog pages and oper
   const login=await request('/api/admin/login',{method:'POST',body:{login:'staff@example.ru',password:'staff-password-2026'}});
   assert.equal(login.status,200);const staff=login.headers.get('set-cookie').split(';')[0];
   assert.match(login.headers.get('set-cookie'),/SameSite=Strict/);
-  const png=Buffer.from('89504e470d0a1a0a','hex');
+  const png=await sharp({create:{width:2,height:2,channels:4,background:{r:100,g:150,b:200,alpha:.5}}}).png().toBuffer();
   const upload=await fetch(web.origin+'/api/admin/upload?product=content&kind=image&name=test.png',{method:'POST',headers:{Origin:web.origin,Cookie:staff,'Content-Type':'image/png'},body:png});
   assert.equal(upload.status,201);const image=(await upload.json()).url;
-  assert.deepEqual(Buffer.from(await(await request(image)).arrayBuffer()),png);
+  const imageResponse=await request(image);assert.equal(imageResponse.headers.get('content-type'),'image/webp');assert.equal((await sharp(Buffer.from(await imageResponse.arrayBuffer())).metadata()).format,'webp');
   const content=JSON.parse(await readFile(join(root,'packages/catalog/generated/content.json'),'utf8'));
   const category=content.categories.find(c=>c.path!=='/catalog/');
   const created=await request('/api/admin/new-product',{method:'PUT',cookie:staff,body:{product:{name:'Тест разделения',article:'SPLIT-TEST-1',categoryPath:category.path,retailRub:1000,partnerRub:700,availability:'InStock'},content:{image,photos:[image]},publish:true}});

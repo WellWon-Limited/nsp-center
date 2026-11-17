@@ -1,3 +1,4 @@
+import {webpContent} from '../../packages/domain/webp.mjs';
 import {homedir} from 'node:os';
 import {join} from 'node:path';
 import {createAccounts} from './accounts.mjs';
@@ -32,7 +33,7 @@ export async function createApi({content,env=process.env,accountsOptions={}}){
           const path=url.searchParams.get('path')||'';
           if(!/^\/(?:sitemap\.xml|catalog\/(?:[a-z0-9-]+\/)*|(?:product|blog)\/[a-z0-9-]+\/)$/.test(path))return json(res,400,{error:'Invalid page path'});
           await accounts.ready();
-          return json(res,200,{enabled:true,...await storefrontPage(accounts.pool,content,path)});
+          return json(res,200,{enabled:true,...webpContent(await storefrontPage(accounts.pool,content,path))});
         }
         if(url.pathname.startsWith('/api/ai/'))return await ai.handle(req,res,url);
         if(url.pathname==='/api/cdek')return await cdek.handle(req,res,url);

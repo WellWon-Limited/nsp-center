@@ -1,3 +1,5 @@
+import {encodeWebp} from './image-format.mjs';
+import {webpContent} from '../../packages/domain/webp.mjs';
 import {CARD_APPLICATION_SCHEMA,cardApplicationRoute} from './card-applications.mjs';
 import { KNOWLEDGE_SCHEMA, inheritedKnowledge, checkKnowledge, searchLectures, lectureContext, saveProductKnowledge } from './product-knowledge.mjs';
 import {readManagedCatalog,managedCategoryList,catalogAdminState,saveManagedCatalog} from './catalog-admin.mjs';
@@ -134,7 +136,7 @@ export function productBase(p) {
   if (!p) return null;
   return { name: p.name, about: p.copy?.about ?? [], highlights: p.copy?.highlights ?? [], description: p.description ?? '', properties: p.properties ?? {}, documents: (p.documents ?? []).filter(d => d.url).map(d => ({ name: d.name, url: d.url })) };
 }
-const localUrl = v => typeof v === 'string' && /^\/(api\/files|media|images)\/[\w./%-]+$/.test(v) && !v.includes('..');
+const localUrl = v => typeof v === 'string' && /^\/(api\/files|media|images|webp\/(?:media|images|prototype))\/[\w./%-]+$/.test(v) && !v.includes('..');
 const textList = (v, items, max) => Array.isArray(v) ? v.filter(x => typeof x === 'string').map(x => x.trim()).filter(Boolean).slice(0, items).map(x => x.slice(0, max)) : undefined;
 /** The administrator's card content: only what is set replaces the built card; anything malformed is an error. */
 export function validateContent(c) {
@@ -246,7 +248,8 @@ export async function siteSettings(pool, categories = [], productPaths = new Map
  */
 const chatLogRate = new Map();
 export async function siteRoute(ctx, req, res, path, url) {
-  const { pool, send, readJson, sessionUser, staffUser, productIds } = ctx;
+  const { pool, readJson, sessionUser, staffUser, productIds } = ctx;
+  const send=(res,status,body,headers)=>ctx.send(res,status,webpContent(body),headers);
   const method = req.method;
   if(await cardApplicationRoute(ctx,req,res,path,url))return true;
   const builtProduct = id => typeof id === 'string' && (!productIds || productIds.has(id));
@@ -283,9 +286,10 @@ export async function siteRoute(ctx, req, res, path, url) {
     return true;
   }
   if (path.startsWith('/api/files/') && method === 'GET') {
-    const id = path.slice('/api/files/'.length);
-    const { rows } = /^[a-f0-9]{32}$/.test(id) ? await pool.query('select mime, data from files where id = $1', [id]) : { rows: [] };
+    const id = path.slice('/api/files/'.length).replace(/\.webp$/,'');
+    const { rows } = /^[a-f0-9]{32}$/.test(id) ? await pool.query('select mime, data, kind from files where id = $1', [id]) : { rows: [] };
     if (!rows[0]) { send(res, 404, { error: 'Нет такого файла.' }); return true; }
+    if(['image/jpeg','image/png'].includes(rows[0].mime)){rows[0].data=await encodeWebp(rows[0].data,{document:rows[0].kind==='document'});rows[0].mime='image/webp';}
     res.writeHead(200, { 'Content-Type': rows[0].mime, 'Content-Length': rows[0].data.length, 'Cache-Control': 'public, max-age=31536000, immutable', 'X-Content-Type-Options': 'nosniff', 'Content-Disposition': 'inline' });
     res.end(req.method === 'HEAD' ? undefined : rows[0].data);
     return true;
@@ -426,10 +430,13 @@ export async function siteRoute(ctx, req, res, path, url) {
     for await (const chunk of req) { size += chunk.length; if (size > MAX_UPLOAD) { send(res, 413, { error: 'Файл больше 8 МБ.' }); return true; } chunks.push(chunk); }
     if (!size) { send(res, 400, { error: 'Пустой файл.' }); return true; }
     const id = randomBytes(16).toString('hex');
-    const name = String(url.searchParams.get('name') || 'файл').slice(0, 160);
-    await pool.query('insert into files (id, product_id, kind, name, mime, size, data) values ($1, $2, $3, $4, $5, $6, $7)', [id, product, kind, name, mime, size, Buffer.concat(chunks)]);
+    const originalName = String(url.searchParams.get('name') || 'файл').slice(0, 150);
+    const name=originalName.replace(/\.[^.]+$/,'')+'.webp';
+    let encoded;try{encoded=await encodeWebp(Buffer.concat(chunks),{document:kind==='document'});}catch{send(res,400,{error:'Не удалось прочитать изображение. Выберите исправный JPG, PNG или WebP.'});return true;}
+    size=encoded.length;
+    await pool.query('insert into files (id, product_id, kind, name, mime, size, data) values ($1, $2, $3, $4, $5, $6, $7)', [id, product, kind, name, 'image/webp', size, encoded]);
     await log(user, 'upload', { productId: product, kind, id, name, size });
-    send(res, 201, { url: `/api/files/${id}`, name });
+    send(res, 201, { url: `/api/files/${id}.webp`, name });
     return true;
   }
   if (method !== 'PUT') { send(res, 404, { error: 'Нет такого адреса.' }); return true; }
@@ -503,7 +510,7 @@ export async function siteRoute(ctx, req, res, path, url) {
       const { rows: gone } = await pool.query('delete from content_items where id = $1 and kind = $2 returning data', [Number(body?.id) || 0, kind]);
       if (!gone.length) { send(res, 400, { error: 'Такой записи уже нет.' }); return true; }
       // Its uploaded photo (gallery photo, offer picture, article cover) goes with it.
-      const files = [gone[0].data.image, gone[0].data.cover].map(v => /^\/api\/files\/([a-f0-9]{32})$/.exec(v ?? '')?.[1]).filter(Boolean);
+      const files = [gone[0].data.image, gone[0].data.cover].map(v => /^\/api\/files\/([a-f0-9]{32})(?:\.webp)?$/.exec(v ?? '')?.[1]).filter(Boolean);
       if (files.length) await pool.query("delete from files where product_id = 'content' and id = any($1)", [files]);
       await log(user, 'content-delete', { kind, id: Number(body.id) });
     } else if (action === 'add' || action === 'update') {

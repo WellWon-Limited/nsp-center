@@ -1,16 +1,19 @@
+import {webpUrl} from '../packages/domain/webp.mjs';
 import gallery from './product-gallery.json' with {type:'json'};
 import images from './product-images.json' with {type:'json'};
 import layouts from './product-image-layout.json' with {type:'json'};
 import legacy from './product-image-overrides.json' with {type:'json'};
 import masks from './product-packshot-masks.json' with {type:'json'};
-export const productImage=src=>legacy[src]||src;
+const webpOverrides=Object.fromEntries(Object.entries(legacy).map(([path,replacement])=>[webpUrl(path),replacement]));
+export const productImage=src=>legacy[src]||webpOverrides[src]||src;
 // Display replacements are separate from the imported catalog and original gallery files.
 // An administrator's photo (src/site.ts) comes first.
-export const productCover=product=>product.adminImage!==undefined?product.adminImage:(images[product.id]?.image||(product.image?productImage(product.image):undefined));
-export function productGalleryImages(product){const cover=productCover(product);if(product.adminPhotos!==undefined)return product.adminPhotos;if(product.adminImage)return [product.adminImage];return [...new Set([...(cover?[cover]:[]),...(gallery[product.id]?.images?.slice(1).map(x=>x.image)||[])])];}
+const rawCover=product=>product.adminImage!==undefined?product.adminImage:(images[product.id]?.image||(product.image?productImage(product.image):undefined));
+export const productCover=product=>webpUrl(rawCover(product));
+export function productGalleryImages(product){const cover=productCover(product);if(product.adminPhotos!==undefined)return product.adminPhotos.map(webpUrl);if(product.adminImage)return [webpUrl(product.adminImage)];return [...new Set([...(cover?[cover]:[]),...(gallery[product.id]?.images?.slice(1).map(x=>webpUrl(x.image))||[])])];}
 
 export function productPackshotStyle(product){
- const m=layouts[product.id];if(!images[product.id]||!m||m.image!==productCover(product))return undefined;
+ const m=layouts[product.id];if(!images[product.id]||!m||webpUrl(m.image)!==productCover(product))return undefined;
  const left=Math.max(0,m.left-m.width*.035),top=Math.max(0,m.top-m.height*.035);
  const width=Math.min(1,m.left+m.width*1.035)-left,height=Math.min(1,m.top+m.height*1.035)-top;
  const imageRatio=m.ratio*m.height/m.width,ratio=width/height*imageRatio;

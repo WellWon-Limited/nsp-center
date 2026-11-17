@@ -10,7 +10,7 @@ export const CONTENT_KINDS = ['promo', 'photo', 'video', 'article', 'faq'];
 export const HIDEABLE_KINDS = ['video', 'article', 'faq'];
 
 const text = (v, max) => String(v ?? '').replace(/\r\n?/g, '\n').trim().slice(0, max);
-const localFile = v => typeof v === 'string' && /^\/(api\/files\/[a-f0-9]{32}|images\/[\w./-]+|media\/[\w./%-]+)$/.test(v) && !v.includes('..');
+const localFile = v => typeof v === 'string' && /^\/(api\/files\/[a-f0-9]{32}(?:\.webp)?|webp\/(?:images|media|prototype)\/[\w./%-]+|images\/[\w./-]+|media\/[\w./%-]+)$/.test(v) && !v.includes('..');
 const isoDate = v => /^\d{4}-\d{2}-\d{2}$/.test(String(v ?? '')) && !Number.isNaN(Date.parse(String(v)));
 const sitePath = v => typeof v === 'string' && /^\/[\w\-./?=&%]*$/.test(v) && !v.startsWith('//');
 

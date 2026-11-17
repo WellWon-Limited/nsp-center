@@ -1,3 +1,4 @@
+import {webpReferences,webpContent} from '../packages/domain/webp.mjs';
 import {ADMIN_PATH} from '../src/admin-path.mjs';
 import {productGalleryImages,productCover} from '../src/product-media.mjs';
 import packshotMasks from '../src/product-packshot-masks.json' with {type:'json'};
@@ -14,7 +15,7 @@ try {
  const themeJsonLd=(theme,href)=>theme?{'@context':'https://schema.org','@graph':[{'@type':'Article',headline:theme.h1,description:theme.description,url:href,dateModified:theme.updated,inLanguage:'ru'},...(theme.faq.length?[{'@type':'FAQPage',mainEntity:theme.faq.map(f=>({'@type':'Question',name:f.question,acceptedAnswer:{'@type':'Answer',text:f.answer}}))}]:[])]}:null;
  const built=JSON.parse(await readFile('packages/catalog/generated/content.json','utf8'));
  // Card prices are not public (scripts/card-prices.mjs): the pages and their embedded data carry retail prices only.
- const data={...built,products:built.products.map(publicProduct)};const rawTemplate=await readFile('dist/index.html','utf8');
+ const data=webpContent({...built,products:built.products.map(publicProduct)});const rawTemplate=await readFile('dist/index.html','utf8');
  // The app's script (src/boot.tsx) starts after the first paint (src/main.tsx); it is fetched together with the page
  // so it is ready by then.
  const bootChunk=(await readdir('dist/assets')).find(f=>/^boot-.*\.js$/.test(f));
@@ -38,7 +39,7 @@ try {
   const meta=metadata(r.url);const themeHere=data.themes.find(t=>t.path===u.pathname);const productHere=data.products.find(p=>p.path===u.pathname);const pageData={...(themeHere?{theme:themeHere}:{}),...(productHere?{productThemes:data.themes.filter(t=>t.mainProductId===productHere.id)}:{}),product:productHere,category:data.categories.find(p=>p.path===u.pathname),article:data.articles.find(p=>p.path===u.pathname),page:data.pages.find(p=>p.path===u.pathname),...(u.pathname==='/'?{homeHtml:data.site.homeHtml,homeReviewsHtml:data.pages.find(p=>p.path==='/company/reviews/')?.html||''}:{})};const body=renderToString(React.createElement(App,{url:r.url,pageData}));meta.product=pageData.product;meta.article=pageData.article;
   const jsonLd=meta.product&&!meta.product.hidden?{'@context':'https://schema.org','@type':'Product',name:meta.product.name,sku:meta.product.article,image:productGalleryImages(meta.product).map(src=>'https://nsp-center.ru'+src),description:meta.product.description.slice(0,3000),offers:{'@type':'Offer',url:u.href,price:meta.product.prices.retail,priceCurrency:'RUB',availability:'https://schema.org/'+meta.product.availability}}:meta.article?{'@context':'https://schema.org','@type':'Article',headline:meta.article.title,description:meta.description,url:u.href}:themeJsonLd(themeHere,u.href);
   const html=template.replace(/<title>.*?<\/title>/s,`<title>${esc(pageTitle(r.title))}</title>`).replace(/<meta name="description"[^>]*>/,`<meta name="description" content="${esc(meta.description)}"/>`).replace('</head>',`${u.pathname==='/'&&!u.search?HOME_PRELOAD:''}${unlisted(u.pathname)?'<meta name="robots" content="noindex, nofollow"/>':''}<link rel="canonical" href="${esc(u.href)}"/>${jsonLd?'<script type="application/ld+json">'+JSON.stringify(jsonLd).replace(/</g,'\\u003c')+'</script>':''}</head>`).replace('<div id="root"></div>',`<div id="root" data-route="${esc(r.url)}">${body}</div><script type="application/json" id="nsp-page-data">${JSON.stringify(pageData).replace(/</g,'\\u003c')}</script>`);
-  await mkdir(join('dist',file.substring(0,file.lastIndexOf('/'))),{recursive:true});await writeFile(join('dist',file),html);manifest.push({url:r.url,file});
+  await mkdir(join('dist',file.substring(0,file.lastIndexOf('/'))),{recursive:true});await writeFile(join('dist',file),webpReferences(html));manifest.push({url:r.url,file});
  }
  for(const [from,to] of Object.entries(data.redirects)){const file=from.replace(/^\//,'')+'index.html';await mkdir(join('dist',file.substring(0,file.lastIndexOf('/'))),{recursive:true});await writeFile(join('dist',file),`<!doctype html><html lang="ru"><head><meta charset="UTF-8"><title>Перейти к продукту | NSP Center</title><meta http-equiv="refresh" content="0;url=${esc(to)}"><link rel="canonical" href="https://nsp-center.ru${esc(to)}"></head><body><a href="${esc(to)}">Перейти к карточке продукта</a></body></html>`);}
  await writeFile('dist/prerender-manifest.json',JSON.stringify({routes:manifest},null,2));

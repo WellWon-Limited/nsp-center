@@ -36,7 +36,7 @@ function usePageHtml(path: string) {
 const hidden = (site: SiteSettings, kind: string, key: string) => Boolean(site.hiddenContent?.[kind]?.includes(key));
 const call = (run: Run, kind: string, action: string, extra: Record<string, unknown>, done: string) => run('/api/admin/site-content', { kind, action, ...extra }, done);
 
-/** A phone photo can be 10 MB: it is made at most 2000 px on the long side (JPEG) before it is sent. */
+/** A phone photo can be 10 MB: it is made at most 2000 px on the long side (WebP) before it is sent. */
 async function shrink(file: File): Promise<Blob> {
   try {
     const bitmap = await createImageBitmap(file);
@@ -45,7 +45,7 @@ async function shrink(file: File): Promise<Blob> {
     const canvas = document.createElement('canvas');
     canvas.width = Math.round(bitmap.width * scale); canvas.height = Math.round(bitmap.height * scale);
     canvas.getContext('2d')!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    return await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error('encode')), 'image/jpeg', 0.86));
+    return await new Promise<Blob>((resolve, reject) => canvas.toBlob(b => b ? resolve(b) : reject(new Error('encode')), 'image/webp', 0.9));
   } catch { return file; }
 }
 async function upload(file: File, notify: (s: string) => void): Promise<string | null> {
