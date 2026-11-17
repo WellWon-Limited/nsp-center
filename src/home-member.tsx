@@ -1,3 +1,4 @@
+import {observeLayout} from './observe-layout.mjs';
 import {layoutScale} from './layout-scale.mjs';
 import {data,shortName,useStore,today} from './store';
 import {Icon} from './ui';
@@ -28,7 +29,7 @@ function MemberBackTop(){
 export function MobileMemberHome(){
  const {state,setState,sessionReady}=useStore();
  const sheet=useRef<HTMLElement>(null);
- useLayoutEffect(()=>{const node=sheet.current;if(!node)return;const measure=()=>{const end=node.querySelector('.member-test');if(end)node.style.setProperty('--member-sheet-height',`${(end.getBoundingClientRect().bottom-node.getBoundingClientRect().top)/layoutScale(node)+16}px`)};measure();const observer=new ResizeObserver(measure);for(const child of node.children)observer.observe(child);window.addEventListener('resize',measure);return()=>{observer.disconnect();window.removeEventListener('resize',measure)}},[sessionReady,state.signedIn]);
+ useLayoutEffect(()=>{const node=sheet.current;if(!node)return;const measure=()=>{const end=node.querySelector('.member-test');if(end)node.style.setProperty('--member-sheet-height',`${(end.getBoundingClientRect().bottom-node.getBoundingClientRect().top)/layoutScale(node)+16}px`)};const stop=observeLayout([...node.children],measure);window.addEventListener('resize',measure);return()=>{stop();window.removeEventListener('resize',measure)}},[sessionReady,state.signedIn]);
  if(!sessionReady)return <section className="home-member home-member--loading" aria-busy="true" aria-label="Загружаем вашу главную страницу"><div className="member-loading-title"/><div className="member-loading-shortcuts"/><div className="member-loading-plan"/><div className="member-loading-shortcuts"/></section>;
  if(!state.signedIn||!state.account)return null;
  const entries=homePlanPreview(state.intake,new Set(data.products.map(p=>p.id)));

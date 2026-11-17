@@ -1,3 +1,4 @@
+import {observeHeaderHeight} from '../../src/observe-layout.mjs';
 import {ConfirmDialog} from '../../src/confirm-dialog';
 import {siteUrl} from './links';
 import {ADMIN_PATH} from '../../src/admin-path.mjs';
@@ -58,9 +59,7 @@ export function AdminApp() {
   useLayoutEffect(() => {
     const header = document.querySelector<HTMLElement>('.admin-header');
     if (!header) return;
-    const fit = () => document.documentElement.style.setProperty('--site-header-height', `${header.getBoundingClientRect().height}px`);
-    fit(); const observer = new ResizeObserver(fit); observer.observe(header);
-    return () => observer.disconnect();
+    return observeHeaderHeight(header);
   }, [checked, !!staff]);
   useEffect(() => {
     fetch('/api/admin/me', { headers: { Accept: 'application/json' } }).then(async r => { const b = r.ok ? await r.json().catch(() => null) : null; setStaff(b?.staff ?? null); }).catch(() => setStaff(null)).finally(() => setChecked(true));

@@ -20,11 +20,11 @@ export function ProductOverview({product:p,notes,onDetails}:{product:Product;not
   const el=root.current;if(!el)return;let disposed=false,frame=0;
   const view=el.ownerDocument.defaultView??window;
   const fit=()=>{if(!disposed)fitProductOverview(el,view)};
-  const schedule=()=>{cancelAnimationFrame(frame);frame=requestAnimationFrame(fit)};
+  const schedule=()=>{if(disposed)return;view.cancelAnimationFrame(frame);frame=view.requestAnimationFrame(fit)};
   fit();el.ownerDocument.fonts.ready.then(schedule);view.addEventListener('resize',schedule);
-  const observer=new ResizeObserver(schedule);
+  const observer=new view.ResizeObserver(schedule);
   for(const child of el.querySelectorAll('.product-title-row,.purchase-box,.product-key-facts'))observer.observe(child);
-  return()=>{disposed=true;cancelAnimationFrame(frame);observer.disconnect();view.removeEventListener('resize',schedule)};
+  return()=>{disposed=true;view.cancelAnimationFrame(frame);observer.disconnect();view.removeEventListener('resize',schedule)};
  },[p.id]);
  const {state,setState,notify}=useStore(),available=p.availability!=='OutOfStock';
  const card=p.card||data.products.find(x=>x.id===p.id)?.card;
