@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { money, useStore } from './store';
+import { money, useStore } from '../../src/store';
 
 const statuses = [['new', 'Новые'], ['processing', 'В обработке'], ['shipped', 'Отправлены'], ['completed', 'Выполнены'], ['cancelled', 'Отменены']] as const;
 type Status = typeof statuses[number][0];

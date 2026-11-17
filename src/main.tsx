@@ -1,5 +1,4 @@
-import './design-system.css';
-import './app.css';
+import './presentation-styles';
 import { installSwipeBack, standaloneIos } from './swipe-back.mjs';
 import { installInstantTap } from './instant-tap.mjs';
 import { installAppHistory } from './app-history.mjs';

@@ -1,14 +1,15 @@
+import {siteUrl} from './links';
 import {AdminBackButton} from './admin-form';
 import {ContentPreviewButton} from './admin-preview';
 import {RequiredLabel,RequiredHint,RequiredMark} from './admin-form';
 import { useEffect, useState, type FormEvent } from 'react';
-import type { ContentPage } from './content-types';
-import { data, shortName, today, useStore } from './store';
-import { emptyContent, type SiteSettings } from './site';
-import { activePromos, faqKey, humanDate, videoOf, VIDEO_SOURCES } from './site-content.mjs';
-import { faqSections, videoSections } from './information-content.mjs';
-import { ProductPicker } from './personal';
-import { Icon } from './ui';
+import type { ContentPage } from '../../src/content-types';
+import { data, shortName, today, useStore } from '../../src/store';
+import { emptyContent, type SiteSettings } from '../../src/site';
+import { activePromos, faqKey, humanDate, videoOf, VIDEO_SOURCES } from '../../src/site-content.mjs';
+import { faqSections, videoSections } from '../../src/information-content.mjs';
+import { ProductPicker } from '../../src/personal';
+import { Icon } from '../../src/ui';
 
 // «Контент» in site management (research 2026-11-11: shops let staff publish offers, photos, videos, articles and FAQ
 // themselves, as short forms of plain fields). Each section lists what is on the site and has one form to add or change
@@ -25,10 +26,9 @@ function usePageHtml(path: string) {
   useEffect(() => {
     if (html) return;
     let off = false;
-    fetch(path).then(r => r.ok ? r.text() : '').then(text => {
-      const json = new DOMParser().parseFromString(text, 'text/html').getElementById('nsp-page-data')?.textContent;
-      if (!off && json) setHtml((JSON.parse(json) as { page?: ContentPage }).page?.html ?? '');
-    }).catch(() => { /* the list of the old site's entries stays empty */ });
+    fetch('/api/admin/preview-data?page='+encodeURIComponent(path)).then(r=>{
+      if(!r.ok)throw Error('Не удалось загрузить содержимое страницы');return r.json();
+    }).then(body=>{if(!off)setHtml(body.page?.html??'')}).catch(()=>{/* existing list remains available on retry */});
     return () => { off = true; };
   }, [path]);
   return html;
@@ -196,9 +196,9 @@ export function JournalSection({ site, run }: Section) {
     </form>}
     <h3>Статьи</h3>
     <ul className="admin-content-list">
-      {added.map(a => <Row key={a.path} title={a.title} note={`${a.date} · добавлена здесь`}><a className="btn btn--secondary" href={a.path} target="_blank" rel="noopener">Открыть</a><button type="button" className="btn btn--secondary" onClick={() => setEdit({ id: a.contentId, f: { ...noArticle, ...a.data } })}>Изменить</button><Remove what="статью" onYes={() => void call(run, 'article', 'delete', { id: a.contentId }, 'Статья удалена')} /></Row>)}
+      {added.map(a => <Row key={a.path} title={a.title} note={`${a.date} · добавлена здесь`}><a className="btn btn--secondary" href={siteUrl(a.path)} target="_blank" rel="noopener">Открыть</a><button type="button" className="btn btn--secondary" onClick={() => setEdit({ id: a.contentId, f: { ...noArticle, ...a.data } })}>Изменить</button><Remove what="статью" onYes={() => void call(run, 'article', 'delete', { id: a.contentId }, 'Статья удалена')} /></Row>)}
       {built.map(a => { const off = hidden(site, 'article', a.id); return <Row key={a.id} title={a.title} note={off ? 'Скрыта с сайта' : `${a.date ?? ''} · со старого сайта`}>
-        <a className="btn btn--secondary" href={a.path} target="_blank" rel="noopener">Открыть</a>
+        <a className="btn btn--secondary" href={siteUrl(a.path)} target="_blank" rel="noopener">Открыть</a>
         <button type="button" className={`btn ${off ? 'btn--primary' : 'btn--secondary'}`} onClick={() => void call(run, 'article', off ? 'show' : 'hide', { key: a.id }, off ? 'Статья снова в журнале' : 'Статья скрыта')}>{off ? 'Вернуть' : 'Скрыть'}</button>
       </Row>; })}
     </ul>

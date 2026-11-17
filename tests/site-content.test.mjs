@@ -44,7 +44,7 @@ test('an added article gets its own journal address and the built article shape'
 
 test('the chat section of site management shows real questions and says nothing about a neural network', async () => {
   const { readFileSync } = await import('node:fs');
-  const admin = readFileSync(new URL('../src/admin.tsx', import.meta.url), 'utf8');
+  const admin = readFileSync(new URL('../apps/admin/admin.tsx', import.meta.url), 'utf8');
   assert.doesNotMatch(admin, /YandexGPT|Нейросеть пока не подключена|ИИ-консультант/);
   assert.match(admin, /\/api\/admin\/chat-log/);
   assert.match(readFileSync(new URL('../src/assistant.tsx', import.meta.url), 'utf8'), /fetch\('\/api\/chat-log'/);

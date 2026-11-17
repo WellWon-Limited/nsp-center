@@ -47,7 +47,7 @@ function restoreTasks(v:unknown):Record<string,string[]>{if(!v||typeof v!=='obje
 /** Local calendar date (YYYY-MM-DD): plan ticks belong to one day. */
 const SITE_CACHE='nsp-center:site';
 export const today=()=>new Date().toLocaleDateString('sv-SE');
-const initial: LocalState = {cart:{},favorites:[],waitlist:[],intake:[],intakeDate:'',intakePlans:{},intakeLog:{},day:1,habits:defaultHabits,notices:[],reminded:[],tasks:{},name:'',orders:[],card:false,account:null,signedIn:false,saved:null};
+export const initial: LocalState = {cart:{},favorites:[],waitlist:[],intake:[],intakeDate:'',intakePlans:{},intakeLog:{},day:1,habits:defaultHabits,notices:[],reminded:[],tasks:{},name:'',orders:[],card:false,account:null,signedIn:false,saved:null};
 const text = (v:unknown, max:number) => typeof v==='string'?v.slice(0,max):'';
 function restoreAccount(v:unknown):Account|null{if(!v||typeof v!=='object')return null;const a=v as Record<string,unknown>;if(typeof a.email!=='string'||typeof a.passwordHash!=='string')return null;return {firstName:text(a.firstName,60),lastName:text(a.lastName,60),email:text(a.email,120),phone:text(a.phone,30),partnerId:text(a.partnerId,20),passwordHash:text(a.passwordHash,128),createdAt:text(a.createdAt,30),...(a.server===true?{server:true}:{}),...(a.server===true&&a.admin===true?{admin:true}:{})};}
 const validIds = new Set(data.products.map(p=>p.id));
@@ -93,8 +93,8 @@ export function openSession(s:LocalState,{account,data}:ServerSession,mode:'load
 }
 /** Sign-out of a server account: the device keeps nothing of it (the server has it all). */
 export const closeSession=(s:LocalState):LocalState=>({...s,...pickSynced(initial),intakeDate:today(),account:null,signedIn:false,card:false,saved:null,name:''});
-type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number,options?:{notify?:boolean})=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>;staff:Staff|null;setStaff:(staff:Staff|null)=>void};
-const Context = createContext<Store|null>(null);
+export type Store = {state:LocalState;setState:React.Dispatch<React.SetStateAction<LocalState>>;add:(p:Product,quantity?:number,options?:{notify?:boolean})=>void;qty:(id:string,quantity:number)=>void;favorite:(id:string)=>void;waitFor:(p:Product)=>void;toast:string;notify:(s:string)=>void;count:number;ready:boolean;sessionReady:boolean;pendingReviews:number;site:SiteSettings|null;setSite:(site:SiteSettings|null)=>void;accounts:'server'|'local'|null;startSession:(session:ServerSession)=>void;logout:()=>Promise<void>;staff:Staff|null;setStaff:(staff:Staff|null)=>void};
+export const Context = createContext<Store|null>(null);
 export function StoreProvider({children}:{children:ReactNode}) {
   const [state,setState]=useState(initial); const [toast,setToast]=useState(''); const [ready,setReady]=useState(false);
   const [toastRevision,setToastRevision]=useState(0);

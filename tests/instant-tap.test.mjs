@@ -74,7 +74,8 @@ test('a tab opens painted at once: the page is drawn before the app script runs,
   const main = read('src/main.tsx');
   assert.match(main, /requestAnimationFrame\(\(\)=>setTimeout\(\(\)=>\{ void import\('\.\/boot'\); \},0\)\);/);
   assert.match(main, /installAppHistory\(window,document,standaloneIos\(window\)\);/, 'taps keep working before the app starts');
-  assert.match(main, /import '\.\/app\.css';/);
+  assert.match(main, /import '\.\/presentation-styles';/);
+  assert.match(read('src/presentation-styles.ts'), /import '\.\/app\.css';/);
   assert.match(read('vite.config.ts'), /cssCodeSplit:false/, 'no styles arrive with the app script');
   assert.match(read('scripts/prerender.mjs'), /rel="modulepreload" crossorigin href="\/assets\/\$\{bootChunk\}"/);
   assert.match(read('src/pwa.tsx'), /if \(document\.readyState === 'complete'\) register\(\); else addEventListener\('load', register, \{ once: true \}\);/);

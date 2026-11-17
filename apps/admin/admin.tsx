@@ -1,24 +1,26 @@
-import {ADMIN_PATH} from './admin-path.mjs';
+import {ConfirmDialog} from '../../src/confirm-dialog';
+import {siteUrl} from './links';
+import {ADMIN_PATH} from '../../src/admin-path.mjs';
 import {ProductPreviewButton} from './admin-preview';
 import {CardApplicationsSection} from './admin-card-applications';
 import {CategoriesSection} from './admin-categories';
 import {RequiredLabel,RequiredHint,useUnsavedProduct,AdminBackButton} from './admin-form';
 import {ProductMediaEditor, ProductAssetFields, type ProductAssets} from './admin-product-media';
-import {customProduct} from './custom-product.mjs';
-import type {ProductKnowledge} from './product-knowledge-types';
+import {customProduct} from '../../src/custom-product.mjs';
+import type {ProductKnowledge} from '../../src/product-knowledge-types';
 import {KnowledgeEditor} from './admin-knowledge';
-import { DISCOUNT_PERCENTS, readProductBadges, type ProductBadges } from './product-badges.mjs';
+import { DISCOUNT_PERCENTS, readProductBadges, type ProductBadges } from '../../src/product-badges.mjs';
 import { OrdersSection } from './admin-orders';
 import { FaqSection, JournalSection, PhotosSection, PromosSection, VideosSection, type ContentTab } from './admin-content';
 import './admin.css';
 import './admin-design.css';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { installHomeScrollEdges } from './home-scroll-edges.mjs';
-import type { Product } from './content-types';
-import { data, money, shortName, useStore } from './store';
-import { builtHidden, pricesUnder, readSite, type ProductOverride, type ProductContent, type SiteSettings } from './site';
-import { Icon, SiteBackdrop } from './ui';
-import { Field, PasswordInput } from './auth';
+import { installHomeScrollEdges } from '../../src/home-scroll-edges.mjs';
+import type { Product } from '../../src/content-types';
+import { data, money, shortName, useStore } from '../../src/store';
+import { builtHidden, pricesUnder, readSite, type ProductOverride, type ProductContent, type SiteSettings } from '../../src/site';
+import { Icon, SiteBackdrop } from '../../src/ui';
+import { Field, PasswordInput } from '../../src/auth';
 
 // Site management (/admin/, research 2026-11-10): a separate staff account with its own sign-in and session, and only
 // management here — no customer cabinet. The server checks the staff session on every request (scripts/site-admin.mjs).
@@ -88,9 +90,9 @@ function StaffSignIn() {
   // the eye on the password, no green ring on the field being typed in (owner, 2026-11-10).
   return <div className="admin-signin" data-ds-id="admin-signin">
     <header className="site-header admin-header"><div className="header-inner">
-      <a className="brand" href="/" aria-label="NSP Center — на сайт"><span className="brand-mark"><img src="/icons/icon.svg" alt="" width="48" height="48" /></span><span>NSP<span className="brand-light"> Center</span></span></a>
+      <a className="brand" href={siteUrl()} aria-label="NSP Center — на сайт"><span className="brand-mark"><img src="/icons/icon.svg" alt="" width="48" height="48" /></span><span>NSP<span className="brand-light"> Center</span></span></a>
       <span className="admin-header-label">Управление сайтом</span>
-      <div className="admin-header-actions"><a className="admin-header-link" href="/">На сайт</a></div>
+      <div className="admin-header-actions"><a className="admin-header-link" href={siteUrl()}>На сайт</a></div>
     </div></header>
     <main className="site-main site-main--account-route" id="main">
       <section className="auth admin-auth">
@@ -159,14 +161,14 @@ export function AdminPanel() {
       <span className="admin-header-label">Управление сайтом</span>
       <div className="admin-header-actions">
         <span className="admin-staff-name" title={staff?.email}><Icon name="user-separated" size={20} />{staff ? `${staff.firstName} ${staff.lastName}`.trim() : ''}</span>
-        <a className="admin-header-link" href="/" target="_blank" rel="noopener">Открыть сайт</a>
+        <a className="admin-header-link" href={siteUrl()} target="_blank" rel="noopener">Открыть сайт</a>
         <button type="button" className="admin-header-link" onClick={() => void signOut()}>Выйти</button>
         <button ref={menuToggleRef} type="button" className="icon-btn admin-mobile-toggle" aria-label={menuOpen?'Закрыть меню разделов':'Разделы управления'} aria-expanded={menuOpen} aria-controls="admin-mobile-menu" onClick={() => setMenuOpen(v => !v)}><Icon name={menuOpen?'close':'menu'}/></button>
       </div>
     </div>
       {menuOpen&&<nav id="admin-mobile-menu" className="mobile-menu panel admin-mobile-menu" aria-label="Разделы управления">
         {tabs.map(([id,label])=><a key={id} href={id==='summary'?ADMIN_PATH:`${ADMIN_PATH}?section=${id}`} aria-current={tab===id?'page':undefined} onClick={e=>{e.preventDefault();setTab(id);}}><span>{label}{id==='reviews'&&pending>0&&<span className="admin-count">{pending}</span>}</span><Icon name="chevron" size={17}/></a>)}
-        <div className="admin-menu-footer"><a href="/" target="_blank" rel="noopener">Открыть сайт <Icon name="chevron" size={17}/></a><button type="button" onClick={()=>{closeMenu();void signOut();}}>Выйти <Icon name="chevron" size={17}/></button></div>
+        <div className="admin-menu-footer"><a href={siteUrl()} target="_blank" rel="noopener">Открыть сайт <Icon name="chevron" size={17}/></a><button type="button" onClick={()=>{closeMenu();void signOut();}}>Выйти <Icon name="chevron" size={17}/></button></div>
       </nav>}
     </header>
     <div className="admin-shell">
@@ -444,7 +446,7 @@ function ProductEditor({ product: p, override: o, run, onPreviewChange,preview }
     </div>
     <BadgeEditor value={f.badges} onChange={badges=>setF(x=>({...x,badges}))}/>
     <div className="admin-choice" role="radiogroup" aria-label="Наличие">{([['InStock', 'В наличии'], ['OutOfStock', 'Нет в наличии']] as const).map(([v, label]) => <button type="button" key={v} role="radio" aria-checked={f.availability === v} className={f.availability === v ? 'active' : ''} onClick={() => set('availability')(v)}>{label}</button>)}</div>
-    <div className="admin-editor-actions">{preview}<button className="btn btn--primary">Сохранить</button>{o && <button type="button" className="btn btn--secondary" onClick={() => void run('/api/admin/product', { productId: p.id, reset: true }, `Как в прайсе: ${shortName(p.name)}`)}>Вернуть как в прайсе</button>}<a href={p.path} className="admin-link">Открыть товар</a></div>
+    <div className="admin-editor-actions">{preview}<button className="btn btn--primary">Сохранить</button>{o && <button type="button" className="btn btn--secondary" onClick={() => void run('/api/admin/product', { productId: p.id, reset: true }, `Как в прайсе: ${shortName(p.name)}`)}>Вернуть как в прайсе</button>}<a href={siteUrl(p.path)} className="admin-link">Открыть товар</a></div>
   </form>;
 }
 
@@ -470,18 +472,6 @@ function ReviewsSection({ overview, run }: { overview: Overview; run: Run }) {
       <p className="ds-muted">Восстановить его будет нельзя.</p>
     </ConfirmDialog>}
   </section>;
-}
-
-/** A confirmation in its own window over the page: Escape or a click outside cancels. Also used by the profile's sign-out. */
-export function ConfirmDialog({ title, confirm, children, onConfirm, onCancel, danger = true }: { title: string; confirm: string; children?: ReactNode; onConfirm: () => void; onCancel: () => void; danger?: boolean }) {
-  useEffect(() => { const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel(); }; addEventListener('keydown', esc); return () => removeEventListener('keydown', esc); }, [onCancel]);
-  return <div className="admin-dialog-backdrop" onClick={onCancel}>
-    <div className="admin-dialog" role="alertdialog" aria-modal="true" aria-labelledby="admin-dialog-title" onClick={e => e.stopPropagation()}>
-      <h2 id="admin-dialog-title">{title}</h2>
-      {children}
-      <div className="admin-editor-actions"><button type="button" className={`btn ${danger ? 'btn--danger' : 'btn--primary'}`} autoFocus onClick={onConfirm}>{confirm}</button><button type="button" className="btn btn--secondary" onClick={onCancel}>Отмена</button></div>
-    </div>
-  </div>;
 }
 
 /** «Сотрудники»: staff accounts are separate from customers — added here with their own email and a one-time password

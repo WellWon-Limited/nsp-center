@@ -338,6 +338,16 @@ export async function siteRoute(ctx, req, res, path, url) {
   const user = await staffUser(req);
   if (!user) { send(res, 401, { error: 'Войдите в управление сайтом.' }); return true; }
 
+  // Full built data for staff previews; never fetch rendered customer HTML.
+  if(path==='/api/admin/preview-data'){
+    if(method!=='GET'){send(res,405,{error:'Метод не поддерживается.'});return true;}
+    const id=url.searchParams.get('product'),pagePath=url.searchParams.get('page');
+    const product=id?(ctx.cardProducts??[]).find(p=>p.id===id):null;
+    const page=pagePath?(ctx.previewPages??[]).find(p=>p.path===pagePath):null;
+    if(!product&&!page){send(res,404,{error:'Материал не найден.'});return true;}
+    send(res,200,product?{product}:{page},{'Cache-Control':'no-store'});return true;
+  }
+
   if (await orderAdminRoute(ctx, req, res, path, url, user)) return true;
   if(path==='/api/admin/categories'){
     if(method==='GET'){const state=await catalogAdminState(pool,ctx.categories,ctx.cardProducts??[]);send(res,200,{catalog:state.config,categories:state.categories,products:state.products.map(p=>({id:p.id,name:p.name,categoryPath:p.categoryPath,hidden:p.hidden,availability:p.availability}))});return true;}

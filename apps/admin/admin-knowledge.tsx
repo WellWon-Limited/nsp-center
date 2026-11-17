@@ -1,14 +1,14 @@
 import {RequiredLabel,useUnsavedProduct} from './admin-form';
-import {productPackageLabel} from './product-media.mjs';
+import {productPackageLabel} from '../../src/product-media.mjs';
 import {useEffect,useRef,useState,type FormEvent,type SetStateAction,type ReactNode} from 'react';
-import type {Product} from './content-types';
-import type {ProductKnowledge,KnowledgeSource} from './product-knowledge-types';
-import type {ProductContent} from './site';
-import {recommendationAreas,type RecommendationArea} from './recommendation-areas.mjs';
-import {ProductPicker} from './personal';
-import {factOrder} from './catalog';
-import {Icon} from './ui';
-import {data,shortName,useStore} from './store';
+import type {Product} from '../../src/content-types';
+import type {ProductKnowledge,KnowledgeSource} from '../../src/product-knowledge-types';
+import type {ProductContent} from '../../src/site';
+import {recommendationAreas,type RecommendationArea} from '../../src/recommendation-areas.mjs';
+import {ProductPicker} from '../../src/personal';
+import {factOrder} from '../../src/catalog';
+import {Icon} from '../../src/ui';
+import {data,shortName,useStore} from '../../src/store';
 import './admin-knowledge.css';
 
 type Run=(path:string,body:unknown,done:string)=>Promise<boolean>;

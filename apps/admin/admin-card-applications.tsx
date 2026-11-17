@@ -1,8 +1,8 @@
 import {AdminBackButton} from './admin-form';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
-import {type CardApplication,CardApplicationStatus} from './card-application';
-import {useStore} from './store';
-import {Icon} from './ui';
+import {type CardApplication,CardApplicationStatus} from '../../src/card-application';
+import {useStore} from '../../src/store';
+import {Icon} from '../../src/ui';
 
 type Entry=CardApplication&{accountEmail:string};
 export function CardApplicationsSection({onChange}:{onChange:()=>void}){

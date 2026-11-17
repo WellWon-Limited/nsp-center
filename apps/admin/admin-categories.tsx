@@ -1,10 +1,10 @@
-import {ADMIN_PATH} from './admin-path.mjs';
+import {ADMIN_PATH} from '../../src/admin-path.mjs';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
-import {data,shortName} from './store';
-import type {SiteSettings} from './site';
-import {initialCatalogConfig} from './catalog-categories.mjs';
+import {data,shortName} from '../../src/store';
+import type {SiteSettings} from '../../src/site';
+import {initialCatalogConfig} from '../../src/catalog-categories.mjs';
 import {RequiredLabel,RequiredHint} from './admin-form';
-import {Icon} from './ui';
+import {Icon} from '../../src/ui';
 import './admin-categories.css';
 
 type Run=(path:string,body:unknown,done:string,onError?:(message:string)=>void)=>Promise<boolean>;

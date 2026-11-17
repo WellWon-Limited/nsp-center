@@ -1,4 +1,4 @@
-import {isStaffPage} from '../src/admin-path.mjs';
+import {ADMIN_PATH,isStaffPage} from '../src/admin-path.mjs';
 import {managedCatalogPage} from './catalog-pages.mjs';
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
@@ -20,6 +20,7 @@ const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http:/
  // Only the production domain is indexable; every other host (dev stand, local) is blocked.
  const indexable=isIndexableHost(req.headers.host);if(!indexable||isStaffPage(path))res.setHeader('X-Robots-Tag',NOINDEX_HEADER);
  if(/^\/admin(\/|$)/.test(path)){res.writeHead(404,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});res.end(req.method==='HEAD'?undefined:await readFile(resolve(dist,'404/index.html')));return;}
+ if(path===ADMIN_PATH||path===ADMIN_PATH.slice(0,-1)||path===ADMIN_PATH+'index.html'){res.writeHead(302,{Location:new URL(ADMIN_PATH+url.search,process.env.ADMIN_ORIGIN||'http://127.0.0.1:5218').href,'Cache-Control':'no-store'});res.end();return;}
  if(path.startsWith('/api/')){api.proxy(req,res);return;}
  if(!indexable&&path==='/robots.txt'){res.writeHead(200,{'Content-Type':mime['.txt'],'Cache-Control':'no-cache'});res.end(req.method==='HEAD'?undefined:BLOCKED_ROBOTS);return;}
 if(content.redirects[path]){res.writeHead(308,{Location:content.redirects[path]});res.end();return;}if(!path.endsWith('/')&&!extname(path)){res.writeHead(308,{Location:path+'/'+url.search});res.end();return;}

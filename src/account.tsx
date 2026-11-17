@@ -1,7 +1,7 @@
 import {Barcode} from './discount-barcode';
 import {CardApplicationPage,CardApplicationStatus,useCardApplication} from './card-application';
 import './account.css';
-import { ConfirmDialog } from './admin';
+import { ConfirmDialog } from './confirm-dialog';
 import { useEffect, useState, type FormEvent } from 'react';
 import { data, useStore, type Account } from './store';
 import { Icon, ProductGrid } from './ui';

@@ -47,7 +47,7 @@ test('the administrator hides and returns a product over what the build says', (
 });
 
 test('site management has the switch and lists hidden products', () => {
-  const admin = read('src/admin.tsx');
+  const admin = read('apps/admin/admin.tsx');
   assert.match(admin, /'\/api\/admin\/visibility', \{ productId: p\.id, hidden: !hidden \}/);
   assert.match(admin, /Скрыть с сайта/);
   assert.match(admin, /Вернуть на сайт/);

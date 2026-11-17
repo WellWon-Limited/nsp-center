@@ -1,5 +1,4 @@
-import {ADMIN_PATH} from './admin-path.mjs';
-import './back-link-spacing.css';
+import {Header} from './site-header';
 import type { Product, Category, Article, ContentPage } from './content-types';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { data, StoreProvider, useStore } from './store';
@@ -10,41 +9,19 @@ import { Cart } from './cart';
 import { Checkout } from './checkout';
 import {CustomerOrders} from './customer-orders';
 import { Purchases } from './purchases';
-import { AdminApp } from './admin';
 import { installHomeScrollEdges } from './home-scroll-edges.mjs';
 import { installHomeReveal } from './home-reveal.mjs';
-import './home-reveal.css';
 import { BackLink, Heading, Icon, PagePath, RichContent, SiteBackdrop, useCameFrom } from './ui';
 import { ThemePage } from './theme-page';
 import { themeByPath, themes, type Theme } from './themes';
-import { NotificationsButton } from './notifications';
 import { InstallBanner, useIntakeReminders } from './pwa';
 import { AssistantChat } from './assistant';
 import { ownsBackLink } from './page-navigation.mjs';
 import { homeStoryReturn } from './home-story-navigation.mjs';
-import './editorial-covers.css';
-import './consultation.css';
-import './phone-design.css';
-import './type-floor.css';
-import './home-tablet.css';
-import { SiteSearch } from './site-search';
-import './site-header.css';
-import './catalog-layout.css';
-import './page-spacing.css';
-import './empty-messages.css';
-import './phone-current.css';
-import './typography.css';
-import './home-desktop.css';
-import './typography-prototype.css';
-import './content-type-scale.css';
-import './responsive-desktop.css';
 export type PageData={theme?:Theme;productThemes?:Theme[];product?:Product;category?:Category;article?:Article;page?:ContentPage;homeHtml?:string;homeReviewsHtml?:string};
-export const extraRoutes=[{url:'/consultation/',title:'Консультация'},{url:'/health/',title:'Моё здоровье'},{url:'/profile/',title:'Профиль'},{url:'/cart/',title:'Корзина'},{url:'/checkout/',title:'Оформление заказа'},{url:'/profile/purchases/',title:'Мои покупки'},{url:'/profile/orders/',title:'Мои заказы'},{url:ADMIN_PATH,title:'Управление сайтом'},{url:'/design-system/',title:'Дизайн-система NSP'},...themes.map(theme=>({url:theme.path,title:theme.title}))];
+export const extraRoutes=[{url:'/consultation/',title:'Консультация'},{url:'/health/',title:'Моё здоровье'},{url:'/profile/',title:'Профиль'},{url:'/cart/',title:'Корзина'},{url:'/checkout/',title:'Оформление заказа'},{url:'/profile/purchases/',title:'Мои покупки'},{url:'/profile/orders/',title:'Мои заказы'},{url:'/design-system/',title:'Дизайн-система NSP'},...themes.map(theme=>({url:theme.path,title:theme.title}))];
 export function normalizeUrl(value:string){const u=new URL(value,'http://nsp.local');return u.pathname.replace(/\/{2,}/g,'/').replace(/([^/])$/,'$1/')+u.search;}
 export function metadata(url:string){const u=new URL(url,'http://nsp.local');const route=data.routes.find(r=>r.url===u.pathname+u.search)||data.routes.find(r=>r.path===u.pathname);const extra=extraRoutes.find(r=>r.url===u.pathname);const product=data.products.find(p=>p.path===u.pathname);const article=data.articles.find(a=>a.path===u.pathname);const page=data.pages.find(p=>p.path===u.pathname);const theme=themeByPath(u.pathname);return {title:route?.title||extra?.title||article?.title||product?.name||'Страница не найдена',description:theme?.description||article?.description||page?.description|| (product?`${product.name}. Цена, наличие, состав, применение и сертификаты в NSP Center.`:'NSP Center — натуральные продукты, витамины и уход. Каталог, составы, статьи и информация о доставке.'),product,article};}
-function Header({path}:{path:string}){const {count,ready,state:{signedIn}}=useStore();
- useLayoutEffect(()=>{const header=document.querySelector<HTMLElement>('.site-header');if(!header)return;const fit=()=>document.documentElement.style.setProperty('--site-header-height',`${header.getBoundingClientRect().height}px`);fit();const observer=new ResizeObserver(fit);observer.observe(header);return()=>observer.disconnect();},[]);
- useLayoutEffect(()=>{if(!ready)return;const value=String(count);document.documentElement.dataset.cartCount=value;document.documentElement.style.setProperty('--header-cart-count',JSON.stringify(value));try{const keep=signedIn?localStorage:sessionStorage;keep.setItem('nsp-center:cart-count',value);(signedIn?sessionStorage:localStorage).removeItem('nsp-center:cart-count');}catch{/* in-memory count still works */}},[count,ready,signedIn]);const [activePanel,setActivePanel]=useState<'menu'|'notifications'|null>(null);const menu=activePanel==='menu'; const links=[['/catalog/','Каталог'],['/health/','План'],['/blog/','Журнал'],['/company/','О компании'],['/delivery/','Доставка'],['/payments/','Оплата'],['/company/reviews/','Отзывы'],['/contacts/','Контакты']];const activeLink=links.filter(([href])=>path.startsWith(href)).sort((a,b)=>b[0].length-a[0].length)[0]?.[0];return <header className="site-header site-header--shared" data-ds-id="site-header"><div className="header-inner"><a className="brand" href="/" aria-label="NSP Center — главная"><span className="brand-mark"><img src="/icons/icon.svg" alt="Логотип NSP" width="48" height="48"/></span><span>NSP<span className="brand-light"> Center</span></span></a><nav className="desktop-nav" aria-label="Основное меню">{links.map(([href,label])=><a key={href} className={href===activeLink?'active':''} aria-current={href===activeLink?'page':undefined} href={href}>{label}</a>)}</nav><SiteSearch/><div className="header-actions"><a className="desktop-contact" href="/consultation/">Есть вопрос?</a><NotificationsButton open={activePanel==='notifications'} onOpenChange={open=>setActivePanel(open?'notifications':null)}/><a className="icon-btn cart-link" href="/cart/" aria-label={`Корзина: ${count} товаров`}><Icon name="bag"/><span className="cart-count cart-count--bag" aria-hidden="true"/></a><a className="icon-btn desktop-only" href="/profile/" aria-label="Профиль"><Icon name="user-separated"/></a><button className="icon-btn menu-toggle" aria-label={menu?'Закрыть меню':'Открыть меню'} aria-expanded={menu} aria-controls="mobile-menu" onClick={()=>setActivePanel(current=>current==='menu'?null:'menu')}><Icon name={menu?'close':'menu'}/></button></div></div>{menu&&<nav id="mobile-menu" className="mobile-menu panel" aria-label="Меню сайта"><SiteSearch menu/>{[...links,['/shares/','Акции'],['/company/faq/','Частые вопросы']].map(([href,label])=><a href={href} key={href}>{label}<Icon name="chevron" size={17}/></a>)}</nav>}</header>;}
 function Footer({phone}:{phone:boolean}){return <footer className={`site-footer${phone?'':' site-footer--computer-only'}`} data-ds-id="site-footer"><div className="footer-main"><div className="footer-top"><div className="footer-brand"><div className="brand"><span className="brand-mark"><img src="/icons/icon.svg" alt="Логотип NSP" width="48" height="48"/></span><span>NSP Center</span></div><p>Внимание к себе.<br/>Каждый день.</p><a href="tel:+79626854838">{data.site.phones[0]}</a><a href={`mailto:${data.site.emails[0]}`}>{data.site.emails[0]}</a></div><div><h3>Продукты</h3>{data.categories.filter(c=>c.parent==='/catalog/').map(c=><a href={c.path} key={c.id}>{c.name}</a>)}<a href="/catalog/">Весь каталог</a></div><div><h3>Информация</h3>{[['/company/','О компании'],['/delivery/','Доставка'],['/payments/','Оплата'],['/company/faq/','Частые вопросы'],['/contacts/','Контакты'],['/shares/','Акции']].map(([p,t])=><a href={p} key={p}>{t}</a>)}</div><div><h3>Узнать больше</h3>{[['/blog/','Журнал'],['/company/sertifikaty/','Сертификаты'],['/company/reviews/','Отзывы'],['/photo/','Фотогалерея'],['/video/','Видеогалерея'],['/health-marafon/','Марафон здоровья'],['/diagnostic-test/','Тест-рекомендации']].map(([p,t])=><a href={p} key={p}>{t}</a>)}</div></div><div className="footer-address"><Icon name="truck" size={19}/><p>{data.site.address}</p></div></div><div className="footer-legal"><div className="footer-legal-inner"><div className="footer-bottom"><span>© NSP Center · Independent distributor Shkola Oleg</span><a href="/company/consent/">Конфиденциальность</a><a href="/company/privacy-policy/">Публичная оферта</a><a href="/company/refund/">Условия возврата</a></div><p className="fine-print">БАД не является лекарственным средством.</p></div></div></footer>;}
 function BottomNav({path}:{path:string}){const items=[['/','home','Главная'],['/catalog/','grid','Каталог'],['/consultation/','message','Консультация'],['/health/','pulse','План'],['/profile/','user-separated','Профиль']];return <nav className="bottom-nav" aria-label="Навигация приложения" data-ds-id="mobile-navigation">{items.map(([href,icon,label])=>{const active=href==='/'?path==='/':path.startsWith(href)||(href==='/health/'&&path==='/health-marafon/');return <a key={href} href={href} aria-label={label} aria-current={active?'page':undefined}><span><Icon name={icon} size={26}/></span></a>;})}</nav>;}
 // «Есть вопрос?»: the chat alone, wide and in the middle of the page (owner, 2026-11-13: the direct contacts moved to
@@ -78,4 +55,4 @@ const PHONE_NO_FOOTER=new Set(['/consultation/','/profile/','/personal/profile/'
 export const footerOnPhone=(path:string)=>!PHONE_NO_FOOTER.has(path);
 // The page colour beyond the bottom edge of every page (src/home-scroll-edges.mjs), installed once for the whole site.
 function ScrollEdges(){useEffect(()=>installHomeScrollEdges(window,document),[]);useEffect(()=>installHomeReveal(window,document),[]);return null;}
-export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;if(path===ADMIN_PATH)return <StoreProvider><AdminApp/></StoreProvider>;const accountRoute=['/cart/','/personal/basket/','/profile/','/personal/profile/'].includes(path);return <StoreProvider><ScrollEdges/><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><SiteBackdrop/><Header path={path}/><main id="main" className={`site-main${accountRoute?' site-main--account-route':''}`}><PagePath.Provider value={path}><PageBack url={url}/><RouteView url={url} pageData={pageData}/></PagePath.Provider></main><Footer phone={footerOnPhone(path)}/><BottomNav path={path}/></StoreProvider>;}
+export function App({url,pageData}:{url:string;pageData?:PageData}){const path=new URL(url,'http://nsp.local').pathname;const accountRoute=['/cart/','/personal/basket/','/profile/','/personal/profile/'].includes(path);return <StoreProvider><ScrollEdges/><Reminders/><InstallBanner/><a className="skip-link" href="#main">К содержимому</a><SiteBackdrop/><Header path={path}/><main id="main" className={`site-main${accountRoute?' site-main--account-route':''}`}><PagePath.Provider value={path}><PageBack url={url}/><RouteView url={url} pageData={pageData}/></PagePath.Provider></main><Footer phone={footerOnPhone(path)}/><BottomNav path={path}/></StoreProvider>;}

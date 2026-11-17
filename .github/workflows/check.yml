@@ -19,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: docker build --target api -t nsp-api:ci .
+      - run: docker build --target admin -t nsp-admin:ci .
       - run: docker build --target web -t nsp-center:ci .
       - name: Smoke-test the image
         run: |
@@ -32,3 +33,8 @@ jobs:
           curl -fsS http://127.0.0.1:4173/api/health
           curl -fsS -o /dev/null http://127.0.0.1:4173/sitemap.xml
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/api/auth/me)" = 503
+          docker run -d --name nsp-admin --network nsp-check -e API_ORIGIN=http://nsp-api:8701 -p 4174:4174 nsp-admin:ci
+          for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:4174/ && break; sleep 1; done
+          docker stop nsp
+          curl -fsS http://127.0.0.1:4174/ | grep 'Управление сайтом'
+          curl -fsS http://127.0.0.1:4174/api/health

@@ -15,7 +15,7 @@ export async function createApi({content,env=process.env,accountsOptions={}}){
     productBase:id=>productBase(content.products.find(p=>p.id===id)),
     cardProducts:content.products,buildRate:content.pricing.rubPerUnit,
     categories:content.categories,knowledgeThemes:content.themes,cbr:env.CBR_ENABLED!=='0',
-    articlePaths:content.articles.map(a=>a.path),
+    articlePaths:content.articles.map(a=>a.path),previewPages:content.pages,
     lectureCorpusFile:env.AI_CORPUS_FILE||join(homedir(),'.local/state/nsp-center/lecture-corpus.jsonl'),
     ...accountsOptions});
   const ai=createAi({content,env,pool:accounts.enabled?accounts.pool:null});

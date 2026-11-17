@@ -20,3 +20,5 @@ references/nsp-center.ru/__pycache__/
 references/nsp-center.ru/.venv/
 
 /packages/catalog/generated/
+
+/dist-admin/

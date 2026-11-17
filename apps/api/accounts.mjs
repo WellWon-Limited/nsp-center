@@ -156,7 +156,7 @@ const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, 
  * (name, description, properties, certificates, photo), shown in the administrator's editor next to the changes.
  * The schema is created on the first request; a database that is down gives 503 and is retried on the next request.
  */
-export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, cbr = true, categories = [], articlePaths = [], knowledgeThemes = [], lectureCorpusFile } = {}) {
+export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, cbr = true, categories = [], articlePaths = [], previewPages = [], knowledgeThemes = [], lectureCorpusFile } = {}) {
   const productPaths = new Map(cardProducts.filter(p => p?.path).map(p => [p.id, p.path]));
   if (!databaseUrl && !givenPool) return { enabled: false, handle: (req, res) => send(res, 503, { error: 'Сервер аккаунтов не подключён.' }), close: async () => {} };
   const pool = givenPool ?? new (await import('pg')).default.Pool({ connectionString: databaseUrl, max: 5 });
@@ -226,7 +226,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
     const method = req.method;
     if (method !== 'GET' && !sameOrigin(req, path === '/api/admin/upload')) return send(res, 403, { error: 'Запрос отклонён.' });
     if (path.startsWith('/api/admin/') && await staffAuth(req, res, path)) return;
-    if (await siteRoute({ pool, send, readJson, sessionUser, staffUser, hashPassword, productIds, productBase, cardProducts, buildRate, cbr, categories, productPaths, articlePaths: new Set(articlePaths) }, req, res, path, url)) return;
+    if (await siteRoute({ pool, send, readJson, sessionUser, staffUser, hashPassword, productIds, productBase, cardProducts, buildRate, cbr, categories, previewPages, productPaths, articlePaths: new Set(articlePaths) }, req, res, path, url)) return;
     if (path === '/api/account/orders') {
       const user = await sessionUser(req);
       if (!user) return send(res, 401, { error: 'Вы не вошли в аккаунт.' });

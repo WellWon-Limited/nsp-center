@@ -11,7 +11,7 @@
     "dev": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/*.test.mjs",
-    "build": "npm run content && npm run typecheck && vite build && node scripts/prerender.mjs && node scripts/pwa.mjs",
+    "build": "npm run build:web && npm run build:admin",
     "preview": "node scripts/serve.mjs",
     "check": "npm run build && npm test && node scripts/check-content.mjs",
     "check:canvas": "node scripts/check-canvas.mjs",
@@ -19,7 +19,11 @@
     "db:seed": "node scripts/seed-test-accounts.mjs",
     "admin:create": "node scripts/create-admin.mjs",
     "api": "node apps/api/server.mjs",
-    "content:catalog": "node scripts/import-content.mjs"
+    "content:catalog": "node scripts/import-content.mjs",
+    "build:web": "npm run content && npm run typecheck && vite build && node scripts/prerender.mjs && node scripts/pwa.mjs",
+    "build:admin": "vite build --config apps/admin/vite.config.ts",
+    "admin": "node apps/admin/server.mjs",
+    "dev:admin": "vite --config apps/admin/vite.config.ts"
   },
   "dependencies": {
     "@cdek-it/widget": "^4.1.0",

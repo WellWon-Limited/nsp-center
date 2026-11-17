@@ -26,6 +26,18 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -q -O /dev/null http://127.0.0.1:8701/api/health || exit 1
 CMD ["node", "apps/api/server.mjs"]
 
+FROM runtime AS admin
+ENV ADMIN_HOST=0.0.0.0 ADMIN_PORT=4174
+COPY --from=build /app/dist-admin ./dist-admin
+COPY --from=build /app/apps/admin/server.mjs ./apps/admin/server.mjs
+COPY --from=build /app/scripts/api-client.mjs ./scripts/api-client.mjs
+COPY --from=build /app/packages/domain ./packages/domain
+USER node
+EXPOSE 4174
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD wget -q -O /dev/null http://127.0.0.1:4174/ || exit 1
+CMD ["node", "apps/admin/server.mjs"]
+
 FROM runtime AS web
 ENV HOST=0.0.0.0 PORT=4173
 COPY --from=build /app/dist ./dist

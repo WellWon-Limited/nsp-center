@@ -466,7 +466,7 @@ test('a card\'s own content replaces only what is set and can be taken back', ()
 });
 
 test('admin products: a section as on the site and a search by name or article within it', () => {
-  const code = readFileSync(new URL('../src/admin.tsx', import.meta.url), 'utf8');
+  const code = readFileSync(new URL('../apps/admin/admin.tsx', import.meta.url), 'utf8');
   assert.ok(code.includes("return visit('/catalog/');"));
   assert.match(code, /<option value="">Все разделы<\/option>/);
   assert.match(code, /data\.products\.filter\(p => \(!inSection \|\| inSection\.has\(p\.path\)\) && words\.every\(w => `\$\{p\.name\} \$\{p\.article \?\? ''\}`\.toLowerCase\(\)\.includes\(w\)\)\)/);
