@@ -50,6 +50,9 @@
   margin-top: var(--space-24);
 }
 
+.auth[data-auth-mode='register'] .auth-form { margin-top: var(--space-8); }
+.auth[data-auth-mode='register'] .auth-form > .auth-hint:first-child { margin-top: 0; }
+
 .auth-field label {
   display: block;
   margin-bottom: var(--space-6);
@@ -223,6 +226,8 @@
   flex-shrink: 0;
   margin-top: 2px;
 }
+
+.auth-form > .auth-notice { margin-top: 0; }
 
 .auth-guest {
   display: flex;

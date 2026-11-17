@@ -96,6 +96,7 @@ export function AuthScreen() {
       <form className="auth-form" onSubmit={signIn}>
         <Field label="Email">{id => <EmailInput id={id} autoComplete="username" value={login} onChange={setLogin} />}</Field>
         <Field label="Пароль">{id => <PasswordInput id={id} autoComplete="current-password" value={password} onChange={setPassword} />}</Field>
+        {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
         <button className="btn btn--primary auth-submit" disabled={!accounts || busy || !login.trim() || password.length < 8}>{busy ? 'Входим…' : 'Войти'}</button>
         <button type="button" className="auth-link auth-forgot" onClick={() => setNotice(true)}>Забыли пароль?</button>
       </form>
@@ -116,7 +117,7 @@ export function AuthScreen() {
         <button className="btn btn--primary auth-submit" disabled={!accounts || busy || !form.consent || Boolean(passwordError)}>{busy ? 'Создаём…' : 'Создать аккаунт'}</button>
       </form>
     </>}
-    {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
+    {mode === 'register' && error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
     {notice && <div className="auth-notice" role="status"><Icon name="clock" size={20} /><p><strong>Скоро заработает.</strong> Восстановление пароля появится позже.</p></div>}
     <a className="auth-guest" href="/">Продолжить без входа <Icon name="chevron" size={16} /></a>
   </section>;
