@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {startTestPostgres} from './database-helper.mjs';
 import assert from 'node:assert/strict';
 import {mkdtemp, rm, stat, readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
@@ -13,12 +14,10 @@ import {saveCheckout} from '../apps/api/order-checkout.mjs';
 import {assertDatabaseReady} from '../apps/api/database/ready.mjs';
 
 test('database migrations, constraints and restricted application preserve orders', {skip:process.getuid?.()===0&&'Postgres does not run as root'}, async t=>{
- const {default:EmbeddedPostgres}=await import('embedded-postgres');
  const dir=await mkdtemp(join(tmpdir(),'nsp-integrity-'));
  const port=20000+Math.floor(Math.random()*20000);
- const database=new EmbeddedPostgres({databaseDir:join(dir,'db'),port,user:'test',password:'test',persistent:false,autoRehydrateSymlinks:true,onLog:()=>{},onError:()=>{}});
+ const database=await startTestPostgres(join(dir,'db'),port,'integrity');
  let owner,app;
- await database.initialise();await database.start();await database.createDatabase('integrity');
  t.after(async()=>{await app?.end();await owner?.end();await database.stop();await rm(dir,{recursive:true,force:true});});
  const url=`postgres://test:test@127.0.0.1:${port}/integrity`;
  owner=new pg.Pool({connectionString:url});
