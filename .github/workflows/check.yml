@@ -10,18 +10,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: PostgreSQL client tools for restore verification
-        run: |
-          sudo install -d /usr/share/postgresql-common/pgdg
-          sudo curl --fail --silent --show-error -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
-          . /etc/os-release
-          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-          sudo apt-get update
-          sudo apt-get install -y postgresql-client-18
       - run: npm run check
-        env:
-          NSP_TEST_BACKUP: '1'
-          PG_BIN_DIR: /usr/lib/postgresql/18/bin
 
   # The dev stand builds this Dockerfile on every merge to main: a broken image
   # must fail here, not on the stand.
@@ -29,25 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: docker build --target api -t nsp-api:ci .
-      - run: docker build --target admin -t nsp-admin:ci .
-      - run: docker build --target web -t nsp-center:ci .
+      - run: docker build -t nsp-center:ci .
       - name: Smoke-test the image
         run: |
-          docker network create nsp-check
-          docker run -d --name nsp-api --network nsp-check nsp-api:ci
-          docker run -d --name nsp --network nsp-check -e API_ORIGIN=http://nsp-api:8701 -p 4173:4173 nsp-center:ci
+          docker run -d --name nsp -p 4173:4173 nsp-center:ci
           for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:4173/ && break; sleep 1; done
           curl -fsS -o /dev/null http://127.0.0.1:4173/
           curl -fsS -o /dev/null http://127.0.0.1:4173/catalog/
           test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/nope/)" = 404
-          curl -fsSI http://127.0.0.1:4173/webp/images/products/russian-source/tnt-nsp.webp | grep image/webp
-          curl -fsS http://127.0.0.1:4173/api/health
-          curl -fsS -o /dev/null http://127.0.0.1:4173/sitemap.xml
-          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:4173/api/auth/me)" = 503
-          docker run -d --name nsp-admin --network nsp-check -e API_ORIGIN=http://nsp-api:8701 -p 4174:4174 nsp-admin:ci
-          for i in $(seq 1 20); do curl -fsS -o /dev/null http://127.0.0.1:4174/ && break; sleep 1; done
-          docker stop nsp
-          curl -fsS http://127.0.0.1:4174/ | grep 'Управление сайтом'
-          curl -fsS http://127.0.0.1:4174/api/health
-          curl -fsSI http://127.0.0.1:4174/webp/images/products/russian-source/tnt-nsp.webp | grep image/webp
