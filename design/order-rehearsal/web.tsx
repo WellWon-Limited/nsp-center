@@ -1,7 +1,7 @@
 import '../../packages/presentation/styles';
 import {finishSplash} from '../../packages/presentation/pwa';
 import {createRoot} from 'react-dom/client';
-import {App} from '../../apps/web/src/app';
+import {App} from '../../apps/web/src/App';
 import {StoreProvider} from '../../packages/presentation/store';
 import {OrderConfirmation,type ConfirmedOrder} from '../../apps/web/src/order-confirmation';
 import {SiteBackdrop} from '../../packages/presentation/ui';
