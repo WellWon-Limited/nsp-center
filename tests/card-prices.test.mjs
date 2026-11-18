@@ -23,14 +23,14 @@ test('card prices follow the administrator: own rubles, own units × rate, list 
 });
 
 test('the built site carries no card prices: bundle data, page data and scripts', () => {
-  const summary = JSON.parse(readFileSync('src/generated/summary.json', 'utf8'));
+  const summary = JSON.parse(readFileSync('packages/catalog/generated/summary.json', 'utf8'));
   assert.ok(summary.products.every(p => p.prices.partner === null && p.prices.units?.partner === undefined && !('price_base' in p)), 'summary.json');
-  const chat = JSON.parse(readFileSync('src/generated/chat-index.json', 'utf8'));
+  const chat = JSON.parse(readFileSync('packages/catalog/generated/chat-index.json', 'utf8'));
   assert.ok(chat.products.every(p => p.partner === null), 'chat-index.json: the chat gets the card price from the site, not its own index');
   const files = [];
   const walk = dir => { for (const f of readdirSync(dir)) { const path = join(dir, f); if (statSync(path).isDirectory()) walk(path); else if (/\.(html|js)$/.test(f)) files.push(path); } };
   walk('dist');
-  const content = JSON.parse(readFileSync('src/generated/content.json', 'utf8'));
+  const content = JSON.parse(readFileSync('packages/catalog/generated/content.json', 'utf8'));
   const sample = content.products.find(p => p.prices.partner && p.prices.partner !== p.prices.retail);
   for (const file of files) {
     const text = readFileSync(file, 'utf8');

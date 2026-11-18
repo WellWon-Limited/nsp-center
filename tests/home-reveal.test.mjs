@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { installHomeReveal } from '../src/home-reveal.mjs';
+import { installHomeReveal } from '../apps/web/src/home-reveal.mjs';
 
 // Entrances on scroll follow data-reveal-design (set by index.html).
 test('home blocks get entrances only when a variant is chosen', () => {

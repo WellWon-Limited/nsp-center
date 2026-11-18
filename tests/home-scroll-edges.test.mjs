@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { installHomeScrollEdges } from '../src/home-scroll-edges.mjs';
+import { installHomeScrollEdges } from '../packages/presentation/home-scroll-edges.mjs';
 
 function browser(design = 'd') {
  const listeners = new Map(), frames = new Map();
@@ -70,6 +70,6 @@ test('site pages keep the body transparent so the shared header surface paints t
  // Safari (iOS 26) fills the area above the page with body's background-color when it has one; html's colour then
  // follows the scroll edge (white at the top, the page colour at the bottom).
  const { readFileSync } = await import('node:fs');
- const css = readFileSync(new URL('../src/catalog-design-variants.css', import.meta.url), 'utf8');
+ const css = readFileSync(new URL('../packages/presentation/desktop-surface.css', import.meta.url), 'utf8');
  assert.match(css, /html\[data-catalog-design\]:root body:has\(\.site-header\):not\(:has\(\.home-first-screen\)\)\{background:linear-gradient\(var\(--color-bg\),var\(--color-bg\)\) transparent\}/);
 });

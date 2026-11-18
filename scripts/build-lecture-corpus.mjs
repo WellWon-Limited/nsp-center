@@ -9,7 +9,7 @@ import { join, basename, dirname } from 'node:path';
 
 const root = process.env.NSP_LECTURES_DIR || join(homedir(), '.local/state/nsp-lectures/raw');
 const out = process.env.NSP_CORPUS_OUT || join(homedir(), '.local/state/nsp-center/lecture-corpus.jsonl');
-const content = JSON.parse(readFileSync(new URL('../src/generated/content.json', import.meta.url), 'utf8'));
+const content = JSON.parse(readFileSync(new URL('../packages/catalog/generated/content.json', import.meta.url), 'utf8'));
 const riskyTitle = /(язв|covid|ковид|орви|аутоиммун|лечеб|лечени|болезн|заболеван|синдром|варикоз|гиперактив|диабет|онко|рак\b|гастрит|артрит|гипертон|инфекц|пульмонолог)/iu;
 const names = content.products.map(p => ({ id: p.id, name: p.name.replace(/\s*\([^)]*\)/g, '').trim().toLowerCase() })).filter(p => p.name.length >= 5);
 

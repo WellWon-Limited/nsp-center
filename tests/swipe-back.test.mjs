@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { isBackSwipe, standaloneIos } from '../src/swipe-back.mjs';
+import { isBackSwipe, standaloneIos } from '../apps/web/src/swipe-back.mjs';
 
 test('a back swipe starts at the left edge and goes right: a third of the screen, or a short quick flick', () => {
   const W = 390;
@@ -14,7 +14,7 @@ test('a back swipe starts at the left edge and goes right: a third of the screen
 });
 
 test('the direction is decided after the first 10 px', async () => {
-  const { swipeDirection } = await import('../src/swipe-back.mjs');
+  const { swipeDirection } = await import('../apps/web/src/swipe-back.mjs');
   assert.equal(swipeDirection(4, 3), null);
   assert.equal(swipeDirection(14, 4), true);
   assert.equal(swipeDirection(6, 12), false, 'scrolling stays scrolling');
@@ -22,7 +22,7 @@ test('the direction is decided after the first 10 px', async () => {
 });
 
 test('fields, carousels that can scroll back, and open menus or dialogs keep their touches', async () => {
-  const { ownsTouch } = await import('../src/swipe-back.mjs');
+  const { ownsTouch } = await import('../apps/web/src/swipe-back.mjs');
   const win = { getComputedStyle: el => ({ overflowX: el.overflowX ?? 'visible' }) };
   const body = { nodeType: 1 };
   const el = (props, parent = body) => ({ nodeType: 1, parentElement: parent, scrollLeft: 0, scrollWidth: 100, clientWidth: 100, matches: () => false, ...props });
@@ -46,7 +46,7 @@ test('only the iPhone home-screen app gets the gesture (browsers and Android hav
 });
 
 test('the swipe works only on a screen with a back button, and does what that button does', async () => {
-  const { backButton, BACK_BUTTONS } = await import('../src/swipe-back.mjs');
+  const { backButton, BACK_BUTTONS } = await import('../apps/web/src/swipe-back.mjs');
   const shown = { getBoundingClientRect: () => ({ width: 80, height: 32 }) };
   const hidden = { getBoundingClientRect: () => ({ width: 0, height: 0 }) };
   assert.equal(backButton({ querySelectorAll: sel => (sel === '.back-action' ? [] : [hidden, shown]) }), shown);
@@ -57,13 +57,13 @@ test('the swipe works only on a screen with a back button, and does what that bu
   assert.match(BACK_BUTTONS, /\.back-link/);
   assert.match(BACK_BUTTONS, /\.catalog-mobile-back/);
   const { readFileSync } = await import('node:fs');
-  const code = readFileSync(new URL('../src/swipe-back.mjs', import.meta.url), 'utf8');
+  const code = readFileSync(new URL('../apps/web/src/swipe-back.mjs', import.meta.url), 'utf8');
   assert.match(code, /button\.click\(\);/);
   assert.doesNotMatch(code, /history\.back\(\)/);
 });
 
 test('a disabled or hidden return control cannot capture the edge swipe', async()=>{
- const {backButton,STEP_BACK}=await import('../src/swipe-back.mjs');
+ const {backButton,STEP_BACK}=await import('../apps/web/src/swipe-back.mjs');
  const visible={getBoundingClientRect:()=>({width:80,height:44})};
  const disabled={...visible,disabled:true};
  const inert={...visible,closest:()=>({})};
@@ -72,7 +72,7 @@ test('a disabled or hidden return control cannot capture the edge swipe', async(
 });
 
 test('a completed app gesture returns exactly once; scroll, cancellation, notifications and cleanup stay safe',async()=>{
- const {installSwipeBack,OVERLAYS,STEP_BACK}=await import('../src/swipe-back.mjs');
+ const {installSwipeBack,OVERLAYS,STEP_BACK}=await import('../apps/web/src/swipe-back.mjs');
  const handlers=new Map(),settings=new Map();let clicks=0,prevented=0,overlay=false;
  const body={nodeType:1},target={nodeType:1,parentElement:body,matches:()=>false,scrollLeft:0,scrollWidth:100,clientWidth:100};
  const back={getBoundingClientRect:()=>({width:80,height:44}),click:()=>{assert.ok(prevented>clicks,'suppress the synthesized tap before activating Back');clicks++;}};

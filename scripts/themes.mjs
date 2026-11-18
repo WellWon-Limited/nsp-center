@@ -1,9 +1,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 
-// Thematic sales pages (/temy/<slug>/): one JSON file per theme in src/theme-data/.
+// Thematic sales pages (/temy/<slug>/): one JSON file per theme in packages/catalog/source/theme-data/.
 // The import puts the full themes into content.json (prerender) and a light index into
 // the browser summary, so a page ships only its own theme text (via its page data).
-export const themeDirUrl = new URL('../src/theme-data/', import.meta.url);
+export const themeDirUrl = new URL('../packages/catalog/source/theme-data/', import.meta.url);
 const required = ['slug', 'path', 'title', 'description', 'h1', 'lead', 'mainProductId', 'pairs', 'sections', 'faq', 'sources', 'updated'];
 
 export function readThemes() {

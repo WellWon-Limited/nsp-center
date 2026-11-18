@@ -1,0 +1,13 @@
+/* Entrances of the home page's blocks as they scroll into view (apps/web/src/home-reveal.mjs); on by default (the chosen «cards one
+   after another», slowed down so it reads calmly): the block's heading rises first, then
+   its cards one by one, each rising like the words of the hero heading. */
+@media (prefers-reduced-motion: no-preference){
+/* In the manner of the home title's words (hero-heading.css, owner 2026-11-12): each piece rises 12 px and fades in over
+   1.5 s on the same easing, the pieces following one another every 160 ms. */
+html.reveal-ready[data-reveal-design="2"] .reveal{opacity:0;transform:translateY(12px);transition:opacity 1.5s cubic-bezier(.2,.65,.2,1),transform 1.5s cubic-bezier(.2,.65,.2,1)}
+html.reveal-ready[data-reveal-design="2"] .reveal.is-in{opacity:1;transform:none}
+html.reveal-ready[data-reveal-design="2"] .reveal .reveal-item{opacity:0;transform:translateY(12px);transition:opacity 1.5s cubic-bezier(.2,.65,.2,1),transform 1.5s cubic-bezier(.2,.65,.2,1);transition-delay:calc(var(--reveal-i,0) * 160ms + 160ms)}
+html.reveal-ready[data-reveal-design="2"] .reveal .reveal-item.is-in{opacity:1;transform:none}
+}
+/* A printed page shows everything, whether it was scrolled to or not. */
+@media print{html.reveal-ready .reveal,html.reveal-ready .reveal .reveal-item{opacity:1!important;transform:none!important;filter:none!important}}

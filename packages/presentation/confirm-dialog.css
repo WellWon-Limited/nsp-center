@@ -1,0 +1,21 @@
+
+.admin-editor-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-8); }
+
+
+/* Confirmation window (deleting a review): centred over a dimmed page. */
+.admin-dialog-backdrop { position: fixed; inset: 0; z-index: calc(var(--layer-overlay) + 30); display: grid; place-items: center; padding: var(--space-18); background: rgb(8 24 19 / .55); }
+
+
+.admin-dialog { display: grid; gap: var(--space-12); width: min(460px, 100%); padding: var(--space-22); border-radius: var(--radius-20); background: var(--color-white); box-shadow: 0 24px 60px -20px rgb(8 24 19 / .5); }
+
+
+.admin-dialog h2 { font-size: var(--text-22); }
+
+
+.admin-dialog blockquote { margin: 0; padding: var(--space-10) var(--space-14); border-left: 3px solid var(--color-ink-line); color: var(--color-ink); font-size: var(--text-14); max-height: 160px; overflow: auto; }
+
+
+.admin-dialog .btn--danger { border: 0; background: var(--color-danger); color: var(--color-white); }
+
+
+.admin-dialog .btn--secondary { border: 1.5px solid var(--color-ink-line); background: var(--color-white); }

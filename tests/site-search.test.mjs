@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { searchSite } from '../src/site-search-match.mjs';
+import { searchSite } from '../packages/presentation/site-search-match.mjs';
 
 const entries=[
  {title:'Магний Хелат',path:'/product/magnesium/',kind:'Продукт',keywords:'1602 минеральный комплекс'},

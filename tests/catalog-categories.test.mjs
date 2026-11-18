@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {initialCatalogConfig,changeCatalogConfig,resolveCatalog,applyCatalogConfig,visibleCategories,readCatalogConfig} from '../src/catalog-categories.mjs';
+import {initialCatalogConfig,changeCatalogConfig,resolveCatalog,applyCatalogConfig,visibleCategories,readCatalogConfig} from '../packages/presentation/catalog-categories.mjs';
 const root='/catalog/',a=root+'a/',b=root+'b/',facet=root+'facet/';
 const category=(path,name,products=[],parent=root)=>({id:path,path,url:path,name,parent,products,children:[],pagination:[],breadcrumbs:[],description:'',html:''});
 const categories=[category(root,'Все продукты',[],null),category(a,'Витамины',['/product/one/','/product/hidden/']),category(b,'Пустая'),category(facet,'По назначению',['/product/one/'])];

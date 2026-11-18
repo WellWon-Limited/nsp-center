@@ -1,0 +1,46 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Метки товара — варианты</title><style>*{box-sizing:border-box}html,body{height:100%;margin:0;background:#eaf3f1;color:#1d3a36;font:13px Manrope,Arial,sans-serif}.preview-bar{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;gap:12px;background:#f4f8f6;border-bottom:1px solid #d5e3de}.preview-bar small{color:#4f6d68}.preview-bar strong{white-space:nowrap}iframe{display:block;width:100%;height:calc(100% - 42px);border:0;visibility:hidden}iframe.ready{visibility:visible}</style><div class="preview-bar"><strong id="label"></strong><small>Пример оформления · скидка не применяется к заказу</small></div><iframe title="Алоэ — варианты скидки и хита продаж" src="/product-detail-selected.html?badge-base=20261113-v15"></iframe><script>
+const option=1;const rate=Number(new URLSearchParams(location.search).get('discount'));const discountRate=[5,10,15,30].includes(rate)?rate:10;
+document.querySelector('#label').textContent='Вариант 1 · Скидка '+discountRate+'% и Хит продаж';document.title='Алоэ · −'+discountRate+'% и Хит продаж';
+const frame=document.querySelector('iframe');
+frame.addEventListener('load',async()=>{
+ const shell=frame.contentDocument,inner=shell?.querySelector('iframe');if(!inner)return;
+ await new Promise(resolve=>{const poll=()=>{const doc=inner.contentDocument;if(inner.classList.contains('ready')&&doc?.querySelector('.detail-price-group')&&doc?.querySelector('.detail-gallery-stage'))resolve();else setTimeout(poll,50)};poll()});
+ const d=inner.contentDocument,photo=d.querySelector('.main-product-image'),info=d.querySelector('.product-purchase'),price=d.querySelector('.detail-price-group');if(!photo||!info||!price)return;
+ d.documentElement.dataset.badgeOption=String(option);
+ const original=Number(price.querySelector('strong').textContent.replace(/[^\d,.]/g,'').replace(',','.'));
+ price.querySelector('strong').textContent=new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',minimumFractionDigits:2}).format(Math.round(original*(100-discountRate))/100);
+ const old=d.createElement('del');old.className='badge-old-price';old.textContent=new Intl.NumberFormat('ru-RU',{style:'currency',currency:'RUB',maximumFractionDigits:0}).format(original);price.append(old);
+ const discount='<span class="sale-mark">−'+discountRate+'%</span>',hit='<span class="hit-mark">Хит продаж</span>';
+ const tags=d.createElement('div');tags.className='product-promo-marks';tags.setAttribute('aria-label','Скидка '+discountRate+' процентов. Хит продаж');tags.innerHTML=discount+hit;
+ if(option===3)info.prepend(tags);else if(option===5){tags.innerHTML=hit;info.querySelector('.product-title-row').after(tags);const percent=d.createElement('span');percent.className='price-discount-mark';percent.textContent='−10%';price.append(percent)}else photo.append(tags);
+ const style=d.createElement('style');style.textContent=`
+ html[data-badge-option] body #root .product-promo-marks{position:relative;display:flex;align-items:center;gap:8px;z-index:5;width:fit-content;font:700 12px/1.25 Manrope,sans-serif;letter-spacing:0}
+ html[data-badge-option] body #root .product-promo-marks>span{display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap}
+ html[data-badge-option] body #root .sale-mark{padding:9px 13px;background:#ad6338;color:#fff;border-radius:999px}
+ html[data-badge-option] body #root .hit-mark{padding:9px 13px;background:#f3f8f7;color:#1d3a36;border-radius:999px}
+ html[data-badge-option] body #root .detail-price-group{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px}
+ html[data-badge-option] body #root .badge-old-price{font:500 14px/1.45 Manrope,sans-serif;color:#5f7a75;white-space:nowrap;text-decoration-thickness:1px}
+ html[data-badge-option="1"] body #root .main-product-image .product-promo-marks{position:absolute;left:18px;top:18px}
+ html[data-badge-option="1"] body #root .hit-mark{background:#fff;border:1px solid #ffffffcc}
+ html[data-badge-option="2"] body #root .main-product-image .product-promo-marks{position:absolute;left:0;top:20px;flex-direction:column;align-items:flex-start;gap:7px}
+ html[data-badge-option="2"] body #root .sale-mark{border-radius:0 14px 14px 0;padding:12px 20px;background:#1d3a36;font-size:16px}
+ html[data-badge-option="2"] body #root .hit-mark{border-radius:0 12px 12px 0;padding:8px 14px;background:#f3dcb8}
+ html[data-badge-option="3"] body #root .product-promo-marks{margin-bottom:2px}
+ html[data-badge-option="3"] body #root .sale-mark{background:#f0dfd2;color:#854a2d;border-radius:10px;padding:7px 11px}
+ html[data-badge-option="3"] body #root .hit-mark{background:#dcebe3;color:#1f6f5c;border-radius:10px;padding:7px 11px}
+ html[data-badge-option="4"] body #root .main-product-image .product-promo-marks{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);padding:6px;border:1px solid #ffffffcc;border-radius:999px;background:#ffffff99;backdrop-filter:blur(20px);box-shadow:0 10px 26px -18px #1d3a3655}
+ html[data-badge-option="4"] body #root .sale-mark{padding:7px 12px;background:#1d3a36}
+ html[data-badge-option="4"] body #root .hit-mark{padding:7px 12px 7px 5px;background:none}
+ html[data-badge-option="5"] body #root .product-promo-marks{margin:0}
+ html[data-badge-option="5"] body #root .hit-mark{padding:0;background:none;border-radius:0;color:#4f6d68;font-weight:600}
+ html[data-badge-option="5"] body #root .hit-mark>span{color:#ad6338;font-size:16px}
+ html[data-badge-option="5"] body #root .price-discount-mark{align-self:center;padding:6px 9px;border-radius:8px;background:#dcebe3;color:#1f6f5c;font:700 12px/1.25 Manrope,sans-serif}
+ @media(max-width:639px){html[data-badge-option] body #root .product-promo-marks{gap:6px;font-size:11px}html[data-badge-option="1"] body #root .main-product-image .product-promo-marks{left:12px;top:12px}}
+ 
+ html[data-badge-option="1"] body #root .product-promo-marks{gap:8px;font-size:12px;line-height:15px}
+ html[data-badge-option="1"] body #root .product-promo-marks :is(.sale-mark,.hit-mark){height:33px;min-height:33px;padding:0 13px;border:0;border-radius:var(--radius-control);font-weight:700;line-height:15px;box-sizing:border-box}
+ html[data-badge-option="1"] body #root .product-promo-marks .sale-mark{background:var(--color-ink);color:var(--color-white)}
+ html[data-badge-option="1"] body #root .product-promo-marks .hit-mark{background:var(--color-mint);color:var(--color-ink)}
+ `;d.head.append(style);await d.fonts.ready;frame.classList.add('ready');
+});
+</script></html>

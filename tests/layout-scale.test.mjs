@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {fitProductOverview} from '../src/product-layout.mjs';
+import {fitProductOverview} from '../packages/presentation/product-layout.mjs';
 
 test('Product frame uses CSS pixels under page scaling and keeps its lower edge within the viewport',()=>{
  for(const scale of [1,1.5,2,2.6]){

@@ -1,0 +1,26 @@
+{
+  "mode": "built-in imagegen edit",
+  "file": "01-mint-woodland-proportions-v8.png",
+  "dimensions": [
+    1774,
+    887
+  ],
+  "reference": "Фотографии упаковок, приложенные владельцем",
+  "requested": {
+    "chlorophyll": {
+      "heightCm": 19.7,
+      "diameterCm": 7
+    },
+    "omega": {
+      "heightCm": 11.75,
+      "diameterCm": 6.3
+    }
+  },
+  "verification": "Silhouettes visually checked against references; generated dimensions approximate, not calibrated.",
+  "status": "Для просмотра отдельно; ранее согласованный вариант главной не заменён",
+  "prompts": [
+    "Use case: compositing / precise-object-edit. Image 1 is the EDIT TARGET, the approved mint woodland hero photograph. Image 2 is the exact white Chlorophyll bottle reference. Image 3 is the exact amber Omega-3 bottle reference with Russian label. Replace ONLY the two bottles in image 1 with accurate photorealistic versions of reference bottles 2 and 3. IMPORTANT: never squash, widen, flatten or shorten their packaging. Keep believable cylindrical 3D volume. Match reference bottle silhouette and perspective. Physical dimensions on the same ground plane: Chlorophyll height 19.7 cm, base diameter 7.0 cm (width/height .355); Omega height 11.75 cm, base diameter 6.3 cm (width/height .536). Thus Omega is 59.6% as tall as Chlorophyll, 90% its diameter, distinctly shorter rather than similarly tall. Use a single scale: if white bottle is 600 pixels high it is 213 pixels wide, and amber bottle is 358 pixels high, 192 pixels wide. Correct label on Omega must match image 3: 'Омега-3 ПНЖК НСП / Omega-3 EPA NSP', beige label, muted salmon orange band, black cap. Keep exact Chlorophyll reference Russian/English label. Sharp natural product photography, crisp packaging, realistic rounded reflections. Keep original mint woodland bokeh, photograph aspect 2:1, ample headroom above white cap, moss stone, fern and white coneflower as in image 1. Bottles stand close together at same baseline in same location in right half. Do not crop caps or bases, do not change entire composition, no UI, no extra text. Preserve atmosphere and all botanical details.",
+    "Use case: compositing / precise-object-edit. FIRST image is target woodland photograph. SECOND image is the exact Chlorophyll product silhouette that MUST be matched. THIRD image is exact Omega product reference. The WHITE CHLOROPHYLL IS VISIBLY TOO SHORT AND SQUAT in target and needs correction. Make the white bottle taller, with the tall narrow ribbed neck and sloped shoulder of reference 2, and its elongated cylindrical body. White bottle must be 1.68 times the Omega's total height, same ground plane; keep Omega at its existing size, do NOT shrink Omega in this pass. Image target coordinates approximately: common ground y800; existing Omega top y400 height400 width212; corrected Chlorophyll top y125, bottom y800, height675, max body width240, center x1003. Match physical height19.7 cm and diameter7 cm for white, Omega height11.75 diameter6.3 cm. White is TALL and SLENDER, NOT flattened, NOT wide. The white bottle diameter only 11% larger than Omega's, despite being 68% taller. Keep white reference proportions faithfully, cap, long neck, shoulder, original reference label. Full rounded base visible; preserve round 3D volume. Omega Russian label from reference3, black cap, amber glass, muted coral band. The only requested change is correct product shapes and scale; do NOT widen either bottle. Preserve approved mint woodland background, stone, fern, white flower and 2:1 panoramic framing. No crops, no added text, no UI, no borders.",
+    "Use case: precise-object-edit. First image is target botanical photo. Second is exact product reference. Correct ONLY the white Chlorophyll bottle silhouette in the first image: it has become TOO ELONGATED AND TOO SKINNY in this intermediate draft. Bring it to the natural reference silhouette (second image), NOT squat, NOT excessively stretched. Its height should be approximately 2.9 times its maximum body width, as in reference, not the current 3.5 times. Keep base on the same stone at y805. Adjust white bottle to height about 670px, width about 230px, cap at y135 (target image is 1774x887). Its top should have clear woodland space above. White Chlorophyll total height approximately 1.68 times amber Omega total height. Keep amber Omega unchanged, including label. This is a modest precise silhouette correction: shorten overlong neck/body to the reference and restore slight natural cylindrical width. Preserve reference original labels, reference white cap and ribbed neck geometry, rich round volume. Preserve all woodland, fern, rock, white coneflower, lighting and bottle positions. Do not alter any region except white bottle and background immediately above cap. Preserve 2:1 image aspect."
+  ]
+}

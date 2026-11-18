@@ -1,0 +1,15 @@
+/* Shared website/admin backdrop; desktop page surface uses one source. */
+@media(min-width:960px){
+html[data-catalog-design]:has(.site-header):not(:has(.home-first-screen)){background:var(--color-white)}
+html[data-catalog-design][data-home-scroll-edge="bottom"]:has(.site-header):not(:has(.home-first-screen)){background:var(--color-bg)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)){background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))::before{display:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{background:var(--color-bg);isolation:isolate;position:relative}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient{display:block;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i{display:block;position:absolute;width:700px;height:700px;border-radius:var(--radius-circle);--ambient-c:var(--color-mint);--ambient-b:70px;opacity:.46;top:-200px;left:-320px;right:auto}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(2){--ambient-c:var(--color-blue);top:300px;left:auto;right:-340px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(3){--ambient-c:var(--color-sand);opacity:.4;top:1350px;left:-380px;right:auto}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient{-webkit-mask-image:linear-gradient(#000 calc(100% - 700px),transparent calc(100% - 200px));mask-image:linear-gradient(#000 calc(100% - 700px),transparent calc(100% - 200px))}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{min-height:100svh}
+html[data-catalog-design]:root body:has(.site-header):not(:has(.home-first-screen)){background:linear-gradient(var(--color-bg),var(--color-bg)) transparent}
+}

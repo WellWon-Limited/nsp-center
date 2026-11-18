@@ -1,4 +1,4 @@
-import {recommendationAreas} from '../src/recommendation-areas.mjs';
+import {recommendationAreas} from '../packages/presentation/recommendation-areas.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -50,7 +50,7 @@ test('Every theme is a prerendered page with one H1, its products, FAQ markup an
 });
 
 test('The browser bundle carries only the theme index; each theme page embeds its own full theme', () => {
-  const summary = JSON.parse(readFileSync(resolve(root, 'src/generated/summary.json'), 'utf8'));
+  const summary = JSON.parse(readFileSync(resolve(root, 'packages/catalog/generated/summary.json'), 'utf8'));
   assert.equal(summary.themes.length, themes.length);
   for (const entry of summary.themes) assert.ok(!('sections' in entry) && !('faq' in entry), `${entry.slug}: full text leaked into the browser summary`);
   for (const theme of themes) {

@@ -1,0 +1,8 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Текущая главная — новая фотография</title><style>html,body{height:100%;margin:0;background:#eaf3f1}iframe{display:block;width:100%;height:100%;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/" title="Текущая главная NSP Center с новой фотографией"></iframe><script>
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+ const d=frame.contentDocument;if(!d)return;
+ await new Promise(resolve=>{const root=d.querySelector('#root');if(!root||root.dataset.hydrated==='true'){resolve();return}const observer=new MutationObserver(()=>{if(root.dataset.hydrated==='true'){observer.disconnect();resolve()}});observer.observe(root,{attributes:true,attributeFilter:['data-hydrated']})});
+ const photo=d.querySelector('.home-hero .hero-photo img');if(photo){photo.closest('picture').querySelectorAll('source').forEach(s=>s.remove());photo.src='/images/hero-dimensions-2026-11-13/01-mint-woodland.png';photo.removeAttribute('srcset');photo.style.objectPosition='78.5% 64%';photo.alt='Хлорофилл и Омега на мшистом камне в мятном лесу';await photo.decode().catch(()=>{})}
+ frame.classList.add('ready');
+});
+</script></html>

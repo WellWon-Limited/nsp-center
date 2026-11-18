@@ -1,0 +1,38 @@
+[
+  {
+    "variant": 1,
+    "file": "01-mint-limestone.png",
+    "title": "Мятный сад",
+    "dimensions": [
+      1983,
+      793
+    ],
+    "native4K": false,
+    "geometry": "Reference-guided generation; approximate, not a calibrated product rendering.",
+    "status": "Preview, not selected for live hero"
+  },
+  {
+    "variant": 2,
+    "file": "02-sage-forest.png",
+    "title": "Шалфейный лес",
+    "dimensions": [
+      1984,
+      793
+    ],
+    "native4K": false,
+    "geometry": "Reference-guided generation; approximate, not a calibrated product rendering.",
+    "status": "Preview, not selected for live hero"
+  },
+  {
+    "variant": 3,
+    "file": "03-soft-botanical.png",
+    "title": "Мягкий ботанический свет",
+    "dimensions": [
+      1983,
+      793
+    ],
+    "native4K": false,
+    "geometry": "Reference-guided generation; approximate, not a calibrated product rendering.",
+    "status": "Preview, not selected for live hero"
+  }
+]

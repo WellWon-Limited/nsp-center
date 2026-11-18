@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { maskTime, finishTime, validTime } from '../src/time-mask.mjs';
+import { maskTime, finishTime, validTime } from '../apps/web/src/time-mask.mjs';
 
 const typed = keys => [...keys].reduce((text, key) => maskTime(text + key, text), '');
 
@@ -38,7 +38,7 @@ test('leaving the field completes an unfinished time', () => {
 });
 
 test('the plan time field uses the shared mask', () => {
-  const source = readFileSync(new URL('../src/personal.tsx', import.meta.url), 'utf8');
+  const source = readFileSync(new URL('../apps/web/src/personal.tsx', import.meta.url), 'utf8');
   assert.match(source, /from '\.\/time-mask\.mjs'/);
   assert.match(source, /maskTime\(e\.target\.value,text\)/);
   assert.match(source, /finishTime\(text\)/);

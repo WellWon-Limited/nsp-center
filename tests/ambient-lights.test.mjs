@@ -4,8 +4,9 @@ import { readFileSync, readdirSync } from 'node:fs';
 
 // The soft lights behind the pages are gradients, not discs under filter:blur(): iPhone painted those large blurred
 // layers in pieces while a page opened, and light squares of the bare page colour showed around the home heading.
-const css = readdirSync(new URL('../src/', import.meta.url)).filter(f => f.endsWith('.css'))
-  .map(f => [f, readFileSync(new URL(`../src/${f}`, import.meta.url), 'utf8')]);
+const css = ['../apps/web/src/','../packages/presentation/'].flatMap(dir =>
+  readdirSync(new URL(dir, import.meta.url)).filter(f => f.endsWith('.css'))
+    .map(f => [f, readFileSync(new URL(dir+f, import.meta.url), 'utf8')]));
 
 test('no light behind the pages is a blurred layer', () => {
   for (const [file, text] of css) {
@@ -22,7 +23,7 @@ test('no light behind the pages is a blurred layer', () => {
 });
 
 test('the loading screen has no blurred layers either', () => {
-  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  const html = readFileSync(new URL('../apps/web/index.html', import.meta.url), 'utf8');
   const style = html.slice(html.indexOf('.nsp-launch{display:none}'), html.indexOf('</style>', html.indexOf('.nsp-launch{display:none}')));
   assert.doesNotMatch(style, /filter:blur/);
 });

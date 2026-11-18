@@ -43,7 +43,7 @@ export function readSource() {
 }
 
 export function readContent() {
-  return readJson(resolve(root, 'src/generated/content.json'));
+  return readJson(resolve(root, 'packages/catalog/generated/content.json'));
 }
 
 function htmlFragments(data) {
@@ -99,8 +99,8 @@ export function auditContent(data = readContent(), source = readSource()) {
     const snapshotProducts = [...productMap.values()].filter((item) => !item.added).length;
     expect(snapshotProducts === 166, `Expected 166 unique snapshot products; got ${snapshotProducts}`);
     const scalars = ['name', 'article', 'price', 'price_base', 'discount', 'currency', 'brand', 'category', 'rating', 'review_count'];
-    // Stock is the snapshot's except what the NSP office confirmed later (src/product-stock.json); Saturday closes at 17:30.
-    const stock = readJson(resolve(root, 'src/product-stock.json'));
+    // Stock is the snapshot's except what the NSP office confirmed later (packages/catalog/source/product-stock.json); Saturday closes at 17:30.
+    const stock = readJson(resolve(root, 'packages/catalog/source/product-stock.json'));
     const stockOf = (original) => stock.inStock.includes(original.article) ? ['InStock', 'В наличии'] : (stock.discontinued.includes(original.article)||(stock.hiddenIds??[]).includes(pathOf(original.url).split('/').filter(Boolean).at(-1))) ? ['OutOfStock', 'Нет в наличии'] : [original.availability, original.availability_text];
     const withHours = (sections) => Object.fromEntries(Object.entries(sections).map(([name, text]) => [name, typeof text === 'string' ? text.replace(/Сб: с 12:00 до 18:00/g, 'Сб: с 12:00 до 17:30') : text]));
     for (const original of source.products) {
@@ -110,7 +110,7 @@ export function auditContent(data = readContent(), source = readSource()) {
       if (!product) continue;
       for (const field of scalars) expect(product[field] === original[field], `${path}: ${field} differs from snapshot`);
       const [availability, availabilityText] = stockOf(original);
-      expect(product.availability === availability && product.availability_text === availabilityText, `${path}: stock differs from the snapshot and src/product-stock.json`);
+      expect(product.availability === availability && product.availability_text === availabilityText, `${path}: stock differs from the snapshot and packages/catalog/source/product-stock.json`);
       expect(Boolean(product.hidden) === (stock.discontinued.includes(original.article)||(stock.hiddenIds??[]).includes(pathOf(original.url).split('/').filter(Boolean).at(-1))), `${path}: hidden only when the line is no longer supplied`);
       expect(equal(product.properties, original.properties), `${path}: product properties lost or changed`);
       expect(equal(product.sections, withHours(original.sections)), `${path}: product sections lost or changed`);

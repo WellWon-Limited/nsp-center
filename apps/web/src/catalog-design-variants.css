@@ -1,0 +1,265 @@
+/* The site's design (owner, 2026-11-12) for every page but the home page: the light page with soft mint, blue and sand
+   light, a white header, a small spaced green label over a large heading, pastel accents, white cards with large
+   rounded corners. Rules are scoped by <html data-catalog-design="1"> (set in index.html). */
+
+@media(min-width:960px){
+/* Every page but the home page (which has its own rules in home-design-variants.css) takes this surface on computers
+   (owner, 2026-11-12: «вообще все … под новый дизайн»).
+   ── Shared by all three ─────────────────────────────────────────────────────────────────────────────────────── */
+/* The page surface of the home page: the base colour with three blurred lights; the header solid white. */
+/* At the bottom edge the browser's overscroll shows the page colour, not a white strip (packages/presentation/home-scroll-edges.mjs). */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header{background:var(--color-white);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
+/* No «‹ Каталог» above the heading when moving between categories: the list on the left is the way between them. */
+html[data-catalog-design] body:has(.catalog-layout) .site-main>.back-link{display:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header .header-actions .icon-btn{background:transparent;box-shadow:none;border:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .desktop-nav a.active::after{left:50%;right:auto;width:4px;height:4px;bottom:-12px;border-radius:50%;background:#1d3a36;transform:translateX(-50%)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-footer{border-top:1px solid rgb(29 58 54 / .1);background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-footer :is(.footer-main,.footer-top,.footer-bottom,.footer-legal,.footer-legal-inner){background:transparent}
+/* Heading: the small spaced green label above, as «Натурально. Каждый день.» on the home page. */
+html[data-catalog-design] body .catalog-page .page-heading>div::before{content:"Каталог NSP";display:block;margin-bottom:14px;color:#3d7a64;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+html[data-catalog-design] body .catalog-page .page-heading h1{font-weight:800;letter-spacing:-.04em;font-size:clamp(40px,3.6vw,54px);line-height:1.04}
+/* Product cards: white, large rounded corners, no frame, the photo on its own rounded panel, the dark pill button. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card.panel{background:#fff;border:0;border-radius:28px;padding:14px;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .product-visual{background-color:#fff;border-radius:22px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .product-meta{padding-left:8px;padding-right:8px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .ds-kicker{color:#3d7a64}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .product-card .favorite{background:transparent;box-shadow:none;border:0}
+/* Search: a white field with a soft shadow instead of the dark outline. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .catalog-tools .search-field{border:0;background:#fff;box-shadow:0 14px 34px -24px rgb(29 58 54 / .5)}
+/* Page numbers: round, the current one dark. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .pagination .pill{border:0;background:transparent;box-shadow:none;border-radius:999px;min-width:44px;height:44px;justify-content:center}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .pagination .pill--active{background:var(--color-ink);color:#fff}
+
+/* ── Every other page (owner, 2026-11-12): headings as on the catalog, and the site's boxes (panels) as white cards with
+   large rounded corners and a soft shadow instead of a frame (the dark outline included). */
+/* Information pages (delivery, payment, questions, contacts, legal texts, galleries) lie on the page surface, not on a
+   white sheet across the screen. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-page{background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){background:transparent;border-bottom:0;padding-inline:max(28px,calc((100vw - 1224px)/2))}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .page-heading h1{font-weight:800;letter-spacing:-.04em;font-size:clamp(40px,3.6vw,54px);line-height:1.04}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .panel:not(.product-card):not(.catalog-sidebar):not(.catalog-tools):not(.tabs){border:0;border-radius:28px;background-color:#fff;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+
+/* ── The first design's page template (owner, 2026-11-12: «дизайн берём как в прототипе и проецируем на наши фото и
+   текст»): the heading on the page (a small green label, the large title, the line under it), and everything else in
+   ONE light card in the middle, 1000 px wide, with rounded photos inside. Information pages, «О компании»,
+   «Сертификаты» and journal articles follow it. */
+/* Information pages: the content is the card; the closing band sits under it at the same width. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div{display:flex;flex-direction:column;align-items:flex-start}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div:not(:has(.information-kicker))::before{content:"NSP Center";order:1;margin:6px 0 10px;color:#3d7a64;font-size:14px;font-weight:800}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>:is(h1,h2){order:2}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>p{order:3}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){box-sizing:border-box;width:auto;max-width:1224px;margin:8px auto 40px;padding:52px 56px;background:rgb(255 255 255 / .62);border:1px solid rgb(255 255 255 / .9);border-radius:32px;box-shadow:0 30px 60px -48px rgb(29 58 54 / .4)}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content) img{border-radius:24px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-closing{box-sizing:border-box;max-width:1224px;margin:0 auto 48px;border-radius:32px}
+/* Inside the card the parts are plain: contact tiles lightly tinted, reviews and questions one under another between
+   thin lines. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content :is(.information-contact-grid>a){border:0;border-radius:24px;background:#eef5f1}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-reviews{grid-template-columns:minmax(0,1fr);gap:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content :is(.information-review,.information-review:nth-child(4n+2),.information-review:nth-child(4n+3)){padding:28px 0;border:0;border-bottom:1px solid rgb(29 58 54 / .1);border-radius:0;background:transparent;box-shadow:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-review:last-child{border-bottom:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-review>header{border-bottom:0;padding-bottom:12px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-question{background:transparent}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content .information-address{padding:40px 0}
+/* «Сертификаты» in the «О компании» style (owner, 2026-11-12): the way back, the label and the title on the page, then
+   ONE light block the site's width — the photo across its top, the introduction under it, then every section. The block is
+   drawn behind the grid's rows from the fourth on, so the sections need no wrapper. */
+@media(min-width:960px){
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept{--co-paper:transparent;position:relative;isolation:isolate;display:grid;grid-template-columns:56px minmax(0,.9fr) minmax(0,1.3fr) 56px;grid-template-rows:auto auto auto 52px;box-sizing:border-box;width:min(100% - 56px,1224px);margin:0 auto 48px;padding:28px 0 0;background:transparent;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept::before{content:"";position:absolute;grid-column:1/-1;grid-row:4/auto;inset:0;z-index:-1;background:rgb(255 255 255 / .7);border:1px solid rgb(255 255 255 / .9);border-radius:32px;box-shadow:0 30px 60px -48px rgb(29 58 54 / .4)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept :is(.co-hero,.co-hero-copy){display:contents}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero::before{content:"";position:static;display:block;grid-column:1/-1;grid-row:4;inset:auto;background:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero::after{display:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>.cert-back{grid-column:1/-1;grid-row:1;position:static;inset:auto;width:auto;height:auto;margin:0 0 18px;padding:0;background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>.cert-back :is(a,span,svg){color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>.co-kicker{grid-column:1/-1;grid-row:2;margin:0 0 10px;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:.06em}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>h1{grid-column:1/-1;grid-row:3;max-width:none;margin:0 0 32px;color:var(--color-ink);font-size:clamp(40px,3.6vw,54px);font-weight:800;letter-spacing:-.04em;line-height:1.04;text-shadow:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>p{grid-column:2/4;grid-row:6;align-self:start;max-width:none;margin:32px 0 0;color:var(--color-ink);font-size:17px;line-height:1.75;text-shadow:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero>img{grid-column:2/4;grid-row:5;position:static;inset:auto;display:block;width:100%;height:440px;margin:0;object-fit:cover;border-radius:24px;transform:none;opacity:1}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>section:not(.co-hero){grid-column:2/4;min-width:0;width:auto;max-width:none;margin:0;padding:52px 0 0;background:transparent;border:0;border-radius:0;box-shadow:none;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>section:last-child{padding-bottom:52px}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept :is(.co-section-heading h2,section>h2,.co-closing h2){font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.2;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept :is(.co-kicker){color:#3d7a64}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept section:not(.co-hero) :is(p,span,a,h3,strong){color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-closing{text-align:left}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-closing .co-button{background:var(--color-ink);border-color:var(--color-ink);color:#fff}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-closing .co-button svg{color:#fff}
+}
+
+/* Journal articles in the «О компании» style (owner, 2026-11-12): the date (small, green) and the title on the page,
+   then ONE light block the site's width: the introduction beside the cover photo, then the text across the block with
+   section headings as on «О компании» and the photos whole, centred. The block is drawn behind the grid's rows from the
+   second on (an absolutely placed layer), so the article's own markup needs no wrapper. */
+@media(min-width:960px){
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory{position:relative;isolation:isolate;display:grid;grid-template-columns:56px minmax(0,.9fr) minmax(0,1.3fr) 56px;grid-template-rows:auto 52px;column-gap:0;box-sizing:border-box;width:min(100% - 56px,1224px);max-width:none;margin:0 auto 48px;padding:28px 0 0;background:transparent;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory::before{content:"";position:absolute;grid-column:1/-1;grid-row:2/auto;inset:0;z-index:-1;background:rgb(255 255 255 / .7);border:1px solid rgb(255 255 255 / .9);border-radius:32px;box-shadow:0 30px 60px -48px rgb(29 58 54 / .4)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory :is(.av-hero,.av-reading-layout,.av-reading){display:contents}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero::before{content:"";display:block;grid-column:1/-1;grid-row:2;height:52px;background:none}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero::after{display:none}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy{grid-column:1/-1;grid-row:1;display:flex;flex-direction:column;align-items:flex-start;position:static;max-width:900px;margin:0;padding:0 0 32px;transform:none;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy :is(h1,span,a){color:var(--color-ink);text-shadow:none}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy .av-journal-link{margin:0 0 18px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy .av-date{order:3;margin:10px 0 0;color:#3d7a64;font-size:14px;font-weight:800}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy h1{order:2;margin:0;font-size:clamp(36px,3.4vw,50px);font-weight:800;letter-spacing:-.04em;line-height:1.08}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{grid-column:2/4;grid-row:3;max-height:none!important;position:static;inset:auto;display:block;width:100%;height:100%;height:440px;min-height:0;margin:0;object-fit:cover;border-radius:24px;transform:none;opacity:1}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory:not(:has(.av-lead)) .av-hero-image{grid-column:2/4;height:440px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-lead{grid-column:2/4;grid-row:4;margin:36px 0 0;font-size:19px;line-height:1.75}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>:not(.av-lead){grid-column:2/4;min-width:0;max-width:none;margin:0}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>.av-lead+:not(.av-lead){margin-top:40px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>.av-article-copy>h2:first-child{margin-top:0}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>.av-end{margin:32px 0 0;padding-bottom:52px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>section{margin-top:48px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(h2){font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.2;color:var(--color-ink)}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(p,li){max-width:none;font-size:16px;line-height:1.8}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading .av-section-number{color:#3d7a64;font-weight:800}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(.av-inline-image,figure){width:min(100%,840px);margin:28px auto}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading :is(.av-inline-image,figure) img,html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading .av-article-copy>img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;border-radius:24px}
+}
+
+/* Sign-in, the test and other framed boxes: no dark outline, the soft shadow of the cards. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.auth,.recommend-question){border:0;border-radius:28px;background-color:#fff;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+/* The test's answers stay light-tinted rows inside the white card. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .recommend-question.panel .answer-list>.panel.panel--interactive{background:#f3f7f5;box-shadow:none;border-radius:18px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .av-reading-layout img{border-radius:24px}
+/* Video gallery: rounded previews. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-video>button{border-radius:22px}
+
+/* ── Product page in the same look (owner, 2026-11-12): texts and photos as they are; the photo, the price box and
+   the information become white cards with large rounded corners and a soft shadow, the tabs along the top of the
+   text card with the open one mint. */
+html[data-catalog-design] body .site-main .product-detail .product-gallery.panel{border:0;border-radius:32px;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+html[data-catalog-design] body .site-main .product-detail .purchase-box.panel{border:0;border-radius:28px;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+html[data-catalog-design] body .site-main .product-detail .purchase-box .card-offer{border-radius:16px}
+html[data-catalog-design] body .site-main .product-detail .product-title-row h1{font-weight:800;letter-spacing:-.03em}
+/* The tabs and their text are one white card: the tabs along its top over a hairline, the open one mint. */
+html[data-catalog-design] body .site-main .product-content.product-content--plain{background:#fff;border:0;border-radius:28px;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45);overflow:hidden}
+html[data-catalog-design] body .site-main .product-content--plain .tabs{gap:4px;padding:8px;margin:0;border:0;border-bottom:1px solid rgb(29 58 54 / .08);border-radius:0;background:transparent;box-shadow:none}
+html[data-catalog-design] body .site-main .product-content--plain .tabs>button{border:0;border-radius:16px;background:transparent;color:#52645e;box-shadow:none}
+html[data-catalog-design] body .site-main .product-content--plain .tabs>button:hover:not(.active){background:#eef5f1;color:var(--color-ink)}
+/* The open tab in the home page's mint, so it is not taken for a button like «В корзину». */
+html[data-catalog-design] body .site-main .product-content--plain .tabs>button.active{background:linear-gradient(120deg,#cfe3d8,#e3eee8);color:var(--color-ink)}
+html[data-catalog-design] body .site-main .product-content--plain .tabs>button:focus:not(:focus-visible){outline:none;box-shadow:none}
+html[data-catalog-design] body .site-main .product-content--plain>[role=tabpanel]{padding:36px 40px;border-radius:0;background:transparent;box-shadow:none}
+
+/* ── Theme pages (/temy/…) in the same look (owner, 2026-11-12): texts and photos as they are; the pairs with their
+   «Зачем?», the questions and the bundle become white or dark cards with large rounded corners and no frame. */
+html[data-catalog-design] body .theme-page .theme-hero h1{font-weight:800;letter-spacing:-.04em}
+html[data-catalog-design] body .site-main .theme-card-with-note{border:0;border-radius:28px;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+html[data-catalog-design] body .site-main .theme-card-with-note>.product-card.panel{border-radius:0;box-shadow:none}
+html[data-catalog-design] body .site-main .theme-card-with-note>p{margin:0 22px;padding:14px 0 20px;border-top:1px solid rgb(29 58 54 / .08)}
+html[data-catalog-design] body .site-main .theme-card-with-note>p strong{color:#3d7a64}
+html[data-catalog-design] body .site-main .theme-faq details.panel{border:0;border-radius:22px;padding:18px 24px;background:#fff;box-shadow:0 18px 40px -32px rgb(29 58 54 / .45)}
+html[data-catalog-design] body .site-main .theme-bundle{border-radius:28px;padding:24px 28px}
+
+/* ── The plan (/health/) in the same look, laid out as the first design's marathon page (owner, 2026-11-12): the heading
+   and the tabs on the left at the site's width, then two columns — the plan or the marathon on a large white card on
+   the left, the test card on the right. */
+html[data-catalog-design] body .site-main .plan-page{max-width:none;margin-inline:0}
+html[data-catalog-design] body .plan-page .page-heading>div::before{content:"Ваш ежедневный ритм";display:block;margin-bottom:10px;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:0;text-transform:none}
+html[data-catalog-design] body .plan-page .page-heading h1{font-weight:800;letter-spacing:-.04em;font-size:clamp(40px,3.6vw,54px);line-height:1.04}
+html[data-catalog-design] body .plan-page .segmented.health-tabs{margin:8px 0 28px;width:fit-content}
+html[data-catalog-design] body .plan-page .personal-grid{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:28px;align-items:start}
+
+html[data-catalog-design] body .plan-page .personal-grid>.plan-column>.panel,html[data-catalog-design] body .plan-page .personal-grid>.panel{border:0;border-radius:28px;padding:36px 40px;background:#fff;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
+html[data-catalog-design] body .plan-page .personal-grid .care-card{border-radius:28px}
+
+/* The page's lights end above the bottom edge, so the last screen is one plain colour — the same the browser shows
+   when the page is pulled past its end: no strip of another colour under the footer. */
+
+/* ── 1 (chosen): the site's categories list as it is (heading over a hairline, the dark open row, a line on the right); search and filters as pills ── */
+html[data-catalog-design="1"] body:has(.catalog-layout) .catalog-tools{border-bottom:0;padding-bottom:6px}
+html[data-catalog-design="1"] body:has(.catalog-layout) .site-main .catalog-tools .search-field{border-radius:999px;min-height:58px;padding-left:22px}
+html[data-catalog-design="1"] body:has(.catalog-layout) .filter-row{gap:10px}
+html[data-catalog-design="1"] body:has(.catalog-layout) .filter-row>label,
+html[data-catalog-design="1"] body:has(.catalog-layout) .sort-trigger{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;border:0;border-radius:999px;background:rgb(255 255 255 / .8);font-weight:700;font-size:13.5px;color:var(--color-ink);box-shadow:none}
+/* The filter boxes as the plan's check: an outlined square; when on, a dark green tick on no fill. */
+html[data-catalog-design="1"] body:has(.catalog-layout) .filter-row>label>input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:none;width:22px;height:22px;margin:0;border:2px solid rgb(29 58 54 / .3);border-radius:5px;background:transparent center/16px 16px no-repeat}
+html[data-catalog-design="1"] body:has(.catalog-layout) .filter-row>label>input[type=checkbox]:checked{border-color:var(--color-ink);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231d3a36' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E")}
+html[data-catalog-design="1"] body:has(.catalog-layout) .filter-row>label>input[type=checkbox]:focus-visible{outline:2px solid var(--color-ink);outline-offset:2px}
+html[data-catalog-design="1"] body:has(.catalog-layout) .product-grid{gap:22px}
+
+
+}
+
+/* Information pages: headings inside the block as on «О компании»; a page with nothing to show yet («Акций пока нет»,
+   «Фото пока нет») has no block — the words stand in the middle of the page surface. */
+@media(min-width:960px){
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content :is(h2,.rich-content h2){font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.2}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content:has(>.information-empty){background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;padding:24px 0 72px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content>.information-empty{min-height:220px;display:flex;align-items:center;justify-content:center;text-align:center;background:transparent;border:0}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content>.information-empty .information-empty-message{margin:0;font-size:22px;font-weight:700;color:#41544e}
+}
+/* Articles (owner, 2026-11-12): the introduction first, the cover under it — the whole picture, never cropped, and
+   never taller than the screen, so it is seen entirely at once. */
+@media(min-width:960px){
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-lead{grid-row:3;margin:0 0 28px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{grid-row:4;justify-self:center;width:auto;max-width:100%;height:clamp(340px,calc(100svh - 490px),740px)!important;min-height:0;aspect-ratio:3/2;object-fit:cover}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-reading>.av-lead+:not(.av-lead){margin-top:48px}
+}
+/* The cover across the whole block again, at the height that keeps it inside the first screen (owner, 2026-11-12). */
+@media(min-width:960px){
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{justify-self:stretch;width:100%;aspect-ratio:auto;object-fit:cover;object-position:50% 50%}
+}
+/* Articles: a calmer start — a smaller title on one or two wide lines and less air before the block; the cover gets
+   the height that frees (owner, 2026-11-12). */
+@media(min-width:960px){
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory{padding-top:20px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy{max-width:1100px;padding:0 0 24px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy .av-journal-link{margin:0 0 10px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy .av-date{margin:10px 0 0} /* the date under the title (owner, 2026-11-14) */
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-copy h1{font-size:clamp(30px,2.6vw,38px);line-height:1.15;letter-spacing:-.03em}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory{grid-template-rows:auto 40px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero::before{height:40px}
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image{height:clamp(340px,calc(100svh - 400px),740px)!important}
+/* The virus in the middle of its frame. */
+html[data-catalog-design] #root .site-main .journal-article-page .av-document--ivory .av-hero-image[src$="/virus-centered-v1.jpg"]{object-position:50% 12%}
+}
+/* Information pages, legal texts and «Сертификаты» start like the articles (owner, 2026-11-12): a compact heading —
+   the way back, the small green label, a smaller title — and less air before the block. */
+@media(min-width:960px){
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){padding-top:20px;padding-bottom:24px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>.information-home{min-height:0;margin:0 0 10px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div:not(:has(.information-kicker))::before{margin:0 0 8px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>h1{margin:0;font-size:clamp(30px,2.6vw,38px);font-weight:800;line-height:1.15;letter-spacing:-.03em}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>p{max-width:none;margin:10px 0 0;font-size:16px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){margin-top:0}
+/* «Сертификаты»: the same compact heading; the introduction first, then the photo across the block, inside the first
+   screen. */
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept{padding-top:20px;grid-template-rows:auto auto auto 40px}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept>.cert-back{margin:0 0 10px}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>.co-kicker{margin:0 0 8px}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>h1{margin:0 0 24px;font-size:clamp(30px,2.6vw,38px);line-height:1.15;letter-spacing:-.03em}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>h1 br{display:none}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero-copy>p{grid-row:5;margin:0 0 28px}
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero>img{grid-row:6;height:clamp(340px,calc(100svh - 400px),740px)}
+}
+@media(min-width:960px){
+/* A page that has its own label (legal texts: «Информация и документы») does not get the second «NSP Center». */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading .information-kicker{order:1;margin:0 0 8px;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:.06em}
+/* Legal texts read across the block like the articles. */
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content--legal>.rich-content{max-width:none;margin:0}
+}
+@media(min-width:960px){
+/* «Сертификаты»: the photo shows its lower part, so the front dish is whole. */
+html[data-catalog-design] #root .site-main .certificates-page>.company-concept .co-hero>img{object-position:50% 85%}
+}
+/* One look for page headings (design check, 2026-11-12): every page title has the small green label above it, as the
+   catalog, the plan and the information pages; theme pages read like the articles; the account greeting is a title of
+   the same size as the other sections'. */
+@media(min-width:960px){
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .page-heading>div:not(:has(.ds-kicker))::before{content:"NSP Center";display:block;margin-bottom:10px;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:0;text-transform:none}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .page-heading .ds-kicker{display:block;margin-bottom:10px;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:0;text-transform:none}
+html[data-catalog-design] body .site-main .theme-page .theme-hero h1{font-size:clamp(30px,2.6vw,38px);line-height:1.15;letter-spacing:-.03em}
+html[data-catalog-design] body .site-main .account-head .ds-kicker{display:block;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:0;text-transform:none}
+html[data-catalog-design] body .site-main .account-head h1{font-size:clamp(40px,3.6vw,54px);font-weight:800;letter-spacing:-.04em;line-height:1.04}
+}
+@media(min-width:960px){
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .catalog-page .page-heading>div:not(:has(.ds-kicker))::before{content:"Каталог NSP";font-size:13px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .plan-page .page-heading>div:not(:has(.ds-kicker))::before{content:"Ваш ежедневный ритм";font-size:14px;font-weight:800;letter-spacing:0;text-transform:none;margin-bottom:10px} /* the same label style as «NSP Center» on the other pages (owner, 2026-11-13) */
+}
+/* A page shorter than the screen (sign-in, an empty cart) still has the page colour down to the screen's bottom edge:
+   no white strip under the content (owner, 2026-11-12). */
+/* The space the page keeps under its content for the phone's bottom bar is the page colour too (it showed the white
+   of the top edge while scrolling to the end). The colour is an image layer and body's own background-color stays
+   transparent: Safari (iOS 26) fills the pulled-down area above the page with body's background-color when it has one,
+   which put a light-green band above the white header; with it transparent, Safari uses html's colour, white at the
+   top and the page colour at the bottom (packages/presentation/home-scroll-edges.mjs), like the home page. */

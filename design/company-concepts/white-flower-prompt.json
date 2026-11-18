@@ -1,0 +1,22 @@
+{
+  "mode": "built-in imagegen",
+  "intent": "Owner requested white flowers; visual edit only, no claim of legal clearance.",
+  "source": "public/images/company-concepts/botanical-v1.png",
+  "output": "public/images/company-concepts/botanical-white-v2.png",
+  "prompt": "Change only all pink echinacea petals to natural creamy white, preserving fine veins, dew, orange-brown cone centres, exact composition, green foliage and background, natural daylight and photographic detail. No added text, objects or logos.",
+  "rights": "Generation and colour changes do not establish rights to underlying inputs.",
+  "homepage": [
+    {
+      "source": "public/images/hero-photo-options/mobile-omega-catalog-v2.jpg",
+      "output": "public/images/hero-photo-options/mobile-omega-white-v1.jpg",
+      "prompt": "Change only the foreground and distant pink echinacea petals to creamy white; preserve composition, exact bottle identities, caps, labels and text, botanical cone detail, moss, leaves, rays and dark background. Full original aspect ratio. Colour edit only; no legal-clearance assertion.",
+      "mode": "built-in imagegen"
+    },
+    {
+      "source": "public/images/hero-photo-options/desktop-omega-catalog-v2.jpg",
+      "output": "public/images/hero-photo-options/desktop-omega-white-v1.jpg",
+      "prompt": "Change only the foreground and distant pink echinacea petals to creamy white; preserve composition, exact bottle identities, caps, labels and text, botanical cone detail, moss, leaves, rays and dark background. Full original aspect ratio. Colour edit only; no legal-clearance assertion.",
+      "mode": "built-in imagegen"
+    }
+  ]
+}

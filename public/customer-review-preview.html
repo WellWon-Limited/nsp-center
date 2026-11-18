@@ -1,0 +1,25 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Отзывы покупателей · пример оформления</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{width:100%;height:100%;display:block;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/product-detail-selected.html?customer-preview=1" title="Пример отзывов покупателей"></iframe><script>
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+const host=frame.contentDocument,inner=host?.querySelector('iframe');if(!inner){frame.classList.add('ready');return}
+await new Promise(resolve=>{if(inner.classList.contains('ready'))return resolve();const o=new MutationObserver(()=>{if(inner.classList.contains('ready')){o.disconnect();resolve()}});o.observe(inner,{attributes:true,attributeFilter:['class']})});
+const d=inner.contentDocument,panel=d.querySelector('#panel-reviews');
+const examples=[['Ирина М.',5,'12 ноября 2026','Удобно, что на странице сразу видны объём и состав. Нужную информацию нашла быстро.'],['Дмитрий К.',4,'10 ноября 2026','Описание понятное. Хотелось бы ещё видеть фотографию оборотной стороны этикетки.'],['Анна С.',5,'8 ноября 2026','Понравилось, что перед заказом можно посмотреть сертификаты и задать вопрос консультанту.']];
+const heading=d.createElement('h2');heading.className='customer-preview-heading';heading.textContent='Отзывы покупателей';
+const note=d.createElement('p');note.className='customer-preview-note';note.textContent='Демонстрационные примеры для оценки оформления. На сайт не публикуются.';
+const cards=d.createElement('div');cards.className='customer-reviews';cards.dataset.dsId='customer-reviews-preview';
+for(const [name,rating,date,text]of examples){const card=d.createElement('article');card.className='customer-review';const header=d.createElement('header'),author=d.createElement('strong'),stars=d.createElement('span'),time=d.createElement('small'),body=d.createElement('p');author.textContent=name;stars.className='review-stars';stars.setAttribute('aria-label','Оценка '+rating+' из 5');for(let i=1;i<=5;i++){const star=d.createElement('span');star.textContent='★';star.className=i<=rating?'on':'';star.setAttribute('aria-hidden','true');stars.append(star)}time.textContent=date;body.textContent=text;header.append(author,stars,time);card.append(header,body);cards.append(card)}
+panel.prepend(heading,note,cards);
+const style=d.createElement('style');style.textContent=`
+html body .site-main #panel-reviews>.expert-notes{display:none!important}
+html body .site-main .customer-preview-heading{font-size:var(--text-24)!important;font-weight:var(--weight-600)!important;line-height:var(--leading-compact)!important;margin:0 0 var(--space-8)!important}
+html body .site-main p.customer-preview-note{font-size:var(--text-13)!important;line-height:var(--leading-relaxed)!important;color:var(--color-muted)!important;margin:0 0 var(--space-20)!important}
+html body .site-main .customer-reviews{gap:var(--space-20)!important}
+html body .site-main .customer-review{padding:var(--space-24)!important;border:1px solid var(--color-border)!important;border-radius:var(--radius-20)!important;background:transparent!important}
+html body .site-main .customer-review header{gap:var(--space-8) var(--space-12)!important}
+html body .site-main .customer-review header strong{font-size:var(--text-14)!important;font-weight:var(--weight-600)!important;line-height:var(--leading-relaxed)!important}
+html body .site-main .customer-review header small{font-size:var(--text-12)!important;line-height:var(--leading-relaxed)!important;margin-left:auto!important;color:var(--color-muted)!important}
+html body .site-main .customer-review p{font-size:var(--text-16)!important;line-height:var(--leading-relaxed)!important;margin:var(--space-12) 0 0!important}
+@media(max-width:639px){html body .site-main .customer-review{padding:var(--space-18)!important}html body .site-main .customer-review header small{margin-left:0!important}}
+`;d.head.append(style);d.querySelector('#tab-reviews').click();await new Promise(r=>setTimeout(r,50));const y=d.querySelector('.product-content').getBoundingClientRect().top+inner.contentWindow.scrollY-d.querySelector('.site-header').getBoundingClientRect().height-16;inner.contentWindow.scrollTo({top:y,behavior:'instant'});frame.classList.add('ready');
+});
+</script></html>

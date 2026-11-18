@@ -1,0 +1,47 @@
+[
+  {
+    "variant": 1,
+    "file": "01-mint-forest.png",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "geometry": "Generated approximation, not calibrated."
+  },
+  {
+    "variant": 2,
+    "file": "02-fern-stream.png",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "geometry": "Generated approximation, not calibrated."
+  },
+  {
+    "variant": 3,
+    "file": "03-sage-garden.png",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "geometry": "Generated approximation, not calibrated."
+  },
+  {
+    "variant": 4,
+    "file": "04-birch-light.png",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "geometry": "Generated approximation, not calibrated."
+  },
+  {
+    "variant": 5,
+    "file": "05-soft-morning.png",
+    "dimensions": [
+      1774,
+      887
+    ],
+    "geometry": "Generated approximation, not calibrated."
+  }
+]

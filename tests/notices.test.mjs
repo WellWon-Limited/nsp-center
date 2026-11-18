@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { addNotice, badge, byDay, dayLabel, namesLine, newCount, shortTime } from '../src/notices.mjs';
+import { addNotice, badge, byDay, dayLabel, namesLine, newCount, shortTime } from '../packages/presentation/notices.mjs';
 
 const now = new Date(2026, 10, 10, 15, 0).getTime();
 const at = (d, h, m = 0) => new Date(2026, 10, d, h, m).toISOString();

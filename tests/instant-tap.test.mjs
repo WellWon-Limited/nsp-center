@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { isTap, installInstantTap, INSTANT_TARGETS } from '../src/instant-tap.mjs';
+import { isTap, installInstantTap, INSTANT_TARGETS } from '../apps/web/src/instant-tap.mjs';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -39,25 +39,25 @@ test('a still tap on a tab clicks it once and lights it up at once', () => {
 });
 
 test('a menu tap before the page is alive is remembered and replayed', () => {
-  assert.match(read('index.html'), /closest\("\.menu-toggle"\)\)window\.__nspMenuTap=1/);
-  assert.match(read('src/boot.tsx'), /__nspMenuTap[\s\S]*\.menu-toggle\[aria-expanded="false"\][\s\S]*click\(\)/);
+  assert.match(read('apps/web/index.html'), /closest\("\.menu-toggle"\)\)window\.__nspMenuTap=1/);
+  assert.match(read('apps/web/src/boot.tsx'), /__nspMenuTap[\s\S]*\.menu-toggle\[aria-expanded="false"\][\s\S]*click\(\)/);
 });
 
 test('the whole product card opens the product, with the heart and buttons on top', () => {
-  const css = read('src/app.css');
+  const css = read('packages/presentation/app.css');
   assert.match(css, /\.product-card \.card-title h3 a::after\{content:"";position:absolute;inset:0;z-index:1\}/);
   assert.match(css, /\.product-card \.favorite\{z-index:2\}/);
   assert.match(css, /\.product-card \.product-meta>\.btn\{position:relative;z-index:2\}/);
 });
 
 test('the home heading waits under the loading screen and rises once it is gone', () => {
-  const css = read('src/hero-heading.css');
+  const css = read('apps/web/src/hero-heading.css');
   assert.match(css, /html\.nsp-splash \.hero-heading--enter \.hero-title-word\{animation-play-state:paused\}/);
   assert.doesNotMatch(css, /nsp-splash-out/);
 });
 
 test('the loading screen: no progress line, no blur layers, its own colour reaches the top edge', () => {
-  const html = read('index.html');
+  const html = read('apps/web/index.html');
   assert.doesNotMatch(html, /nsp-launch-progress/);
   assert.doesNotMatch(html, /\.nsp-launch::(?:before|after)/);
   // The status bar takes the screen's background-color; the gradient starts with the same colour at the top.
@@ -65,17 +65,18 @@ test('the loading screen: no progress line, no blur layers, its own colour reach
 });
 
 test('switching tabs on the white phone bar: the tapped icon turns dark, the one being left turns quiet, none vanish', () => {
-  const css = read('src/home-phone-variants.css');
+  const css = read('apps/web/src/home-phone-variants.css');
   assert.match(css, /html\[data-home-design="d"\] body \.bottom-nav a\.is-going,html\[data-home-design="d"\] body \.bottom-nav a\.is-going>span\{color:var\(--color-ink\)\}/);
   assert.match(css, /html\[data-home-design="d"\] body \.bottom-nav:has\(a\.is-going\) a\[aria-current="page"\]:not\(\.is-going\)>span\{color:rgb\(29 58 54 \/ \.58\)\}/);
 });
 
 test('a tab opens painted at once: the page is drawn before the app script runs, with one stylesheet in the head', () => {
-  const main = read('src/main.tsx');
+  const main = read('apps/web/src/main.tsx');
   assert.match(main, /requestAnimationFrame\(\(\)=>setTimeout\(\(\)=>\{ void import\('\.\/boot'\); \},0\)\);/);
   assert.match(main, /installAppHistory\(window,document,standaloneIos\(window\)\);/, 'taps keep working before the app starts');
-  assert.match(main, /import '\.\/app\.css';/);
-  assert.match(read('vite.config.ts'), /cssCodeSplit:false/, 'no styles arrive with the app script');
+  assert.match(main, /import '\.\.\/\.\.\/\.\.\/packages\/presentation\/styles';/);
+  assert.match(read('packages/presentation/presentation-styles.ts'), /import '\.\/app\.css';/);
+  assert.match(read('apps/web/vite.config.ts'), /cssCodeSplit:false/, 'no styles arrive with the app script');
   assert.match(read('scripts/prerender.mjs'), /rel="modulepreload" crossorigin href="\/assets\/\$\{bootChunk\}"/);
-  assert.match(read('src/pwa.tsx'), /if \(document\.readyState === 'complete'\) register\(\); else addEventListener\('load', register, \{ once: true \}\);/);
+  assert.match(read('packages/presentation/pwa.tsx'), /if \(document\.readyState === 'complete'\) register\(\); else addEventListener\('load', register, \{ once: true \}\);/);
 });

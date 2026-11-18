@@ -4,16 +4,16 @@ import { readFileSync } from 'node:fs';
 import * as cheerio from 'cheerio';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
-const css = read('src/app.css');
+const css = read('packages/presentation/app.css');
 
 test('the browser theme and the upper overscroll strip continue the shared header surface', () => {
-  assert.match(read('index.html'), /<meta name="theme-color" content="#eaf5f1"\/>/);
+  assert.match(read('apps/web/index.html'), /<meta name="theme-color" content="#eaf5f1"\/>/);
   assert.match(css, /\.site-header::before\{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var\(--header-edge-surface,var\(--color-bg\)\)/);
   assert.match(css, /body\{background:linear-gradient\(to top,#fff calc\(var\(--phone-nav-height,52px\) \+ env\(safe-area-inset-bottom\)\),var\(--color-bg\) 0\)\}/);
 });
 
 test('the loading screen block stands exactly in the middle of the screen', () => {
-  const html = read('index.html');
+  const html = read('apps/web/index.html');
   assert.doesNotMatch(html, /\.nsp-launch-center\{[^}]*translateY\(-8px\)/);
   assert.match(html, /to\{opacity:1;transform:none\}/);
 });
@@ -36,11 +36,11 @@ test('the FAQ does not repeat its heading', () => {
 });
 
 test('with the keyboard open the chat fits the space above it and the header stays', () => {
-  const chat = read('src/assistant.css');
+  const chat = read('apps/web/src/assistant.css');
   // The keyboard rule outranks the site's page rules (#root min-height:100svh, position:relative), which used to keep the
   // input row under the keyboard.
   assert.match(chat, /html\.chat-kb-open\[data-catalog-design\] body:has\(\.chat\):has\(\.site-header\) > #root,\n  html\.chat-kb-open body:has\(\.chat\) #root \{ position: fixed; left: 0; right: 0; top: var\(--chat-top, 0px\); height: var\(--chat-vh, 100svh\); min-height: 0; \}/);
-  const code = read('src/assistant.tsx');
+  const code = read('apps/web/src/assistant.tsx');
   assert.match(code, /requestAnimationFrame\(apply\)/, 'updated once per frame');
   assert.doesNotMatch(code, /window\.scrollTo\(0, 0\)/, 'the page is not yanked to the top on every keyboard step');
   assert.match(code, /document\.addEventListener\('focusin',\s*onFocusIn\)/);
@@ -52,7 +52,7 @@ test('with the keyboard open the chat fits the space above it and the header sta
 });
 
 test('every inline script of the page head is valid JavaScript (a broken one silently drops the first-paint data)', () => {
-  const html = read('index.html');
+  const html = read('apps/web/index.html');
   const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
   assert.ok(scripts.length >= 4);
   for (const code of scripts) assert.doesNotThrow(() => new Function(code), code.slice(0, 80));
@@ -64,39 +64,52 @@ test('no clip on the page: a screen-wide dimming (the install offer) covers the 
 });
 
 test('the home heading rises once per visit, and the page on screen is not reloaded for a new version', () => {
-  const html = read('index.html');
+  const html = read('apps/web/index.html');
   assert.match(html, /if\(sx\.getItem\("nsp-center:hero-played"\)&&!\(nx&&nx\.type==="reload"\)\)dx\.classList\.add\("nsp-hero-played"\)/);
-  assert.match(read('src/hero-heading.css'), /html\.nsp-hero-played \.hero-heading--enter \.hero-title-word\{animation:none\}/);
-  assert.match(read('src/hero-heading.tsx'), /sessionStorage\.setItem\('nsp-center:hero-played', '1'\)/);
-  assert.doesNotMatch(read('src/pwa.tsx'), /location\.reload\(\)/);
+  assert.match(read('apps/web/src/hero-heading.css'), /html\.nsp-hero-played \.hero-heading--enter \.hero-title-word\{animation:none\}/);
+  assert.match(read('apps/web/src/hero-heading.tsx'), /sessionStorage\.setItem\('nsp-center:hero-played', '1'\)/);
+  assert.doesNotMatch(read('packages/presentation/pwa.tsx'), /location\.reload\(\)/);
 });
 
 
 
 test('the consultation page is the chat alone, wide and centred; its contact card lives in the home pickup block', () => {
-  assert.doesNotMatch(read('src/App.tsx'), /consult-contact/);
-  const css = read('src/consultation.css');
+  assert.doesNotMatch(read('apps/web/src/App.tsx'), /consult-contact/);
+  const css = read('packages/presentation/consultation.css');
   assert.match(css, /\.consult-page\{width:min\(100% - 56px,1040px\)\}\n \.consult-layout\{grid-template-columns:minmax\(0,1fr\)\}\n \.consult-layout>\.chat\{max-width:none\}/);
-  assert.match(read('src/home-story.tsx'), /<ContactCard className="story-pickup-card" address=\{false\} heading="h3"\/>/);
-  assert.match(read('src/home-story.css'), /grid-template-areas:"address card" "info card"/);
-  assert.match(read('src/contact-card.css'), /#root \.contact-card a\.contact-card-phone\{font-size:28px;font-weight:800;color:#2f6f5a/);
+  assert.match(read('apps/web/src/home-story.tsx'), /<ContactCard className="story-pickup-card" address=\{false\} heading="h3"\/>/);
+  assert.match(read('apps/web/src/home-story.css'), /grid-template-areas:"address card" "info card"/);
+  assert.match(read('apps/web/src/contact-card.css'), /#root \.contact-card a\.contact-card-phone\{font-size:28px;font-weight:800;color:#2f6f5a/);
 });
 
 test('the plan time is optional: added from a product without a time, listed last, no reminder', async () => {
-  // The product page's «+ Добавить в план приёма» (src/product-overview.tsx).
-  assert.match(read('src/product-overview.tsx'), /\[\.\.\.s\.intake,\{id:p\.id,time:'',done:false\}\]/);
-  assert.match(read('src/personal.tsx'), /time:newTime,done:false\}/);
-  assert.match(read('src/pwa.tsx'), /if \(!it\.time\) return false;/);
-  const { restorePlans } = await import('../src/intake-plan.ts').catch(() => ({}));
+  // The product page's «+ Добавить в план приёма» (packages/presentation/product-overview.tsx).
+  assert.match(read('packages/presentation/product-overview.tsx'), /\[\.\.\.s\.intake,\{id:p\.id,time:'',done:false\}\]/);
+  assert.match(read('apps/web/src/personal.tsx'), /time:newTime,done:false\}/);
+  assert.match(read('packages/presentation/pwa.tsx'), /if \(!it\.time\) return false;/);
+  const { restorePlans } = await import('../packages/presentation/intake-plan.ts').catch(() => ({}));
   if (restorePlans) assert.deepEqual(restorePlans({ '2026-11-13': [{ id: 'a', time: '', done: false }, { id: 'b', time: '25:00', done: false }] }, new Set(['a', 'b'])), { '2026-11-13': [{ id: 'a', time: '', done: false }] });
-  else assert.match(read('src/intake-plan.ts'), /x\.time===''\|\|/);
+  else assert.match(read('packages/presentation/intake-plan.ts'), /x\.time===''\|\|/);
 });
 
 test('the desktop hero fits its three category tiles and extends the unchanged photo with woodland', () => {
- const css=read('src/home-desktop.css');
+ const css=read('packages/presentation/home-desktop.css');
  assert.match(css,/--hero-h:max\(260px,min\(var\(--hero-natural\),var\(--hero-fit\)\)\);/);
  assert.match(css,/woodland-side-extension-haze-v2\.png/);
  assert.doesNotMatch(css,/filter:blur\(32px\)/);
- assert.doesNotMatch(read('src/home-hero-framing.tsx'),/ResizeObserver|setProperty|useLayoutEffect/);
+ assert.doesNotMatch(read('apps/web/src/home-hero-framing.tsx'),/ResizeObserver|setProperty|useLayoutEffect/);
  assert.match(css,/height:var\(--home-tile-h\)!important/);
+});
+
+test('courier days and windows: Monday to Saturday, 10–14 and 14–18, five days, a started window of today is not offered', async () => {
+  const { deliveryDays, earliestSlot } = await import('../apps/web/src/delivery-slots.mjs');
+  // Tuesday 17 November 2026, 12:30 in Saint Petersburg: today only 14–18 is left.
+  const tue = deliveryDays(new Date('2026-11-17T09:30:00Z'));
+  assert.equal(tue.length, 5);
+  assert.deepEqual(tue[0].windows.map(w => w.free), [false, true]);
+  assert.deepEqual(earliestSlot(tue), { date: '2026-11-17', window: '14-18' });
+  // After 14:00 the next working day comes first; Sunday is skipped.
+  const sat = deliveryDays(new Date('2026-11-21T12:00:00Z'));
+  assert.equal(sat[0].date, '2026-11-23');
+  assert.ok(sat.every(d => new Date(d.date + 'T12:00:00Z').getUTCDay() !== 0));
 });

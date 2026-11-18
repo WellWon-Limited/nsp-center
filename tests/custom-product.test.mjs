@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { customProduct, freeId, mergeCustom, sectionsOf, slugOf, validateNewProduct } from '../src/custom-product.mjs';
+import { customProduct, freeId, mergeCustom, sectionsOf, slugOf, validateNewProduct } from '../packages/presentation/custom-product.mjs';
 
-const content = JSON.parse(readFileSync(new URL('../src/generated/content.json', import.meta.url), 'utf8'));
+const content = JSON.parse(readFileSync(new URL('../packages/catalog/generated/content.json', import.meta.url), 'utf8'));
 const categories = () => structuredClone(content.categories);
 const face = '/catalog/ukhod-za-kozhey-litsa-i-shei/';
 

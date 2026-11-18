@@ -1,0 +1,138 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Страница товара — варианты</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{width:100%;height:100%;display:block;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/product/aloe-vera-juice/" title="Вариант страницы товара"></iframe><script>
+const variant=Math.max(1,Math.min(3,Number(new URLSearchParams(location.search).get('v'))||1));const v=3;document.title=['','01 · Ровные колонки','02 · Цена одной строкой','03 · Компактная покупка'][variant];
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+const d=frame.contentDocument;if(!d)return;
+await new Promise(resolve=>{const root=d.querySelector('#root');if(!root||root.dataset.hydrated==='true'){resolve();return}const o=new MutationObserver(()=>{if(root.dataset.hydrated==='true'){o.disconnect();resolve()}});o.observe(root,{attributes:true,attributeFilter:['data-hydrated']})});
+const detail=d.querySelector('.product-detail'),purchase=detail?.querySelector('.product-purchase'),box=purchase?.querySelector('.purchase-box');if(!purchase||!box){frame.classList.add('ready');return}
+d.documentElement.dataset.detailOption=String(v);
+const heading=purchase.querySelector('h1');heading.textContent='Сок Алоэ Вера';
+const category=purchase.querySelector('.product-title-category');if(category)category.textContent='БАД · Aloe Vera Juice NSP';
+const purpose=d.createElement('p');purpose.className='detail-purpose';purpose.textContent='Поддержка иммунной и пищеварительной систем';
+purchase.querySelector('.product-title-row').after(purpose);
+const facts=d.createElement('dl');facts.className='detail-key-facts';for(const [label,value]of [['Объём','473 мл'],['Основа состава','Концентрат алоэ вера']]){const row=d.createElement('div'),dt=d.createElement('dt'),dd=d.createElement('dd');dt.textContent=label;dd.textContent=value;row.append(dt,dd);facts.append(row)}
+box.before(facts);
+const stock=d.createElement('span');stock.className='detail-stock';stock.textContent='В наличии';box.prepend(stock);
+const delivery=d.createElement('div');delivery.className='detail-delivery';delivery.innerHTML='<a href="/delivery/">Условия доставки <span aria-hidden="true">›</span></a><a href="/payments/">Способы оплаты <span aria-hidden="true">›</span></a>';
+const find=d.createElement('button');find.className='detail-composition-link';find.type='button';find.textContent='Состав, применение и ограничения ›';find.addEventListener('click',()=>{d.querySelector('#tab-properties')?.click();d.querySelector('.product-content')?.scrollIntoView({behavior:'smooth',block:'start'})});facts.after(find);
+purchase.append(delivery);
+const illustration=d.createElement('img');illustration.className='detail-aloe-accent';illustration.src='/images/catalog-concepts-2026-11-13/aloe-v1.png';illustration.alt='';illustration.setAttribute('aria-hidden','true');detail.querySelector('.main-product-image').append(illustration);
+if(v===4){const buy=d.createElement('aside');buy.className='detail-buy-column';buy.setAttribute('aria-label','Покупка товара');const plan=purchase.querySelector('.text-button'),note=purchase.querySelector('.fine-print');buy.append(box);if(plan)buy.append(plan);if(note)buy.append(note);buy.append(delivery);detail.append(buy);}
+const description=d.querySelector('#panel-description');if(description){const archive=d.createElement('details');archive.className='detail-original-description';const summary=d.createElement('summary');summary.textContent='Дополнительная информация';archive.append(summary);while(description.firstChild)archive.append(description.firstChild);const title=d.createElement('h2');title.textContent='О продукте';const intro=d.createElement('p');intro.textContent='Жидкая биологически активная добавка на основе концентрата внутренней части листьев алоэ вера. Объём флакона — 473 мл. Полный состав, рекомендации по применению и ограничения доступны в разделе «Состав и применение».';description.append(title,intro,archive);}
+if(v===5){const intro=d.createElement('header');intro.className='detail-wide-heading';intro.append(purchase.querySelector('.product-title-row'),purpose);detail.prepend(intro);}
+const rules=[],prefix='html[data-detail-option] body .site-main ';
+const put=(selector,css)=>rules.push(prefix+selector+'{'+css.replace(/;?$/,';').replaceAll(';','!important;')+'}');
+put('.product-detail','margin-top:var(--space-12);gap:var(--space-28);grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start');
+put('.product-gallery.panel','padding:var(--space-12);border-radius:var(--radius-panel);background:var(--color-glass);border:1px solid var(--color-glass-border);backdrop-filter:blur(var(--blur-20));box-shadow:none');
+put('.main-product-image','height:470px;--packshot-target:370px;padding:var(--space-32);border-radius:var(--radius-20);background:var(--color-mint-tint);isolation:isolate;overflow:hidden');
+put('.main-product-image .product-packshot-frame','position:relative;z-index:1;width:min(100%,calc(370px * var(--packshot-ratio)));height:auto;transform:none');
+put('.main-product-image .product-packshot-frame>img','mask-image:url("/images/catalog-concepts-2026-11-13/aloe-mask.svg");-webkit-mask-image:url("/images/catalog-concepts-2026-11-13/aloe-mask.svg");mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mix-blend-mode:normal');
+put('.main-product-image .detail-aloe-accent','position:absolute;z-index:0;bottom:var(--space-8);right:-5%;width:68%;height:auto;max-width:none;object-fit:contain;pointer-events:none;mix-blend-mode:normal');
+put('.main-product-image .favorite','z-index:3;background:var(--color-glass-raised);border:0');
+put('.product-purchase','padding:var(--space-8) 0 0;gap:var(--space-12);min-width:0');
+put('.product-title-row h1','font-size:clamp(30px,2.5vw,38px);line-height:1.15;letter-spacing:-.03em');
+put('.product-article','font-size:var(--text-12);color:var(--color-muted)');
+put('.detail-purpose','font-size:var(--text-17);line-height:1.5;color:var(--color-body);margin:0;max-width:440px');
+put('.product-title-category','font-size:var(--text-13);color:var(--color-muted)');
+put('.product-rating','margin:0;font-size:var(--text-13)');
+put('.detail-key-facts','display:grid;grid-template-columns:1fr 1.5fr;gap:var(--space-16);margin:0;padding:var(--space-14) 0;border-block:1px solid var(--color-ink-line)');
+put('.detail-key-facts dt','font-size:var(--text-12);color:var(--color-muted);margin:0 0 var(--space-4)');
+put('.detail-key-facts dd','font-size:var(--text-14);font-weight:700;color:var(--color-ink);margin:0');
+put('.detail-composition-link','align-self:flex-start;display:inline-flex;padding:0;min-height:32px;border:0;background:none;color:var(--color-link);font:inherit;font-size:var(--text-13);font-weight:700;text-align:left;cursor:pointer');
+put('.purchase-box.panel','padding:var(--space-20);border:1px solid var(--color-glass-border);border-radius:var(--radius-20);background:var(--color-glass-strong);box-shadow:none;backdrop-filter:blur(var(--blur-20))');
+put('.detail-stock','display:block;font-size:var(--text-12);font-weight:700;color:var(--color-success);margin-bottom:var(--space-8)');
+put('.purchase-prices .price-row.current','margin:0;align-items:center');
+put('.purchase-prices .price-row.current strong','font-size:var(--text-28)');
+put('.purchase-actions','display:flex;flex-wrap:nowrap;gap:var(--space-12);margin-top:var(--space-16)');
+put('.purchase-actions>.quantity','flex:none;order:0;height:48px');
+put('.purchase-actions>.btn','height:48px;min-height:48px;flex:1 1 auto;font-size:var(--text-14);border-radius:var(--radius-control)');
+put('.card-offer','margin-top:var(--space-10);padding:var(--space-10) var(--space-12)');
+put('.card-offer p,.card-offer a','font-size:var(--text-12);line-height:1.4');
+put('.product-purchase>.text-button,.detail-buy-column>.text-button','align-self:flex-start;font-size:var(--text-13);min-height:32px');
+put('.product-purchase>.fine-print,.detail-buy-column>.fine-print','font-size:var(--text-11);line-height:1.5;margin:0;color:var(--color-muted)');
+put('.detail-delivery','display:flex;flex-wrap:wrap;gap:var(--space-8) var(--space-20);padding-top:var(--space-8)');
+put('.detail-delivery a','display:inline-flex;align-items:center;gap:var(--space-8);font-size:var(--text-13);font-weight:700;color:var(--color-link);text-decoration:none');
+put('.product-content','margin-top:var(--space-28);scroll-margin-top:calc(var(--site-header-height) + 16px)');
+if(v===4){
+put('.product-detail','grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr);gap:var(--space-24)');
+put('.main-product-image','height:410px;--packshot-target:310px;padding:var(--space-18)');
+put('.main-product-image .product-packshot-frame','width:min(100%,calc(310px * var(--packshot-ratio)))');
+put('.product-title-row h1','font-size:var(--text-28)');
+put('.detail-key-facts','grid-template-columns:1fr;gap:var(--space-14);padding:var(--space-16) 0');
+put('.detail-buy-column','display:flex;flex-direction:column;gap:var(--space-12);position:sticky;top:calc(var(--site-header-height) + 20px);min-width:0');
+put('.purchase-box.panel','padding:var(--space-18)');
+put('.purchase-actions','flex-wrap:wrap');
+put('.purchase-actions>.btn','flex-basis:100%');
+put('.detail-delivery','flex-direction:column;gap:var(--space-12)');
+}
+if(v===2){
+put('.product-detail','padding:var(--space-24);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-glass);backdrop-filter:blur(var(--blur-20));grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)');
+put('.product-gallery.panel','padding:0;border:0;background:transparent;backdrop-filter:none');
+put('.main-product-image','background:color-mix(in srgb,var(--color-muted) 7%,var(--color-white));height:500px');
+put('.purchase-box.panel','padding:var(--space-16) 0 0;border:0;border-top:1px solid var(--color-ink-line);border-radius:0;background:transparent;backdrop-filter:none');
+put('.main-product-image .detail-aloe-accent','display:none');
+put('.detail-key-facts','border:0;padding:var(--space-12) 0');
+}
+put('.detail-original-description','margin-top:var(--space-24);border-top:1px solid var(--color-ink-line);padding-top:var(--space-16)');
+put('.detail-original-description>summary','cursor:pointer;font-size:var(--text-14);font-weight:700;color:var(--color-link)');
+put('.purchase-actions>.cart-action','width:100%;min-height:58px;height:58px;flex:1 1 auto;border-radius:var(--radius-control)');
+put('.cart-action--filled','display:grid;grid-template-columns:58px minmax(0,1fr) 58px');
+put('.cart-action-count strong','font-size:var(--text-18)');
+put('.cart-action-count span','font-size:var(--text-11)');
+if(v===3){
+ put('.main-product-image','background:color-mix(in srgb,var(--color-muted) 7%,var(--color-white));height:440px');
+ put('.product-purchase','padding:var(--space-24);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-glass);backdrop-filter:blur(var(--blur-20))');
+ put('.main-product-image .detail-aloe-accent','display:none');
+ put('.purchase-box.panel','padding:var(--space-16) 0 0;border:0;border-top:1px solid var(--color-ink-line);border-radius:0;background:transparent;backdrop-filter:none');
+}
+if(v===5){
+ put('.product-detail','grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:var(--space-24);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-glass);backdrop-filter:blur(var(--blur-20));gap:var(--space-20) var(--space-28)');
+ put('.detail-wide-heading','grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:var(--space-24);padding:0 0 var(--space-18);border-bottom:1px solid var(--color-ink-line)');
+ put('.detail-wide-heading h1','font-size:var(--text-28);letter-spacing:-.03em;line-height:1.2');
+ put('.detail-wide-heading .detail-purpose','font-size:var(--text-15);max-width:360px');
+ put('.product-gallery.panel','padding:0;border:0;background:transparent;backdrop-filter:none');
+ put('.main-product-image','height:420px;background:var(--color-mint-tint)');
+ put('.product-purchase','padding-top:0');
+ put('.purchase-box.panel','padding:var(--space-16);border:0;background:var(--color-glass-raised)');
+}
+// The selected layout stays; only status, price grouping and the photo column change.
+const priceRow=box.querySelector('.price-row.current'),stockLabel=box.querySelector('.detail-stock');
+const priceGroup=d.createElement('div');priceGroup.className='detail-price-group';while(priceRow.firstChild)priceGroup.append(priceRow.firstChild);priceRow.append(priceGroup);
+put('.product-detail','align-items:stretch');
+put('.product-gallery.panel','align-self:stretch;min-height:0;display:flex;flex-direction:column');
+put('.main-product-image','height:auto;min-height:0;flex:1 1 auto;--packshot-target:440px');
+put('.main-product-image .product-packshot-frame','width:min(100%,calc(440px * var(--packshot-ratio)))');
+put('.product-purchase','gap:var(--space-10);padding:var(--space-24)');
+put('.product-purchase .purchase-box.panel','margin-top:0;padding-top:var(--space-12)');
+put('.purchase-prices .price-row.current','justify-content:flex-start;align-items:center;gap:var(--space-16);padding:0');
+put('.detail-price-group','display:flex;align-items:baseline;justify-content:flex-start;gap:var(--space-12);padding:0');
+put('.detail-price-group>span','flex:none;width:auto;padding:0;font-size:var(--text-13);color:var(--color-muted)');
+put('.detail-price-group>strong','flex:none;font-size:var(--text-28);white-space:nowrap');
+put('.detail-stock','display:inline-flex;align-items:center;align-self:flex-start;gap:var(--space-6);width:auto;margin:0;font-size:var(--text-12);line-height:1.4');
+if(variant===1){
+ purchase.querySelector('.product-title-category').after(stockLabel);
+ put('.detail-stock','background:var(--color-mint-status);border-radius:var(--radius-control);padding:var(--space-6) var(--space-10)');
+ put('.detail-stock::before','content:"";width:6px;height:6px;flex:none;border-radius:50%;background:var(--color-success)');
+ put('.detail-price-group','flex-direction:column;gap:var(--space-2)');
+}
+if(variant===2){
+ stockLabel.textContent='✓ В наличии';priceRow.append(stockLabel);
+ put('.detail-stock','margin-left:var(--space-8);font-weight:600');
+ const extras=d.createElement('div');extras.className='detail-photo-extras';
+ for(const [id,label]of [['properties','Состав и применение'],['documents','Сертификаты']]){const target=d.querySelector('#tab-'+id);if(!target)continue;const button=d.createElement('button');button.type='button';button.textContent=label+' ›';button.addEventListener('click',()=>{target.click();d.querySelector('.product-content').scrollIntoView({behavior:'smooth',block:'start'})});extras.append(button)}
+ detail.querySelector('.product-gallery').append(extras);
+ put('.main-product-image .product-packshot-frame','width:min(100%,calc(390px * var(--packshot-ratio)))');
+ put('.detail-photo-extras','display:flex;gap:var(--space-12);justify-content:space-between;padding:var(--space-16) var(--space-8) var(--space-4);flex:none');
+ put('.detail-photo-extras button','padding:var(--space-8) 0;background:none;border:0;color:var(--color-link);font:inherit;font-size:var(--text-13);font-weight:700;cursor:pointer');
+}
+if(variant===3){
+ stockLabel.textContent='Доступно к заказу';purchase.querySelector('.product-rating').after(stockLabel);
+ put('.detail-stock','background:var(--color-glass-raised);border:1px solid var(--color-glass-border);padding:var(--space-6) var(--space-10);border-radius:var(--radius-control);color:var(--color-success)');
+ put('.detail-price-group>span','display:none');
+ put('.main-product-image','background:var(--color-mint-tint)');
+ put('.detail-key-facts','padding:var(--space-10) 0');
+ put('.product-purchase .purchase-box.panel','border:0;background:var(--color-glass-raised);border-radius:var(--radius-20);padding:var(--space-16)');
+ put('.detail-price-group>strong','font-size:var(--text-28)');
+}
+const style=d.createElement('style');style.textContent=rules.join('\n')+'\n@media(max-width:959px){'+prefix+'.product-detail{grid-template-columns:1fr!important;padding:16px!important}'+prefix+'.main-product-image{height:330px!important;--packshot-target:270px!important}'+prefix+'.main-product-image .product-packshot-frame{width:min(100%,calc(270px * var(--packshot-ratio)))!important}'+prefix+'.detail-buy-column{position:static!important}'+prefix+'.product-title-row h1{font-size:28px!important}}';d.head.append(style);frame.classList.add('ready');
+});
+</script></html>

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {installHomeScrollReturn} from '../src/home-scroll-return.mjs';
+import {installHomeScrollReturn} from '../apps/web/src/home-scroll-return.mjs';
 function browser(path,storage=new Map(),y=0){
  const location=new URL(path,'https://nsp.example');let click;
  const win={location,scrollY:y,sessionStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value),removeItem:key=>storage.delete(key)}};

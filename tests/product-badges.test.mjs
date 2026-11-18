@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readProductBadges, validateProductBadges, productBadgeLabels } from '../src/product-badges.mjs';
-import { applySite, readSite } from '../src/site.ts';
-import { customProduct, validateNewProduct } from '../src/custom-product.mjs';
+import { readProductBadges, validateProductBadges, productBadgeLabels } from '../packages/presentation/product-badges.mjs';
+import { applySite, readSite } from '../packages/presentation/site.ts';
+import { customProduct, validateNewProduct } from '../packages/presentation/custom-product.mjs';
 
 test('only the six approved discounts are accepted; malformed labels cannot create arbitrary badges',()=>{
  for(const discountPercent of [5,10,15,20,30,50]) {

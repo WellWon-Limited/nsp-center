@@ -1,0 +1,340 @@
+/* Profile sign-in / registration: one narrow white card centred on the page. */
+
+.auth {
+  max-width: 520px;
+  margin: var(--space-16) auto 0;
+  padding: var(--space-32);
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-28);
+  background: var(--color-white);
+  box-shadow: 0 10px 24px -18px rgb(29 58 54 / .45);
+}
+
+.auth h1 {
+  text-align: center;
+  font-size: var(--text-32, 32px);
+}
+
+.auth-subtitle {
+  font-size: var(--text-16);
+  margin-top: var(--space-4);
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: var(--space-10);
+  color: var(--color-muted);
+}
+
+.auth-switch--left {
+  text-align: left;
+  margin-top: var(--space-12);
+}
+
+.auth-link {
+  border: 0;
+  padding: 0;
+  background: none;
+  font: inherit;
+  font-weight: var(--weight-700);
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  margin-top: var(--space-24);
+}
+
+.auth[data-auth-mode='register'] .auth-form { margin-top: var(--space-8); }
+.auth[data-auth-mode='register'] .auth-form > .auth-hint:first-child { margin-top: 0; }
+
+.auth-field label {
+  display: block;
+  margin-bottom: var(--space-6);
+  font-size: var(--text-13);
+  font-weight: var(--weight-700);
+  color: var(--color-ink);
+}
+
+.auth-field .field {
+  width: 100%;
+  background: #f3f7f5;
+  border-color: var(--color-ink-line);
+}
+
+.auth-required {
+  color: #ad6338;
+}
+
+.auth-hint {
+  margin-top: var(--space-6);
+  font-size: var(--text-12);
+  color: var(--color-muted);
+}
+
+.auth-hint a,
+.auth-consent a {
+  color: var(--color-link);
+  font-weight: var(--weight-700);
+}
+
+.auth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+}
+
+.auth-password {
+  position: relative;
+}
+
+.auth-password .field {
+  padding-right: 52px;
+}
+
+.auth-eye {
+  position: absolute;
+  top: 50%;
+  right: var(--space-8);
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-12);
+  background: transparent;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.auth-eye:hover {
+  background: var(--color-ink-soft);
+}
+
+.auth-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-10);
+  font-size: var(--text-13);
+  line-height: var(--leading-long);
+}
+
+.auth-consent input {
+  margin-top: 3px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-ink);
+}
+
+.auth-submit {
+  width: 100%;
+  justify-content: center;
+  min-height: 52px;
+}
+
+.auth-forgot {
+  align-self: center;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+  margin: var(--space-24) 0;
+  font-size: var(--text-12);
+  font-weight: var(--weight-700);
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--color-ink-line);
+}
+
+.auth-providers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-12);
+  margin-top: var(--space-20);
+}
+
+.auth-divider + .auth-providers {
+  margin-top: 0;
+}
+
+.auth-provider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+  min-height: 52px;
+  border: 1px solid var(--color-ink-line);
+  border-radius: var(--radius-16);
+  background: var(--color-white);
+  font: inherit;
+  font-weight: var(--weight-700);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.auth-provider:hover {
+  background: #f3f7f5;
+}
+
+.auth-provider-mark {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-8, 8px);
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--color-white);
+}
+
+.auth-provider-mark--yandex {
+  background: #fc3f1d;
+}
+
+.auth-provider-mark--vk {
+  background: #0077ff;
+  font-size: 10px;
+}
+
+.auth-notice {
+  display: flex;
+  gap: var(--space-12);
+  margin-top: var(--space-20);
+  padding: var(--space-14) var(--space-16);
+  border-radius: var(--radius-16);
+  background: var(--color-sand-tint);
+  color: var(--color-ink);
+  font-size: var(--text-13);
+  line-height: var(--leading-long);
+}
+
+.auth-notice svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.auth-form > .auth-notice { margin-top: 0; }
+
+.auth-guest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding-left: var(--space-16);
+  width: 100%;
+  margin-top: var(--space-24);
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: var(--weight-700);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+
+@media (max-width: 639px) {
+  .auth {
+    margin-top: 0;
+    padding: var(--space-24) var(--space-18);
+    border-radius: var(--radius-24);
+  }
+
+  .auth h1 {
+    font-size: var(--text-28);
+  }
+
+  .auth-row,
+  .auth-providers {
+    grid-template-columns: 1fr;
+  }
+}
+
+.auth-notice--error {
+  background: rgb(173 99 56 / .12);
+}
+
+/* Keep the profile card guidance close to the registration fields. */
+.auth-hint--tight {
+  margin-top: calc(-1 * var(--space-12));
+}
+
+.auth-password-error { color: #ad6338; }
+
+/* Sign-in and registration fields (owner, 2026-11-10): no light-green focus ring while typing; the focused field is
+   shown by a dark border instead, so keyboard users still see where they are. */
+.auth .field:focus,
+.auth .field:focus-visible {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--color-ink);
+}
+.auth .field[aria-invalid='true']:focus-visible { border-color: var(--color-danger); }
+
+/* Center short authentication forms in the visible page area; long forms grow and scroll. */
+.site-main.site-main--account-route:has(>.auth){display:flex;flex-direction:column;justify-content:center;padding-block:var(--space-16)}
+.site-main.site-main--account-route>.auth{width:100%;margin:0 auto;flex:none}
+
+/* Desktop authentication is a self-contained screen without a separate homepage return row. */
+@media(min-width:960px) and (pointer:fine){
+ .site-main.site-main--account-route:has(>.auth)>.back-link{display:none}
+}
+
+/* A staff account typed into the customer sign-in: the way to site management's sign-in. */
+.auth-staff-link { width: 100%; min-height: 48px; margin-top: var(--space-12); justify-content: center; gap: var(--space-8); }
+
+/* Auto margins centre a short form; an overflowing registration starts safely below the header. */
+@layer typography-reference{
+html body #root .site-main.site-main--account-route:has(>.auth[data-auth-mode]){justify-content:flex-start!important;flex:1 0 auto!important;padding-block:16px!important;overflow-anchor:none}
+html body #root .site-main.site-main--account-route>.auth[data-auth-mode]{margin-block:auto!important;flex:none!important;transform:none!important;position:relative;top:auto}
+}
+@layer typography-reference{
+ html body #root .auth[data-auth-mode] h1{font-family:var(--font-sans)!important;font-size:28px!important;font-weight:800!important;line-height:1.25!important;letter-spacing:var(--tracking-heading)!important}
+ @media(max-width:639px){html body #root .auth[data-auth-mode] h1{font-size:24px!important}}
+}
+
+/* Auth copy: comfortable multi-line text; compact controls and scalable headings.
+   WCAG 1.4.12 requires surviving user spacing overrides, not a fixed default. */
+@layer typography-reference {
+ html body #root .auth[data-auth-mode] :is(p,.auth-consent,.auth-notice){line-height:1.5!important}
+ html body #root .auth[data-auth-mode] :is(.auth-field label,.field,.btn,.auth-link,.auth-guest){line-height:1.5!important}
+ html body #root .auth[data-auth-mode] .auth-submit{height:auto;white-space:normal}
+ @media(max-width:639px){
+  html body #root .site-main.site-main--account-route:has(>.auth){display:flex!important;flex-direction:column;min-height:var(--phone-first-screen-height);box-sizing:border-box}
+  html body #root .site-main.site-main--account-route:has(>.auth)>.back-link{display:none}
+ }
+}
+
+/* Recovery uses the same .auth card, typography, fields and buttons as sign-in.
+   Only content-specific spacing lives here; keep the owner's compact action rows. */
+.recovery-intro{overflow-wrap:anywhere}
+.recovery-email{font-weight:var(--weight-700);margin-top:var(--space-8);text-align:center;overflow-wrap:anywhere}
+.recovery-help{margin-top:var(--space-16)}
+.recovery-email+.recovery-help{margin-top:var(--space-8)}
+.recovery-back{display:flex;align-items:center;justify-content:center;gap:var(--space-6);margin-top:var(--space-24)}
+.recovery-symbol{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--color-bg);color:var(--color-link);margin:0 auto var(--space-20)}
+.recovery-actions{display:flex;flex-direction:column;align-items:stretch;gap:var(--space-4);margin-top:var(--space-8);text-align:center}
+.recovery-actions>.auth-link{display:flex;align-items:center;justify-content:center;min-height:36px;margin:0;padding:0}
+.recovery-actions>button:disabled{opacity:.45;cursor:default;text-decoration:none}
+.recovery-email-button{display:flex;margin-top:var(--space-24)}
+.recovery-main [hidden]{display:none!important}
+/* The email preview keeps mail metadata outside the shared card. */
+.recovery-main:has(>.email-envelope){display:flex;flex-direction:column;justify-content:flex-start;padding-block:var(--space-16)}
+.email-envelope{max-width:520px;width:100%;margin:auto}
+.email-letter{width:100%;margin:0}
+.email-meta{margin:0 0 var(--space-16);padding-inline:var(--space-8)}
+.email-brand{display:flex;align-items:center;justify-content:center;gap:var(--space-8);font-size:var(--text-22);font-weight:var(--weight-700);color:var(--color-ink);margin-bottom:var(--space-24)}
+.email-divider{border-top:1px solid var(--color-ink-line);margin-top:var(--space-24)}

@@ -1,0 +1,38 @@
+{
+  "mode": "built-in imagegen",
+  "inputRoles": [
+    "Оригинал Омеги с русской этикеткой",
+    "Оригинал хлорофилла",
+    "Ранее выбранное фото — только идея сцены"
+  ],
+  "commonPrompt": "Use case: product-mockup / compositing. Generate an ENTIRELY NEW hero photograph from scratch. Image1 is the AUTHORITATIVE OMEGA bottle reference with RUSSIAN label. Image2 is the AUTHORITATIVE CHLOROPHYLL bottle reference. Image3 is an IDEA for scenery/palette/flower only, not an image to modify or copy. Do not reuse the old bottle render from image3.\nCRITICAL product identity and scale:\nOMEGA ON LEFT of pair, CHLOROPHYLL ON RIGHT. Amber Omega bottle is real height11.75cm, base diameter6.3cm. White Chlorophyll real height19.7cm, base diameter7cm. Both on same level stone and same camera distance. Omega total height exactly59.6% of white total height; Omega body diameter90% of white body diameter. Tall white bottle height/base diameter2.814; short amber1.865. Natural round cylindrical volume, NOT squashed, widened, flattened or excessively stretched.\nWhite internal proportions: cap9%, neck collar8%, ribbed neck15%, sloped shoulders11%, straight body+rounded base57% of total height. Top assembly43% total. Match reference2's shoulder and neck silhouette. The Chlorophyll cap MUST BE PERFECTLY STRAIGHT, centered on the neck's vertical axis, symmetrical, level horizontal elliptical rims, clean circular screw cap. No tilted/crooked lid, bent neck, lopsided shoulder, dents or warped white plastic.\nOmega reference1 has black ribbed cap, amber bottle, beige label with exact text 'Омега-3 / ПНЖК НСП / Omega-3 EPA NSP' and muted salmon orange band. Preserve this Russian packaging, NOT Ukrainian EPA label from an older scene. Cap roughly18% of Omega total height. Keep label typography crisp and legible. White label: 'Хлорофилл Жидкий / Liquid Chlorophyll', NATURES SUNSHINE logo, original mint-green label.\nCOMPOSITION MUST MATCH OUR WIDE WEBSITE HERO: panorama2.5:1, request native3840x1536. Preserve generous but restrained space ABOVE cap: white cap top is8% of photo height, white total height77%, shared bottle baseline85%. Omega total height45.9%, top39.1%, same baseline85%. This leaves a clean header-to-cap gap when the full panorama is shown, about45–55px on our1470px-wide screen. No UI or actual header in photograph.\nPair in right half: Omega center at60% width, white center72% width, close together with a small gap. All packaging entirely visible, NO cropping caps or bases. Labels frontal, camera level,85mm lens feel, parallel verticals, no wide angle perspective distortion.\nLeft42% is airy calm negative space for white glass copy card. A SINGLE prominent WHITE CONEFLOWER/ECHINACEA to the LEFT of pair near45% width, with its bloom and golden cone naturally FACING RIGHT toward the bottles, three-quarter profile, not left. Natural slender stem and delicate clean petals, no weird brown blotches. Sparse fern near lower stone and upper-right edge, all plants realistic, coherent stems, no doubled/melted leaves.\nPALETTE: our design-system pale mint#eaf3f1, soft mint#9fdcc6, desaturated cool sage and restrained deep forest#1d3a36. Photography should harmonize with this palette; cool neutral white balance, no yellow/olive cast, no neon mint. Keep original packaging colors accurate. Elegant restrained botanical commercial photography, crisp detailed rock/moss/flower, soft background garden bokeh. Real shadows/contact on stone, no artificial outlines. No text overlays, UI, frames, checkerboard, ribbons, extra bottles, watermarks. Highest native detail, genuinely4K if supported, do not mislabel a small image as4K.",
+  "variants": [
+    {
+      "n": 1,
+      "file": "01-mint-limestone",
+      "title": "Мятный сад",
+      "scene": "An airy mint botanical garden on pale limestone with sparse fine moss. One white coneflower facing right, a graceful fern at the top-right edge, softly blurred distant white blooms. Soft diffused morning daylight, calm fresh palette, strongest resemblance to selected garden idea but new scene."
+    },
+    {
+      "n": 2,
+      "file": "02-sage-forest",
+      "title": "Шалфейный лес",
+      "scene": "A serene cool sage forest clearing with distant foliage and gentle diffuse silvery daylight. Bottles on neutral grey limestone with modest moss; a single white coneflower facing right beside them; elegant sparse fern in right foreground. Restrained depth, fresh mint air, no bright sunlight beams."
+    },
+    {
+      "n": 3,
+      "file": "03-soft-botanical",
+      "title": "Мягкий ботанический свет",
+      "scene": "A premium botanical meadow edge near a soft mint woodland, bottles on a wide light natural stone. Diffused side light, pale mint and grey-green bokeh, a single prominent white coneflower turned right and small delicate fern. Very clean but fully photographic, calm left background and richly detailed natural foreground."
+    }
+  ],
+  "scaleCorrectionPrompt": "Use case: precise-object-edit. Make ONE SMALL CORRECTION to this newly generated photo. The LEFT amber Omega bottle is a little too large. Reduce this entire LEFT amber bottle uniformly to90% of its CURRENT height and90% of its CURRENT width, keeping its base at the SAME stone contact baseline and the same horizontal center. All parts (cap,label,body) shrink together; preserve round 3D form, do not squash one axis. The target total Omega height is59.6% of the RIGHT white Chlorophyll height. It should be visibly lower, but the same exact product, same Russian label and black cap. Fill the very small vacated border around Omega with seamless continuation of the background. DO NOT CHANGE THE WHITE CHLOROPHYLL BOTTLE AT ALL: preserve its exact current size, shape, label, straight level symmetrical cap, vertical axis, neck geometry and headroom. DO NOT change the flower facing right, stone, plants, lighting, mint-sage palette or scene. Keep the original wide2.5:1 panorama, same framing and camera; NO cropping, no resizing of the whole image, no added objects or UI. This is a local edit only around the left amber product.",
+  "requestedResolution": [
+    3840,
+    1536
+  ],
+  "actualResolution": [
+    1983,
+    793
+  ]
+}

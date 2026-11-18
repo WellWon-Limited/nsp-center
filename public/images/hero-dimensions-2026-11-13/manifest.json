@@ -1,0 +1,37 @@
+[
+  {
+    "id": "01-mint-woodland",
+    "title": "Мятный лес",
+    "width": 1983,
+    "height": 793,
+    "native4K": false
+  },
+  {
+    "id": "02-sage-garden",
+    "title": "Шалфейный сад",
+    "width": 1983,
+    "height": 793,
+    "native4K": false
+  },
+  {
+    "id": "03-fern-grove",
+    "title": "Папоротниковая роща",
+    "width": 1983,
+    "height": 793,
+    "native4K": false
+  },
+  {
+    "id": "04-lakeside-morning",
+    "title": "Утро у озера",
+    "width": 1983,
+    "height": 793,
+    "native4K": false
+  },
+  {
+    "id": "05-soft-sun-forest",
+    "title": "Лес в мягком свете",
+    "width": 1983,
+    "height": 793,
+    "native4K": false
+  }
+]

@@ -1,0 +1,93 @@
+/* Measured on the approved product page: 12px from the header, a 32px return row, then 20px to content. */
+@layer typography-reference{
+ html body #root .site-main :is(.back-link,.information-home){display:inline-flex;align-items:center;min-height:32px!important;padding-block:0!important;margin-block:0!important;box-sizing:border-box}
+ html body #root .site-main:has(>.back-link){padding-top:0!important}
+ html body #root .site-main>.back-link{margin-top:12px!important;margin-bottom:20px!important}
+ html body #root .site-main>.back-link+*{margin-top:0!important}
+ html[data-catalog-design] body #root .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){padding-top:28px!important}
+ html[data-catalog-design] body #root .site-main .information-heading>div>.information-home{min-height:32px!important;margin-bottom:20px!important}
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-document--ivory{padding-top:12px!important}
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-hero-copy .av-journal-link{display:block;min-height:32px;margin:0 0 20px!important}
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-hero-copy .av-journal-link>.back-link{margin:0!important}
+ html[data-catalog-design] body #root .site-main .certificates-page>.company-concept{padding-top:12px!important}
+ html[data-catalog-design] body #root .site-main .certificates-page>.company-concept>.cert-back{margin:0 0 20px!important;padding:0!important}
+ html body #root .site-main .co-home-return{min-height:32px!important;margin:0 0 20px!important}
+}
+
+/* The plan and journal use the delivery header's same label/title/intro rhythm. */
+@layer typography-reference{
+ html body #root .site-main:has(>.plan-page),html body #root .site-main:has(>.journal-page-heading){padding-top:28px!important}
+ html body #root .site-main:has(>.back-link):is(:has(>.plan-page),:has(>.journal-page-heading)){padding-top:0!important}
+ html body #root .site-main :is(.plan-page,.journal-page-heading)>.page-heading{display:block!important;margin:0!important;padding:0 0 24px!important}
+ html body #root .site-main :is(.plan-page,.journal-page-heading)>.page-heading>div::before{margin:0 0 8px!important;font-size:14px!important;line-height:21px!important}
+ html body #root .site-main :is(.plan-page,.journal-page-heading)>.page-heading h1{margin:0!important}
+ html body #root .site-main :is(.plan-page,.journal-page-heading)>.page-heading p{margin:10px 0 0!important;max-width:none!important;font-size:var(--text-14)!important;line-height:var(--leading-long)!important}
+ html body #root .site-main .plan-page .health-tabs{margin-top:0!important}
+}
+@layer typography-reference{@media(min-width:960px){
+ html body #root .consult-page{padding-top:28px!important}
+ html body #root .consult-heading{margin:0!important}
+ html body #root .consult-heading>.back-link{margin:0 0 20px!important}
+ html body #root .consult-heading>.page-heading{display:block!important;padding:0 0 24px!important;margin:0!important}
+ html body #root .consult-heading .page-heading .ds-kicker{display:block;margin:0 0 8px!important;font-size:14px!important;line-height:21px!important}
+ html body #root .consult-heading .page-heading :is(h1,h2){font-size:40px!important;line-height:1.15!important;margin:0!important}
+ html body #root .consult-heading .page-heading p{margin:10px 0 0!important;max-width:none!important}
+}}
+
+/* «‹ Раздел» (research 2026-11-14, GOV.UK back link, Apple HIG, Nature's Sunshine / Siberian Wellness pages): text 15 px,
+   on a computer 16 px under the header and 8 px above what follows (about 24 px and 16 px to the words); on a phone a
+   44 px tall touch row, the words about 12 px under the header and 8 px above the title. Measured, not guessed: see
+   tests/phone-look.test.mjs. */
+@layer typography-reference{
+ html body #root .site-main :is(.back-link,.information-home){font-size:15px!important;line-height:20px!important;font-weight:600!important;gap:6px}
+ html body #root .site-main>.back-link{margin-top:16px!important;margin-bottom:8px!important}
+ html[data-catalog-design] body #root .site-main .information-heading>div>.information-home{margin-bottom:8px!important}
+ html[data-catalog-design] body #root .site-main .journal-article-page .av-hero-copy .av-journal-link{margin:0 0 8px!important}
+ html[data-catalog-design] body #root .site-main .certificates-page>.company-concept>.cert-back{margin:0 0 8px!important}
+ html body #root .site-main .co-home-return{margin:0 0 8px!important}
+ @media(max-width:639px){
+  html body #root .site-main :is(.back-link,.information-home){min-height:44px!important}
+  html body #root .site-main>.back-link{margin-top:0!important;margin-bottom:-4px!important}
+  html[data-catalog-design] body #root .site-main .information-heading>div>.information-home,html body #root .site-main .co-home-return{margin-bottom:-4px!important}
+  html[data-catalog-design] body #root .site-main .journal-article-page .av-hero-copy .av-journal-link,html[data-catalog-design] body #root .site-main .certificates-page>.company-concept>.cert-back{margin-bottom:-4px!important}
+ }
+}
+@layer typography-reference{
+ /* A page with «‹ Раздел» needs no «NSP Center» label above it as well: the way back stands first. */
+ html[data-catalog-design] body #root .site-main .information-heading>div:has(>.information-home)::before{display:none!important}
+ html[data-catalog-design] body #root .site-main .information-heading:has(.information-home):not(.information-heading--photo):not(.information-heading--dark){padding-top:18px!important}
+ @media(max-width:639px){
+  html[data-catalog-design] body #root .site-main .information-heading:has(.information-home):not(.information-heading--photo):not(.information-heading--dark){padding-top:6px!important}
+  html[data-catalog-design] body #root .site-main .information-heading>div>.information-home{margin-bottom:0!important}
+  html[data-catalog-design] body #root .site-main .journal-article-page .av-document--ivory,html[data-catalog-design] body #root .site-main .certificates-page>.company-concept{padding-top:0!important}
+ }
+}
+@layer typography-reference{
+ /* «‹ Раздел» in the quiet grey of the plan's line under its title (owner, 2026-11-14), the chevron too. */
+ html body #root .site-main :is(.back-link,.information-home),html body #root .site-main :is(.back-link,.information-home):is(:hover,:focus-visible,:active,:visited){color:var(--color-muted)!important;font-weight:500!important}
+ html body #root .site-main :is(.back-link,.information-home) svg{color:currentColor!important}
+}
+
+/* One return rhythm for both direct and nested page headers. */
+:root{--return-top-gap:var(--space-16);--return-bottom-gap:var(--space-8);--return-row-height:var(--space-32)}
+@media(max-width:959px){:root{--return-row-height:calc(var(--space-22) * 2)}}
+@layer typography-reference{
+ html[data-catalog-design] body #root main.site-main :is(a.back-link[href],a.information-home[href],a.catalog-mobile-back[href]){height:var(--return-row-height)!important;min-height:var(--return-row-height)!important;box-sizing:border-box!important;padding-block:0!important;margin-block:0!important;line-height:20px!important;align-items:center}
+ html[data-catalog-design] body #root main.site-main:has(>a.back-link[href]){padding-top:0!important}
+ html[data-catalog-design] body #root main.site-main>a.back-link[href]{margin-top:var(--return-top-gap)!important;margin-bottom:var(--return-bottom-gap)!important}
+ html[data-catalog-design] body #root main.site-main>a.back-link[href]+*{margin-top:0!important}
+ html[data-catalog-design] body #root main.site-main .information-heading:has(.information-home):not(.information-heading--photo):not(.information-heading--dark){padding-top:var(--return-top-gap)!important}
+ html[data-catalog-design] body #root main.site-main .information-heading>div>.information-home[href]{margin-bottom:var(--return-bottom-gap)!important}
+ html[data-catalog-design] body #root main.site-main .information-heading>div:has(>.information-home)>.information-kicker{display:none!important}
+ html[data-catalog-design] body #root main.site-main .journal-article-page .av-document--ivory{padding-top:var(--return-top-gap)!important}
+ html[data-catalog-design] body #root main.site-main .journal-article-page .av-hero-copy .av-journal-link{height:var(--return-row-height)!important;min-height:var(--return-row-height)!important;padding:0!important;margin:0 0 var(--return-bottom-gap)!important}
+ html[data-catalog-design] body #root main.site-main .certificates-page>.company-concept{padding-top:var(--return-top-gap)!important}
+ html[data-catalog-design] body #root main.site-main .certificates-page>.company-concept>.cert-back{height:var(--return-row-height)!important;min-height:var(--return-row-height)!important;margin:0 0 var(--return-bottom-gap)!important;padding:0!important}
+ html[data-catalog-design] body #root main.site-main:has(>.recommend){padding-top:var(--return-top-gap)!important}
+ html[data-catalog-design] body #root main.site-main .recommend>.back-link[href]{margin:0 0 var(--return-bottom-gap)!important}
+}
+@layer typography-reference{
+ /* The checkout's «‹ Корзина» / «‹ Товар»: the same distances as on the other pages. */
+ html[data-catalog-design] body #root main.site-main .checkout>a.back-link[href]{margin:var(--return-top-gap) 0 var(--return-bottom-gap)!important}
+ html[data-catalog-design] body #root main.site-main:has(>.checkout>a.back-link[href]){padding-top:0!important}
+}

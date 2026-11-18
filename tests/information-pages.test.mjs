@@ -1,12 +1,13 @@
+import {webpUrl} from '../packages/domain/webp.mjs';
 import test from 'node:test';
-import {ownsBackLink} from '../src/page-navigation.mjs';
+import {ownsBackLink} from '../packages/presentation/page-navigation.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {resolve} from 'node:path';
 import * as cheerio from 'cheerio';
-import {cleanInfoHtml,videoSections,contactSections} from '../src/information-content.mjs';
+import {cleanInfoHtml,videoSections,contactSections} from '../packages/presentation/information-content.mjs';
 const root=resolve(import.meta.dirname,'..');
-const data=JSON.parse(readFileSync(resolve(root,'src/generated/content.json'),'utf8'));
+const data=JSON.parse(readFileSync(resolve(root,'packages/catalog/generated/content.json'),'utf8'));
 const page=path=>data.pages.find(p=>p.path===path);
 const read=path=>cheerio.load(readFileSync(resolve(root,'dist',path.replace(/^\//,'')+'index.html'),'utf8'));
 const words=text=>text.normalize('NFKC').match(/[\p{L}\p{N}]+/gu)||[];
@@ -40,7 +41,7 @@ test('Empty offers and photos say so, and all twenty videos retain their destina
  for(const path of ['/contacts/','/company/reviews/','/payments/'])assert.equal(read(path)('.information-heading img').length,0);
  assert.equal(read('/delivery/')('.information-heading .information-kicker').length,0);
  const videos=videoSections(page('/video/').html),$=read('/video/');assert.equal(videos.length,20);assert.equal($('.information-video').length,20);
- for(const v of videos){assert.equal($(`.information-video a[href="${v.href}"]`).length,1,v.id);assert.equal($(`img[src="${v.poster}"]`).length,1,v.id);assert.ok(existsSync(resolve(root,'public',v.poster.slice(1))),v.id);}
+ for(const v of videos){assert.equal($(`.information-video a[href="${v.href}"]`).length,1,v.id);assert.equal($(`img[src="${webpUrl(v.poster)}"]`).length,1,v.id);assert.ok(existsSync(resolve(root,'public',v.poster.slice(1))),v.id);}
 });
 test('Contact hours and unique business details are preserved; obsolete form labels are absent',()=>{
  const contact=contactSections(page('/contacts/').html),$=read('/contacts/');
@@ -68,7 +69,7 @@ test('Company article keeps its introduction, six principles, timeline and produ
  const intro='NSP-центр помогает выбирать продукты на основе растительных ингредиентов и находить понятную информацию о составе, применении и качестве. Чтобы забота о себе становилась частью повседневной жизни.';
  assert.equal($('h1').length,1);
  assert.equal($('.co-hero-title').length,0);
- assert.equal($('.co-paper-cover img').attr('src'),'/images/company-concepts/company-fresh-choice-2.png');
+ assert.equal($('.co-paper-cover img').attr('src'),'/webp/images/company-concepts/company-fresh-choice-2.webp');
  assert.equal($('#about .information-heading').length,0);
  assert.equal($('.information-heading h1').text(),'О компании');
  assert.equal($('.co-article-lead').text(),intro);

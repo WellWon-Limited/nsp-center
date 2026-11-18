@@ -3,7 +3,7 @@ node_modules
 dist
 public/media
 public/prototype
-src/generated
+packages/catalog/generated
 .wellwon/canvas
 .wellwon/plugins
 .agent

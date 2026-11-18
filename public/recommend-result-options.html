@@ -1,0 +1,62 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Варианты страницы рекомендаций</title><style>html,body{margin:0;width:100%;height:100%;background:#eaf3f1}iframe{display:block;border:0;width:100%;height:100%;opacity:0}iframe.ready{opacity:1}</style></head><body><iframe title="Пример результата теста — оформление"></iframe><script>
+(()=>{
+ const variant=Math.max(1,Math.min(3,Number(new URLSearchParams(location.search).get('variant'))||1));
+ const names={1:'Один общий блок',2:'Блоки по направлениям',3:'Пояснения рядом с товарами'};document.title=`${variant}. ${names[variant]}`;
+ const key='nsp-center:recommend',previous=sessionStorage.getItem(key);sessionStorage.setItem(key,JSON.stringify([[0],[1],[1],[1],[1],[1],[1],[0]]));
+ addEventListener('pagehide',()=>{if(previous===null)sessionStorage.removeItem(key);else sessionStorage.setItem(key,previous)},{once:true});
+ const frame=document.querySelector('iframe');
+ const css=`
+ @layer typography-reference{
+ html[data-result-preview] body #root .site-main{box-sizing:border-box;width:min(calc(100% - 56px),1000px)!important;max-width:1000px!important;margin:0 auto!important;padding:18px 0 48px!important}
+ html[data-result-preview] body #root .recommend[data-ds-id="recommend-result"]{max-width:none!important;width:100%!important;margin:0!important}
+ html[data-result-preview] body #root .recommend>.back-link{margin:0 0 12px!important}
+ html[data-result-preview] body #root .recommend>.page-heading{padding:0 0 24px!important;margin:0!important;text-align:left!important}
+ html[data-result-preview] body #root .result-paper{box-sizing:border-box;padding:32px!important;border:1px solid var(--color-glass-border)!important;border-radius:32px!important;background:var(--color-glass-raised)!important;-webkit-backdrop-filter:blur(var(--blur-24))!important;backdrop-filter:blur(var(--blur-24))!important}
+ html[data-result-preview] body #root .result-intro{font-size:16px!important;line-height:1.7!important;color:var(--color-ink)!important;margin:0 0 28px!important}
+ html[data-result-preview] body #root .recommend .recommend-area{margin:0!important;padding:0 0 32px!important}
+ html[data-result-preview] body #root .recommend .recommend-area+.recommend-area{padding-top:28px!important;border-top:1px solid var(--color-ink-line)!important}
+ html[data-result-preview] body #root .recommend-area>h2{font-size:26px!important;line-height:1.2!important;letter-spacing:var(--tracking-heading)!important;margin:0 0 12px!important}
+ html[data-result-preview] body #root .recommend-why{font-size:14px!important;line-height:1.6!important;color:var(--color-muted)!important;margin:0 0 20px!important}
+ html[data-result-preview] body #root .recommend .theme-cards{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:18px!important}
+ html[data-result-preview] body #root .recommend .theme-card-with-note{min-width:0!important}
+ html[data-result-preview] body #root .recommend .theme-card-with-note>p{font-size:14px!important;line-height:1.6!important;color:var(--color-body)!important}
+ html[data-result-preview] body #root .recommend .recommend-actions{margin:8px 0 16px!important;padding-top:24px!important;border-top:1px solid var(--color-ink-line)!important;display:flex!important;justify-content:flex-start!important}
+ html[data-result-preview] body #root .recommend .recommend-actions .btn{width:auto!important;min-width:210px!important;background:var(--color-white)!important;border:1px solid var(--color-border)!important;color:var(--color-ink)!important}
+ html[data-result-preview] body #root .recommend .fine-print{font-size:12px!important;line-height:1.6!important;color:var(--color-muted)!important;margin:0!important}
+ html[data-result-preview="2"] body #root .recommend .recommend-area{padding:28px 32px!important;margin:0 0 20px!important;border:1px solid var(--color-glass-border)!important;border-radius:32px!important;background:var(--color-glass-raised)!important}
+ html[data-result-preview="2"] body #root .recommend .recommend-area+.recommend-area{padding-top:28px!important;border-top:1px solid var(--color-glass-border)!important}
+ html[data-result-preview="2"] body #root .result-intro{margin:0 0 24px!important;font-size:14px!important;line-height:1.65!important;color:var(--color-muted)!important}
+ html[data-result-preview="2"] body #root .recommend .theme-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:660px!important}
+ html[data-result-preview="2"] body #root .recommend .recommend-actions{margin-top:4px!important;padding-top:0!important;border:0!important}
+ html[data-result-preview="3"] body #root .recommend .recommend-area{display:grid!important;grid-template-columns:minmax(0,1fr) 578px!important;gap:0 28px!important;align-items:start!important}
+ html[data-result-preview="3"] body #root .result-area-heading{grid-column:1!important;min-width:0!important}
+ html[data-result-preview="3"] body #root .result-area-heading>h2{font-size:26px!important;line-height:1.2!important;letter-spacing:var(--tracking-heading)!important;margin:0 0 12px!important}
+ html[data-result-preview="3"] body #root .recommend .theme-cards{grid-column:2!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ @media(max-width:959px){
+ html[data-result-preview] body #root .site-main{width:calc(100% - 36px)!important}
+ html[data-result-preview] body #root .result-paper,html[data-result-preview="2"] body #root .recommend .recommend-area{padding:24px 20px!important;border-radius:26px!important}
+ html[data-result-preview] body #root .recommend .theme-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ html[data-result-preview="3"] body #root .recommend .recommend-area{display:block!important}
+ html[data-result-preview] body #root .result-intro{font-size:15px!important}
+ }
+ @media(max-width:599px){
+ html[data-result-preview] body #root .recommend .theme-cards{grid-template-columns:minmax(0,1fr)!important}
+ html[data-result-preview] body #root .recommend .recommend-actions .btn{width:100%!important;min-width:0!important}
+ }
+ }
+ `;
+ frame.onload=async()=>{const d=frame.contentDocument,w=frame.contentWindow;
+  for(let i=0;i<200&&!d.querySelector('[data-ds-id="recommend-result"]');i++)await new Promise(r=>setTimeout(r,20));
+  await d.fonts.ready;await new Promise(r=>setTimeout(r,100));d.querySelector('.install-banner-close')?.click();
+  const result=d.querySelector('[data-ds-id="recommend-result"]');if(!result){frame.classList.add('ready');return}
+  if(result.classList.contains('recommend--paper')){w.scrollTo({top:0,behavior:'instant'});frame.classList.add('ready');window.previewReady=true;return}
+  d.documentElement.dataset.resultPreview=String(variant);const style=d.createElement('style');style.textContent=css;d.head.append(style);
+  const heading=result.querySelector('.page-heading'),intro=heading.querySelector('p');if(intro)intro.className='result-intro';
+  const areas=[...result.querySelectorAll(':scope>.recommend-area')],actions=result.querySelector('.recommend-actions'),fine=result.querySelector(':scope>.fine-print');
+  if(variant===2){if(intro)heading.after(intro);}else{const paper=d.createElement('div');paper.className='result-paper';paper.dataset.dsId='result-paper';if(intro)paper.append(intro);paper.append(...areas);if(actions)paper.append(actions);if(fine)paper.append(fine);result.append(paper);}
+  if(variant===3){for(const area of areas){const lead=d.createElement('div');lead.className='result-area-heading';const title=area.querySelector('h2'),why=area.querySelector('.recommend-why');if(title)lead.append(title);if(why)lead.append(why);area.prepend(lead);}}
+  w.scrollTo({top:0,behavior:'instant'});frame.classList.add('ready');window.previewReady=true;
+ };
+ frame.src='/diagnostic-test/?result-preview='+variant;
+})();
+</script></body></html>

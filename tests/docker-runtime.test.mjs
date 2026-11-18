@@ -1,28 +1,40 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import {readFileSync} from 'node:fs';
+import {dirname,join,normalize} from 'node:path';
 
-// The runtime image copies the server's files one by one (Dockerfile): every local module that scripts/serve.mjs
-// imports, directly or through other modules, must be in that list, or the server does not start on the stand.
-test('the Docker runtime image has every local module the server imports', () => {
-  const docker = readFileSync('Dockerfile', 'utf8');
-  const seen = new Set();
-  const pkg=JSON.parse(readFileSync('package.json','utf8'));
-  const walk = file => {
-    if (seen.has(file)) return; seen.add(file);
-    const src = readFileSync(file, 'utf8');
-    for(const match of src.matchAll(/import\s[^'"]*?from\s+['"]([^.'"][^'"]*)['"]/g)){
-      if(match[1].startsWith('node:'))continue;
-      const name=match[1].startsWith('@')?match[1].split('/').slice(0,2).join('/'):match[1].split('/')[0];
-      assert.ok(pkg.dependencies?.[name],`${file}: ${name} is available in the production container`);
-    }
-    for (const m of src.matchAll(/(?:^|\n)\s*import\s[^'"]*?from\s+['"](\.{1,2}\/[^'"]+)['"]|import\(['"](\.{1,2}\/[^'"]+\.m?js)['"]\)/g)) {
-      const spec = m[1] ?? m[2];
-      if (!/\.m?js$/.test(spec)) continue;
-      walk(relative('.', join(dirname(file), spec)));
-    }
-  };
-  walk('scripts/serve.mjs');
-  for (const file of seen) assert.ok(docker.includes(`/app/${file}`), `Dockerfile copies ${file}`);
+function imports(entry){
+  const seen=new Set();
+  const walk=file=>{
+    if(seen.has(file))return;seen.add(file);
+    const source=readFileSync(file,'utf8');
+    for(const match of source.matchAll(/(?:from\s*|import\s*\()\s*['"](\.[^'"]+\.mjs)['"]/g))walk(normalize(join(dirname(file),match[1])));
+  };walk(entry);return seen;
+}
+test('API deployment contains its imports and never imports frontend source or rendering',()=>{
+  const docker=readFileSync('Dockerfile','utf8').split('FROM runtime AS api')[1].split('FROM runtime AS admin')[0];
+  for(const file of imports('apps/api/server.mjs')){
+    assert.match(file,/^(apps\/api|packages\/domain)\//,file);
+    assert.ok(docker.includes(file.startsWith('apps/')?'/app/apps/api':'/app/packages/domain'),file);
+  }
+  assert.doesNotMatch(docker,/\/app\/(dist|src)\b/);
+});
+test('web deployment has no API implementation, private catalog or database import',()=>{
+  const docker=readFileSync('Dockerfile','utf8').split('FROM runtime AS web')[1];
+  for(const file of imports('apps/web/server.mjs')){
+    assert.doesNotMatch(file,/apps\/api/);
+    assert.doesNotMatch(readFileSync(file,'utf8'),/from ['"]pg['"]|DATABASE_URL|accounts\.pool/);
+    assert.ok(docker.includes('/app/'+file)||file.startsWith('packages/domain/')&&docker.includes('/app/packages/domain'),file);
+  }
+  assert.doesNotMatch(docker,/generated\/content\.json|\/app\/apps\/api/);
+});
+
+test('admin deployment is independent of storefront runtime and database credentials',()=>{
+ const docker=readFileSync('Dockerfile','utf8').split('FROM runtime AS admin')[1].split('FROM runtime AS web')[0];
+ for(const file of imports('apps/admin/server.mjs')){
+  assert.doesNotMatch(file,/apps\/api|scripts\/serve/);
+  assert.doesNotMatch(readFileSync(file,'utf8'),/DATABASE_URL|from ['"]pg['"]/);
+  assert.ok(docker.includes('/app/'+file)||file.startsWith('packages/domain/')&&docker.includes('/app/packages/domain'),file);
+ }
+ assert.doesNotMatch(docker,/\/app\/dist\s|generated\/content\.json|\/app\/src/);
 });

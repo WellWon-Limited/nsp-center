@@ -1,0 +1,58 @@
+.card-application-page{max-width:1200px;margin-inline:auto;color:var(--color-ink);padding-bottom:32px}.card-application-page>header{margin:20px 0 28px;max-width:850px}.card-application-page>header h1{font-size:36px;line-height:1.2;font-weight:600;margin:8px 0 12px}.card-application-page>header>p:last-child{font-size:17px;line-height:1.5;color:var(--color-muted)}.card-application-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr);gap:28px;align-items:start}.card-application-paper{padding:28px}.card-application-form-title{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:20px}.card-application-form-title h2,.card-application-layout aside h2{font-size:22px;font-weight:600;margin:0}.card-application-form-title small{font-size:12px;color:var(--color-muted)}.card-application-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 16px;align-items:start}.card-application-field{display:grid;gap:8px;min-width:0;font-size:14px;font-weight:600}.card-application-field>span,.card-application-field>label{min-height:20px;line-height:20px}.card-application-field .field{font-size:16px;font-weight:400;min-height:48px;border:1px solid var(--color-border);padding:12px 14px;border-radius:var(--radius-control);box-shadow:none}.card-application-field .field:focus-visible{outline:0;border-color:var(--color-ink);box-shadow:none}.card-application-field .phone-field .field{padding-left:39px}.card-application-field .phone-field-prefix{left:14px;font-size:16px}.card-application-field small{font-size:12px;line-height:1.4;font-weight:400;color:var(--color-muted)}.card-application-page em{display:inline;font-style:normal;color:var(--color-danger)}.card-application-consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.5;margin:24px 0 20px}.card-application-consent input{width:18px;height:18px;flex:none;margin-top:2px;accent-color:var(--color-ink)}.card-application-note{font-size:13px;line-height:1.5;color:var(--color-muted);margin:16px 0 0}.card-application-preview.discount-card{margin:0 0 24px;min-height:210px}.card-application-preview>p{font-size:14px;line-height:1.5;max-width:260px;margin:0}.card-application-layout aside ol{font-size:16px;line-height:1.6;padding-left:20px}.card-application-layout aside li{padding-left:2px;margin-bottom:10px}.card-application-status{padding:18px;background:var(--color-mint-tint);border-radius:var(--radius-panel);margin-bottom:20px;overflow-wrap:anywhere}.card-application-status strong{font-size:20px}.card-application-status p{font-size:16px;line-height:1.5;margin:10px 0 0}.card-application-status--rejected{background:var(--color-sand-tint)}.discount-card .card-application-status{color:var(--color-ink);margin:0}.discount-card .card-application-status strong{font-size:17px}.discount-card .card-application-status p{font-size:14px}
+.admin-card-applications .card-application-admin-grid{display:grid;grid-template-columns:minmax(250px,1fr) minmax(0,1.2fr);gap:22px}.card-application-list{display:grid;align-content:start;gap:10px}.card-application-list>button{width:100%;text-align:left;padding:16px;border-radius:16px;border:1px solid var(--color-border);background:var(--color-glass-raised);color:var(--color-ink);display:grid;gap:6px;overflow-wrap:anywhere}.card-application-list>button[aria-pressed=true]{background:var(--color-mint-tint);border-color:var(--color-ink)}.card-application-list small{font-size:13px;line-height:1.4}.card-application-admin-detail{padding:22px;background:var(--color-white);border-radius:var(--radius-panel);min-width:0}.card-application-admin-detail h3{font-size:22px;margin:0 0 8px}.card-application-admin-detail dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;font-size:15px;line-height:1.5}.card-application-admin-detail dt{color:var(--color-muted)}.card-application-admin-detail dd{margin:0;overflow-wrap:anywhere}.card-application-admin-detail form{display:grid;gap:14px}.card-application-admin-detail label{display:grid;gap:8px;font-size:14px}.card-application-admin-detail .ds-cluster{flex-wrap:wrap}.card-application-admin-detail .btn{white-space:normal}.card-application-admin-tools{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}.card-application-admin-tools .field{width:auto;max-width:100%;flex:1;min-width:160px}.card-application-admin-pages{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:20px}
+@media(max-width:959px){.card-application-layout{grid-template-columns:1fr;gap:24px}.card-application-page>header h1{font-size:30px}.card-application-paper{padding:20px}.card-application-grid{grid-template-columns:1fr}.card-application-form-title{display:block}.card-application-form-title small{display:block;margin-top:10px}.card-application-page>header{margin-top:16px}.card-application-page>header>p:last-child{font-size:16px}.card-application-page .btn{max-width:100%}.admin-card-applications .card-application-admin-grid{grid-template-columns:1fr}.card-application-admin-detail{padding:18px}.card-application-admin-detail dl{grid-template-columns:1fr;gap:3px}.card-application-admin-detail dd{margin-bottom:10px}}
+/* The application owns its single return link, even when account navigation remembers a previous page. */
+.site-main:has(>.card-application-page)>.back-link{display:none}
+@layer typography-reference{
+ html[data-catalog-design] body #root main.site-main:has(>.card-application-page){padding-top:0!important}
+ html[data-catalog-design] body #root main.site-main .card-application-page>a.back-link[href]{display:flex!important;width:fit-content;margin:var(--return-top-gap) 0 var(--return-bottom-gap)!important}
+ html[data-catalog-design] body #root main.site-main .card-application-page>header{margin-top:0!important}
+}
+
+/* A request is a text status below the card, never part of its printed surface. */
+.card-application-status{padding:0;background:none!important;border:0;border-radius:0;margin:20px 0;box-shadow:none}
+.discount-card-area{min-width:0;align-self:start}
+.discount-card-area>.discount-card{margin-bottom:0}
+.discount-card-area>.card-application-status{margin-top:18px}
+.discount-card-link{display:inline-flex;align-items:center;justify-self:start;gap:8px;line-height:1.4}
+.discount-card-link>svg{width:18px!important;height:18px!important;flex:0 0 18px;transform:none!important;vertical-align:middle}
+
+.admin-card-applications .card-application-admin-grid{grid-template-columns:minmax(0,1fr)}
+.card-application-admin-detail{width:100%;max-width:none}
+
+.discount-card--requested{aspect-ratio:1.586;align-content:space-between;gap:12px}
+.discount-card-area>.card-application-status{max-width:440px;margin-inline:auto}
+
+html body #root .card-offer a{white-space:normal!important}
+.account .account-card.account-card--application{margin-top:var(--space-24);background:var(--color-sand-tint)!important;width:100%}
+.account-card--application .card-application-status{max-width:none;margin:0}
+.account-card--application>p{margin:0;font-size:var(--text-14);line-height:var(--leading-body)}
+.account-card--application .discount-card-link{color:var(--color-ink)}
+.admin-back-link{appearance:none;background:transparent;border:0;box-shadow:none;padding:0;display:inline-flex;align-items:center;gap:var(--space-8);font-family:var(--font-sans);font-size:var(--text-14);font-weight:var(--weight-400);min-height:44px;margin:var(--space-16) 0;color:var(--color-ink)}
+.admin-back-link svg{flex:0 0 18px;transform:rotate(180deg)}
+.admin-back-link:hover{background:transparent;color:var(--color-link)}
+
+.card-request-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--color-ink-line);margin-bottom:24px}
+.card-request-heading p{font-size:var(--text-14);line-height:var(--leading-body);color:var(--color-muted);margin:8px 0 0}
+.card-request-state{flex:none;background:var(--color-mint-tint);white-space:nowrap}
+.card-request-state--rejected{background:var(--color-sand-tint)}
+.card-request-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.card-request-columns h4{font-size:var(--text-18);font-weight:var(--weight-700);line-height:var(--leading-compact);margin:0 0 12px}
+.card-request-customer dl{display:block;margin:20px 0 0}
+.card-request-customer dl>div{display:grid;grid-template-columns:minmax(100px,.65fr) minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--color-ink-line)}
+.card-request-customer dl>div:last-child{border-bottom:0}
+.card-request-review{display:grid;gap:16px;min-width:0}
+.card-request-review>p,.card-request-review form>p{margin:0;font-size:var(--text-14);line-height:var(--leading-body)}
+.card-request-review>.btn{justify-self:start}
+.card-request-review h4{margin-bottom:0}
+@media(max-width:959px){.card-request-columns{grid-template-columns:minmax(0,1fr);gap:24px}.card-request-heading{flex-wrap:wrap}.card-request-customer dl>div{grid-template-columns:minmax(90px,.65fr) minmax(0,1fr);gap:12px}.card-request-review .admin-editor-actions{align-items:stretch}.card-request-review .admin-editor-actions>.btn{flex:1 1 180px}}
+
+.account-card--application .card-application-status>strong{font-size:var(--text-18);font-weight:var(--weight-700)}
+
+.card-application-field--wide{grid-column:1/-1}
+.card-application-terms{margin-top:24px;padding-top:20px;border-top:1px solid var(--color-ink-line)}
+.card-application-terms h3{font-size:var(--text-16);font-weight:var(--weight-700);line-height:var(--leading-body);margin:0 0 12px}
+.card-application-terms p{font-size:var(--text-14);line-height:var(--leading-body);margin:0 0 12px;color:var(--color-body)}
+.card-application-terms p:last-child{margin-bottom:0}
+
+.card-application-layout aside>.discount-card-scale{margin:0 auto 24px}

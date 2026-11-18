@@ -1,11 +1,13 @@
+import {createAccounts} from './database-helper.mjs';
+import sharp from 'sharp';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { applyContent, applySite, noteKey, visibleNotes } from '../src/site.ts';
-import { createAccounts, hashPassword, verifyPassword, validateRegistration, phoneKey, pickData, parseCookies } from '../scripts/accounts.mjs';
+import { applyContent, applySite, noteKey, visibleNotes } from '../packages/presentation/site.ts';
+import { hashPassword, verifyPassword, validateRegistration, phoneKey, pickData, parseCookies } from '../scripts/accounts.mjs';
 
 test('passwords are salted scrypt hashes and verify only with the same password', async () => {
   const a = await hashPassword('secret-2026'), b = await hashPassword('secret-2026');
@@ -46,7 +48,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   const port = 20000 + Math.floor(Math.random() * 20000);
   const pg = new EmbeddedPostgres({ databaseDir: join(dir, 'db'), port, user: 'test', password: 'test', persistent: false, autoRehydrateSymlinks: true, onLog: () => {}, onError: () => {} });
   await pg.initialise(); await pg.start(); await pg.createDatabase('accounts');
-  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, knowledgeThemes:[{mainProductId:'alfalfa',lead:'Люцерна: растительная питательная поддержка.',pairs:[{productId:'bee-pollen',why:'Пищевая поддержка рациона.'}],sources:[{course:'Курс',lecture:'Растения в питании',speaker:'Лектор'}]}], categories: JSON.parse(readFileSync(new URL('../src/generated/content.json', import.meta.url), 'utf8')).categories, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', name:'Люцерна', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
+  const accounts = await createAccounts({ databaseUrl: `postgres://test:test@127.0.0.1:${port}/accounts`, knowledgeThemes:[{mainProductId:'alfalfa',lead:'Люцерна: растительная питательная поддержка.',pairs:[{productId:'bee-pollen',why:'Пищевая поддержка рациона.'}],sources:[{course:'Курс',lecture:'Растения в питании',speaker:'Лектор'}]}], categories: JSON.parse(readFileSync(new URL('../packages/catalog/generated/content.json', import.meta.url), 'utf8')).categories, productIds: new Set(['bee-pollen', 'alfalfa']), cardProducts: [{ id: 'bee-pollen', prices: { retail: 1000, partner: 714, units: { retail: 10, partner: 7.14 } } }, { id: 'alfalfa', name:'Люцерна', prices: { retail: 900, partner: null } }], buildRate: 100, adminEmails: ['boss@example.ru'], cbr: false });
   const server = createServer((req, res) => accounts.handle(req, res, new URL(req.url, 'http://x')));
   await new Promise(r => server.listen(0, '127.0.0.1', r));
   t.after(async () => { server.close(); await accounts.close(); await pg.stop(); rmSync(dir, { recursive: true, force: true }); });
@@ -67,6 +69,10 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/card-prices')).status, 403, 'no card number, no card prices');
 
   assert.equal((await call('/api/account', 'PUT', { profile: { firstName: 'Анна', lastName: 'Петрова', phone: '+7 900 111-22-33', partnerId: '446621' }, data: { cart: { 'bee-pollen': 2 }, signedIn: true } })).status, 200);
+  assert.equal((await call('/api/auth/me')).body.account.partnerId, '', 'a profile update cannot verify a self-entered card');
+  assert.equal((await call('/api/card-prices')).status, 403);
+  // Existing cards imported by staff remain valid; new claims use the approval flow tested separately.
+  await accounts.pool.query("update users set partner_id='446621' where email='anna@example.ru'");
   const me = await call('/api/auth/me');
   assert.equal(me.body.account.lastName, 'Петрова');
   const cardPrices = await call('/api/card-prices');
@@ -125,9 +131,22 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = '';
   await accounts.pool.query("insert into users (email, first_name, last_name, password_hash, consent_at, role) values ('boss@example.ru', 'Марина', 'Админ', $1, now(), 'admin')", [await hashPassword('password-3-staff')]);
   const asCustomer = await call('/api/auth/login', 'POST', { login: 'boss@example.ru', password: 'password-3-staff' });
-  assert.deepEqual([asCustomer.status, asCustomer.body.staff], [403, true], 'a staff account does not sign in as a customer');
+  assert.deepEqual(asCustomer, {status:401,body:{error:'Неверный логин или пароль.'},cookie:null}, 'staff credentials get the ordinary failed customer login response without a session');
+  const wrongStaffPassword = await call('/api/auth/login', 'POST', {login:'boss@example.ru',password:'wrong-password'});
+  const unknownCustomer = await call('/api/auth/login', 'POST', {login:'unknown@example.ru',password:'wrong-password'});
+  assert.deepEqual(wrongStaffPassword, asCustomer, 'the response does not disclose whether the staff password was correct');
+  assert.deepEqual(unknownCustomer, asCustomer, 'the response does not disclose the account role or existence');
   assert.equal((await call('/api/admin/me')).status, 401);
   assert.equal((await call('/api/admin/login', 'POST', { login: 'anna@example.ru', password: 'password-1' })).status, 401, 'a customer does not sign in to site management');
+  const sharedPhone = await call('/api/auth/register', 'POST', {firstName:'Другой',lastName:'Покупатель',email:'shared-phone@example.ru',phone:'+7 900 111-22-33',password:'password-4',consent:true});
+  assert.equal(sharedPhone.status,201,'contact phone can be shared by customers');
+  const personalBoss = await call('/api/auth/register', 'POST', {firstName:'Марина',lastName:'Покупатель',email:'boss@example.ru',phone:'+7 900 111-22-33',password:'password-5',consent:true});
+  assert.equal(personalBoss.status,201,'staff can register an independent customer with the same email');
+  assert.equal((await call('/api/auth/register','POST',{firstName:'Повтор',lastName:'Покупатель',email:'BOSS@example.ru',password:'password-5',consent:true})).status,409);
+  assert.equal((await call('/api/auth/login','POST',{login:'boss@example.ru',password:'password-3-staff'})).status,401);
+  assert.equal((await call('/api/admin/login','POST',{login:'boss@example.ru',password:'password-5'})).status,401);
+  assert.equal((await call('/api/auth/login','POST',{login:'boss@example.ru',password:'password-5'})).status,200);
+  session = '';
   const boss = await call('/api/admin/login', 'POST', { login: 'boss@example.ru', password: 'password-3-staff' });
   assert.equal(boss.status, 200);
   assert.match(boss.cookie, /^nsp_staff=[\w-]{20,}; Path=\/; HttpOnly; SameSite=Strict; Max-Age=43200/, 'a 12-hour staff session');
@@ -183,7 +202,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.ok(complete.id,'new-product form creates the record only on final submit');
   assert.equal(complete.visibility[complete.id],true,'a newly created card stays hidden');
   assert.equal(complete.knowledge[complete.id].experts[0].speaker,'Анна Лекторова','lecture expert can be attached before the product exists');
-  assert.equal(complete.cards[complete.id].image,'/images/journal-final/magnesium-cover-v1.jpg');
+  assert.equal(complete.cards[complete.id].image,'/webp/images/journal-final/magnesium-cover-v1.webp');
   const fullContent=(await call('/api/product-content?id='+complete.id)).body.content;
   assert.equal(fullContent.properties.Состав,'Растительные ингредиенты.');
   assert.deepEqual(fullContent.about,expertKnowledge.about);
@@ -329,8 +348,10 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/reviews?product=bee-pollen')).body.reviews[0].author, 'Анна П.');
   assert.equal((await call('/api/admin/review', 'PUT', { id: review.id, status: 'deleted' })).status, 200);
   assert.deepEqual((await call('/api/reviews?product=bee-pollen')).body.reviews, []);
-  // «Сотрудники»: a new member of staff gets their own email and a one-time password; a customer's email is refused.
-  assert.equal((await call('/api/admin/staff', 'PUT', { email: 'anna@example.ru' })).status, 409, 'a customer is not promoted');
+  // Creating staff with a customer's email creates a separate identity, never promotes the customer.
+  assert.equal((await call('/api/admin/staff', 'PUT', { email: 'anna@example.ru' })).status, 201, 'a separate staff identity is created');
+  assert.equal((await accounts.pool.query("select count(*)::int as n from users where email='anna@example.ru' and role='customer'")).rows[0].n,1);
+  assert.equal((await call('/api/admin/staff','PUT',{email:'anna@example.ru',remove:true})).status,200);
   const helper = await call('/api/admin/staff', 'PUT', { email: 'helper@example.ru', firstName: 'Вера' });
   assert.equal(helper.status, 201);
   assert.match(helper.body.password, /^[a-zA-Z2-9]{16}$/);
@@ -358,7 +379,21 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   const { rows: customerRows } = await accounts.pool.query("select id from users where email = 'anna@example.ru'");
   await accounts.pool.query('insert into account_data(user_id,data) values ($1,$2) on conflict(user_id) do update set data=excluded.data', [customerRows[0].id, JSON.stringify({orders:[{id:'LOCAL-1',total:100,items:1,date:'01.01.2026'}]})]);
   assert.equal((await call('/api/admin/orders')).body.total, 0);
-  const { rows: orderRows } = await accounts.pool.query('insert into shop_orders(user_id,customer,items,total) values ($1,$2,$3,$4) returning id', [customerRows[0].id, JSON.stringify({name:'Анна Петрова',phone:'+7 900 111-22-33',email:'anna@example.ru'}), JSON.stringify([{name:'Люцерна',quantity:2,price:500}]), 1000]);
+  const { rows: orderRows } = await accounts.pool.query(`with o as (insert into shop_orders(user_id,customer,total_kopecks,subtotal_kopecks,discount_kopecks,delivery_kopecks) values ($1,$2,100000,100000,0,0) returning id), i as (insert into order_items(order_id,product_id,name,quantity,unit_price_kopecks,retail_price_kopecks,line_total_kopecks) select id,'alfalfa','Люцерна',2,50000,50000,100000 from o) select id from o`, [customerRows[0].id, JSON.stringify({name:'Анна Петрова',phone:'+7 900 111-22-33',email:'anna@example.ru'})]);
+  const buyerLogin=await fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({login:'anna@example.ru',password:'password-1'})});
+  const customerCookie=buyerLogin.headers.get('set-cookie').split(';')[0];
+  const ownOrders=await fetch(base+'/api/account/orders?user_id=99999',{headers:{Cookie:customerCookie}});
+  assert.equal(ownOrders.status,200);
+  const owned=await ownOrders.json();
+  assert.equal(owned.orders.length,1);
+  assert.equal(owned.orders[0].status,'new');
+  assert.equal('note' in owned.orders[0],false,'staff notes are never exposed to customers');
+  assert.equal('customer' in owned.orders[0],false,'no other customer details in this endpoint');
+  assert.equal((await fetch(base+'/api/account/orders')).status,401);
+  const another=await fetch(base+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({firstName:'Другой',lastName:'Покупатель',email:'another-orders@example.ru',password:'password-2',consent:true})});
+  const otherCookie=another.headers.get('set-cookie').split(';')[0];
+  assert.deepEqual((await(await fetch(base+'/api/account/orders',{headers:{Cookie:otherCookie}})).json()).orders,[],'a different customer cannot see this order');
+
   const orderId = String(orderRows[0].id);
   const orders = (await call('/api/admin/orders')).body;
   assert.equal(orders.total, 1); assert.equal(orders.summary.new, 1);
@@ -367,7 +402,7 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   assert.equal((await call('/api/admin/orders?q=missing')).body.total, 0);
   assert.equal((await call('/api/admin/orders?status=unknown')).status, 400);
   assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'unknown',note:'',updatedAt:orders.orders[0].updatedAt})).status, 400);
-  const updated = await call('/api/admin/orders', 'PUT', {id:orderId,status:'completed',note:'Выдан',updatedAt:orders.orders[0].updatedAt});
+  const updated = await call('/api/admin/orders', 'PUT', {id:orderId,status:'completed',note:'Выдан',updatedAt:orders.orders[0].updatedAt,correction:true,reason:'Заказ уже выдан, исправление учёта'});
   assert.equal(updated.status, 200); assert.equal(updated.body.order.note, 'Выдан');
   assert.equal((await call('/api/admin/orders', 'PUT', {id:orderId,status:'cancelled',note:'',updatedAt:orders.orders[0].updatedAt})).status, 409, 'stale changes cannot overwrite another administrator');
   const filtered = (await call('/api/admin/orders?status=completed')).body;
@@ -382,16 +417,21 @@ test('accounts API: register, session, data, sign-out, sign-in, guards', { skip:
   session = adminSession;
 
   // A card's own content: an uploaded certificate scan is served back; name and photo reach every page via /api/site.
-  const png = Buffer.from('89504e470d0a1a0a0000000d4948445200000001000000010806000000', 'hex');
+  const png=await sharp({create:{width:2,height:2,channels:4,background:{r:100,g:150,b:200,alpha:.5}}}).png().toBuffer();
   const up = await fetch(base + '/api/admin/upload?product=alfalfa&kind=document&name=scan.png', { method: 'POST', headers: { 'Content-Type': 'image/png', Origin: base, Cookie: session }, body: png });
   assert.equal(up.status, 201);
   const file = await up.json();
-  assert.match(file.url, /^\/api\/files\/[a-f0-9]{32}$/);
+  assert.match(file.url, /^\/api\/files\/[a-f0-9]{32}\.webp$/);
   assert.equal((await fetch(base + '/api/admin/upload?product=alfalfa&kind=document', { method: 'POST', headers: { 'Content-Type': 'image/svg+xml', Origin: base, Cookie: session }, body: '<svg/>' })).status, 415, 'no SVG uploads');
   assert.equal((await fetch(base + '/api/admin/upload?product=alfalfa&kind=document', { method: 'POST', headers: { 'Content-Type': 'image/png', Cookie: session }, body: png })).status, 403, 'an upload needs our Origin');
   const served = await fetch(base + file.url);
-  assert.equal(served.headers.get('content-type'), 'image/png');
-  assert.deepEqual(Buffer.from(await served.arrayBuffer()), png);
+  assert.equal(served.headers.get('content-type'), 'image/webp');
+  const decoded=await sharp(Buffer.from(await served.arrayBuffer())).raw().toBuffer();assert.deepEqual(decoded,await sharp(png).raw().toBuffer());
+  assert.equal((await fetch(base+'/api/admin/upload?product=alfalfa&kind=image',{method:'POST',headers:{'Content-Type':'image/png',Origin:base,Cookie:session},body:'not an image'})).status,400,'decode input instead of trusting extension');
+  const legacyId='d'.repeat(32);
+  await accounts.pool.query('insert into files(id,product_id,kind,name,mime,size,data) values($1,$2,$3,$4,$5,$6,$7)',[legacyId,'alfalfa','image','legacy.png','image/png',png.length,png]);
+  const legacy=await fetch(base+'/api/files/'+legacyId+'.webp');assert.equal(legacy.status,200);assert.equal(legacy.headers.get('content-type'),'image/webp');assert.equal((await sharp(Buffer.from(await legacy.arrayBuffer())).metadata()).format,'webp');
+  assert.equal((await accounts.pool.query('select mime from files where id=$1',[legacyId])).rows[0].mime,'image/png','legacy source retained');
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { name: 'X' } })).status, 400);
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { documents: [{ name: 'evil', url: 'https://evil.example/x.png' }] } })).status, 400);
   assert.equal((await call('/api/admin/content', 'PUT', { productId: 'alfalfa', content: { name: 'Люцерна новая', about: ['Первый абзац.'], properties: { 'Применение': 'По одной капсуле.' }, documents: [file], image: file.url } })).body.cards.alfalfa.name, 'Люцерна новая');
@@ -448,7 +488,7 @@ test('a card\'s own content replaces only what is set and can be taken back', ()
 });
 
 test('admin products: a section as on the site and a search by name or article within it', () => {
-  const code = readFileSync(new URL('../src/admin.tsx', import.meta.url), 'utf8');
+  const code = readFileSync(new URL('../apps/admin/admin.tsx', import.meta.url), 'utf8');
   assert.ok(code.includes("return visit('/catalog/');"));
   assert.match(code, /<option value="">Все разделы<\/option>/);
   assert.match(code, /data\.products\.filter\(p => \(!inSection \|\| inSection\.has\(p\.path\)\) && words\.every\(w => `\$\{p\.name\} \$\{p\.article \?\? ''\}`\.toLowerCase\(\)\.includes\(w\)\)\)/);

@@ -1,0 +1,10 @@
+{
+  "mode": "built-in imagegen edit",
+  "source": "01-mint-woodland.png",
+  "output": "01-mint-woodland-headroom-v2.png",
+  "prompt": "Extend mint woodland above chlorophyll cap, preserve labels, bottle proportions, flower, fern and stone; seamless natural bokeh with no mirror edges or stripes.",
+  "actual_dimensions": [
+    1983,
+    793
+  ]
+}

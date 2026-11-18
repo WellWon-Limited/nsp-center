@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import * as cheerio from 'cheerio';
-const $=cheerio.load(readFileSync('index.html','utf8'));
+const $=cheerio.load(readFileSync('apps/web/index.html','utf8'));
 const script=$('script').toArray().map(n=>$(n).html()).find(s=>s.includes('savedCartCount'));
 function preview(entries={}){
  const dataset={},properties={};
@@ -33,7 +33,7 @@ test('Navigation destinations share header markup and header dimensions do not d
   if(reference===undefined)reference=header;
   else assert.equal(header,reference,`${path}: header content or structure changed`);
  }
- const css=['src/home-hero.css','src/app.css'].map(path=>readFileSync(path,'utf8')).join('\n');
+ const css=['apps/web/src/home-hero.css','packages/presentation/app.css'].map(path=>readFileSync(path,'utf8')).join('\n');
  assert.doesNotMatch(css,/:has\([^)]*home[^)]*\)[^{]*\.site-header/);
  assert.doesNotMatch(css,/:has\([^)]*home[^)]*\)\s*\{\s*--home-control-unit/);
 });
@@ -57,7 +57,7 @@ test('The home plan card is final from the first paint: no loading line; this br
  const head=doc('head').html();
  assert.match(head,/classList\.add\("nsp-has-plan"\)/);
  assert.match(head,/--plan-name/);
- const css=readFileSync('src/app.css','utf8');
+ const css=readFileSync('packages/presentation/app.css','utf8');
  assert.match(css,/html\.nsp-has-plan :is\(\.hero-daily-create,\.hero-daily-guest\)\{display:none\}/);
  assert.match(css,/html\.nsp-signed-in \.hero-daily-signup\{display:none\}/);
 });

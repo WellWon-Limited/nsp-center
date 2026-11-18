@@ -1,0 +1,11 @@
+import {useEffect,useRef,useState} from 'react';
+import {productCover} from './product-media.mjs';
+import {data,shortName} from './store';
+import {listed} from './site';
+import {Icon} from './ui';
+export function ProductPicker({exclude,value,onChange,placeholder='Введите название',label='Продукт для плана',withHidden=false}:{exclude:string[];value:string;onChange:(id:string)=>void;placeholder?:string;label?:string;withHidden?:boolean}){const [query,setQuery]=useState('');const [open,setOpen]=useState(false);const root=useRef<HTMLDivElement>(null);
+ useEffect(()=>{if(!open)return;const close=(e:MouseEvent)=>{if(!root.current?.contains(e.target as Node))setOpen(false);};document.addEventListener('mousedown',close);return()=>document.removeEventListener('mousedown',close);},[open]);
+ useEffect(()=>{if(!value)setQuery('');},[value]);
+ const needle=query.toLowerCase().trim();const options=data.products.filter(p=>!exclude.includes(p.id)&&(withHidden||listed(p))&&(!needle||`${p.name} ${p.article}`.toLowerCase().includes(needle)));
+ return <div className="product-picker" ref={root}><div className="product-picker-field"><input className="field" value={query} placeholder={placeholder} aria-label={label} role="combobox" aria-expanded={open} aria-controls="product-picker-list" autoComplete="off" onFocus={()=>setOpen(true)} onChange={e=>{setQuery(e.target.value);onChange('');setOpen(true);}} onKeyDown={e=>{if(e.key==='Escape')setOpen(false);if(e.key==='Enter'&&open&&options[0]&&!value){e.preventDefault();onChange(options[0].id);setQuery(shortName(options[0].name));setOpen(false);}}}/><button type="button" className="product-picker-toggle" aria-label={open?'Скрыть список продуктов':'Показать список продуктов'} onClick={()=>setOpen(v=>!v)}><Icon name="chevron" size={18}/></button></div>
+ {open&&<ul className="product-picker-list" id="product-picker-list" role="listbox">{options.length?options.map(p=><li key={p.id}><button type="button" role="option" aria-selected={value===p.id} onClick={()=>{onChange(p.id);setQuery(shortName(p.name));setOpen(false);}}><img src={productCover(p)} alt="" width="32" height="32" loading="lazy"/><span>{shortName(p.name)}</span></button></li>):<li className="product-picker-empty">Ничего не найдено</li>}</ul>}</div>;}

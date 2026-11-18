@@ -1,0 +1,10 @@
+import type {Article} from './content-types';
+import {data,useStore} from './store';
+import {isHiddenContent,listed} from './site';
+import {Icon,ProductGrid} from './ui';
+import {immuneArticleId} from './immune-article';
+import {JournalArticle,journalCover,journalCoverAlt,orderJournalArticles} from './journal-article';
+export const useJournal=()=>{const {site}=useStore();return orderJournalArticles(data.articles).filter(a=>!isHiddenContent(site,'article',a.id));};
+export const articleCover=journalCover;
+export function ArticleCard({article:a,first=false}:{article:Article;first?:boolean}){return <article className="panel article-card"><a href={a.path}>{articleCover(a)&&<img src={articleCover(a)} alt={journalCoverAlt(a)} width="600" height="380" loading={first?undefined:'lazy'} fetchPriority={first?'high':undefined} decoding="async"/>}<div><span className="ds-kicker">Журнал · {a.date}</span><h2>{a.title}</h2><span className="read-more">Читать статью <Icon name="chevron" size={17}/></span></div></a></article>;}
+export function ArticlePage({article:a}:{article:Article}){const journalArticles=useJournal();const {site}=useStore();if(!a.custom&&isHiddenContent(site,'article',a.id))return <section className="not-found empty-screen product-gone" data-ds-id="article-gone"><h1>Этой статьи больше нет в журнале</h1><a className="btn btn--primary" href="/blog/">Перейти в журнал</a></section>;const related=data.products.filter(p=>listed(p)&&a.related.includes(p.path)).slice(0,8);return <><article className={`article-detail journal-article-page${a.id===immuneArticleId?' immune-article-page':''}`}><JournalArticle article={a}/></article>{related.length>0&&<section className="section article-related-products" data-ds-id="article-related-products"><h2>Продукты из статьи</h2><ProductGrid products={related}/></section>}<section className="section"><div className="section-heading"><h2>Продолжайте читать</h2><a href="/blog/">Все статьи <Icon name="chevron" size={18}/></a></div><div className="article-grid">{journalArticles.filter(x=>x.id!==a.id).slice(0,3).map(a=><ArticleCard article={a} key={a.id}/>)}</div></section></>;}

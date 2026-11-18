@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {APP_RESUME_TIMEOUT_MS as timeout,RESUME_PAGE_KEY,installAppResume,readResumePage} from '../src/app-resume.mjs';
+import {APP_RESUME_TIMEOUT_MS as timeout,RESUME_PAGE_KEY,installAppResume,readResumePage} from '../apps/web/src/app-resume.mjs';
 const storage=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)}};
 function app({standalone=true,phone=true,path='/catalog/'}={}){
  let clock=1000000,id=0;const docListeners=new Map(),winListeners=new Map(),timers=new Map(),redirects=[];
@@ -45,7 +45,7 @@ test('unsafe or malformed last-page records cannot become a restore destination'
  const s=storage();for(const item of [null,{}, {url:'//other.test',at:1},{url:'/admin/?x',at:1},{url:'/admin?x',at:1},{url:'/api/auth/',at:1},{url:'/\\other.test',at:1},{url:'/cart/',at:'1'}]){s.setItem(RESUME_PAGE_KEY,JSON.stringify(item));assert.equal(readResumePage(s),null)}
 });
 test('new icon launches always start on home, independently of the previous route, duration and account',()=>{
- const script=fs.readFileSync('index.html','utf8').match(/<script>try\{var sx[\s\S]*?<\/script>/)[0].replace(/^<script>|<\/script>$/g,'');
+ const script=fs.readFileSync('apps/web/index.html','utf8').match(/<script>try\{var sx[\s\S]*?<\/script>/)[0].replace(/^<script>|<\/script>$/g,'');
  assert.equal(JSON.parse(fs.readFileSync('public/manifest.webmanifest')).start_url,'/');
  for(const signedIn of [false,true])for(const age of [1,timeout-1,timeout,timeout+1]){
   const sx=storage(),lx=storage(),redirects=[];lx.setItem('nsp-center:v1',JSON.stringify({signedIn,cart:{aloe:2}}));lx.setItem(RESUME_PAGE_KEY,JSON.stringify({url:'/catalog/?q=алое',at:10000000-age,scroll:420}));sx.setItem('nsp-footer-home-return','700');

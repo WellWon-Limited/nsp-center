@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {homeStoryLinks,homeStoryReturn} from '../src/home-story-navigation.mjs';
+import {homeStoryLinks,homeStoryReturn} from '../packages/presentation/home-story-navigation.mjs';
 
 test('Home details article and company links carry their section, with a safe return destination',()=>{
  const original='<p><a href="/blog/vitamin-c/">Статья</a><a href="/company/">Компания</a><a href="/catalog/">Каталог</a><a href="https://example.com/company/">Внешний</a></p>';

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { restoreWaitlist, reconcileWaitlist } from '../src/waitlist.ts';
+import { restoreWaitlist, reconcileWaitlist } from '../packages/presentation/waitlist.ts';
 const product={id:'a',name:'A',path:'/product/a/',availability:'OutOfStock'};
 test('Waitlist restoration filters invalid entries and duplicates',()=>{
  assert.deepEqual(restoreWaitlist([null,{id:'a'},{id:'a'},{id:'missing'}],new Set(['a'])),[{id:'a',notified:false}]);

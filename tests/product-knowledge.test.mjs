@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {applySite,applyContent,readSite} from '../src/site.ts';
-import {readProductKnowledge} from '../src/product-knowledge.mjs';
+import {applySite,applyContent,readSite} from '../packages/presentation/site.ts';
+import {readProductKnowledge} from '../packages/presentation/product-knowledge.mjs';
 import {knowledgeName,knownLectureAuthor,knownAuthorLinks} from '../scripts/product-knowledge.mjs';
 const facts={about:['Растительные ингредиенты в питании.'],highlights:['Пищевая поддержка'],benefit:'Для разнообразия рациона',sources:[{id:'lecture',course:'Курс',lecture:'Растения',speaker:'Лектор'}],recommendations:[{area:'nutrition',reason:'Дополняет рацион.'}],pairs:[{productId:'other',why:'Поддержка питания.'}]};
 test('knowledge is attributed and bounded before it enters public product objects',()=>{

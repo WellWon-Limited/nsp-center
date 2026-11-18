@@ -1,0 +1,10 @@
+{
+  "mode": "built-in imagegen edit",
+  "source": "01-mint-woodland-headroom-v3.png",
+  "output": "01-mint-woodland-centered-v4.png",
+  "dimensions": [
+    1774,
+    887
+  ],
+  "prompt": "Use case: compositing / precise-object-edit. Edit target: supplied approved photograph. Make ONE composition change for a full width website hero: move the two bottles, their mossy stone, white coneflower and nearby fern as an intact group LEFT so the midpoint of the pair is exactly at 50% of canvas width (currently about 63%). Leave the surrounding mint woodland as continuous photographic forest, filling the former right-hand location naturally. Keep identical bottle size, labels, shape, aspect ratio, relative scale, gap, white flower, textures and lighting. Tall bottle stays slender and genuinely round. Preserve the existing ample space above the cap. Do NOT squeeze, shorten, widen, or enlarge bottles. Maintain 2:1 wide landscape framing and full bases on stone. On both far sides leave quiet blurred sage mint forest for overlaid white glass text cards. No text overlays, UI, borders, new products, orange ribbon, duplicate bottles or hard seams. Image quality must match approved original."
+}

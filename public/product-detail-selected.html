@@ -1,0 +1,258 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Страница товара — варианты</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{width:100%;height:100%;display:block;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/product/aloe-vera-juice/?copy=coherent-20261113&amp;cart=quantity-notice-v2&amp;gallery=russian-botanical-v2" title="Вариант страницы товара"></iframe><script>
+const variant=1;const v=3;document.title='Страница товара · выбранный вариант';
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+const d=frame.contentDocument;if(!d)return;
+await new Promise(resolve=>{const root=d.querySelector('#root');if(!root||root.dataset.hydrated==='true'){resolve();return}const o=new MutationObserver(()=>{if(root.dataset.hydrated==='true'){o.disconnect();resolve()}});o.observe(root,{attributes:true,attributeFilter:['data-hydrated']})});
+const detail=d.querySelector('.product-detail'),purchase=detail?.querySelector('.product-purchase'),box=purchase?.querySelector('.purchase-box');if(!purchase||!box){frame.classList.add('ready');return}
+d.documentElement.dataset.detailOption=String(v);
+const heading=purchase.querySelector('h1');heading.textContent='Сок Алоэ Вера';
+const category=purchase.querySelector('.product-title-category');if(category)category.textContent='БАД · Aloe Vera Juice NSP';
+const purpose=d.createElement('p');purpose.className='detail-purpose';purpose.textContent='Поддержка иммунной и пищеварительной систем';
+purchase.querySelector('.product-title-row').after(purpose);
+const facts=d.createElement('dl');facts.className='detail-key-facts';for(const [label,value]of [['Объём','473 мл'],['Основа состава','Концентрат алоэ вера']]){const row=d.createElement('div'),dt=d.createElement('dt'),dd=d.createElement('dd');dt.textContent=label;dd.textContent=value;row.append(dt,dd);facts.append(row)}
+box.before(facts);
+const stock=d.createElement('span');stock.className='detail-stock';stock.textContent='В наличии';box.prepend(stock);
+const delivery=d.createElement('div');delivery.className='detail-delivery';delivery.innerHTML='<a href="/delivery/">Условия доставки <span aria-hidden="true">›</span></a><a href="/payments/">Способы оплаты <span aria-hidden="true">›</span></a>';
+const find=d.createElement('button');find.className='detail-composition-link';find.type='button';find.textContent='Состав, применение и ограничения ›';find.addEventListener('click',()=>{d.querySelector('#tab-properties')?.click();d.querySelector('.product-content')?.scrollIntoView({behavior:'smooth',block:'start'})});facts.after(find);
+purchase.append(delivery);
+const illustration=d.createElement('img');illustration.className='detail-aloe-accent';illustration.src='/images/catalog-concepts-2026-11-13/aloe-v1.png';illustration.alt='';illustration.setAttribute('aria-hidden','true');detail.querySelector('.main-product-image').append(illustration);
+if(v===4){const buy=d.createElement('aside');buy.className='detail-buy-column';buy.setAttribute('aria-label','Покупка товара');const plan=purchase.querySelector('.text-button'),note=purchase.querySelector('.fine-print');buy.append(box);if(plan)buy.append(plan);if(note)buy.append(note);buy.append(delivery);detail.append(buy);}
+const description=d.querySelector('#panel-description');if(description){const title=d.createElement('h2');title.textContent='О продукте';title.className='detail-about-title';description.prepend(title);}
+const rules=[],prefix='html[data-detail-option] body .site-main ';
+const put=(selector,css)=>rules.push(prefix+selector+'{'+css.replace(/;?$/,';').replaceAll(';','!important;')+'}');
+put('.product-detail','margin-top:var(--space-12);gap:var(--space-28);grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start');
+put('.product-gallery.panel','padding:var(--space-12);border-radius:var(--radius-panel);background:var(--color-glass);border:1px solid var(--color-glass-border);backdrop-filter:blur(var(--blur-20));box-shadow:none');
+put('.main-product-image','height:470px;--packshot-target:370px;padding:var(--space-32);border-radius:var(--radius-20);background:var(--color-mint-tint);isolation:isolate;overflow:hidden');
+put('.main-product-image .product-packshot-frame','position:relative;z-index:1;width:min(100%,calc(370px * var(--packshot-ratio)));height:auto;transform:none');
+put('.main-product-image .product-packshot-frame>img','mask-image:url("/images/catalog-concepts-2026-11-13/aloe-mask.svg");-webkit-mask-image:url("/images/catalog-concepts-2026-11-13/aloe-mask.svg");mask-size:100% 100%;-webkit-mask-size:100% 100%;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mix-blend-mode:normal');
+put('.main-product-image .detail-aloe-accent','position:absolute;z-index:0;bottom:var(--space-8);right:-5%;width:68%;height:auto;max-width:none;object-fit:contain;pointer-events:none;mix-blend-mode:normal');
+put('.main-product-image .favorite','z-index:3;background:var(--color-glass-raised);border:0');
+put('.product-purchase','padding:var(--space-8) 0 0;gap:var(--space-12);min-width:0');
+put('.product-title-row h1','font-size:clamp(30px,2.5vw,38px);line-height:1.15;letter-spacing:-.03em');
+put('.product-article','font-size:var(--text-12);color:var(--color-muted)');
+put('.detail-purpose','font-size:var(--text-17);line-height:1.5;color:var(--color-body);margin:0;max-width:440px');
+put('.product-title-category','font-size:var(--text-13);color:var(--color-muted)');
+put('.product-rating','margin:0;font-size:var(--text-13)');
+put('.detail-key-facts','display:grid;grid-template-columns:1fr 1.5fr;gap:var(--space-16);margin:0;padding:var(--space-14) 0;border-block:1px solid var(--color-ink-line)');
+put('.detail-key-facts dt','font-size:var(--text-12);color:var(--color-muted);margin:0 0 var(--space-4)');
+put('.detail-key-facts dd','font-size:var(--text-14);font-weight:700;color:var(--color-ink);margin:0');
+put('.detail-composition-link','align-self:flex-start;display:inline-flex;padding:0;min-height:32px;border:0;background:none;color:var(--color-link);font:inherit;font-size:var(--text-13);font-weight:700;text-align:left;cursor:pointer');
+put('.purchase-box.panel','padding:var(--space-20);border:1px solid var(--color-glass-border);border-radius:var(--radius-20);background:var(--color-glass-strong);box-shadow:none;backdrop-filter:blur(var(--blur-20))');
+put('.detail-stock','display:block;font-size:var(--text-12);font-weight:700;color:var(--color-success);margin-bottom:var(--space-8)');
+put('.purchase-prices .price-row.current','margin:0;align-items:center');
+put('.purchase-prices .price-row.current strong','font-size:var(--text-28)');
+put('.purchase-actions','display:flex;flex-wrap:nowrap;gap:var(--space-12);margin-top:var(--space-16)');
+put('.purchase-actions>.quantity','flex:none;order:0;height:48px');
+put('.purchase-actions>.btn','height:48px;min-height:48px;flex:1 1 auto;font-size:var(--text-14);border-radius:var(--radius-control)');
+put('.card-offer','margin-top:var(--space-10);padding:var(--space-10) var(--space-12)');
+put('.card-offer p,.card-offer a','font-size:var(--text-12);line-height:1.4');
+put('.product-purchase>.text-button,.detail-buy-column>.text-button','align-self:flex-start;font-size:var(--text-13);min-height:32px');
+put('.product-purchase>.fine-print,.detail-buy-column>.fine-print','font-size:var(--text-11);line-height:1.5;margin:0;color:var(--color-muted)');
+put('.detail-delivery','display:flex;flex-wrap:wrap;gap:var(--space-8) var(--space-20);padding-top:var(--space-8)');
+put('.detail-delivery a','display:inline-flex;align-items:center;gap:var(--space-8);font-size:var(--text-13);font-weight:700;color:var(--color-link);text-decoration:none');
+put('.product-content','margin-top:var(--space-28);scroll-margin-top:calc(var(--site-header-height) + 16px)');
+if(v===4){
+put('.product-detail','grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,.9fr);gap:var(--space-24)');
+put('.main-product-image','height:410px;--packshot-target:310px;padding:var(--space-18)');
+put('.main-product-image .product-packshot-frame','width:min(100%,calc(310px * var(--packshot-ratio)))');
+put('.product-title-row h1','font-size:var(--text-28)');
+put('.detail-key-facts','grid-template-columns:1fr;gap:var(--space-14);padding:var(--space-16) 0');
+put('.detail-buy-column','display:flex;flex-direction:column;gap:var(--space-12);position:sticky;top:calc(var(--site-header-height) + 20px);min-width:0');
+put('.purchase-box.panel','padding:var(--space-18)');
+put('.purchase-actions','flex-wrap:wrap');
+put('.purchase-actions>.btn','flex-basis:100%');
+put('.detail-delivery','flex-direction:column;gap:var(--space-12)');
+}
+if(v===2){
+put('.product-detail','padding:var(--space-24);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-glass);backdrop-filter:blur(var(--blur-20));grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)');
+put('.product-gallery.panel','padding:0;border:0;background:transparent;backdrop-filter:none');
+put('.main-product-image','background:color-mix(in srgb,var(--color-muted) 7%,var(--color-white));height:500px');
+put('.purchase-box.panel','padding:var(--space-16) 0 0;border:0;border-top:1px solid var(--color-ink-line);border-radius:0;background:transparent;backdrop-filter:none');
+put('.main-product-image .detail-aloe-accent','display:none');
+put('.detail-key-facts','border:0;padding:var(--space-12) 0');
+}
+put('.purchase-actions>.cart-action','width:100%;min-height:58px;height:58px;flex:1 1 auto;border-radius:var(--radius-control)');
+if(v===3){
+ put('.main-product-image','background:color-mix(in srgb,var(--color-muted) 7%,var(--color-white));height:440px');
+ put('.product-purchase','padding:var(--space-24);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-glass);backdrop-filter:blur(var(--blur-20))');
+ put('.main-product-image .detail-aloe-accent','display:none');
+ put('.purchase-box.panel','padding:var(--space-16) 0 0;border:0;border-top:1px solid var(--color-ink-line);border-radius:0;background:transparent;backdrop-filter:none');
+}
+if(v===5){
+ put('.product-detail','grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:var(--space-24);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);background:var(--color-glass);backdrop-filter:blur(var(--blur-20));gap:var(--space-20) var(--space-28)');
+ put('.detail-wide-heading','grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:var(--space-24);padding:0 0 var(--space-18);border-bottom:1px solid var(--color-ink-line)');
+ put('.detail-wide-heading h1','font-size:var(--text-28);letter-spacing:-.03em;line-height:1.2');
+ put('.detail-wide-heading .detail-purpose','font-size:var(--text-15);max-width:360px');
+ put('.product-gallery.panel','padding:0;border:0;background:transparent;backdrop-filter:none');
+ put('.main-product-image','height:420px;background:var(--color-mint-tint)');
+ put('.product-purchase','padding-top:0');
+ put('.purchase-box.panel','padding:var(--space-16);border:0;background:var(--color-glass-raised)');
+}
+// The selected layout stays; only status, price grouping and the photo column change.
+const priceRow=box.querySelector('.price-row.current'),stockLabel=box.querySelector('.detail-stock');
+const priceGroup=d.createElement('div');priceGroup.className='detail-price-group';while(priceRow.firstChild)priceGroup.append(priceRow.firstChild);priceRow.append(priceGroup);
+put('.product-detail','align-items:stretch');
+put('.product-gallery.panel','align-self:stretch;min-height:0;display:flex;flex-direction:column');
+put('.main-product-image','height:auto;min-height:0;flex:1 1 auto;--packshot-target:440px');
+put('.main-product-image .product-packshot-frame','width:min(100%,calc(440px * var(--packshot-ratio)))');
+put('.product-purchase','gap:var(--space-10);padding:var(--space-24)');
+put('.product-purchase .purchase-box.panel','margin-top:0;padding-top:var(--space-12)');
+put('.purchase-prices .price-row.current','justify-content:flex-start;align-items:center;gap:var(--space-16);padding:0');
+put('.detail-price-group','display:flex;align-items:baseline;justify-content:flex-start;gap:var(--space-12);padding:0');
+put('.detail-price-group>span','flex:none;width:auto;padding:0;font-size:var(--text-13);color:var(--color-muted)');
+put('.detail-price-group>strong','flex:none;font-size:var(--text-28);white-space:nowrap');
+put('.detail-stock','display:inline-flex;align-items:center;align-self:flex-start;gap:var(--space-6);width:auto;margin:0;font-size:var(--text-12);line-height:1.4');
+if(variant===1){
+ purchase.querySelector('.product-title-category').after(stockLabel);
+ put('.detail-stock','background:var(--color-mint-status);border-radius:var(--radius-control);padding:var(--space-6) var(--space-10)');
+ put('.detail-stock::before','content:"";width:6px;height:6px;flex:none;border-radius:50%;background:var(--color-success)');
+ put('.detail-price-group','flex-direction:column;gap:var(--space-2)');
+}
+if(variant===2){
+ stockLabel.textContent='✓ В наличии';priceRow.append(stockLabel);
+ put('.detail-stock','margin-left:var(--space-8);font-weight:600');
+ const extras=d.createElement('div');extras.className='detail-photo-extras';
+ for(const [id,label]of [['properties','Состав и применение'],['documents','Сертификаты']]){const target=d.querySelector('#tab-'+id);if(!target)continue;const button=d.createElement('button');button.type='button';button.textContent=label+' ›';button.addEventListener('click',()=>{target.click();d.querySelector('.product-content').scrollIntoView({behavior:'smooth',block:'start'})});extras.append(button)}
+ detail.querySelector('.product-gallery').append(extras);
+ put('.main-product-image .product-packshot-frame','width:min(100%,calc(390px * var(--packshot-ratio)))');
+ put('.detail-photo-extras','display:flex;gap:var(--space-12);justify-content:space-between;padding:var(--space-16) var(--space-8) var(--space-4);flex:none');
+ put('.detail-photo-extras button','padding:var(--space-8) 0;background:none;border:0;color:var(--color-link);font:inherit;font-size:var(--text-13);font-weight:700;cursor:pointer');
+}
+if(variant===3){
+ stockLabel.textContent='Доступно к заказу';purchase.querySelector('.product-rating').after(stockLabel);
+ put('.detail-stock','background:var(--color-glass-raised);border:1px solid var(--color-glass-border);padding:var(--space-6) var(--space-10);border-radius:var(--radius-control);color:var(--color-success)');
+ put('.detail-price-group>span','display:none');
+ put('.main-product-image','background:var(--color-mint-tint)');
+ put('.detail-key-facts','padding:var(--space-10) 0');
+ put('.product-purchase .purchase-box.panel','border:0;background:var(--color-glass-raised);border-radius:var(--radius-20);padding:var(--space-16)');
+ put('.detail-price-group>strong','font-size:var(--text-28)');
+}
+const titleRow=purchase.querySelector('.product-title-row'),article=titleRow.querySelector('.product-article'),rating=purchase.querySelector('.product-rating');
+const metadata=d.createElement('div');metadata.className='detail-heading-meta';const metaDivider=d.createElement('span');metaDivider.className='detail-meta-divider';metaDivider.textContent='|';metaDivider.setAttribute('aria-hidden','true');titleRow.append(metadata);metadata.append(rating,metaDivider,article);category?.remove();rating.querySelectorAll('span').forEach(span=>{if(span.textContent?.trim()==='·')span.remove();});
+put('.detail-heading-meta','display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-6) var(--space-16);margin:0');
+put('.detail-meta-divider','color:var(--color-border);font-size:var(--text-14);line-height:var(--leading-relaxed)');
+put('.detail-heading-meta .product-rating','display:inline-flex;margin:0;font-size:var(--text-13);line-height:var(--leading-relaxed)');
+// Selected revision: one glass surface around photo and information.
+priceGroup.querySelector('span')?.remove();delivery.remove();
+put('.product-detail','padding:var(--space-12);gap:var(--space-24);background:var(--color-glass);border:1px solid var(--color-glass-border);border-radius:var(--radius-panel);backdrop-filter:blur(var(--blur-20))');
+put('.product-gallery.panel','padding:0;border:0;background:transparent;box-shadow:none;backdrop-filter:none;border-radius:var(--radius-20)');
+put('.product-purchase','padding:var(--space-20);border:0;background:transparent;box-shadow:none;backdrop-filter:none;border-radius:0;gap:var(--space-10)');
+put('.detail-composition-link','display:flex;justify-content:flex-start;align-items:center;align-self:stretch;width:100%;min-height:56px;padding:var(--space-12) 0;margin:0;text-align:left;line-height:1.4');
+put('.detail-key-facts','margin:0');
+put('.product-purchase .purchase-box.panel','margin:0');
+// Inter and a consistent readable type hierarchy; no fixed text heights.
+put('.product-detail,.product-content','font-family:InterNSP,Inter,var(--font-sans)');
+put('.product-title-row h1','font-size:var(--text-40);font-weight:var(--weight-700);line-height:var(--leading-heading);letter-spacing:-.025em');
+put('.detail-purpose','font-size:var(--text-16);font-weight:var(--weight-400);line-height:var(--leading-relaxed)');
+put('.product-title-category,.product-article,.detail-stock,.product-rating','font-size:var(--text-13);line-height:var(--leading-relaxed)');
+put('.detail-key-facts dt','font-size:var(--text-13);line-height:var(--leading-body)');
+put('.detail-key-facts dd','font-size:var(--text-16);font-weight:var(--weight-600);line-height:var(--leading-body)');
+put('.detail-composition-link','font-size:var(--text-14);font-weight:var(--weight-600);line-height:var(--leading-relaxed)');
+put('.detail-price-group>strong','font-size:var(--text-28);font-weight:var(--weight-700);line-height:var(--leading-compact)');
+put('.card-offer p,.card-offer a,.product-purchase>.text-button','font-size:var(--text-13);line-height:var(--leading-relaxed)');
+put('.product-purchase>.fine-print','font-size:var(--text-12);line-height:var(--leading-relaxed)');
+put('.product-content p,.product-content li,.product-content dd','font-size:var(--text-16);line-height:var(--leading-relaxed);text-align:left;text-indent:0');
+put('.product-content p','margin-bottom:var(--space-16)');
+put('.product-content h2','font-size:var(--text-28);line-height:var(--leading-compact)');
+put('.product-content #panel-description>.detail-about-title','font-weight:var(--weight-600);margin-bottom:var(--space-16)');
+put('.product-content h3','font-size:var(--text-20);line-height:var(--leading-compact)');
+// Larger packaging keeps its native aspect ratio; available space caps it without cropping.
+put('.main-product-image','padding:var(--space-24)');
+put('.main-product-image .product-packshot-frame','width:auto;max-width:100%;height:min(620px,calc(100svh - 300px));max-height:100%;aspect-ratio:var(--packshot-ratio);flex:0 1 auto');
+put('.detail-composition-link:focus,.detail-composition-link:focus-visible','outline:none;box-shadow:none');
+put('.detail-composition-link:focus-visible','color:var(--color-ink)');
+const compactRules=rules.length;
+put('.product-purchase','gap:var(--space-4);padding:var(--space-16)');
+put('.product-title-row h1','font-size:var(--text-28)');
+put('.detail-stock','padding:var(--space-4) var(--space-10)');
+put('.detail-key-facts','padding:var(--space-8) 0');
+put('.detail-composition-link','min-height:40px;padding:var(--space-8) 0');
+put('.card-offer','margin-top:var(--space-8);padding:var(--space-8) var(--space-12)');
+put('.purchase-actions','margin-top:var(--space-12)');
+const compactCss='@media(min-width:960px) and (max-height:880px){'+rules.splice(compactRules).join('\n')+'}';
+const style=d.createElement('style');style.textContent=rules.join('\n')+'\n'+compactCss+'\n@media(max-width:959px){'+prefix+'.product-detail{grid-template-columns:1fr!important;padding:16px!important}'+prefix+'.main-product-image{height:330px!important;padding:16px!important;--packshot-target:296px!important}'+prefix+'.main-product-image .product-packshot-frame{width:auto!important;height:296px!important;max-height:100%!important}'+prefix+'.detail-buy-column{position:static!important}'+prefix+'.product-title-row h1{font-size:28px!important}}';d.head.append(style);
+// Actual Russian 473 ml packaging, with separate botanical gallery photographs.
+const photo=detail.querySelector('.main-product-image');
+photo.querySelector('.product-packshot-frame')?.remove();photo.querySelector('.detail-aloe-accent')?.remove();
+const stage=d.createElement('div');stage.className='detail-gallery-stage is-packshot';
+const galleryImage=d.createElement('img');galleryImage.className='detail-gallery-image';stage.append(galleryImage);photo.append(stage);
+const thumbnails=d.createElement('div');thumbnails.className='detail-gallery-thumbnails';thumbnails.setAttribute('role','group');thumbnails.setAttribute('aria-label','Фотографии товара');photo.append(thumbnails);
+const photos=[
+ ['/images/aloe-gallery-2026-11-13/aloe-russian-botanical-v3-centered.png','Сок Алоэ Вера НСП на светлом камне рядом с листьями алоэ'],
+ ['/images/aloe-gallery-2026-11-13/aloe-leaves-v1.png','Листья алоэ и прозрачная мякоть на светлом камне'],
+ ['/images/aloe-gallery-2026-11-13/aloe-gel-v1.png','Мякоть листа алоэ крупным планом']
+];
+const showPhoto=index=>{galleryImage.src=photos[index][0];galleryImage.alt=photos[index][1];stage.classList.remove('is-packshot');stage.classList.toggle('is-product-scene',index===0);photo.classList.add('shows-botanical');thumbnails.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)))};
+photos.forEach(([src,alt],index)=>{const button=d.createElement('button');button.type='button';button.setAttribute('aria-label',alt);const thumb=d.createElement('img');thumb.src=src;thumb.alt='';button.append(thumb);button.addEventListener('click',()=>showPhoto(index));thumbnails.append(button)});showPhoto(0);
+const galleryStyle=d.createElement('style');galleryStyle.textContent=`
+html[data-detail-option] body .site-main>.back-link{margin-top:24px!important;margin-bottom:8px!important}
+
+html[data-detail-option] body .site-main .main-product-image{position:relative!important;background:var(--color-mint-tint)!important;padding:24px 24px 24px 82px!important}
+html[data-detail-option] body .site-main .detail-gallery-stage{position:relative;width:auto;height:min(520px,calc(100svh - 350px));aspect-ratio:4/5;max-width:100%;min-height:0;flex:0 1 auto;overflow:hidden;border-radius:16px}
+html[data-detail-option] body .site-main .detail-gallery-stage.is-packshot{height:min(520px,calc(100svh - 350px));width:auto;aspect-ratio:284/822;max-height:100%;flex:0 1 auto;border-radius:0}
+html[data-detail-option] body .site-main .detail-gallery-stage .detail-gallery-image{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:cover!important;transform:none!important;mask:none!important;filter:none!important}
+html[data-detail-option] body .site-main .detail-gallery-stage.is-packshot .detail-gallery-image{width:281.6901%!important;height:115.5718%!important;left:-90.493%!important;top:-3.6496%!important;object-fit:fill!important}
+html[data-detail-option] body .site-main .detail-gallery-thumbnails{position:absolute;left:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:4}
+html[data-detail-option] body .site-main .detail-gallery-thumbnails button{width:56px;height:64px;min-height:44px;padding:0;border:0;border-radius:12px;background:transparent;overflow:hidden;cursor:pointer}
+html[data-detail-option] body .site-main .detail-gallery-thumbnails button[aria-pressed=true]{border-color:var(--color-link);box-shadow:0 0 0 2px var(--color-link)}
+html[data-detail-option] body .site-main .detail-gallery-thumbnails button:focus-visible{outline:2px solid var(--color-link);outline-offset:3px}
+html[data-detail-option] body .site-main .detail-gallery-thumbnails img{display:block;width:100%;height:100%;object-fit:cover}
+html[data-detail-option] body .site-main .detail-gallery-thumbnails button:first-child img{object-fit:cover}
+@media(max-width:959px){html[data-detail-option] body .site-main .main-product-image{padding:16px 16px 16px 76px!important}html[data-detail-option] body .site-main .detail-gallery-stage{height:250px}.detail-gallery-stage.is-packshot{height:250px}html[data-detail-option] body .site-main .detail-gallery-thumbnails{left:8px}html[data-detail-option] body .site-main .detail-gallery-thumbnails button{width:52px;height:58px}}
+
+/* The botanical photograph fills the gallery surface; thumbnails remain available over it. */
+html[data-detail-option] body .site-main .main-product-image.shows-botanical{padding:0!important;overflow:hidden!important}
+html[data-detail-option] body .site-main .main-product-image.shows-botanical .detail-gallery-stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;aspect-ratio:auto!important;border-radius:inherit!important}
+html[data-detail-option] body .site-main .main-product-image.shows-botanical .detail-gallery-image{object-fit:cover!important;object-position:50% 50%!important}
+@media(max-width:959px){html[data-detail-option] body .site-main .main-product-image.shows-botanical{height:auto!important;min-height:0!important;aspect-ratio:4/5!important;flex:none!important}}
+html[data-detail-option] body .site-main .main-product-image .detail-gallery-stage.is-product-scene .detail-gallery-image{transform:scale(1.04)!important;transform-origin:center!important}
+
+html[data-detail-option] body .site-main .main-product-image .detail-gallery-stage.is-product-scene .detail-gallery-image{inset:auto!important;left:var(--scene-left)!important;top:var(--scene-top)!important;width:var(--scene-width)!important;height:var(--scene-height)!important;transform:none!important;object-fit:fill!important}
+html[data-detail-option] body #root .site-main .main-product-image .favorite{background:color-mix(in srgb,var(--color-bg) 55%,var(--color-white) 45%)!important;border:1px solid var(--color-glass-border)!important;box-shadow:none!important;backdrop-filter:blur(var(--blur-20))!important;-webkit-backdrop-filter:blur(var(--blur-20))!important;border-radius:50%!important;width:46px!important;height:46px!important}
+
+/* Product typography from the supplied prototype system, scoped to this selected card. */
+@layer typography-reference{
+ html[data-detail-option] body #root :is(.product-detail,.product-content){--font-sans:Manrope,sans-serif;--font-mono:'IBM Plex Mono',monospace;font-family:Manrope,sans-serif!important;font-size:var(--text-14)!important;line-height:var(--leading-relaxed)!important}
+ html[data-detail-option] body #root :is(.product-detail,.product-content) *{font-family:Manrope,sans-serif!important}
+ html[data-detail-option] body #root .product-detail h1{font-size:var(--text-28)!important;font-weight:var(--weight-800)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+ html[data-detail-option] body #root .product-detail .detail-purpose{font-size:var(--text-14)!important;font-weight:var(--weight-400)!important;line-height:var(--leading-long)!important}
+ html[data-detail-option] body #root .product-detail :is(.product-article,.detail-stock){font-size:var(--text-11)!important;line-height:var(--leading-body)!important}
+ html[data-detail-option] body #root .product-detail .product-rating{font-size:var(--text-12)!important;line-height:var(--leading-body)!important}
+ html[data-detail-option] body #root .product-detail .detail-key-facts dt{font-size:var(--text-12)!important;font-weight:var(--weight-700)!important;line-height:var(--leading-long)!important}
+ html[data-detail-option] body #root .product-detail .detail-key-facts dd{font-size:var(--text-13)!important;font-weight:var(--weight-400)!important;line-height:var(--leading-long)!important}
+ html[data-detail-option] body #root .product-detail .detail-composition-link{font-size:var(--text-12)!important;font-weight:var(--weight-700)!important;line-height:var(--leading-body)!important}
+ html[data-detail-option] body #root .product-detail .detail-price-group>strong{font-size:var(--text-28)!important;font-weight:var(--weight-800)!important;line-height:var(--leading-compact)!important}
+ html[data-detail-option] body #root .product-detail :is(.card-offer p,.card-offer a,.text-button){font-size:var(--text-12)!important;line-height:var(--leading-body)!important}
+ html[data-detail-option] body #root .product-detail .fine-print{font-size:var(--text-11)!important;line-height:var(--leading-long)!important}
+ html[data-detail-option] body #root .product-detail .cart-action{font-size:var(--text-14)!important;font-weight:var(--weight-800)!important;line-height:var(--leading-compact)!important}
+ html[data-detail-option] body #root .product-detail .quantity output{font-size:var(--text-13)!important;font-weight:var(--weight-700)!important}
+ html[data-detail-option] body #root .product-content :is(p,li,dd){font-size:var(--text-15)!important;line-height:var(--leading-long)!important}
+ html[data-detail-option] body #root .product-content h2{font-size:var(--text-22)!important;line-height:var(--leading-heading)!important;letter-spacing:var(--tracking-heading)!important}
+ html[data-detail-option] body #root .product-content h3{font-size:var(--text-18)!important;line-height:var(--leading-heading)!important}
+ html[data-detail-option] body #root .product-content .tabs>button{font-size:var(--text-13)!important;font-weight:var(--weight-700)!important}
+ @media(max-width:639px){
+  html[data-detail-option] body #root .product-detail h1{font-size:var(--text-26)!important}
+  html[data-detail-option] body #root .product-detail .cart-action{font-size:var(--text-12)!important}
+  html[data-detail-option] body #root .product-content :is(p,li,dd){font-size:var(--text-13)!important}
+  html[data-detail-option] body #root .product-content h2{font-size:var(--text-20)!important}
+  html[data-detail-option] body #root .product-content h3{font-size:var(--text-16)!important}
+  html[data-detail-option] body #root .product-content .tabs>button{font-size:var(--text-11)!important}
+ }
+}
+`;d.head.append(galleryStyle);
+// Centre the bottle itself, whose bounds differ from the full photograph bounds.
+const centerProductScene=()=>{
+ if(!stage.classList.contains('is-product-scene')||!galleryImage.naturalWidth)return;
+ const bounds=stage.getBoundingClientRect(),width=bounds.width,height=bounds.height;
+ const naturalWidth=galleryImage.naturalWidth,naturalHeight=galleryImage.naturalHeight;
+ const centerX=561.5/1122*naturalWidth,centerY=650.5/1402*naturalHeight;
+ const scale=Math.max(width/naturalWidth*1.04,height/naturalHeight*1.04,width/(2*centerX),width/(2*(naturalWidth-centerX)),height/(2*centerY),height/(2*(naturalHeight-centerY)));
+ stage.style.setProperty('--scene-width',naturalWidth*scale+'px');stage.style.setProperty('--scene-height',naturalHeight*scale+'px');
+ stage.style.setProperty('--scene-left',width/2-centerX*scale+'px');stage.style.setProperty('--scene-top',height/2-centerY*scale+'px');
+};
+galleryImage.addEventListener('load',centerProductScene);new ResizeObserver(centerProductScene).observe(stage);centerProductScene();
+
+
+frame.classList.add('ready');
+});
+</script></html>

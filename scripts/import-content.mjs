@@ -3,6 +3,7 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { load } from 'cheerio';
+import {publicProduct} from '../packages/domain/card-prices.mjs';
 import { pricesFor, readPriceList } from './pricing.mjs';
 import { readThemes } from './themes.mjs';
 import { readProductCopy } from './product-copy.mjs';
@@ -13,7 +14,7 @@ import { readProductExperts, readSetContents } from './product-experts.mjs';
 // the NSP price list (references/prices/) adds retail and partner prices.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const snapshot = resolve(root, 'references/nsp-center.ru');
-const generated = resolve(root, 'src/generated/content.json');
+const generated = resolve(root, 'packages/catalog/generated/content.json');
 const mediaRoot = resolve(root, 'public/media');
 const origin = 'https://nsp-center.ru';
 const readData = name => JSON.parse(readFileSync(resolve(snapshot, `data/${name}.json`), 'utf8'));
@@ -353,7 +354,7 @@ const routes = successfulPages.map(record => {
 
 const content = {
   products, categories, articles, pages, site, routes, redirects,
-  // The warehouse rate the rubles were computed with; the administrator may set another one at runtime (src/site.ts).
+  // The warehouse rate the rubles were computed with; the administrator may set another one at runtime (packages/presentation/site.ts).
   pricing: { rubPerUnit: priceList.rubPerUnit },
   themes: readThemes(),
   audit: {
@@ -381,9 +382,9 @@ for (const product of readNewProducts(priceList, categories)) {
     if (firstPage?.products) firstPage.products.unshift(product.path);
   }
 }
-// Stock checked with the NSP office (src/product-stock.json): what the supplier has now, and lines no longer supplied.
+// Stock checked with the NSP office (packages/catalog/source/product-stock.json): what the supplier has now, and lines no longer supplied.
 // A discontinued product keeps its page (its address stays, marked noindex) but is hidden from the catalog, search and chat.
-const stock = JSON.parse(readFileSync(new URL('../src/product-stock.json', import.meta.url), 'utf8'));
+const stock = JSON.parse(readFileSync(new URL('../packages/catalog/source/product-stock.json', import.meta.url), 'utf8'));
 for (const article of [...stock.inStock, ...stock.discontinued]) if (!products.some(product => product.article === article)) throw new Error(`Product stock: unknown article ${article}`);
 for (const product of products) {
   if (stock.inStock.includes(product.article)) { product.availability = 'InStock'; product.availability_text = 'В наличии'; }
@@ -409,5 +410,6 @@ for (const html of [...products.flatMap(product => Object.values(product.section
 }
 mkdirSync(dirname(generated), { recursive: true });
 writeFileSync(generated, JSON.stringify(content, null, 2) + '\n');
+writeFileSync(resolve(dirname(generated), 'public.json'), JSON.stringify({...content, products:content.products.map(publicProduct)}));
 console.log(`Imported ${products.length} products, ${categories.length} categories, ${articles.length} articles, ${pages.length} pages, ${routes.length} routes and ${copied.size} local media files.`);
 console.log(`Source empty pages: ${content.audit.emptySourcePages.join(', ')}. External media: ${externalMedia.size}.`);

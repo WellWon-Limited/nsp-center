@@ -3,21 +3,21 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
-import {chatViewportFrame,focusPhoneChatInput} from '../src/chat-viewport.mjs';
+import {chatViewportFrame,focusPhoneChatInput} from '../apps/web/src/chat-viewport.mjs';
 import {cardFacts} from '../scripts/card-facts.mjs';
-import {productPackagePresentation} from '../src/product-media.mjs';
+import {productPackagePresentation} from '../packages/presentation/product-media.mjs';
 
 test('new supplier products keep meaningful catalog text and package facts in the browser summary',()=>{
- const products=JSON.parse(fs.readFileSync('src/generated/summary.json')).products;
+ const products=JSON.parse(fs.readFileSync('packages/catalog/generated/summary.json')).products;
  for(const id of ['turmeric-curcumin','tnt-nsp','smart-meal','collagen-plus','chlorophyll-lime','day-anti-age-face-cream-40']){
-  const p=products.find(p=>p.id===id);assert.ok(p,id);assert.equal(p.card.sub,JSON.parse(fs.readFileSync('src/product-new/'+id+'.json')).copy.highlights[0],id+' support line');assert.ok(p.properties['Объём'],id+' package');assert.ok(p.properties['Форма выпуска'],id+' release form');assert.ok(productPackagePresentation(p).includes(p.properties['Объём'].split(' по ')[0]));
+  const p=products.find(p=>p.id===id);assert.ok(p,id);assert.equal(p.card.sub,JSON.parse(fs.readFileSync('packages/catalog/source/product-new/'+id+'.json')).copy.highlights[0],id+' support line');assert.ok(p.properties['Объём'],id+' package');assert.ok(p.properties['Форма выпуска'],id+' release form');assert.ok(productPackagePresentation(p).includes(p.properties['Объём'].split(' по ')[0]));
  }
  const p={category:'Биологические добавки',properties:{},copy:{highlights:['Растительный белок и клетчатка']}};
  assert.equal(cardFacts(p,new Map()).sub,'Растительный белок и клетчатка');
 });
 
 test('a keyboard viewport pan is compensated so the header stays at the visible top, and closing restores full height',()=>{
- const source=fs.readFileSync('src/assistant.tsx','utf8');const start=source.indexOf('    const vv=window.visualViewport;');const end=source.indexOf('\n  }, []);',start);
+ const source=fs.readFileSync('apps/web/src/assistant.tsx','utf8');const start=source.indexOf('    const vv=window.visualViewport;');const end=source.indexOf('\n  }, []);',start);
  const script=ts.transpileModule('(function(){'+source.slice(start,end)+'})()',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
  const listeners=new Map(),properties=new Map(),classes=new Set(),frames=[],timers=[];
  const root={style:{setProperty:(k,v)=>properties.set(k,v),removeProperty:k=>properties.delete(k)},classList:{add:k=>classes.add(k),remove:k=>classes.delete(k),toggle:(k,v)=>v?classes.add(k):classes.delete(k),contains:k=>classes.has(k)}};
@@ -33,7 +33,7 @@ test('a keyboard viewport pan is compensated so the header stays at the visible 
 });
 
 test('launch text and logo positions are fixed before paint and are not recomputed on viewport resize',()=>{
- const html=fs.readFileSync('index.html','utf8');const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(s=>s.includes('--launch-center-y'));
+ const html=fs.readFileSync('apps/web/index.html','utf8');const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(s=>s.includes('--launch-center-y'));
  for(const [screenHeight,initialHeight]of [[874,812],[568,568]]){
   const positions=new Map(),classes=new Set(),theme={content:'#eaf5f1'};
   const context={screen:{height:screenHeight},innerHeight:initialHeight,matchMedia:()=>({matches:true}),sessionStorage:{getItem:()=>null},document:{documentElement:{style:{setProperty:(k,v)=>positions.set(k,v)},classList:{add:k=>classes.add(k)}},querySelector:()=>theme}};

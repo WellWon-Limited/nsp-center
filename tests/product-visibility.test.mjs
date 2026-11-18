@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import * as cheerio from 'cheerio';
-import { applySite, listed, readSite } from '../src/site.ts';
+import { applySite, listed, readSite } from '../packages/presentation/site.ts';
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
-const content = JSON.parse(read('src/generated/content.json'));
-const stock = JSON.parse(read('src/product-stock.json'));
+const content = JSON.parse(read('packages/catalog/generated/content.json'));
+const stock = JSON.parse(read('packages/catalog/source/product-stock.json'));
 const byArticle = article => content.products.find(p => p.article === article);
 
 test('cosmetics follow what the supplier has: three Bremani Care products in stock, Tropical Mists hidden', () => {
@@ -31,7 +31,7 @@ test('a hidden product keeps its address, says it is not on sale and leaves the 
   assert.equal($('meta[name="robots"]').attr('content'), 'noindex, nofollow');
   assert.ok(!read('dist/catalog/naturalnaya-kosmetika/index.html').includes(`href="${hidden.path}"`), 'not in its section');
   assert.ok(!read('dist/sitemap.xml').includes(hidden.path), 'not in the sitemap');
-  assert.ok(!JSON.parse(read('src/generated/chat-index.json')).products.some(p => p.id === hidden.id), 'not offered by the chat');
+  assert.ok(!JSON.parse(read('packages/catalog/generated/chat-index.json')).products.some(p => p.id === hidden.id), 'not offered by the chat');
 });
 
 test('the administrator hides and returns a product over what the build says', () => {
@@ -47,7 +47,7 @@ test('the administrator hides and returns a product over what the build says', (
 });
 
 test('site management has the switch and lists hidden products', () => {
-  const admin = read('src/admin.tsx');
+  const admin = read('apps/admin/admin.tsx');
   assert.match(admin, /'\/api\/admin\/visibility', \{ productId: p\.id, hidden: !hidden \}/);
   assert.match(admin, /Скрыть с сайта/);
   assert.match(admin, /Вернуть на сайт/);
@@ -55,6 +55,6 @@ test('site management has the switch and lists hidden products', () => {
 });
 
 test('Saturday hours are 17:30 everywhere', () => {
-  assert.ok(!read('src/generated/content.json').includes('Сб: с 12:00 до 18:00'));
-  assert.match(read('src/assistant.tsx'), /сб с 12:00 до 17:30/);
+  assert.ok(!read('packages/catalog/generated/content.json').includes('Сб: с 12:00 до 18:00'));
+  assert.match(read('apps/web/src/assistant.tsx'), /сб с 12:00 до 17:30/);
 });

@@ -1,0 +1,33 @@
+<!doctype html><html lang="ru"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Отзывы экспертов — варианты</title><style>html,body{margin:0;height:100%;background:#eaf3f1}iframe{width:100%;height:100%;display:block;border:0;visibility:hidden}iframe.ready{visibility:visible}</style><iframe src="/product-detail-selected.html?expert-review=1" title="Оформление отзывов экспертов"></iframe><script>
+const v=2;document.title='Отзывы экспертов · выбранный вариант';
+const frame=document.querySelector('iframe');frame.addEventListener('load',async()=>{
+const host=frame.contentDocument,inner=host?.querySelector('iframe');if(!inner){frame.classList.add('ready');return}
+await new Promise(resolve=>{if(inner.classList.contains('ready')){resolve();return}const o=new MutationObserver(()=>{if(inner.classList.contains('ready')){o.disconnect();resolve()}});o.observe(inner,{attributes:true,attributeFilter:['class']})});
+const d=inner.contentDocument;d.documentElement.dataset.expertOption=String(v);
+const prefix='html[data-expert-option] body .site-main ',rules=[];
+const put=(sel,css)=>rules.push(prefix+sel+'{'+css.replace(/;?$/,';').replaceAll(';','!important;')+'}');
+put('.expert-notes','gap:var(--space-20)');
+put('.expert-note','position:relative;border:0;border-radius:var(--radius-20);padding:var(--space-24);background:var(--color-glass);box-shadow:none;min-width:0');
+put('.expert-text','font-size:var(--text-16);line-height:var(--leading-relaxed);font-weight:var(--weight-400);margin:var(--space-16) 0 var(--space-20);text-align:left;white-space:normal');
+put('.expert-badge','font-size:var(--text-12);font-weight:var(--weight-600);line-height:var(--leading-relaxed);background:var(--color-ink);color:var(--color-white)');
+put('.expert-note footer','gap:var(--space-4)');
+put('.expert-note footer strong','font-size:var(--text-14);line-height:var(--leading-relaxed);font-weight:var(--weight-700)');
+put('.expert-note footer span','font-size:var(--text-13);line-height:var(--leading-relaxed);color:var(--color-muted)');
+put('.expert-note footer small','font-size:var(--text-12);line-height:var(--leading-relaxed);color:var(--color-muted)');
+if(v===1){
+ put('.expert-note','background:var(--color-glass);border:1px solid var(--color-glass-border);backdrop-filter:blur(var(--blur-20))');
+ put('.expert-note::before','content:"“";position:absolute;right:var(--space-24);top:var(--space-12);font-size:60px;line-height:1;color:var(--color-inactive);opacity:.5;font-family:Georgia,serif;pointer-events:none');
+ put('.expert-note footer','padding-top:var(--space-16);border-top:1px solid var(--color-ink-line)');
+}
+if(v===2){
+ put('.expert-note','border:1px solid var(--color-border);background:transparent');
+ put('.expert-badge','color:var(--color-white)');
+ put('.expert-note footer','padding-top:var(--space-12)');
+}
+if(v===3){
+ put('.expert-note','background:var(--color-mint-tint);padding:var(--space-24) var(--space-24) 0;overflow:hidden');
+ put('.expert-note footer','background:var(--color-glass-raised);margin:0 calc(-1 * var(--space-24));padding:var(--space-18) var(--space-24);border-top:1px solid var(--color-glass-border)');
+}
+const style=d.createElement('style');style.textContent=rules.join('\n');d.head.append(style);d.querySelector('#tab-reviews')?.click();await new Promise(r=>setTimeout(r,50));const target=d.querySelector('.product-content');const y=target.getBoundingClientRect().top+inner.contentWindow.scrollY-d.querySelector('.site-header').getBoundingClientRect().height-16;inner.contentWindow.scrollTo({top:y,behavior:'instant'});frame.classList.add('ready');
+});
+</script></html>

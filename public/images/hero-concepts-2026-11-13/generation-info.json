@@ -1,0 +1,45 @@
+{
+  "generator": "built-in image_gen",
+  "requested_resolution": [
+    3840,
+    2160
+  ],
+  "actual_resolution": [
+    1672,
+    941
+  ],
+  "status": "unselected local concepts; not 4K",
+  "palette": {
+    "bg": "#eaf3f1",
+    "ink": "#1d3a36",
+    "mint": "#9fdcc6",
+    "blue": "#b9d4f5",
+    "sand": "#f3dcb8"
+  },
+  "references": [
+    "owner attached chlorophyll package",
+    "owner attached Omega-3 package"
+  ],
+  "variants": [
+    {
+      "file": "01-forest-morning.png",
+      "concept": "Лесное утро"
+    },
+    {
+      "file": "02-garden-water.png",
+      "concept": "Сад у воды"
+    },
+    {
+      "file": "03-mountain-air.png",
+      "concept": "Горная природа"
+    },
+    {
+      "file": "04-light-conservatory.png",
+      "concept": "Светлая оранжерея"
+    },
+    {
+      "file": "05-forest-sunlight.png",
+      "concept": "Лес с мягкими лучами"
+    }
+  ]
+}
