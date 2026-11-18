@@ -36,7 +36,7 @@ test('launch text and logo positions are fixed before paint and are not recomput
  const html=fs.readFileSync('apps/web/index.html','utf8');const script=[...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map(x=>x[1]).find(s=>s.includes('--launch-center-y'));
  for(const [screenHeight,initialHeight]of [[874,812],[568,568]]){
   const positions=new Map(),classes=new Set(),theme={content:'#eaf5f1'};
-  const context={screen:{height:screenHeight},innerHeight:initialHeight,matchMedia:()=>({matches:true}),sessionStorage:{getItem:()=>null},document:{documentElement:{style:{setProperty:(k,v)=>positions.set(k,v)},classList:{add:k=>classes.add(k)}},querySelector:()=>theme}};
+  const context={navigator:{standalone:true},screen:{height:screenHeight},innerHeight:initialHeight,matchMedia:()=>({matches:true}),sessionStorage:{getItem:()=>null},document:{documentElement:{style:{setProperty:(k,v)=>positions.set(k,v)},classList:{add:k=>classes.add(k)}},querySelector:()=>theme}};
   vm.runInNewContext(script,context);assert.ok(classes.has('nsp-splash'));assert.equal(theme.content,'#d3ebe1');const before=[...positions];context.innerHeight=screenHeight;assert.deepEqual([...positions],before);assert.ok(Number.parseInt(positions.get('--launch-center-y'))<initialHeight);assert.ok(Number.parseInt(positions.get('--launch-note-y'))<initialHeight-20);
  }
 });
