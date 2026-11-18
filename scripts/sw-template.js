@@ -46,7 +46,7 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
   // Site management is never kept offline on a device (staff screens, research 2026-11-10).
-  if (isStaffPage(url.pathname)) return;
+  if (isStaffPage(url.pathname) || url.pathname === '/order/' || url.pathname.startsWith('/api/')) return;
   // Pages: a page seen before (or warmed up, below) opens at once from this version's copy while a fresh copy is fetched
   // for next time; a new page comes from the network; offline, the cached home page renders any route itself.
   if (request.mode === 'navigate') {

@@ -10,7 +10,18 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: PostgreSQL client tools for restore verification
+        run: |
+          sudo install -d /usr/share/postgresql-common/pgdg
+          sudo curl --fail --silent --show-error -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc https://www.postgresql.org/media/keys/ACCC4CF8.asc
+          . /etc/os-release
+          echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt ${VERSION_CODENAME}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-18
       - run: npm run check
+        env:
+          NSP_TEST_BACKUP: '1'
+          PG_BIN_DIR: /usr/lib/postgresql/18/bin
 
   # The dev stand builds this Dockerfile on every merge to main: a broken image
   # must fail here, not on the stand.

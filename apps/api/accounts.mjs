@@ -1,4 +1,5 @@
-import { seedKnowledge } from './product-knowledge.mjs';
+import { customerOrder, readCustomerOrder } from './order-read.mjs';
+import { assertDatabaseReady } from './database/ready.mjs';
 // Accounts API (apps/api/app.mjs): registration, sign-in, sign-out and the account's own data
 // (cart, favourites, waiting list, intake plan, marathon) kept in Postgres, so they follow the visitor to any device.
 // It works only when DATABASE_URL is set; without it every /api/ request answers 503 and the site keeps its
@@ -9,6 +10,8 @@ import { seedKnowledge } from './product-knowledge.mjs';
 import { createHash, randomBytes, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 import { domainToUnicode } from 'node:url';
+import { saveCheckout } from './order-checkout.mjs';
+import { customProduct } from '../../packages/domain/custom-product.mjs';
 import { SITE_SCHEMA, siteRoute } from './site-admin.mjs';
 import { customerEmailError, formatPhone, phoneError, russianEmail, FOREIGN_EMAIL_ERROR } from '../../packages/domain/contact-fields.mjs';
 
@@ -36,8 +39,11 @@ create table if not exists users (
   consent_at timestamptz not null,
   created_at timestamptz not null default now()
 );
-create unique index if not exists users_email_key on users (lower(email));
-create unique index if not exists users_phone_key on users (phone_key) where phone_key is not null;
+alter table users add column if not exists role text not null default 'customer';
+-- Staff (including removed staff) and customers have separate email identities.
+create unique index if not exists users_email_scope_key on users (lower(email), (role = 'customer'));
+drop index if exists users_email_key;
+drop index if exists users_phone_key;
 create table if not exists sessions (
   token_hash text primary key,
   user_id bigint not null references users(id) on delete cascade,
@@ -154,9 +160,9 @@ const accountOf = row => ({ firstName: row.first_name, lastName: row.last_name, 
  * `categories`: the catalog sections, for cards created in site management (packages/presentation/custom-product.mjs).
  * `cbr: false` skips asking cbr.ru for the reference rate (tests). `productBase(id)`: a product's built card content
  * (name, description, properties, certificates, photo), shown in the administrator's editor next to the changes.
- * The schema is created on the first request; a database that is down gives 503 and is retried on the next request.
+ * The schema is prepared by db:migrate; requests only check readiness and retry if the database was down.
  */
-export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, cbr = true, categories = [], articlePaths = [], previewPages = [], knowledgeThemes = [], lectureCorpusFile } = {}) {
+export async function createAccounts({ databaseUrl, pool: givenPool, productIds = null, productBase = () => null, cardProducts = [], buildRate = 0, pickupAddress = '', cbr = true, categories = [], articlePaths = [], previewPages = [], knowledgeThemes = [], lectureCorpusFile } = {}) {
   const productPaths = new Map(cardProducts.filter(p => p?.path).map(p => [p.id, p.path]));
   if (!databaseUrl && !givenPool) return { enabled: false, handle: (req, res) => send(res, 503, { error: 'Сервер аккаунтов не подключён.' }), close: async () => {} };
   const pool = givenPool ?? new (await import('pg')).default.Pool({ connectionString: databaseUrl, max: 5 });
@@ -165,7 +171,8 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
   let ready = null;
   // Staff accounts are created only by `npm run admin:create` or by an administrator in «Сотрудники» — never by
   // registering with a listed email (anyone could register it first). ADMIN_EMAILS is no longer read.
-  const migrate = () => (ready ??= pool.query(SCHEMA + SITE_SCHEMA).then(()=>seedKnowledge(pool,{products:cardProducts,themes:knowledgeThemes,corpusFile:lectureCorpusFile})).catch(error => { ready = null; throw error; }));
+  const readyDatabase = () => (ready ??= assertDatabaseReady(pool).catch(error => { ready = null; throw error; }));
+  const orderRequests = limiter(30, 60 * 1000);
   const signIns = limiter(10, 15 * 60 * 1000), registrations = limiter(20, 60 * 60 * 1000);
 
   async function startSession(req, userId, staff = false) {
@@ -189,7 +196,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
     const { rows } = await pool.query('select data, updated_at from account_data where user_id = $1', [user.id]);
     return { account: accountOf(user), data: rows[0]?.data ?? {}, updatedAt: rows[0]?.updated_at ?? null };
   }
-  const taken = error => error?.code === '23505' ? (String(error.constraint).includes('phone') ? 'Этот телефон уже указан в другом аккаунте.' : 'Аккаунт с таким email уже есть. Войдите в него или укажите другой email.') : null;
+  const taken = error => error?.code === '23505' && error.constraint === 'users_email_scope_key' ? 'Аккаунт с таким email уже есть. Войдите в него или укажите другой email.' : null;
 
   /** Site management's sign-in (/admin/): /api/admin/login, /logout, /me. Only staff accounts; returns false for other
    *  /api/admin/ paths (they are checked in scripts/site-admin.mjs with staffUser). */
@@ -227,13 +234,45 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
     if (method !== 'GET' && !sameOrigin(req, path === '/api/admin/upload')) return send(res, 403, { error: 'Запрос отклонён.' });
     if (path.startsWith('/api/admin/') && await staffAuth(req, res, path)) return;
     if (await siteRoute({ pool, send, readJson, sessionUser, staffUser, hashPassword, productIds, productBase, cardProducts, buildRate, cbr, categories, previewPages, productPaths, articlePaths: new Set(articlePaths) }, req, res, path, url)) return;
+    if (path === '/api/orders') {
+      if (method !== 'POST') return send(res, 405, { error: 'Оформление заказа доступно методом POST.' });
+      const ip = clientIp(req);
+      if (orderRequests.blocked(ip)) return send(res, 429, { error: 'Слишком много запросов. Попробуйте через минуту.' });
+      orderRequests.hit(ip);
+      const user = await sessionUser(req);
+      try {
+        const result = await saveCheckout({ pool, buildRate, pickupAddress, loadCatalog: async client => {
+          const {rows:[snapshot]} = await client.query(`select
+            (select value from site_settings where key='rate') as rate,
+            coalesce((select jsonb_agg(o) from product_overrides o),'[]'::jsonb) as overrides,
+            coalesce((select jsonb_object_agg(product_id,hidden) from product_visibility),'{}'::jsonb) as visibility,
+            coalesce((select jsonb_object_agg(product_id,jsonb_build_object('name',data->>'name')) from product_content),'{}'::jsonb) as cards,
+            coalesce((select jsonb_agg(c) from custom_products c),'[]'::jsonb) as custom`);
+          const num = v => v === null ? null : Number(v);
+          const settings = {rate:snapshot.rate,visibility:snapshot.visibility,cards:snapshot.cards,products:Object.fromEntries(snapshot.overrides.map(p=>[p.product_id,{retailUnits:num(p.retail_units),partnerUnits:num(p.partner_units),retailRub:p.retail_rub,partnerRub:p.partner_rub,availability:p.availability}]))};
+          const custom = snapshot.custom;
+          return { settings, products: [...cardProducts, ...custom.map(r => customProduct(r.product_id, r.data, categories, true))] };
+        } }, user, await readJson(req));
+        return send(res, result.repeated ? 200 : 201, result);
+      } catch (e) {
+        if (e.orderStatus) return send(res, e.orderStatus, { error: e.message });
+        throw e;
+      }
+    }
+    if (/^\/api\/orders\/\d{1,18}$/.test(path)) {
+      if (method !== 'GET') return send(res, 405, { error: 'Доступно только чтение заказа.' });
+      const user = await sessionUser(req);
+      const token = typeof req.headers.authorization === 'string' ? req.headers.authorization.replace(/^Bearer /, '') : '';
+      const order = await readCustomerOrder(pool, path.split('/').at(-1), user, token);
+      return send(res, order ? 200 : 404, order ? {order} : {error:'Заказ недоступен. Войдите в аккаунт покупателя или откройте сохранённую ссылку на заказ.'});
+    }
     if (path === '/api/account/orders') {
       const user = await sessionUser(req);
       if (!user) return send(res, 401, { error: 'Вы не вошли в аккаунт.' });
       if (method !== 'GET') return send(res, 405, { error: 'Доступно только чтение заказов.' });
       // Never accept an email or customer id from the browser; staff notes are private.
-      const {rows} = await pool.query('select id, items, total, status, created_at, updated_at from shop_orders where user_id = $1 order by created_at desc, id desc', [user.id]);
-      return send(res, 200, {orders: rows.map(r => ({id:String(r.id),items:r.items,total:r.total,status:r.status,createdAt:r.created_at,updatedAt:r.updated_at}))});
+      const {rows} = await pool.query('select * from order_read where user_id = $1 order by created_at desc, id desc', [user.id]);
+      return send(res, 200, {orders: rows.map(customerOrder)});
     }
     if (path === '/api/auth/me' && method === 'GET') {
       const user = await sessionUser(req);
@@ -258,7 +297,7 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
       if (signIns.blocked(key)) return send(res, 429, { error: 'Слишком много попыток входа. Попробуйте через 15 минут.' });
       if (!russianEmail(login)) return send(res, 400, { error: FOREIGN_EMAIL_ERROR });
       // Sign-in is by email only (owner, 2026-11-10); the phone stays a contact field of the profile.
-      const { rows } = await pool.query('select * from users where lower(email) = $1', [login]);
+      const { rows } = await pool.query("select * from users where lower(email) = $1 and role = 'customer'", [login]);
       const user = rows[0];
       const ok = await verifyPassword(password, user?.password_hash ?? decoyHash) && Boolean(user);
       if (!ok || user.role !== 'customer') { signIns.hit(key); return send(res, 401, { error: 'Неверный логин или пароль.' }); }
@@ -295,9 +334,9 @@ export async function createAccounts({ databaseUrl, pool: givenPool, productIds 
   return {
     enabled: true,
     pool,
-    ready: migrate,
+    ready: readyDatabase,
     async handle(req, res, url) {
-      try { await migrate(); }
+      try { await readyDatabase(); }
       catch (error) { console.error('Accounts database is unavailable:', error.message); return send(res, 503, { error: 'Сервер аккаунтов временно недоступен. Попробуйте позже.' }); }
       try { await route(req, res, url.pathname, url); }
       catch (error) {

@@ -1,3 +1,4 @@
+import { deleteCustomProduct } from './database/products.mjs';
 import {encodeWebp} from './image-format.mjs';
 import {webpContent} from '../../packages/domain/webp.mjs';
 import {CARD_APPLICATION_SCHEMA,cardApplicationRoute} from './card-applications.mjs';
@@ -434,7 +435,7 @@ export async function siteRoute(ctx, req, res, path, url) {
     const name=originalName.replace(/\.[^.]+$/,'')+'.webp';
     let encoded;try{encoded=await encodeWebp(Buffer.concat(chunks),{document:kind==='document'});}catch{send(res,400,{error:'Не удалось прочитать изображение. Выберите исправный JPG, PNG или WebP.'});return true;}
     size=encoded.length;
-    await pool.query('insert into files (id, product_id, kind, name, mime, size, data) values ($1, $2, $3, $4, $5, $6, $7)', [id, product, kind, name, 'image/webp', size, encoded]);
+    await pool.query('insert into files (id, product_id, kind, name, mime, size, data) values ($1, $2, $3, $4, $5, $6, $7)', [id, product === 'content' ? null : product, kind, name, 'image/webp', size, encoded]);
     await log(user, 'upload', { productId: product, kind, id, name, size });
     send(res, 201, { url: `/api/files/${id}.webp`, name });
     return true;
@@ -536,7 +537,7 @@ export async function siteRoute(ctx, req, res, path, url) {
   if (path === '/api/admin/new-product') {
     const checked = validateNewProduct(body?.product, await managedCategoryList(pool,ctx.categories??[]));
     if (checked.error) { send(res, 400, { error: checked.error }); return true; }
-    const taken = new Set([...(productIds ?? []), ...(await customRows(pool)).map(r => r.product_id)]);
+    const taken = new Set([...(productIds ?? []), ...(await pool.query('select id from products')).rows.map(r => r.id)]);
     if (checked.value.article && (ctx.cardProducts ?? []).some(p => p.article === checked.value.article)) { send(res, 400, { error: 'Товар с таким артикулом уже есть в каталоге — найдите его в списке выше.' }); return true; }
     const id = freeId(checked.value.name, taken);
     if(body.product?.knowledgeSourceId&&typeof body.product.knowledgeSourceId!=='string'){send(res,400,{error:'Выберите источник из базы лекций.'});return true;}
@@ -550,6 +551,7 @@ export async function siteRoute(ctx, req, res, path, url) {
     const client=await pool.connect();
     try{
       await client.query('begin');
+      await client.query("insert into products(id,source,name) values($1,'custom',$2)",[id,checked.value.name]);
       await client.query('insert into custom_products (product_id, data) values ($1, $2)', [id, JSON.stringify(checked.value)]);
       if(knowledge)await client.query('insert into product_knowledge(product_id,data) values($1,$2)',[id,JSON.stringify(knowledge)]);
       if(Object.keys(content).length)await client.query('insert into product_content(product_id,data) values($1,$2)',[id,JSON.stringify(content)]);
@@ -561,10 +563,7 @@ export async function siteRoute(ctx, req, res, path, url) {
     return true;
   }
   if (path === '/api/admin/delete-product') {
-    const { rowCount } = typeof body?.productId === 'string' ? await pool.query('delete from custom_products where product_id = $1', [body.productId]) : { rowCount: 0 };
-    if (!rowCount) { send(res, 400, { error: 'Удалить можно только карточку, созданную в управлении сайтом.' }); return true; }
-    for (const table of ['product_knowledge', 'product_visibility', 'product_overrides', 'product_content', 'hidden_notes', 'note_stars', 'files', 'reviews']) await pool.query(`delete from ${table} where product_id = $1`, [body.productId]);
-    await log(user, 'product-delete', { productId: body.productId });
+    if(typeof body?.productId !== 'string' || !await deleteCustomProduct(pool,body.productId,user.id)) { send(res,400,{error:'Удалить можно только карточку, созданную в управлении сайтом.'}); return true; }
     send(res, 200, await siteSettings(pool, ctx.categories, ctx.productPaths));
     return true;
   }
@@ -629,13 +628,12 @@ export async function siteRoute(ctx, req, res, path, url) {
       send(res, 200, { ok: true });
       return true;
     }
-    const { rows: [existing] } = await pool.query('select role from users where lower(email) = $1', [email]);
+    const { rows: [existing] } = await pool.query("select role from users where lower(email) = $1 and role <> 'customer'", [email]);
     if (existing?.role === 'admin') { send(res, 409, { error: 'Этот сотрудник уже есть.' }); return true; }
-    if (existing?.role === 'customer') { send(res, 409, { error: 'Эта почта уже у покупателя. Для сотрудника нужна отдельная почта.' }); return true; }
     const clean = (v, max) => typeof v === 'string' ? v.trim().slice(0, max) : '';
     const password = oneTimePassword();
     const firstName = clean(body?.firstName, 60) || 'Сотрудник', lastName = clean(body?.lastName, 60);
-    if (existing) await pool.query("update users set role = 'admin', password_hash = $2, first_name = $3, last_name = $4 where lower(email) = $1", [email, await ctx.hashPassword(password), firstName, lastName]);
+    if (existing) await pool.query("update users set role = 'admin', password_hash = $2, first_name = $3, last_name = $4 where lower(email) = $1 and role <> 'customer'", [email, await ctx.hashPassword(password), firstName, lastName]);
     else await pool.query("insert into users (email, phone, phone_key, first_name, last_name, partner_id, password_hash, consent_at, role) values ($1, '', null, $2, $3, '', $4, now(), 'admin')", [email, firstName, lastName, await ctx.hashPassword(password)]);
     await log(user, 'staff-added', { email });
     send(res, 201, { email, password });

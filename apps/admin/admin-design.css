@@ -2,7 +2,6 @@
    lights, the white header without a shadow and a thin line under it, the small green label over the section title,
    and white cards with large rounded corners and a soft shadow instead of frames. The menu on the left keeps its
    layout and look. */
-body:has(.admin-app,.admin-signin)::before{display:none}
 :is(.admin-app,.admin-signin) .admin-header{background:var(--header-edge-paint);box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
 :is(.admin-app,.admin-signin) .admin-header .icon-btn{background:transparent;box-shadow:none;border:0}
 :is(.admin-app,.admin-signin) .admin-header-label{color:#3d7a64;font-weight:800}
@@ -22,9 +21,6 @@ body:has(.admin-app,.admin-signin)::before{display:none}
 .admin-app :is(input,select,textarea).field,.admin-app .admin-search input{border-radius:14px}
 
 /* The same surface and sign-in card as the customer account, including scroll edges. */
-html[data-catalog-design]:root:has(.admin-app,.admin-signin){background:var(--color-white)}
-html[data-catalog-design]:root[data-home-scroll-edge="bottom"]:has(.admin-app,.admin-signin){background:var(--color-bg)}
-body:has(.admin-app,.admin-signin)::after{display:none}
 .admin-signin .auth.admin-auth{max-width:520px;padding:var(--space-32);margin:0 auto;border:0;border-radius:28px;background:#fff;box-shadow:0 18px 40px -30px rgb(29 58 54 / .45)}
 .admin-signin .auth-switch{font-size:14px;line-height:1.6}
 :is(.admin-app,.admin-signin) .admin-header .header-inner{max-width:none;margin-inline:auto}
@@ -162,3 +158,9 @@ html body #root .admin-app .admin-product-workspace select.field:focus-visible{o
 /* Native file inputs must shrink with the 320px editor, rather than keeping their intrinsic desktop width. */
 .admin-app .admin-content-image{min-width:0;max-width:100%}
 .admin-app .admin-file input[type=file]{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;margin-top:var(--space-8)}
+
+/* Compact staff sign-in heading; scoped to the admin application. */
+@layer typography-reference {
+ html body #root .admin-signin .auth.admin-auth h1{font-size:1.75rem!important;line-height:1.25!important}
+ @media(max-width:639px){html body #root .admin-signin .auth.admin-auth h1{font-size:1.5rem!important}}
+}

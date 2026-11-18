@@ -1,4 +1,4 @@
-import {Barcode} from '../../../packages/presentation/discount-barcode';
+import {LoyaltyCard} from '../../../packages/presentation/loyalty-card';
 import {CardApplicationPage,CardApplicationStatus,useCardApplication} from '../../../packages/presentation/card-application';
 import './account.css';
 import { ConfirmDialog } from '../../../packages/presentation/confirm-dialog';
@@ -43,13 +43,9 @@ function PersonalData({ account }: { account: Account }) {
   </section>;
 }
 
-const DEMO_POINTS = 100;
-const groupDigits = (id: string) => id.replace(/\B(?=(\d{3})+$)/g, ' ');
 
-// The discount card right under the greeting: with a number — the card itself (discount, barcode, number); without —
-// the same card shape with a field for the number and a link to get a card.
 function DiscountCard({ account }: { account: Account }) {
-  const { setState, notify,accounts } = useStore();
+  const { notify,accounts } = useStore();
   const [busy,setBusy]=useState(false),[attachError,setAttachError]=useState('');
   const [id, setId] = useState('');
   const {application,setApplication,loaded,error:applicationError}=useCardApplication();
@@ -60,25 +56,13 @@ function DiscountCard({ account }: { account: Account }) {
     setBusy(true);setAttachError('');
     try{const response=await fetch('/api/card-application',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'attach',requestedPartnerId:partnerId})});const body=await response.json();if(body.application)setApplication(body.application);if(!response.ok)throw Error(body.error||'Не удалось отправить номер.');setId('');notify('Номер карты отправлен на проверку. Скидка появится после подтверждения.')}catch(e){setAttachError(e instanceof Error?e.message:'Нет связи с сервером. Повторите попытку.')}finally{setBusy(false)}
   };
-  const remove = () => {
-    setState(s => s.account ? { ...s, card: false, account: { ...s.account, partnerId: '' } } : s);
-    notify('Дисконтная карта удалена');
+  const copyNumber = async () => {
+    try { await navigator.clipboard.writeText(account.partnerId); notify('Номер карты скопирован'); }
+    catch { notify('Не удалось скопировать номер. Выделите его на карте и скопируйте.'); }
   };
-  return <div className="discount-card-area"><div className="discount-card-scale"><section className={`discount-card${application&&application.status!=='rejected'?' discount-card--requested':''}`} data-ds-id="account-card">
-    <div className="discount-card-top"><span>Дисконтная карта</span><span>Nature’s Sunshine</span></div>
-    {account.partnerId ? <>
-      {/* The card shows the points balance, not the owner's name (it is their own cabinet). A fixed 100 until the partner
-          system is connected and accrues points (owner, 2026-11-06). */}<div className="discount-card-main">{account.server||application?.status==='approved'?<strong>Ваша карта NSP</strong>:<strong className="discount-card-points">{DEMO_POINTS} <span>баллов</span></strong>}<span className="discount-card-rate">−30%</span></div>
-      <div className="discount-card-code"><Barcode value={account.partnerId} /><span>{groupDigits(account.partnerId)}</span></div>
-      <div className="discount-card-foot"><span>Скидка до 30% на все товары в каталоге и корзине</span>{application?.status!=='approved'&&<button type="button" onClick={remove}>Удалить</button>}</div>
-    </> : <>
-      <div className="discount-card-main"><strong>Скидка до 30%</strong></div>
-      <p className="discount-card-text">Добавьте номер карты (ID партнёра NSP). Цены по карте появятся после проверки администратором.</p>
-      <div className="discount-card-code"><Barcode value={account.partnerId||'0000000'}/><span>{account.partnerId?groupDigits(account.partnerId):'Номер после подтверждения'}</span></div>
-
-
-    </>}
-  </section></div>{attachError&&<p role="alert" className="contact-error">{attachError}</p>}{(!account.partnerId||application)&&<section className="account-card account-card--application" data-ds-id="account-card-application">{application?<CardApplicationStatus application={application}/>:<><h2>Оформить дисконтную карту</h2><p>Заполните заявку — после оформления и проверки номер карты появится в личном кабинете.</p></>}      {(!application||application.status==='rejected'&&application.data.mode==='attach')&&loaded&&!applicationError&&<form className="discount-card-form" onSubmit={attach}>
+  return <div className="discount-card-area"><LoyaltyCard partnerId={account.partnerId} status={application?.status} attach={application?.data.mode==='attach'}/>
+    {account.partnerId&&<button type="button" className="text-button loyalty-copy" onClick={copyNumber}>Скопировать номер</button>}
+    {attachError&&<p role="alert" className="contact-error">{attachError}</p>}{(!account.partnerId||application)&&<section className="account-card account-card--application" data-ds-id="account-card-application">{application?<CardApplicationStatus application={application}/>:<><h2>Оформить дисконтную карту</h2><p>Заполните заявку — после оформления и проверки номер карты появится в личном кабинете.</p></>}      {(!application||application.status==='rejected'&&application.data.mode==='attach')&&loaded&&!applicationError&&<form className="discount-card-form" onSubmit={attach}>
         <input className="field" inputMode="numeric" placeholder="Номер карты" aria-label="Номер дисконтной карты" value={id} onChange={e => setId(e.target.value)} />
         <button className="btn" disabled={busy}>{busy?'Отправляем…':'Проверить'}</button>
       </form>}<a className="discount-card-link" href="/profile/?card=apply">{application?'Посмотреть заявку':'Оформить карту'} <Icon name="chevron" size={18}/></a></section>}</div>;

@@ -20,11 +20,18 @@
     "admin:create": "node scripts/create-admin.mjs",
     "api": "node apps/api/server.mjs",
     "content:catalog": "node scripts/import-content.mjs",
-    "build:web": "npm run content && npm run typecheck && vite build --config apps/web/vite.config.ts && node scripts/prerender.mjs && node scripts/pwa.mjs",
+    "build:web": "npm run content && npm run typecheck && vite build --config apps/web/vite.config.ts && node scripts/prerender.mjs && node scripts/pwa.mjs && node design/password-recovery/build.mjs",
     "build:admin": "npm run images:webp && vite build --config apps/admin/vite.config.ts",
     "admin": "node apps/admin/server.mjs",
     "dev:admin": "vite --config apps/admin/vite.config.ts",
-    "images:webp": "node scripts/prepare-webp.mjs"
+    "images:webp": "node scripts/prepare-webp.mjs",
+    "build:local": "npm run build && node design/card-number/build.mjs && node design/card-number/centered.mjs && node design/card-number/points.mjs && node design/order-rehearsal/build.mjs",
+    "db:migrate": "node apps/api/database/cli.mjs",
+    "db:secure": "node scripts/secure-local-db.mjs",
+    "db:backup": "node scripts/backup-db.mjs",
+    "db:backup:watch": "node scripts/backup-db.mjs --watch",
+    "db:backup:install": "node scripts/install-db-backup.mjs",
+    "db:restore": "node scripts/restore-db.mjs"
   },
   "dependencies": {
     "@cdek-it/widget": "^4.1.0",

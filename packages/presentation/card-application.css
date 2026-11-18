@@ -54,3 +54,5 @@ html body #root .card-offer a{white-space:normal!important}
 .card-application-terms h3{font-size:var(--text-16);font-weight:var(--weight-700);line-height:var(--leading-body);margin:0 0 12px}
 .card-application-terms p{font-size:var(--text-14);line-height:var(--leading-body);margin:0 0 12px;color:var(--color-body)}
 .card-application-terms p:last-child{margin-bottom:0}
+
+.card-application-layout aside>.discount-card-scale{margin:0 auto 24px}

@@ -1,3 +1,5 @@
+import {launch,cleanEnv} from './server-helper.mjs';
+import {grantApplicationAccess} from '../apps/api/database/permissions.mjs';
 import sharp from 'sharp';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -5,7 +7,7 @@ import {mkdtemp,cp,mkdir,symlink,rm,readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {spawn,execFile} from 'node:child_process';
+import {execFile} from 'node:child_process';
 import {promisify} from 'node:util';
 import {createServer} from 'node:net';
 import pg from 'pg';
@@ -14,19 +16,6 @@ import {ADMIN_PATH} from '../packages/presentation/admin-path.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
 const exec=promisify(execFile);
-const cleanEnv={PATH:process.env.PATH,HOME:process.env.HOME,NSP_LOAD_ENV:'0',CBR_ENABLED:'0',API_HOST:'127.0.0.1',API_PORT:'0',HOST:'127.0.0.1',PORT:'0'};
-async function launch(entry,cwd,env){
-  const child=spawn(process.execPath,[entry],{cwd,env:{...cleanEnv,...env},stdio:['ignore','pipe','pipe']});
-  let log='';
-  const origin=await new Promise((resolve,reject)=>{
-    const timer=setTimeout(()=>{child.kill();reject(new Error('Server startup timed out'));},15000);
-    child.once('error',error=>{clearTimeout(timer);reject(error);});
-    child.once('exit',code=>{clearTimeout(timer);reject(new Error(`Server exited during startup (${code}): ${log.slice(-1500)}`));});
-    child.stderr.on('data',b=>{log+=b;});
-    child.stdout.on('data',b=>{log+=b;const url=log.match(/http:\/\/127\.0\.0\.1:\d+|unix:[^\n]+/)?.[0];if(url){clearTimeout(timer);resolve(url);}});
-  });
-  return {origin,async stop(){if(child.exitCode!==null||child.signalCode)return;const exited=new Promise(resolve=>child.once('exit',resolve));child.kill('SIGTERM');const timer=setTimeout(()=>child.kill('SIGKILL'),5000);await exited;clearTimeout(timer);}};
-}
 async function fixture(t){
   const dir=await mkdtemp(join(tmpdir(),'nsp-separated-api-'));
   await cp(join(root,'apps/api'),join(dir,'apps/api'),{recursive:true});
@@ -65,7 +54,13 @@ test('independent web and API preserve sessions, uploads, catalog pages and oper
   t.after(async()=>{await admin?.stop();await web?.stop();await api?.stop();await pool?.end();await database.stop();await rm(dir,{recursive:true,force:true});});
   const url=`postgres://test:test@127.0.0.1:${port}/separation`;
   pool=new pg.Pool({connectionString:url});
-  api=await launch('apps/api/server.mjs',dir,{DATABASE_URL:url,AI_CORPUS_FILE:join(dir,'no-corpus')});
+  // Run the shipped CLI from the isolated runtime, including catalog-path resolution.
+  const migrated=await exec(process.execPath,['apps/api/database/cli.mjs'],{cwd:dir,env:{...cleanEnv,DATABASE_ADMIN_URL:url,AI_CORPUS_FILE:join(dir,'no-corpus')}});
+  assert.match(migrated.stdout,/Database ready/);
+  await pool.query("create role nsp_app login password 'test' nosuperuser nocreatedb nocreaterole");
+  await grantApplicationAccess(pool);
+  const appUrl=url.replace('test:test@','nsp_app:test@');
+  api=await launch('apps/api/server.mjs',dir,{DATABASE_URL:appUrl,AI_CORPUS_FILE:join(dir,'no-corpus')});
   const apiPort=new URL(api.origin).port;
   web=await launch('apps/web/server.mjs',root,{API_ORIGIN:api.origin});
   const request=(path,{method='GET',body,cookie='',headers={}}={})=>fetch(web.origin+path,{method,headers:{Origin:web.origin,...(cookie?{Cookie:cookie}:{}),...(body?{'Content-Type':'application/json'}:{}),...headers},body:body?JSON.stringify(body):undefined,redirect:'manual'});
@@ -145,7 +140,7 @@ test('independent web and API preserve sessions, uploads, catalog pages and oper
   await api.stop();
   assert.equal((await request('/')).status,200,'static pages survive API downtime');
   assert.equal((await request('/api/auth/me',{cookie:customer})).status,503);
-  api=await launch('apps/api/server.mjs',dir,{DATABASE_URL:url,API_PORT:apiPort,AI_CORPUS_FILE:join(dir,'no-corpus')});
+  api=await launch('apps/api/server.mjs',dir,{DATABASE_URL:appUrl,API_PORT:apiPort,AI_CORPUS_FILE:join(dir,'no-corpus')});
   const account=await(await request('/api/auth/me',{cookie:customer})).json();assert.equal(account.data.cart.alfalfa,2);
   assert.equal((await request('/api/admin/me',{cookie:staff})).status,200);
 });

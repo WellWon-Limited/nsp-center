@@ -18,7 +18,7 @@ const prototypes=new Map([['/app-prototype/',Buffer.from(adaptPrototype(original
 const mime={'.html':'text/html; charset=utf-8','.webmanifest':'application/manifest+json','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.gif':'image/gif','.webp':'image/webp','.woff2':'font/woff2','.woff':'font/woff','.pdf':'application/pdf','.xml':'application/xml; charset=utf-8','.txt':'text/plain; charset=utf-8'};
 const server=createServer(async(req,res)=>{try{const url=new URL(req.url,'http://localhost');let path=decodeURIComponent(url.pathname);
  // Only the production domain is indexable; every other host (dev stand, local) is blocked.
- const indexable=isIndexableHost(req.headers.host);if(!indexable||isStaffPage(path))res.setHeader('X-Robots-Tag',NOINDEX_HEADER);
+ const indexable=isIndexableHost(req.headers.host);if(!indexable||isStaffPage(path)||path==='/order/')res.setHeader('X-Robots-Tag',NOINDEX_HEADER);
  if(/^\/admin(\/|$)/.test(path)){res.writeHead(404,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});res.end(req.method==='HEAD'?undefined:await readFile(resolve(dist,'404/index.html')));return;}
  if(path===ADMIN_PATH||path===ADMIN_PATH.slice(0,-1)||path===ADMIN_PATH+'index.html'){res.writeHead(302,{Location:new URL(ADMIN_PATH+url.search,process.env.ADMIN_ORIGIN||'http://127.0.0.1:5218').href,'Cache-Control':'no-store'});res.end();return;}
  if(path.startsWith('/api/')){api.proxy(req,res);return;}
@@ -53,7 +53,8 @@ if(content.redirects[path]){res.writeHead(308,{Location:content.redirects[path]}
  const kept=/^\/(images|icons)\//.test(path);
  const type=mime[extname(target)]||'application/octet-stream',html=type===mime['.html'];
  const stamp=status===200&&modified&&!html?new Date(Math.floor(modified.getTime()/1000)*1000).toUTCString():null;
- const cache=status!==200?'no-cache':forever?'public, max-age=31536000, immutable':kept?'public, max-age=604800, stale-while-revalidate=86400':'no-cache';
+ if(path==='/order/')res.setHeader('Referrer-Policy','no-referrer');
+ const cache=path==='/order/'?'no-store':status!==200?'no-cache':forever?'public, max-age=31536000, immutable':kept?'public, max-age=604800, stale-while-revalidate=86400':'no-cache';
  const headers={'Content-Type':type,'Cache-Control':cache,'X-Content-Type-Options':'nosniff',...(stamp?{'Last-Modified':stamp}:{})};
  const since=Date.parse(req.headers['if-modified-since']||'');
  if(stamp&&!Number.isNaN(since)&&since>=Date.parse(stamp)){res.writeHead(304,headers);res.end();return;}

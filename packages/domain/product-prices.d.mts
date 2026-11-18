@@ -1,0 +1,2 @@
+type PriceSettings = {rate?:{rubPerUnit:number;updatedAt?:string}|null;products:Record<string,{retailUnits?:number|null;partnerUnits?:number|null;retailRub?:number|null;partnerRub?:number|null}>};
+export function pricesUnder<S extends PriceSettings>(p: {id:string;prices:{units?:{retail?:number|null;partner?:number|null}}}, original:{retail:number;partner:number|null}, site:S|null, buildRate:number):{retail:number;partner:number|null};

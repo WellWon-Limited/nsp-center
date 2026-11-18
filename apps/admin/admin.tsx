@@ -1,3 +1,4 @@
+import {StaffRecovery,useStaffRecovery,localRecovery} from './admin-recovery';
 import {observeHeaderHeight} from '../../packages/presentation/observe-layout.mjs';
 import {ConfirmDialog} from '../../packages/presentation/confirm-dialog';
 import {siteUrl} from './links';
@@ -38,7 +39,7 @@ type Overview = SiteSettings & {
 };
 type Tab = 'card-applications' | 'summary' | 'orders' | 'products' | 'categories' | 'rate' | 'reviews' | 'chat' | 'staff' | ContentTab;
 // Icons as in the site's phone tab bar (home, catalog grid, chat, profile) and header (bag); groups with a heading.
-const tabs: [Tab, string, string, string][] = [['summary', 'Сводка', 'home', 'Сводка'], ['orders', 'Заказы', 'bag', 'Заказы'], ['card-applications', 'Дисконтные карты', 'user-separated', 'Карты'], ['products', 'Товары', 'grid', 'Товары'], ['categories', 'Категории', 'grid', 'Категории'], ['rate', 'Курс у.е.', 'sliders', 'Курс'], ['reviews', 'Отзывы', 'star', 'Отзывы'], ['chat', 'Чат-консультант', 'message', 'Чат'], ['staff', 'Сотрудники', 'user-separated', 'Команда'], ['promos', 'Акции', 'tag', 'Акции'], ['photos', 'Фотогалерея', 'image', 'Фото'], ['videos', 'Видеогалерея', 'play', 'Видео'], ['journal', 'Журнал', 'book', 'Журнал'], ['faq', 'Частые вопросы', 'help', 'Вопросы']];
+const tabs: [Tab, string, string, string][] = [['summary', 'Обзор работы магазина', 'home', 'Сводка'], ['orders', 'Обработка заказов', 'bag', 'Заказы'], ['card-applications', 'Обработка заявок на карты', 'user-separated', 'Карты'], ['products', 'Редактирование товаров', 'grid', 'Товары'], ['categories', 'Настройка категорий товаров', 'grid', 'Категории'], ['rate', 'Изменение курса у.е.', 'sliders', 'Курс'], ['reviews', 'Модерация отзывов', 'star', 'Отзывы'], ['chat', 'Просмотр диалогов чата', 'message', 'Чат'], ['staff', 'Управление сотрудниками', 'user-separated', 'Команда'], ['promos', 'Добавление акций', 'tag', 'Акции'], ['photos', 'Добавление фотографий', 'image', 'Фото'], ['videos', 'Добавление видео', 'play', 'Видео'], ['journal', 'Редактирование статей', 'book', 'Журнал'], ['faq', 'Редактирование вопросов и ответов', 'help', 'Вопросы']];
 const groups: [string, Tab[]][] = [['', ['summary']], ['Магазин', ['orders', 'products', 'categories', 'rate']], ['Контент', ['promos', 'photos', 'videos', 'journal', 'faq']], ['Покупатели', ['card-applications', 'reviews', 'chat']], ['Команда', ['staff']]];
 const when = (iso: string) => new Date(iso).toLocaleString('ru-RU', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
 const number = (v: number | null | undefined) => v === null || v === undefined ? '' : String(v).replace('.', ',');
@@ -69,6 +70,7 @@ export function AdminApp() {
 }
 
 function StaffSignIn() {
+  const recovery=useStaffRecovery();
   const { setStaff } = useStore();
   // ?email= (from the customer sign-in that recognised a staff account) fills the email in.
   const [login, setLogin] = useState(() => typeof location === 'undefined' ? '' : new URLSearchParams(location.search).get('email') ?? '');
@@ -94,7 +96,7 @@ function StaffSignIn() {
       <div className="admin-header-actions"><a className="admin-header-link" href={siteUrl()}>На сайт</a></div>
     </div></header>
     <main className="site-main site-main--account-route" id="main">
-      <section className="auth admin-auth">
+      {recovery.step?<StaffRecovery step={recovery.step} go={recovery.go} initialEmail={login}/>:<section className="auth admin-auth" data-auth-mode="signin">
         <h1>Вход для сотрудников</h1>
         <p className="auth-switch">Управление сайтом NSP Center.</p>
         <form className="auth-form" onSubmit={submit}>
@@ -102,11 +104,11 @@ function StaffSignIn() {
           <Field label="Пароль">{id => <PasswordInput id={id} autoComplete="current-password" value={password} onChange={setPassword} />}</Field>
           <button className="btn btn--primary auth-submit" disabled={busy || !login.trim() || !password}>{busy ? 'Входим…' : 'Войти'}</button>
           {/* As on the customers' sign-in (auth.tsx): a staff password is renewed by an administrator in «Сотрудники». */}
-          <button type="button" className="auth-link auth-forgot" onClick={() => setForgot(true)}>Забыли пароль?</button>
+          <button type="button" className="auth-link auth-forgot" onClick={() => {if(localRecovery()){setPassword('');recovery.go('request');}else setForgot(true);}}>Забыли пароль?</button>
         </form>
         {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
         {forgot && <div className="auth-notice" role="status"><Icon name="clock" size={20} /><p><strong>Обратитесь к администратору сайта.</strong> В разделе «Сотрудники» он выдаст вам новый пароль. Восстановление по почте появится позже.</p></div>}
-      </section>
+      </section>}
     </main>
   </div>;
 }
@@ -229,7 +231,7 @@ function SummarySection({ overview, pending, open }: { overview: Overview; pendi
     <section className="admin-card admin-attention" data-ds-id="admin-attention">
       <h2>Требует внимания</h2>
       {waiting.length ? <ul className="admin-attention-list">{waiting.map(r => <li key={r.id}><span><strong>{productName(r.productId)}</strong><small>{r.author} · {'★'.repeat(r.rating)} · {when(r.date)}</small></span><button type="button" className="text-button" onClick={() => open('reviews')}>Проверить</button></li>)}</ul>
-        : <p className="ds-muted">Новых отзывов нет. Заказы с сайта появятся в «Заказах», когда подключим оформление заказа.</p>}
+        : <p className="ds-muted">Новых отзывов нет. Заказы с сайта доступны в разделе «Обработка заказов».</p>}
     </section>
   </>;
 }

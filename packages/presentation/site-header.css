@@ -68,7 +68,7 @@
  .site-header--shared .header-actions .menu-toggle{display:inline-flex!important}
  .site-header--shared .header-inner{justify-content:space-between;min-width:0}
  .site-header--shared .header-actions{flex-shrink:0}
- .site-header--shared .mobile-menu{grid-template-columns:minmax(0,1fr);max-height:calc(100svh - var(--site-header-height,123px) - 24px);overflow-y:auto}
+ .site-header--shared .mobile-menu{grid-template-columns:minmax(0,1fr);max-height:calc(100dvh - var(--site-header-height,123px) - max(24px,env(safe-area-inset-bottom)));overflow-y:auto}
  .site-header--shared .mobile-menu a{min-height:44px}
 
  .site-header--shared .header-inner>.site-search{display:none}

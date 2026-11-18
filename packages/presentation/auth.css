@@ -298,10 +298,43 @@
 
 /* Auto margins centre a short form; an overflowing registration starts safely below the header. */
 @layer typography-reference{
-html body #root .site-main.site-main--account-route:has(>[data-ds-id="profile-auth"]){justify-content:flex-start!important;flex:1 0 auto!important;padding-block:16px!important;overflow-anchor:none}
-html body #root .site-main.site-main--account-route>[data-ds-id="profile-auth"]{margin-block:auto!important;flex:none!important;transform:none!important;position:relative;top:auto}
+html body #root .site-main.site-main--account-route:has(>.auth[data-auth-mode]){justify-content:flex-start!important;flex:1 0 auto!important;padding-block:16px!important;overflow-anchor:none}
+html body #root .site-main.site-main--account-route>.auth[data-auth-mode]{margin-block:auto!important;flex:none!important;transform:none!important;position:relative;top:auto}
 }
 @layer typography-reference{
- html body #root .auth[data-auth-mode="register"] h1{font-family:var(--font-sans)!important;font-size:28px!important;font-weight:800!important;line-height:1.15!important;letter-spacing:var(--tracking-heading)!important}
- @media(max-width:639px){html body #root .auth[data-auth-mode="register"] h1{font-size:24px!important}}
+ html body #root .auth[data-auth-mode] h1{font-family:var(--font-sans)!important;font-size:28px!important;font-weight:800!important;line-height:1.25!important;letter-spacing:var(--tracking-heading)!important}
+ @media(max-width:639px){html body #root .auth[data-auth-mode] h1{font-size:24px!important}}
 }
+
+/* Auth copy: comfortable multi-line text; compact controls and scalable headings.
+   WCAG 1.4.12 requires surviving user spacing overrides, not a fixed default. */
+@layer typography-reference {
+ html body #root .auth[data-auth-mode] :is(p,.auth-consent,.auth-notice){line-height:1.5!important}
+ html body #root .auth[data-auth-mode] :is(.auth-field label,.field,.btn,.auth-link,.auth-guest){line-height:1.5!important}
+ html body #root .auth[data-auth-mode] .auth-submit{height:auto;white-space:normal}
+ @media(max-width:639px){
+  html body #root .site-main.site-main--account-route:has(>.auth){display:flex!important;flex-direction:column;min-height:var(--phone-first-screen-height);box-sizing:border-box}
+  html body #root .site-main.site-main--account-route:has(>.auth)>.back-link{display:none}
+ }
+}
+
+/* Recovery uses the same .auth card, typography, fields and buttons as sign-in.
+   Only content-specific spacing lives here; keep the owner's compact action rows. */
+.recovery-intro{overflow-wrap:anywhere}
+.recovery-email{font-weight:var(--weight-700);margin-top:var(--space-8);text-align:center;overflow-wrap:anywhere}
+.recovery-help{margin-top:var(--space-16)}
+.recovery-email+.recovery-help{margin-top:var(--space-8)}
+.recovery-back{display:flex;align-items:center;justify-content:center;gap:var(--space-6);margin-top:var(--space-24)}
+.recovery-symbol{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--color-bg);color:var(--color-link);margin:0 auto var(--space-20)}
+.recovery-actions{display:flex;flex-direction:column;align-items:stretch;gap:var(--space-4);margin-top:var(--space-8);text-align:center}
+.recovery-actions>.auth-link{display:flex;align-items:center;justify-content:center;min-height:36px;margin:0;padding:0}
+.recovery-actions>button:disabled{opacity:.45;cursor:default;text-decoration:none}
+.recovery-email-button{display:flex;margin-top:var(--space-24)}
+.recovery-main [hidden]{display:none!important}
+/* The email preview keeps mail metadata outside the shared card. */
+.recovery-main:has(>.email-envelope){display:flex;flex-direction:column;justify-content:flex-start;padding-block:var(--space-16)}
+.email-envelope{max-width:520px;width:100%;margin:auto}
+.email-letter{width:100%;margin:0}
+.email-meta{margin:0 0 var(--space-16);padding-inline:var(--space-8)}
+.email-brand{display:flex;align-items:center;justify-content:center;gap:var(--space-8);font-size:var(--text-22);font-weight:var(--weight-700);color:var(--color-ink);margin-bottom:var(--space-24)}
+.email-divider{border-top:1px solid var(--color-ink-line);margin-top:var(--space-24)}

@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
+import {adminEnvFile} from '../apps/api/database/config.mjs';
 
 const dir = process.env.NSP_PG_DIR || join(homedir(), '.local/state/nsp-center/postgres');
 const port = Number(process.env.NSP_PG_PORT) || 8700;
@@ -15,7 +16,8 @@ const envFile = resolve('.env');
 const DATABASE = 'nsp_center';
 
 const env = existsSync(envFile) ? readFileSync(envFile, 'utf8') : '';
-const known = env.match(/^DATABASE_URL=postgres:\/\/nsp:([^@]+)@127\.0\.0\.1:(\d+)\/nsp_center$/m);
+const adminEnv = existsSync(adminEnvFile) ? readFileSync(adminEnvFile, 'utf8').replace(/^DATABASE_ADMIN_URL=/m,'DATABASE_URL=') : env;
+const known = adminEnv.match(/^DATABASE_URL=postgres:\/\/nsp:([^@]+)@127\.0\.0\.1:(\d+)\/nsp_center$/m);
 const fresh = !existsSync(join(dir, 'PG_VERSION'));
 if (!fresh && !known) throw new Error(`${dir} exists but .env has no DATABASE_URL for it; restore .env or choose another NSP_PG_DIR.`);
 const password = fresh ? randomBytes(18).toString('base64url') : decodeURIComponent(known[1]);
@@ -30,7 +32,8 @@ await client.end();
 if (!rowCount) await pg.createDatabase(DATABASE);
 
 const url = `DATABASE_URL=postgres://nsp:${encodeURIComponent(password)}@127.0.0.1:${port}/${DATABASE}`;
-if (!known || known[2] !== String(port)) writeFileSync(envFile, (env.replace(/^DATABASE_URL=.*\n?/m, '') + `${url}\n`).replace(/^\n+/, ''));
+if (!known) writeFileSync(envFile, (env.replace(/^DATABASE_URL=.*\n?/m, '') + `${url}\n`).replace(/^\n+/, ''), {mode:0o600});
+else if(known[2] !== String(port)) throw new Error('Port differs from saved credentials; keep NSP_PG_PORT consistent with local database configuration.');
 console.log(`Local Postgres: 127.0.0.1:${port}/${DATABASE} (data: ${dir}); DATABASE_URL is in .env`);
 
 const stop = async () => { await pg.stop(); process.exit(0); };

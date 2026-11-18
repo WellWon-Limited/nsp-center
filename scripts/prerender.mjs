@@ -30,7 +30,7 @@ try {
  const firstScreenMasks=firstScreenImages.map(src=>packshotMasks[src]).filter(Boolean);
  const HOME_PRELOAD='<link rel="preload" as="image" href="/images/hero-dimensions-2026-11-13/01-mint-woodland-omega-label-v4.png" fetchpriority="high"/>'
   +[...firstScreenImages,...firstScreenMasks].map(src=>`<link rel="preload" as="image" href="${src}"/>`).join('');
- const PRIVATE=new Set([ADMIN_PATH,'/profile/purchases/','/profile/orders/','/checkout/']);
+ const PRIVATE=new Set([ADMIN_PATH,'/profile/purchases/','/profile/orders/','/checkout/','/order/']);
  // A product hidden from customers (a line no longer supplied) keeps its address but leaves search the same way.
  const HIDDEN=new Set(data.products.filter(p=>p.hidden).map(p=>p.path));const unlisted=path=>PRIVATE.has(path)||HIDDEN.has(path);
  const pageTitle=t=>/^nsp[\s-]*center$/i.test(String(t).trim())?'NSP Center':`${t} | NSP Center`;

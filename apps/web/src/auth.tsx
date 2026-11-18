@@ -98,7 +98,12 @@ export function AuthScreen() {
         <Field label="Пароль">{id => <PasswordInput id={id} autoComplete="current-password" value={password} onChange={setPassword} />}</Field>
         {error && <div className="auth-notice auth-notice--error" role="alert"><Icon name="close" size={20} /><p>{error}</p></div>}
         <button className="btn btn--primary auth-submit" disabled={!accounts || busy || !login.trim() || password.length < 8}>{busy ? 'Входим…' : 'Войти'}</button>
-        <button type="button" className="auth-link auth-forgot" onClick={() => setNotice(true)}>Забыли пароль?</button>
+        <button type="button" className="auth-link auth-forgot" onClick={() => {
+          // The approved recovery flow is local-only until email delivery is configured.
+          if (['127.0.0.1', 'localhost', '[::1]'].includes(window.location.hostname)) {
+            window.location.assign('/__preview/password-recovery/step-1/index.html');
+          } else setNotice(true);
+        }}>Забыли пароль?</button>
       </form>
     </> : <>
       <h1>Создать аккаунт</h1>

@@ -1,3 +1,4 @@
+import { pricesUnder } from '../domain/product-prices.mjs';
 import {readProductKnowledge} from './product-knowledge.mjs';
 import {readCatalogConfig,type CatalogConfig} from './catalog-categories.mjs';
 import type {ProductKnowledge} from './product-knowledge-types';
@@ -32,13 +33,7 @@ const contentEdits = new WeakMap<Product, ProductContent|null>();
 const AVAILABILITY_TEXT: Record<string, string> = { InStock: 'В наличии', OutOfStock: 'Нет в наличии' };
 
 /** Rubles of a product under the settings: own ruble price > own у.е. price × rate > price list у.е. × rate > built price. */
-export function pricesUnder(p: Product, original: Pick<Original, 'retail' | 'partner'>, site: SiteSettings | null, buildRate: number) {
-  const o = site?.products[p.id];
-  const rate = site?.rate?.rubPerUnit ?? buildRate;
-  const units = { retail: o?.retailUnits ?? p.prices.units?.retail ?? null, partner: o?.partnerUnits ?? p.prices.units?.partner ?? null };
-  const fromUnits = (u: number | null, built: number | null) => u === null ? built : Math.round(u * rate);
-  return { retail: o?.retailRub ?? fromUnits(units.retail, original.retail) ?? original.retail, partner: o?.partnerRub ?? fromUnits(units.partner, original.partner) };
-}
+export { pricesUnder } from '../domain/product-prices.mjs';
 
 /** Discount-card prices from GET /api/card-prices (scripts/card-prices.mjs): only for a signed-in account with a card
  *  number, or an administrator (who also gets the price list's card units for the price editor). */

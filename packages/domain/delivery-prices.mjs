@@ -1,0 +1,1 @@
+export const COURIER_RUB = 350, FREE_COURIER_FROM = 12000;

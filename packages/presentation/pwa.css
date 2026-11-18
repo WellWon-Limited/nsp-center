@@ -7,6 +7,9 @@
   z-index: calc(var(--layer-overlay) + 10);
   width: min(440px, calc(100vw - 24px));
   padding: var(--space-16);
+  box-sizing: border-box;
+  max-height: calc(100dvh - 20px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  overflow-y: auto;
   border: 1px solid var(--color-ink-line);
   border-radius: var(--radius-24);
   background: var(--color-white);

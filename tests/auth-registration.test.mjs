@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import vm from 'node:vm';
-const source = readFileSync('apps/web/src/auth-password.ts', 'utf8');
+const source = readFileSync('packages/presentation/auth-password.ts', 'utf8');
 const exports = {};
 vm.runInNewContext(ts.transpileModule(source, {compilerOptions: {module: ts.ModuleKind.CommonJS}}).outputText, {exports});
 const check = exports.registrationPasswordError;

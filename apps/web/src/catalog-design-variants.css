@@ -7,16 +7,7 @@
    (owner, 2026-11-12: «вообще все … под новый дизайн»).
    ── Shared by all three ─────────────────────────────────────────────────────────────────────────────────────── */
 /* The page surface of the home page: the base colour with three blurred lights; the header solid white. */
-html[data-catalog-design]:has(.site-header):not(:has(.home-first-screen)){background:var(--color-white)}
 /* At the bottom edge the browser's overscroll shows the page colour, not a white strip (packages/presentation/home-scroll-edges.mjs). */
-html[data-catalog-design][data-home-scroll-edge="bottom"]:has(.site-header):not(:has(.home-first-screen)){background:var(--color-bg)}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)){background:transparent}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))::before{display:none}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{background:var(--color-bg);isolation:isolate;position:relative}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient{display:block;position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i{display:block;position:absolute;width:700px;height:700px;border-radius:var(--radius-circle);--ambient-c:var(--color-mint);--ambient-b:70px;opacity:.46;top:-200px;left:-320px;right:auto}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(2){--ambient-c:var(--color-blue);top:300px;left:auto;right:-340px}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient i:nth-child(3){--ambient-c:var(--color-sand);opacity:.4;top:1350px;left:-380px;right:auto}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-header{background:var(--color-white);-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;border-bottom:1px solid rgb(29 58 54 / .06)}
 /* No «‹ Каталог» above the heading when moving between categories: the list on the left is the way between them. */
 html[data-catalog-design] body:has(.catalog-layout) .site-main>.back-link{display:none}
@@ -54,7 +45,7 @@ html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .
    «Сертификаты» and journal articles follow it. */
 /* Information pages: the content is the card; the closing band sits under it at the same width. */
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div{display:flex;flex-direction:column;align-items:flex-start}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div::before{content:"NSP Center";order:1;margin:6px 0 10px;color:#3d7a64;font-size:14px;font-weight:800}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div:not(:has(.information-kicker))::before{content:"NSP Center";order:1;margin:6px 0 10px;color:#3d7a64;font-size:14px;font-weight:800}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>:is(h1,h2){order:2}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>p{order:3}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){box-sizing:border-box;width:auto;max-width:1224px;margin:8px auto 40px;padding:52px 56px;background:rgb(255 255 255 / .62);border:1px solid rgb(255 255 255 / .9);border-radius:32px;box-shadow:0 30px 60px -48px rgb(29 58 54 / .4)}
@@ -173,7 +164,6 @@ html[data-catalog-design] body .plan-page .personal-grid .care-card{border-radiu
 
 /* The page's lights end above the bottom edge, so the last screen is one plain colour — the same the browser shows
    when the page is pulled past its end: no strip of another colour under the footer. */
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .ambient{-webkit-mask-image:linear-gradient(#000 calc(100% - 700px),transparent calc(100% - 200px));mask-image:linear-gradient(#000 calc(100% - 700px),transparent calc(100% - 200px))}
 
 /* ── 1 (chosen): the site's categories list as it is (heading over a hairline, the dark open row, a line on the right); search and filters as pills ── */
 html[data-catalog-design="1"] body:has(.catalog-layout) .catalog-tools{border-bottom:0;padding-bottom:6px}
@@ -228,7 +218,7 @@ html[data-catalog-design] #root .site-main .journal-article-page .av-document--i
 @media(min-width:960px){
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){padding-top:20px;padding-bottom:24px}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>.information-home{min-height:0;margin:0 0 10px}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div::before{margin:0 0 8px}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div:not(:has(.information-kicker))::before{margin:0 0 8px}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>h1{margin:0;font-size:clamp(30px,2.6vw,38px);font-weight:800;line-height:1.15;letter-spacing:-.03em}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>p{max-width:none;margin:10px 0 0;font-size:16px}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main :is(.information-content,.delivery-content){margin-top:0}
@@ -244,7 +234,6 @@ html[data-catalog-design] #root .site-main .certificates-page>.company-concept .
 }
 @media(min-width:960px){
 /* A page that has its own label (legal texts: «Информация и документы») does not get the second «NSP Center». */
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:has(.information-kicker)>div::before{display:none}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading .information-kicker{order:1;margin:0 0 8px;color:#3d7a64;font-size:14px;font-weight:800;letter-spacing:.06em}
 /* Legal texts read across the block like the articles. */
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-content--legal>.rich-content{max-width:none;margin:0}
@@ -269,10 +258,8 @@ html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .
 }
 /* A page shorter than the screen (sign-in, an empty cart) still has the page colour down to the screen's bottom edge:
    no white strip under the content (owner, 2026-11-12). */
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen))>#root{min-height:100svh}
 /* The space the page keeps under its content for the phone's bottom bar is the page colour too (it showed the white
    of the top edge while scrolling to the end). The colour is an image layer and body's own background-color stays
    transparent: Safari (iOS 26) fills the pulled-down area above the page with body's background-color when it has one,
    which put a light-green band above the white header; with it transparent, Safari uses html's colour, white at the
    top and the page colour at the bottom (packages/presentation/home-scroll-edges.mjs), like the home page. */
-html[data-catalog-design]:root body:has(.site-header):not(:has(.home-first-screen)){background:linear-gradient(var(--color-bg),var(--color-bg)) transparent}

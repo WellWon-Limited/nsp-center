@@ -61,7 +61,7 @@ html body #root .site-main:has(>.recommend)~.site-footer{display:none!important}
   html[data-catalog-design] body #root .recommend-paper .theme-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
  }
  @media(max-width:599px){
-  html[data-catalog-design] body #root .recommend-paper .theme-cards{grid-template-columns:minmax(0,1fr)!important}
+  html[data-catalog-design] body #root .recommend-paper .theme-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   html[data-catalog-design] body #root .recommend--paper .recommend-actions .btn{width:100%!important}
  }
 }

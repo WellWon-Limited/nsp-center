@@ -54,7 +54,7 @@ html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .
 /* ── Information pages: the heading on the page, the content in one light block, an empty page without a block ─── */
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-page{background:transparent}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark){background:transparent;border-bottom:0;padding:16px 18px 18px}
-html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div::before{content:"NSP Center";display:block;margin:0 0 6px;color:#3d7a64;font-size:13px;font-weight:800}
+html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:not(.information-heading--photo):not(.information-heading--dark)>div:not(:has(.information-kicker))::before{content:"NSP Center";display:block;margin:0 0 6px;color:#3d7a64;font-size:13px;font-weight:800}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading:has(.information-kicker)>div::before{display:none}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading .information-kicker{color:#3d7a64;font-size:13px;font-weight:800;letter-spacing:.04em}
 html[data-catalog-design] body:has(.site-header):not(:has(.home-first-screen)) .site-main .information-heading>div>h1{margin:0;font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.12}

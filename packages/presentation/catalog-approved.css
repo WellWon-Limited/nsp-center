@@ -75,7 +75,7 @@ html[data-catalog-design] body #root .catalog-page .catalog-sidebar a:last-child
  html[data-catalog-design] body #root .site-main .waitlist-label{white-space:nowrap!important;font-size:13px!important;line-height:1.35!important}
  @media(min-width:1200px) and (max-width:1439px){html[data-catalog-design] body #root :is(.catalog-page,[data-ds-id="home-products"],.theme-page,.recommend) .product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
  @media(min-width:960px) and (max-width:1199px){html[data-catalog-design] body #root :is(.catalog-page,[data-ds-id="home-products"],.theme-page,.recommend) .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
- @media(max-width:599px){html[data-catalog-design] body #root :is(.catalog-page,[data-ds-id="home-products"],.theme-page,.recommend) .product-grid{grid-template-columns:minmax(0,1fr)!important}}
+ @media(max-width:599px){html[data-catalog-design] body #root :is(.catalog-page,[data-ds-id="home-products"],.theme-page,.recommend) .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 }
 
 @layer typography-reference{
@@ -94,7 +94,7 @@ html[data-catalog-design] body #root .catalog-page .catalog-sidebar a:last-child
 html body #root :is(.theme-page,.recommend) .theme-cards{gap:18px}
 html body #root :is(.theme-page,.recommend) .theme-card-with-note{border:0;border-radius:0;background:transparent;box-shadow:none;overflow:visible;gap:12px}
 html body #root :is(.theme-page,.recommend) .theme-card-with-note>p{border:0;margin:0 4px;padding:0 0 12px}
-@media(max-width:599px){html body #root :is(.theme-page,.recommend) .theme-cards{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:599px){html body #root :is(.theme-page,.recommend) .theme-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 /* Other product selections use the same cards without stretching a lone product
    across the row. Narrow account/article columns fit fewer cards automatically. */
@@ -123,3 +123,12 @@ html[data-catalog-design] body #root .product-badge--hit{background:var(--color-
 }
 
 /* Guest card invitation shares the card rhythm and never flashes over a restored signed-in account. */
+
+/* Two-column phone cards must also fit the longest stock action. */
+@layer typography-reference {
+ @media(max-width:599px){
+  html[data-catalog-design] body #root .site-main .product-card .waitlist-label{white-space:normal!important;font-size:12px!important;overflow-wrap:anywhere}
+  html[data-catalog-design] body #root .site-main .product-card .waitlist-button{gap:4px!important;padding-inline:4px!important}
+  html[data-catalog-design] body #root .site-main .product-card .waitlist-button>svg{display:none}
+ }
+}

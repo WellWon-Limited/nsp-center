@@ -285,3 +285,17 @@
  html[data-home-design="d"] body #root .home-member--sheet :is(.member-marathon,.member-test)>span{display:grid;gap:6px!important}
  html[data-home-design="d"] body #root .home-member--sheet :is(.member-marathon,.member-test)>span>span{font-size:14px!important;line-height:1.45!important;color:var(--color-body)!important;opacity:1!important}
 }}
+
+/* Browser toolbars change the viewport, not the site's navigation height.
+   Reserve its full box plus the safe inset in both Safari and standalone mode. */
+@layer typography-reference {
+ @media(max-width:959px){
+  html body:not(:has(.chat)){padding-bottom:var(--phone-bottom-clearance)!important}
+  html{scroll-padding-bottom:var(--phone-bottom-clearance)}
+  html body #root .bottom-nav{left:max(14px,env(safe-area-inset-left))!important;right:max(14px,env(safe-area-inset-right))!important}
+  html body #root .site-header--shared .header-inner{padding-left:max(18px,env(safe-area-inset-left))!important;padding-right:max(18px,env(safe-area-inset-right))!important}
+ }
+ @media(max-width:639px){
+  html body .dialog{max-height:calc(100dvh - env(safe-area-inset-top))!important;padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
+ }
+}

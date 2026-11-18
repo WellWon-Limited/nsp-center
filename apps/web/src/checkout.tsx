@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { data, money, priceOf, shortName, useStore } from '../../../packages/presentation/store';
 import { BackLink, Icon } from '../../../packages/presentation/ui';
 import { EmailInput, PhoneInput } from '../../../packages/presentation/contact-inputs';
@@ -10,8 +10,7 @@ import './checkout.css';
 // «Оформление заказа» (/checkout/): contacts, the way to receive the order with its address, a comment and the two
 // consents with links to the documents — two columns, the order on the right staying in view (owner's choice of three
 // layouts, 2026-11-17). Reached from the cart («Перейти к оформлению») with the ticked products, or from a product's
-// «Купить сейчас» with that product alone. Payment is not connected yet: «Перейти к оплате» only checks the form
-// (docs/ORDERS.md — ЮKassa comes later).
+// «Купить сейчас» with that product alone. Submission persists an unpaid order; payment is not connected yet.
 
 type Method = 'pickup' | 'courier' | 'cdek';
 type Form = { firstName: string; lastName: string; phone: string; email: string; method: Method; city: string; street: string; house: string; flat: string; cdekPoint: string; cdekCode: string; cdekPrice: number | null; cdekDays: string; day: string; window: string; comment: string; offer: boolean; consent: boolean; mailing: boolean };
@@ -30,7 +29,8 @@ function buyNow(url: string) {
   return p ? { product: p, qty: Math.max(1, Math.min(99, Number(q.get('qty')) || 1)) } : null;
 }
 function useCheckout(url: string) {
-  const { state, ready } = useStore();
+  const { state, ready, sessionReady } = useStore();
+  const [busy, setBusy] = useState(false);
   const buy = buyNow(url);
   const acc = state.signedIn ? state.account : null;
   const [form, setForm] = useState<Form>({ firstName: acc?.firstName ?? '', lastName: acc?.lastName ?? '', phone: acc?.phone ?? '', email: acc?.email ?? '', method: 'pickup', city: 'Санкт-Петербург', street: '', house: '', flat: '', cdekPoint: '', cdekCode: '', cdekPrice: null, cdekDays: '', day: '', window: '', comment: '', offer: false, consent: false, mailing: false });
@@ -42,7 +42,7 @@ function useCheckout(url: string) {
   const contactsOk = Boolean(form.firstName.trim() && form.lastName.trim() && !phoneError(form.phone) && !customerEmailError(form.email));
   const addressOk = form.method === 'pickup' || (form.method === 'courier' ? Boolean(form.street.trim() && form.house.trim() && form.day && form.window) : Boolean(form.cdekCode || (form.city.trim() && form.cdekPoint.trim())));
   const consentsOk = form.offer && form.consent;
-  return { state, ready, form, set, sum, items, buy, delivery, contactsOk, addressOk, consentsOk, ok: contactsOk && addressOk && consentsOk && sum.count > 0 };
+  return { state, ready: ready && sessionReady, busy, setBusy, form, set, sum, items, buy, delivery, contactsOk, addressOk, consentsOk, ok: contactsOk && addressOk && consentsOk && sum.count > 0 };
 }
 type Checkout = ReturnType<typeof useCheckout>;
 
@@ -55,7 +55,7 @@ function Contacts({ c }: { c: Checkout }) {
     <Field label="Имя"><input className="field" value={form.firstName} onChange={e => set('firstName')(e.target.value)} autoComplete="given-name" required /></Field>
     <Field label="Фамилия"><input className="field" value={form.lastName} onChange={e => set('lastName')(e.target.value)} autoComplete="family-name" required /></Field>
     <Field label="Телефон"><PhoneInput id="checkout-phone" value={form.phone} onChange={set('phone')} /></Field>
-    <Field label="Почта — пришлём чек и статус заказа"><EmailInput id="checkout-email" value={form.email} onChange={set('email')} /></Field>
+    <Field label="Электронная почта"><EmailInput id="checkout-email" value={form.email} onChange={set('email')} /></Field>
   </div>;
 }
 function Methods({ c }: { c: Checkout }) {
@@ -143,9 +143,8 @@ function Totals({ c }: { c: Checkout }) {
   </div>;
 }
 function Pay({ c }: { c: Checkout }) {
-  const { notify } = useStore();
-  return <><button type="submit" className="btn btn--primary checkout-pay" disabled={!c.ok} onClick={() => c.ok && notify('Проверено. Оплата подключится после договора с ЮKassa')}>Перейти к оплате<Icon name="chevron" size={18} /></button>
-    <p className="checkout-fine">Картой, SberPay, T-Pay или по СБП. Деньги спишутся, когда заказ соберут; чек придёт на почту.</p></>;
+  return <><button type="submit" className="btn btn--primary checkout-pay" disabled={!c.ok || c.busy}>{c.busy ? 'Сохраняем…' : 'Оформить заказ'}<Icon name="chevron" size={18} /></button>
+    <p className="checkout-fine">Заказ сохранится. Онлайн-оплата пока не подключена, деньги не списываются.</p></>;
 }
 function Section({ n, title, children }: { n: number; title: string; children: ReactNode }) {
   return <section className="checkout-section"><h2><span className="checkout-step-n">{n}</span>{title}</h2>{children}</section>;
@@ -164,12 +163,38 @@ function TwoColumns({ c }: { c: Checkout }) {
 
 export function Checkout({ url }: { url: string }) {
   const c = useCheckout(url);
-  const submit = (e: FormEvent) => e.preventDefault();
+  const { qty } = useStore();
+  const [error, setError] = useState('');
+  const submitting = useRef(false);
+  const attempt = useRef<{fingerprint:string;key:string;guestToken:string} | null>(null);
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!c.ok || submitting.current) return;
+    submitting.current = true; c.setBusy(true); setError('');
+    try {
+      const payload = {form:c.form, items:c.sum.chosen.map(p=>({id:p.id,quantity:c.items[p.id]})), expectedSubtotalKopecks:Math.round(c.sum.total*100)};
+      const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify({payload,account:c.state.account?.email??''})));
+      const fingerprint = Array.from(new Uint8Array(bytes), b=>b.toString(16).padStart(2,'0')).join('');
+      // Retain the key after a lost response, including a page reload. Store no contact data here.
+      try { attempt.current ??= JSON.parse(sessionStorage.getItem('nsp-checkout-attempt') || 'null'); } catch { /* Storage may be disabled. */ }
+      if (attempt.current?.fingerprint !== fingerprint || !attempt.current.guestToken) attempt.current = {fingerprint,key:crypto.randomUUID(),guestToken:Array.from(crypto.getRandomValues(new Uint8Array(32)),b=>b.toString(16).padStart(2,'0')).join('')};
+      try { sessionStorage.setItem('nsp-checkout-attempt',JSON.stringify(attempt.current)); } catch { /* In-memory retry still works. */ }
+      const response = await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,key:attempt.current.key,guestToken:attempt.current.guestToken})});
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Не удалось сохранить заказ. Попробуйте ещё раз.');
+      if (!c.buy) for (const item of payload.items) qty(item.id, Math.max(0,(c.state.cart[item.id]??0)-item.quantity));
+      try { sessionStorage.removeItem('nsp-checkout-attempt'); } catch { /* No persistent storage. */ }
+      attempt.current = null;
+      window.location.assign(result.orderUrl);
+    } catch (e) { setError(e instanceof Error ? e.message : 'Нет связи с сервером. Попробуйте ещё раз.'); }
+    finally { submitting.current = false; c.setBusy(false); }
+  };
   const back = c.buy ? <BackLink fallback={c.buy.product.path} label={shortName(c.buy.product.name)} fixed /> : <BackLink fallback="/cart/" label="Корзина" fixed />;
   if (!c.ready) return <div className="account-route-loading" aria-busy="true" aria-label="Загрузка" />;
   if (!c.sum.count) return <div className="checkout">{back}<div className="checkout-head"><h1>Оформление заказа</h1></div><p className="cart-empty empty-screen">В заказе пока нет товаров. <a href="/cart/">Вернуться в корзину</a></p></div>;
   return <form className="checkout" onSubmit={submit} data-ds-id="checkout" noValidate>
     {back}<div className="checkout-head"><h1>Оформление заказа</h1><p>Проверьте контакты и выберите, как получить заказ.</p></div>
+    {error && <p className="auth-error" role="alert">{error}</p>}
     <TwoColumns c={c} />
   </form>;
 }

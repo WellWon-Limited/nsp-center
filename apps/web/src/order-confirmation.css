@@ -14,3 +14,7 @@
 .order-confirmation-total{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-top:18px;margin-top:12px;border-top:1px solid var(--color-ink-line);color:var(--color-ink)}
 .order-confirmation-total strong{font-size:28px;line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums}
 @media(max-width:959px){.order-confirmation--1 .order-confirmation-details{gap:16px}.order-confirmation--1 :is(.order-confirmation-receiving,.order-confirmation-items){padding:18px}.order-confirmation-details li strong{font-size:18px}.order-confirmation-total strong{font-size:24px}}
+
+.order-access,.order-history{margin-block:var(--space-24);padding:var(--space-24)}
+.order-amounts p{display:flex;justify-content:space-between;gap:var(--space-16)}
+.order-history li{margin-block:var(--space-12);line-height:1.5}

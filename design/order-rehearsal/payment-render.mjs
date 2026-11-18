@@ -1,0 +1,7 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {load} from 'cheerio';
+const $=load(await readFile('dist/index.html','utf8'));
+const header=$('.site-header').first().prop('outerHTML')||'';
+const html=`<!doctype html><html lang="ru" data-home-design="d" data-catalog-design="1" data-about-design="1" data-phone-design="1" data-home-look="8" data-reveal-design="2" class="nsp-session-ready nsp-hero-played"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Результат оплаты — макет</title><link rel="stylesheet" href="/__qa/payment/style.css"></head><body><div id="root"></div><script>window.__paymentHeader=${JSON.stringify(header).replaceAll('<','\\u003c')};const memory=()=>{const m=new Map();return {getItem:k=>m.get(k)??null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k),clear:()=>m.clear()}};Object.defineProperty(window,'localStorage',{value:memory()});Object.defineProperty(window,'sessionStorage',{value:memory()});const json=b=>Promise.resolve(new Response(JSON.stringify(b),{headers:{'Content-Type':'application/json'}}));window.fetch=async()=>json({account:null,data:{},application:null});document.addEventListener('click',e=>{const a=e.target.closest('a');if(a)e.preventDefault()},true);</script><script type="module" src="/__qa/payment/payment.js"></script></body></html>`;
+await writeFile('dist/payment-review.html',html);
+console.log('Payment review states generated; no database or provider calls.');
