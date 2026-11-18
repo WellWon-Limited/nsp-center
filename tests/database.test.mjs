@@ -1,11 +1,10 @@
 import test from 'node:test';
-import {startTestPostgres} from './database-helper.mjs';
+import {startTestPostgres,createTestPool} from './database-helper.mjs';
 import assert from 'node:assert/strict';
 import {mkdtemp, rm, stat, readFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {randomUUID, randomBytes} from 'node:crypto';
-import pg from 'pg';
 import {migrateDatabase} from '../apps/api/database/migrate.mjs';
 import {grantApplicationAccess} from '../apps/api/database/permissions.mjs';
 import {deleteCustomProduct} from '../apps/api/database/products.mjs';
@@ -20,7 +19,7 @@ test('database migrations, constraints and restricted application preserve order
  let owner,app;
  t.after(async()=>{await app?.end();await owner?.end();await database.stop();await rm(dir,{recursive:true,force:true});});
  const url=`postgres://test:test@127.0.0.1:${port}/integrity`;
- owner=new pg.Pool({connectionString:url});
+ owner=createTestPool({connectionString:url});
  const products=[{id:'built-test',name:'Built product'}];
  await t.test('unprepared requests cannot create schema; migrations are serialized and repeatable',async()=>{
   await assert.rejects(assertDatabaseReady(owner),{code:'42P01'});
@@ -35,7 +34,7 @@ test('database migrations, constraints and restricted application preserve order
  });
  await owner.query("create role nsp_app login password 'test' nosuperuser nocreatedb nocreaterole");
  await grantApplicationAccess(owner);
- app=new pg.Pool({connectionString:url.replace('test:test@','nsp_app:test@')});
+ app=createTestPool({connectionString:url.replace('test:test@','nsp_app:test@')});
  await assertDatabaseReady(app);
  const {rows:[user]}=await app.query("insert into users(email,first_name,last_name,password_hash,consent_at) values('first@example.ru','First','Test','fixture',now()) returning id");
  const {rows:[other]}=await app.query("insert into users(email,first_name,last_name,password_hash,consent_at) values('second@example.ru','Second','Test','fixture',now()) returning id");

@@ -30,3 +30,15 @@ export async function startTestPostgres(databaseDir,port,name){
   if(result.code!==0)throw new Error(`Test database shutdown failed (${result.code??result.signal}): ${errors}`);
  }};
 }
+
+/** pg.Pool.end() removes clients before their sockets have emitted 'end'. */
+export function createTestPool(options){
+ const pool=new pg.Pool(options),closing=new Set();
+ pool.on('connect',client=>{
+  const ended=new Promise(resolve=>client.once('end',resolve));
+  closing.add(ended);void ended.then(()=>closing.delete(ended));
+ });
+ const end=pool.end.bind(pool);
+ pool.end=async()=>{const pending=[...closing];await end();await Promise.all(pending);};
+ return pool;
+}
