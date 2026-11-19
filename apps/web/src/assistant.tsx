@@ -389,13 +389,13 @@ export function AssistantChat() {
   // Keep the shell at the visible top; only the conversation shrinks when the software keyboard opens.
   useEffect(() => {
     const vv=window.visualViewport;if(!vv)return;
-    const root=document.documentElement;let frame=0,settle=0;const retries:number[]=[];
+    const root=document.documentElement;let frame=0;const retries:number[]=[];
     let full=Math.max(window.innerHeight,vv.height);
     const set=(height:number,top:number)=>{root.style.setProperty('--chat-vh',`${Math.round(height)}px`);root.style.setProperty('--chat-top',`${Math.round(top)}px`)};
     const apply=()=>{frame=0;
       if(!focused.current&&!root.classList.contains('chat-kb-open'))full=Math.max(window.innerHeight,vv.height);
       const view=chatViewportFrame(vv,full,window.scrollY||0,document.body?.getBoundingClientRect?.().top||0);
-      const open=focused.current||view.keyboard>100;
+      const open=focused.current&&view.keyboard>100;
       root.classList.toggle('chat-kb-open',open);
       if(open)set(view.height,view.top);else{root.style.removeProperty('--chat-vh');root.style.removeProperty('--chat-top')}
       if(log.current&&atEnd.current)log.current.scrollTop=log.current.scrollHeight;
@@ -403,13 +403,13 @@ export function AssistantChat() {
     const schedule=()=>{if(!frame)frame=requestAnimationFrame(apply)};
     const onFocusIn=(event:FocusEvent)=>{if(!(event.target as Element)?.closest?.('.chat-input'))return;
       if(!root.classList.contains('chat-kb-open'))full=Math.max(window.innerHeight,vv.height);
-      focused.current=true;atEnd.current=true;clearTimeout(settle);root.classList.add('chat-kb-open');apply();
+      focused.current=true;atEnd.current=true;root.classList.add('chat-kb-open');apply();
       for(const ms of [100,350,700])retries.push(window.setTimeout(()=>{if(focused.current)apply()},ms));
     };
-    const onFocusOut=(event:FocusEvent)=>{if(!(event.target as Element)?.closest?.('.chat-input'))return;focused.current=false;clearTimeout(settle);settle=window.setTimeout(()=>{if(!document.activeElement?.closest?.('.chat-input'))schedule()},300)};
+    const onFocusOut=(event:FocusEvent)=>{if(!(event.target as Element)?.closest?.('.chat-input'))return;focused.current=false;apply()};
     apply();vv.addEventListener('resize',schedule);vv.addEventListener('scroll',schedule);
     document.addEventListener('focusin',onFocusIn);document.addEventListener('focusout',onFocusOut);
-    return()=>{cancelAnimationFrame(frame);clearTimeout(settle);retries.forEach(clearTimeout);vv.removeEventListener('resize',schedule);vv.removeEventListener('scroll',schedule);document.removeEventListener('focusin',onFocusIn);document.removeEventListener('focusout',onFocusOut);root.classList.remove('chat-kb-open');root.style.removeProperty('--chat-vh');root.style.removeProperty('--chat-top')};
+    return()=>{cancelAnimationFrame(frame);retries.forEach(clearTimeout);vv.removeEventListener('resize',schedule);vv.removeEventListener('scroll',schedule);document.removeEventListener('focusin',onFocusIn);document.removeEventListener('focusout',onFocusOut);root.classList.remove('chat-kb-open');root.style.removeProperty('--chat-vh');root.style.removeProperty('--chat-top')};
   }, []);
   const { state: who, ready: whoReady } = useStore();
   const storeKey = chatKey(who.signedIn ? who.account?.email : null);
@@ -481,7 +481,7 @@ export function AssistantChat() {
     }
     window.setTimeout(byRules, 600);
   };
-  const submit = (e: FormEvent) => { e.preventDefault(); send(draft); };
+  const submit = (e: FormEvent) => { e.preventDefault(); if (!draft.trim()) return; send(draft); if (phoneChat) (e.currentTarget as HTMLFormElement).querySelector('input')?.blur(); };
   const last = messages[messages.length - 1];
   // The page heading is for search engines and screen readers only (owner: no visible title above the chat).
   // A series: messages of one side in a row sit closer, only the last has the bubble's tail and the time under it.
@@ -512,7 +512,6 @@ export function AssistantChat() {
       {/* Phones pin the composer below the scrolling messages; desktop keeps the input at the end of its log. */}
       <div className="chat-composer">
         <form className="chat-input" onSubmit={submit}><input onPointerDown={event=>focusPhoneChatInput(event,window,document)} value={draft} onChange={e => setDraft(e.target.value)} placeholder="Напишите ваш вопрос" aria-label="Ваш вопрос" maxLength={500} enterKeyHint="send" autoComplete="off" /><button type="submit" className="chat-send" disabled={!draft.trim()} aria-label="Отправить" onPointerDown={e => e.preventDefault()}><Icon name="arrow" size={20} /></button></form>
-        <p className="chat-note">Помощник не заменяет консультацию врача.</p>
       </div>
     </div>
     {away && <button type="button" className="chat-down" onClick={toBottom} aria-label="К последним сообщениям"><Icon name="chevron" size={22} /></button>}
