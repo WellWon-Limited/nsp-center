@@ -253,8 +253,8 @@
   html:root{--header-edge-paint:#eaf5f1!important;--header-edge-surface:#eaf5f1!important}
   html body #root .site-main .home-first-screen .home-hero.home-hero--forest .hero-photo{background:url('/images/hero-dimensions-2026-11-13/woodland-side-extension-haze-v2.png') center/cover!important}
   html body #root .site-main .home-first-screen .home-hero.home-hero--forest .hero-photo>picture>img{width:auto!important;max-width:none!important;min-width:0!important;height:118%!important;aspect-ratio:2/1!important;left:50%!important;right:auto!important;top:-17.2%!important;transform:translateX(-63%)!important;object-fit:contain!important;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent)!important;mask-image:linear-gradient(90deg,transparent,#000 6%,#000 90%,transparent)!important}
-  html body:has(.chat) #root .chat>.chat-log{overflow:hidden!important;display:flex!important;flex-direction:column;min-height:0!important;gap:0!important;padding-bottom:0!important}
-  html body:has(.chat) #root .chat-flow{display:flex!important;flex:1;min-height:0;flex-direction:column;gap:10px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+  html body:has(.chat) #root .chat>.chat-log{overflow:hidden!important;display:flex!important;flex-direction:column;min-height:0!important;gap:0!important;padding-top:0!important;padding-bottom:0!important}
+  html body:has(.chat) #root .chat-flow{box-sizing:border-box;padding-top:14px;display:flex!important;flex:1;min-height:0;flex-direction:column;gap:10px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
   html body:has(.chat) #root .chat-log>.chat-composer{flex:none;margin-top:0!important;display:flex!important;flex-direction:column;padding:8px 0!important}
   html body:has(.chat) #root .chat-composer>.chat-note{order:-1;margin:0 0 6px!important}
   html body:has(.chat) #root .chat-composer>.chat-input{margin:0!important}
@@ -310,14 +310,18 @@
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
  }
+ html body #root .bottom-nav{box-shadow:none!important}
+ /* Paint behind the entire dock, not from its bottom edge: no horizontal seam
+    or shadow remains beneath the rounded navigation. */
  html body #root .bottom-nav::after{
   content:""!important;
   position:absolute!important;
-  top:calc(100% - 1px)!important;
+  top:0!important;
+  z-index:-1;
   left:calc(-1 * max(14px,env(safe-area-inset-left)) - 1px)!important;
   right:calc(-1 * max(14px,env(safe-area-inset-right)) - 1px)!important;
   height:100vh!important;
-  background:var(--header-edge-paint)!important;
+  background:linear-gradient(180deg,transparent,var(--header-edge-paint) 24px)!important;
   pointer-events:none;
  }
 }
