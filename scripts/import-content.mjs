@@ -1,3 +1,4 @@
+import { FREE_COURIER_FROM } from '../packages/domain/delivery-prices.mjs';
 import { existsSync, readFileSync, mkdirSync, copyFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -305,7 +306,9 @@ const pages = sourcePages.filter(page => page.type === 'page').map(page => {
   const { $, raw } = rawPage(page.url);
   const path = siteUrl(page.url);
   const title = page.h1 || (path === '/health-marafon/' ? 'Марафон здоровья' : page.title.split('|')[0].trim());
-  const html = semanticHtml(pageContainers($).map(node => $.html(node)).join('\n'), page.url, title);
+  let html = semanticHtml(pageContainers($).map(node => $.html(node)).join('\n'), page.url, title);
+  // Keep the imported delivery article in sync with the current checkout terms.
+  if (path === '/delivery/') html = html.replace(/12(?:[\s\u00a0\u202f]|&nbsp;)*000/g, FREE_COURIER_FROM.toLocaleString('ru-RU'));
   const media = fragmentStats(path, html);
   return {
     id: path.split('/').filter(Boolean).join('-'), path, url: path, title,

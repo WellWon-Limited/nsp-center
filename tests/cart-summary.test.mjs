@@ -20,9 +20,17 @@ test('with the discount card the total is the card price and the saving is shown
   assert.equal(s.retail - s.total, s.saving);
 });
 
-test('courier within the ring road: 350 ₽, free from 12 000 ₽ of what is paid', () => {
-  assert.deepEqual([cartSummary([a], { a: 1 }, [], false).courier, cartSummary([a], { a: 1 }, [], false).freeCourierLeft], [350, 12000 - 1560]);
+test('courier within the ring road: 350 ₽, free from 10 000 ₽ of what is paid', () => {
+  assert.deepEqual([cartSummary([a], { a: 1 }, [], false).courier, cartSummary([a], { a: 1 }, [], false).freeCourierLeft], [350, 10000 - 1560]);
   const big = cartSummary([a], { a: 8 }, [], false);
   assert.deepEqual([big.courier, big.freeCourierLeft], [0, 0]);
   assert.equal(cartSummary([a], { a: 8 }, [], true).courier, 350, 'the threshold counts the card price actually paid');
 });
+
+ test('free courier delivery starts at exactly 10,000 rubles after discounts',()=>{
+  for(const [subtotal,fee,left] of [[9999,350,1],[10000,0,0],[10001,0,0]]){
+   const s=cartSummary([product('edge',subtotal,null)],{edge:1},[],false);
+   assert.equal(s.courier,fee);assert.equal(s.freeCourierLeft,left);
+  }
+  assert.equal(cartSummary([product('discounted',10000,9999)],{discounted:1},[],true).courier,350);
+ });

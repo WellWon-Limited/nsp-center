@@ -242,7 +242,8 @@
   html:not(.nsp-signed-in) body #root .site-main .home-first-screen .hero-daily{margin-top:10px!important;padding:10px 14px!important}
   html:not(.nsp-signed-in) body #root .site-main .home-first-screen .hero-copy .ds-cluster{margin-top:10px!important}
   html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-paths{margin-top:10px!important}
-  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-hero .hero-photo{height:clamp(64px,calc(100svh - var(--site-header-height,61px) - var(--phone-bottom-clearance) - 418px),202px)!important;aspect-ratio:auto!important;margin-top:10px!important;background: url('/images/hero-dimensions-2026-11-13/woodland-side-extension-haze-v2.png') center/cover!important}
+  /* Keep guest photography tied to width, never to Safari toolbar height. */
+  html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-hero .hero-photo{height:auto!important;aspect-ratio:366/202!important;margin-top:10px!important;background: url('/images/hero-dimensions-2026-11-13/woodland-side-extension-haze-v2.png') center/cover!important}
   html:not(.nsp-signed-in) body #root .site-main .home-first-screen .home-hero .hero-photo img{object-fit:contain!important}
  }
 }

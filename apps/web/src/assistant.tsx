@@ -1,3 +1,4 @@
+import { FREE_COURIER_FROM } from './cart-summary.mjs';
 import {chatViewportFrame,focusPhoneChatInput} from './chat-viewport.mjs';
 import {productCover} from '../../../packages/presentation/product-media.mjs';
 import './assistant.css';
@@ -112,7 +113,7 @@ export function findProducts(text: string, index: Index): ChatProduct[] {
   for (const h of hits) if (!kept.some(k => h.at < k.at + k.len && k.at < h.at + h.len)) kept.push(h);
   return kept.sort((a, b) => a.at - b.at).map(h => h.p);
 }
-const deliveryText = 'Самовывоз из пункта выдачи в Санкт-Петербурге — бесплатно. Курьер по Санкт-Петербургу в пределах КАД — 350 ₽, при заказе от 12 000 ₽ бесплатно; за КАД — по тарифам CDEK. В другие города отправляем CDEK до пункта выдачи или по адресу, стоимость и срок считаются по тарифу, оплата — заранее. Менеджер подтверждает заказ в течение 1 рабочего дня; курьер ездит с понедельника по пятницу, поэтому заказ пятницы приедет с понедельника.';
+const deliveryText = `Самовывоз из пункта выдачи в Санкт-Петербурге — бесплатно. Курьер по Санкт-Петербургу в пределах КАД — 350 ₽, при заказе от ${money(FREE_COURIER_FROM)} бесплатно; за КАД — по тарифам CDEK. В другие города отправляем CDEK до пункта выдачи или по адресу, стоимость и срок считаются по тарифу, оплата — заранее. Менеджер подтверждает заказ в течение 1 рабочего дня; курьер ездит с понедельника по пятницу, поэтому заказ пятницы приедет с понедельника.`;
 const hoursText = 'Пункт выдачи работает: пн–пт с 11:00 до 19:00, сб с 12:00 до 17:30, воскресенье — выходной.';
 export function shopAnswer(text: string, index: Index, previous?: string): Message | null {
   const t = text.toLowerCase().replace(/ё/g, 'е');
