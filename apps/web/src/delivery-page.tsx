@@ -1,3 +1,5 @@
+import { FREE_COURIER_FROM } from './cart-summary.mjs';
+import {money} from '../../../packages/presentation/store';
 import {Icon} from '../../../packages/presentation/ui';
 import {InformationHeader,InformationClosing} from '../../../packages/presentation/information-layout';
 import './delivery-page.css';
@@ -18,7 +20,7 @@ export function DeliveryPage(){return <div className="delivery-page information-
  <section className="delivery-section">
   <h2>Курьером по Санкт-Петербургу</h2>
   <div className="delivery-copy"><p>Доставим заказ в течение 2 рабочих дней после подтверждения менеджером, если товары есть на складе. Доставка работает с понедельника по пятницу. Заказы, оформленные в пятницу, передаются курьеру начиная с понедельника следующей недели.</p><p>В течение 1 рабочего дня после оформления заказа менеджер позвонит по указанному вами номеру и согласует удобное время получения. В день доставки курьер свяжется с вами за 1 час до приезда и уточнит время прибытия.</p>
-   <div className="delivery-rates"><div><h3>В пределах КАД</h3><p className="delivery-price">350 руб.</p><p>Зелёная зона. При заказе от 12 000 руб. — бесплатно.</p></div><div><h3>За пределами КАД</h3><p className="delivery-price delivery-price--text">По тарифам CDEK</p><p>Синяя зона: Пушкин, Стрельна, Парголово, Колпино, Мурино, Бугры, Шушары, Кудрово.</p></div></div>
+   <div className="delivery-rates"><div><h3>В пределах КАД</h3><p className="delivery-price">350 руб.</p><p>Зелёная зона. При заказе от {money(FREE_COURIER_FROM)} — бесплатно.</p></div><div><h3>За пределами КАД</h3><p className="delivery-price delivery-price--text">По тарифам CDEK</p><p>Синяя зона: Пушкин, Стрельна, Парголово, Колпино, Мурино, Бугры, Шушары, Кудрово.</p></div></div>
   </div>
  </section>
  <section className="delivery-section">
