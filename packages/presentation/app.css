@@ -560,7 +560,7 @@ img.product-image-missing{object-fit:contain;opacity:.25;padding:18%}
    still on its way shows white for that moment, never a dark-green screen. */
 @media(max-width:639px){
  .site-header::before{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var(--header-edge-surface,var(--color-bg));pointer-events:none}
- body{background:linear-gradient(to top,#fff calc(var(--phone-nav-height,52px) + env(safe-area-inset-bottom)),var(--color-bg) 0)}
+ body{background:var(--color-bg)}
 }
 /* An empty screen on a phone («Акций пока нет», «Покупок ещё не было», empty cart, not found): at first only the light
    background with the line in the middle of what is visible between the header and the tab bar; the footer (with its

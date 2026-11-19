@@ -27,9 +27,10 @@ test('a keyboard viewport pan is compensated so the header stays at the visible 
  const log={current:{scrollTop:0,scrollHeight:900}},focused={current:false},atEnd={current:false};
  const context={chatViewportFrame,window:win,document:doc,localStorage:{getItem:()=>null,setItem:()=>{}},focused,atEnd,log,requestAnimationFrame:fn=>{frames.push(fn);return frames.length},cancelAnimationFrame:()=>{},clearTimeout:()=>{}};
  const cleanup=vm.runInNewContext(script,context);const flush=()=>{while(frames.length)frames.shift()()};
- listeners.get('focusin')({target:{closest:()=>true}});flush();assert.ok(classes.has('chat-kb-open'));assert.equal(properties.get('--chat-top'),'0px');
+ vv.height=440;listeners.get('focusin')({target:{closest:()=>true}});flush();assert.ok(classes.has('chat-kb-open'));assert.equal(properties.get('--chat-top'),'0px');
  for(const top of [0,24,48]){vv.height=440;vv.offsetTop=top;listeners.get('vv:resize')();flush();assert.equal(Number.parseInt(properties.get('--chat-top'))-top,0,'header stays at visual viewport top');assert.equal(properties.get('--chat-vh'),'440px')}
- vv.height=874;vv.offsetTop=0;listeners.get('focusout')({target:{closest:()=>true}});timers.forEach(fn=>fn());flush();assert.equal(properties.has('--chat-vh'),false);assert.equal(classes.has('chat-kb-open'),false);cleanup();
+ // Blur must restore the shell before Safari emits its final resize, with no timeout.
+ listeners.get('focusout')({target:{closest:()=>true}});assert.equal(properties.has('--chat-vh'),false);assert.equal(classes.has('chat-kb-open'),false);vv.height=874;vv.offsetTop=0;listeners.get('vv:resize')();flush();assert.equal(classes.has('chat-kb-open'),false);cleanup();
 });
 
 test('launch text and logo positions are fixed before paint and are not recomputed on viewport resize',()=>{

@@ -9,7 +9,10 @@ const css = read('packages/presentation/app.css');
 test('the browser theme and the upper overscroll strip continue the shared header surface', () => {
   assert.match(read('apps/web/index.html'), /<meta name="theme-color" content="#eaf5f1"\/>/);
   assert.match(css, /\.site-header::before\{content:"";position:absolute;left:0;right:0;bottom:100%;height:100vh;background:var\(--header-edge-surface,var\(--color-bg\)\)/);
-  assert.match(css, /body\{background:linear-gradient\(to top,#fff calc\(var\(--phone-nav-height,52px\) \+ env\(safe-area-inset-bottom\)\),var\(--color-bg\) 0\)\}/);
+  assert.match(css, /body\{background:var\(--color-bg\)\}/);
+  assert.doesNotMatch(css, /background:linear-gradient\(to top,#fff/);
+  const phone = readFileSync('packages/presentation/phone-current.css', 'utf8');
+  assert.doesNotMatch(phone, /#root:has\(>\.bottom-nav\)::after/);
 });
 
 test('the loading screen block stands exactly in the middle of the screen', () => {
