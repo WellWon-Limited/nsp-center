@@ -12,7 +12,9 @@ function scrollToHomeSection(event:MouseEvent<HTMLAnchorElement>){
  if(!target)return;
  event.preventDefault();
  if(target.id==='home-showcase')window.dispatchEvent(new Event(HOME_PRODUCTS_REPLAY));
- target.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+ // Section-local sizing variables may differ from the fixed header's height.
+ const headerHeight=document.querySelector('.site-header')?.getBoundingClientRect().height||0;
+ window.scrollTo({top:Math.max(0,window.scrollY+target.getBoundingClientRect().top-headerHeight-16),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
 }
 
 function MemberBackTop(){

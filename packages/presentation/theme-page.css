@@ -328,3 +328,18 @@
   html[data-catalog-design] body #root .theme-page--paper .theme-paper-support .theme-cards{column-gap:14px!important}
  }
 }
+
+/* Explanation text stays inside its own card column even when phone collections
+   extend to the paper edges. Shared by themes and recommendation results. */
+@layer typography-reference{
+ html[data-catalog-design] body #root .site-main :is(.theme-page--paper,.recommend-paper) .theme-card-with-note>p{
+  box-sizing:border-box!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0 18px 16px!important;
+  text-indent:0!important;
+  text-align:left!important;
+  overflow-wrap:anywhere;
+ }
+}
