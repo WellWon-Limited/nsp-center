@@ -132,3 +132,13 @@ html[data-catalog-design] body #root .product-badge--hit{background:var(--color-
   html[data-catalog-design] body #root .site-main .product-card .waitlist-button>svg{display:none}
  }
 }
+
+/* Every ProductCard uses the same single-line cart label, including narrower
+   themed and recommendation collections. Stock notification labels may wrap. */
+@layer typography-reference{
+ html[data-catalog-design] body #root .site-main .product-card .product-meta>.card-cart-button{white-space:nowrap!important;overflow-wrap:normal!important;gap:6px!important}
+ html[data-catalog-design] body #root .site-main .product-card .card-cart-button>svg{flex-shrink:0}
+ @media(max-width:959px){
+  html[data-catalog-design] body #root .site-main .product-card .product-meta>.card-cart-button{padding-inline:4px!important;gap:4px!important}
+ }
+}

@@ -23,7 +23,7 @@ export function Purchases() {
     <Heading eyebrow="NSP Center" title="Мои покупки" description="Уже полученные товары. Добавьте нужные в корзину снова." />
     
     {loading ? <div className="account-route-loading" aria-busy="true" aria-label="Загрузка" />
-      : error ? <p role="alert">{error}</p> : !all.length ? <section className="purchases-empty empty-screen" data-ds-id="purchases-empty"><p>Покупок ещё не было</p></section>
+      : error ? <p role="alert">{error}</p> : !all.length ? <section className="purchases-empty empty-screen" data-ds-id="purchases-empty" role="status"><p>Покупок ещё не было</p></section>
       : <>
         <div className="purchases-search" data-ds-id="purchases-search">
           <label className="search-field"><Icon name="search" /><input value={q} onChange={e => setQ(e.target.value)} placeholder="Найти в покупках: название, артикул" aria-label="Поиск по покупкам" />{q && <button className="icon-btn icon-btn--sm" onClick={() => setQ('')} aria-label="Очистить поиск"><Icon name="close" size={16} /></button>}</label>

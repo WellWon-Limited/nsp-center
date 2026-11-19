@@ -83,3 +83,8 @@ html body #root .site-main:has(>.recommend)~.site-footer{display:none!important}
  html body #root .site-main .recommend[data-ds-id="recommend-test"]>.page-heading{padding-bottom:var(--space-16)!important;text-align:center}
  html body #root .site-main .recommend[data-ds-id="recommend-test"]>.recommend-question{margin-top:0!important}
 }}
+
+@layer typography-reference{@media(max-width:959px){
+ /* Match the catalog's card width rather than nesting a second phone inset. */
+ html[data-catalog-design] body #root .recommend-paper .theme-cards{margin-inline:-20px!important;column-gap:14px!important}
+}}
