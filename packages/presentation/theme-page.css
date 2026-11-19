@@ -313,3 +313,18 @@
   html[data-catalog-design] body #root .site-main .theme-page--paper .theme-cards.theme-cards--main{grid-template-columns:repeat(2,minmax(0,1fr))!important;justify-content:start!important}
  }
 }
+
+/* The featured product follows the article and is centred, using the same
+   card width as a product in a collection rather than a right-hand sidebar. */
+@layer typography-reference{
+ html[data-catalog-design] body #root .theme-page--paper .theme-paper-grid{grid-template-columns:minmax(0,1fr)!important}
+ html[data-catalog-design] body #root .theme-page--paper .theme-paper-product{position:static!important}
+ html[data-catalog-design] body #root .site-main .theme-page--paper .theme-cards.theme-cards--main{grid-template-columns:minmax(0,280px)!important;justify-content:center!important}
+ @media(max-width:959px){
+  /* Avoid a second inset squeezing the two catalog cards inside the paper. */
+  html[data-catalog-design] body #root .theme-page--paper .theme-paper-product,
+  html[data-catalog-design] body #root .theme-page--paper .theme-paper-support .theme-cards{margin-inline:-20px!important}
+  html[data-catalog-design] body #root .site-main .theme-page--paper .theme-cards.theme-cards--main{grid-template-columns:minmax(0,calc((100% - 14px)/2))!important}
+  html[data-catalog-design] body #root .theme-page--paper .theme-paper-support .theme-cards{column-gap:14px!important}
+ }
+}
