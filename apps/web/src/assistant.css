@@ -70,7 +70,9 @@
 .chat-warning { margin: var(--space-10) 0 0; padding: var(--space-8) var(--space-10); border-radius: 10px; background: #fbf1e9; color: #7a4423; font-size: var(--text-13); line-height: 1.4; }
 
 /* The chat is one fixed screen (no page scroll, no footer): the messages scroll inside, right up to the header. */
-html:has(.chat), body:has(.chat) { overflow: hidden; }
+@media (max-width: 959px) {
+  html:has(.chat), body:has(.chat) { overflow: hidden; }
+}
 body:has(.chat) .site-main { padding-top: 0; padding-bottom: 0; }
 .chat { height: calc(100svh - 97px); min-height: 0; }
 .chat-log { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: var(--space-14) 0 var(--space-12); }
@@ -217,9 +219,11 @@ html:has(.chat), body:has(.chat) { overscroll-behavior: none; height: 100%; }
 /* First paint = final layout (owner, 2026-11-11: no jumping when switching tabs): the chat page is one screen in normal
    flow — the header at the top, the chat column filling the rest, on a phone ending above the tab bar by CSS alone
    (calc of the bar's height). While the phone keyboard is open the app fits the space above it (below). */
+@media (max-width: 959px) {
 body:has(.chat) #root { display: flex; flex-direction: column; height: 100svh; min-height: 0; }
 html[data-catalog-design] body:has(.chat):has(.site-header) > #root { min-height: 0; }
 body:has(.chat) .site-main { flex: 1 1 auto; min-height: 0; width: 100%; max-width: none; padding: 0; display: flex; }
+}
 @media (max-width: 959px) { .chat { width: calc(100vw - 2 * var(--space-22)); } }
 @media (max-width: 639px) {
   .chat { width: calc(100vw - 2 * var(--space-18)); height: 100%; }
