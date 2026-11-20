@@ -6,7 +6,8 @@ flow. People-facing summary: `README.md`, section «Репозиторий и д
 
 ## Repository and access
 
-- Repository: https://github.com/WellWon-Limited/nsp-center (private).
+- Repository: https://github.com/WellWon-Limited/nsp-center (public: anyone can read and clone;
+  only granted accounts can push).
 - Organization: WellWon-Limited; org-wide 2FA is required; default repository
   permission is `none`, so a member sees only repositories granted explicitly.
 - Owner: `wellwon` (admin).
