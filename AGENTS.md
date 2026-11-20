@@ -36,7 +36,7 @@ the PWA (`docs/PASSPORT.md`). The active result and acceptance live in
   Before changing content, page structure, routes, meta tags or blog articles,
   read `docs/SEO.md` (principles, blog article template, task list). Public URLs
   never change without a 301 redirect; only https://nsp-center.ru/ is indexed.
-- Repository https://github.com/WellWon-Limited/nsp-center (private). Changes
+- Repository https://github.com/WellWon-Limited/nsp-center (public). Changes
   go through branch -> PR -> required green checks -> merge; access and flow —
   `CONTRIBUTING.md`.
 
